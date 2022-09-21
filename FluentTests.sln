@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentTests", "FluentTests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentTests.Tests", "FluentTests.Tests\FluentTests.Tests.csproj", "{A6D826B6-1440-4169-B5F6-EF79F801BCCA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentTests.AutoFixture", "FluentTests.AutoFixture\FluentTests.AutoFixture.csproj", "{09AB3D92-4B13-4DBB-9BB1-3460C7CFC4A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentTests.AutoFixture.Tests", "FluentTests.AutoFixture.Tests\FluentTests.AutoFixture.Tests.csproj", "{A1392A79-D7D5-4A21-BCEC-A240F3BEB5EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{A6D826B6-1440-4169-B5F6-EF79F801BCCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6D826B6-1440-4169-B5F6-EF79F801BCCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6D826B6-1440-4169-B5F6-EF79F801BCCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09AB3D92-4B13-4DBB-9BB1-3460C7CFC4A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09AB3D92-4B13-4DBB-9BB1-3460C7CFC4A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09AB3D92-4B13-4DBB-9BB1-3460C7CFC4A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09AB3D92-4B13-4DBB-9BB1-3460C7CFC4A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1392A79-D7D5-4A21-BCEC-A240F3BEB5EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1392A79-D7D5-4A21-BCEC-A240F3BEB5EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1392A79-D7D5-4A21-BCEC-A240F3BEB5EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1392A79-D7D5-4A21-BCEC-A240F3BEB5EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

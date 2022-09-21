@@ -1,6 +1,6 @@
 namespace FluentTests.Tests;
+
 using static Dsl.Bdd;
-using static Dsl.Shared;
 
 public class BddTests
 {
