@@ -1,0 +1,12 @@
+{
+    "tasks": [
+        {
+            "name": "Format C# Code",
+            "command": "dotnet",
+            "args": [
+                "csharpier",
+                "."
+            ]
+        }
+    ]
+}
