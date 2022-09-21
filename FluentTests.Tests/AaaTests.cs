@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace FluentTests.Tests;
 using static Dsl.Aaa;
 using static Dsl.Shared;
@@ -70,4 +72,65 @@ public class AaaTests
             })
             .And((d, r) => Assert.NotEqual(d.a, r.Length))
             .And(r => Assert.NotEqual(1, r.Length));
+
+    private static Task<int> SomeAsyncFunction(int i) => throw new Exception("Some failure");
+
+    [Fact(DisplayName = "Failure assertions work on async functions")]
+    public async Task Case6() =>
+        await Arrange(() => 1)
+            .Act(SomeAsyncFunction)
+            .AssertFailsWith(
+                (_, e) =>
+                {
+                    Assert.Equal("Some failure", e.Message);
+                    return Task.CompletedTask;
+                }
+            );
+
+    [Fact(DisplayName = "Failure assertions work on async functions with initial data")]
+    public async Task Case7() =>
+        await Arrange(() => 1)
+            .Act(SomeAsyncFunction)
+            .AssertFailsWith(e =>
+            {
+                Assert.Equal("Some failure", e.Message);
+                return Task.CompletedTask;
+            });
+
+    [Fact(DisplayName = "Failure assertions throw on successful async functions")]
+    public async Task Case8() =>
+        await Assert.ThrowsAsync<NoFailureException>(
+            async () =>
+                await Arrange(() => 1)
+                    .Act(Task.FromResult)
+                    .AssertFailsWith(
+                        [ExcludeFromCodeCoverage]
+                        (data, e) =>
+                        {
+                            Assert.Equal(1, data);
+                            Assert.Equal("Some failure", e.Message);
+                            return Task.CompletedTask;
+                        }
+                    )
+        );
+
+    private static int SomeFunction(int i) => throw new Exception("Some failure");
+
+    [Fact(DisplayName = "Failure assertions work on sync functions")]
+    public async Task Case9() =>
+        await Arrange(() => 1)
+            .Act(SomeFunction)
+            .AssertFailsWith(e => Assert.Equal("Some failure", e.Message));
+
+    [Fact(DisplayName = "Failure assertions work on sync functions and initial data")]
+    public async Task Case10() =>
+        await Arrange(() => 1)
+            .Act(SomeFunction)
+            .AssertFailsWith(
+                (data, e) =>
+                {
+                    Assert.Equal(1, data);
+                    Assert.Equal("Some failure", e.Message);
+                }
+            );
 }

@@ -126,4 +126,84 @@ public static class Aaa
         this Scenario.Acted<TData, TResult> scenario,
         Action<TResult> fn
     ) => scenario.Assert((_, r) => fn(r));
+
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">async assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>asserted and failed scenario</returns>
+    public static Scenario.Asserted<TData, Exception> AssertFailsWith<TData, TResult>(
+        this Scenario.Acted<TData, TResult> scenario,
+        Func<TData, Exception, Task> fn
+    ) =>
+        new(
+            scenario.Name,
+            scenario.ArrangeScenario,
+            async data =>
+            {
+                try
+                {
+                    await scenario.ActOnScenario(data);
+                    throw new NoFailureException();
+                }
+                catch (NoFailureException)
+                {
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    return e;
+                }
+            },
+            fn
+        );
+
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">async assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>asserted and failed scenario</returns>
+    public static Scenario.Asserted<TData, Exception> AssertFailsWith<TData, TResult>(
+        this Scenario.Acted<TData, TResult> scenario,
+        Func<Exception, Task> fn
+    ) => scenario.AssertFailsWith((_, e) => fn(e));
+
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>asserted and failed scenario</returns>
+    public static Scenario.Asserted<TData, Exception> AssertFailsWith<TData, TResult>(
+        this Scenario.Acted<TData, TResult> scenario,
+        Action<TData, Exception> fn
+    ) =>
+        scenario.AssertFailsWith(
+            (d, e) =>
+            {
+                fn(d, e);
+                return Task.CompletedTask;
+            }
+        );
+
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>asserted and failed scenario</returns>
+    public static Scenario.Asserted<TData, Exception> AssertFailsWith<TData, TResult>(
+        this Scenario.Acted<TData, TResult> scenario,
+        Action<Exception> fn
+    ) => scenario.AssertFailsWith((_, e) => fn(e));
 }

@@ -118,4 +118,56 @@ public static class Bdd
         this Scenario.Acted<TData, TResult> scenario,
         Action<TResult> fn
     ) => scenario.Assert(fn);
+
+    /// <summary>
+    /// Then verify the scenario fails
+    /// </summary>
+    /// <param name="scenario">run scenario</param>
+    /// <param name="fn">then on failure function</param>
+    /// <typeparam name="TData">scenario data</typeparam>
+    /// <typeparam name="TResult">result of running the scenario</typeparam>
+    /// <returns>completed scenario</returns>
+    public static Scenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
+        this Scenario.Acted<TData, TResult> scenario,
+        Func<TData, Exception, Task> fn
+    ) => scenario.AssertFailsWith(fn);
+
+    /// <summary>
+    /// Then verify the scenario fails
+    /// </summary>
+    /// <param name="scenario">run scenario</param>
+    /// <param name="fn">then on failure function</param>
+    /// <typeparam name="TData">scenario data</typeparam>
+    /// <typeparam name="TResult">result of running the scenario</typeparam>
+    /// <returns>completed scenario</returns>
+    public static Scenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
+        this Scenario.Acted<TData, TResult> scenario,
+        Func<Exception, Task> fn
+    ) => scenario.AssertFailsWith(fn);
+
+    /// <summary>
+    /// Then verify the scenario fails
+    /// </summary>
+    /// <param name="scenario">run scenario</param>
+    /// <param name="fn">then on failure function</param>
+    /// <typeparam name="TData">scenario data</typeparam>
+    /// <typeparam name="TResult">result of running the scenario</typeparam>
+    /// <returns>completed scenario</returns>
+    public static Scenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
+        this Scenario.Acted<TData, TResult> scenario,
+        Action<TData, Exception> fn
+    ) => scenario.AssertFailsWith(fn);
+
+    /// <summary>
+    /// Then verify the scenario fails
+    /// </summary>
+    /// <param name="scenario">run scenario</param>
+    /// <param name="fn">then on failure function</param>
+    /// <typeparam name="TData">scenario data</typeparam>
+    /// <typeparam name="TResult">result of running the scenario</typeparam>
+    /// <returns>completed scenario</returns>
+    public static Scenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
+        this Scenario.Acted<TData, TResult> scenario,
+        Action<Exception> fn
+    ) => scenario.AssertFailsWith(fn);
 }

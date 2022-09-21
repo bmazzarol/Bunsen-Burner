@@ -43,4 +43,49 @@ public class BddTests
                 Assert.Equal("2", r);
                 return Task.CompletedTask;
             });
+
+    private static Task<int> SomeAsyncFunction(int i) => throw new Exception("Some failure");
+
+    [Fact(DisplayName = "Failure assertions work on async functions")]
+    public async Task Case6() =>
+        await Given(() => 1)
+            .When(SomeAsyncFunction)
+            .ThenFailsWith(
+                (_, e) =>
+                {
+                    Assert.Equal("Some failure", e.Message);
+                    return Task.CompletedTask;
+                }
+            );
+
+    [Fact(DisplayName = "Failure assertions work on async functions with initial data")]
+    public async Task Case7() =>
+        await Given(() => 1)
+            .When(SomeAsyncFunction)
+            .ThenFailsWith(e =>
+            {
+                Assert.Equal("Some failure", e.Message);
+                return Task.CompletedTask;
+            });
+
+    private static int SomeFunction(int i) => throw new Exception("Some failure");
+
+    [Fact(DisplayName = "Failure assertions work on sync functions")]
+    public async Task Case9() =>
+        await Given(() => 1)
+            .When(SomeFunction)
+            .ThenFailsWith(e => Assert.Equal("Some failure", e.Message));
+
+    [Fact(DisplayName = "Failure assertions work on sync functions and initial data")]
+    public async Task Case10() =>
+        await Given(() => 1)
+            .When(SomeFunction)
+            .ThenFailsWith(
+                (data, e) =>
+                {
+                    Assert.Equal(1, data);
+                    Assert.Equal("Some failure", e.Message);
+                }
+            )
+            .And(e => Assert.NotNull(e.StackTrace));
 }
