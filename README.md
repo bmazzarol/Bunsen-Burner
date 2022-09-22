@@ -12,9 +12,9 @@ using Xunit;
 using static Dsl.Shared;
 using static Dsl.Aaa;
 
-namespace SomeNamespace
+namespace SomeNamespace;
 
-public static Tests
+public static class Tests
 {
     [Fact(DisplayName = "Example AAA test!!!")]
     public static async Task SomeTest() =>
@@ -35,9 +35,9 @@ Most tests in the DotNET ecosystem are written in an arrange, act, assert style,
 ```c#
 using Xunit;
 
-namespace SomeNamespace
+namespace SomeNamespace;
 
-public static Tests
+public static class Tests
 {
     [Fact]
     public static async Task SomeTest()
@@ -68,9 +68,9 @@ using Xunit;
 using static Dsl.Shared;
 using static Dsl.Aaa;
 
-namespace SomeNamespace
+namespace SomeNamespace;
 
-public static Tests
+public static class Tests
 {
     [Fact(DisplayName = "Example AAA test!!!")]
     public static async Task SomeTest() =>
