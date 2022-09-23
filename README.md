@@ -14,9 +14,9 @@ A better way to write tests in C#.
 using Xunit;
 using static BunsenBurner.Aaa;
 
-namespace SomeNamespace
+namespace SomeNamespace;
 
-public static Tests
+public static class Tests
 {
     [Fact(DisplayName = "Example AAA test!!!")]
     public static async Task SomeTest() =>
@@ -37,9 +37,9 @@ Most tests in the C# are written in an arrange, act, assert style, like so,
 ```c#
 using Xunit;
 
-namespace SomeNamespace
+namespace SomeNamespace;
 
-public static Tests
+public static class Tests
 {
     [Fact]
     public static async Task SomeTest()
@@ -69,9 +69,9 @@ This library aims to formalize this structure in the following ways,
 using Xunit;
 using static BunsenBurner.Aaa;
 
-namespace SomeNamespace
+namespace SomeNamespace;
 
-public static Tests
+public static class Tests
 {
     [Fact(DisplayName = "Example AAA test!!!")]
     public static async Task SomeTest() =>
