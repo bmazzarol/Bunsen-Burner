@@ -1,6 +1,6 @@
-namespace FluentTests.Tests;
+namespace BunsenBurner.Tests;
 
-using static Dsl.Bdd;
+using static Bdd;
 
 public class BddTests
 {
@@ -43,6 +43,33 @@ public class BddTests
                 Assert.Equal("2", r);
                 return Task.CompletedTask;
             });
+
+    [Fact(DisplayName = "Additional And assertions work")]
+    public async Task Case5() =>
+        await Given(() => (a: 1, b: "c"))
+            .When(x => x.a + x.b)
+            .Then(
+                (d, r) =>
+                {
+                    Assert.NotEqual(d.b, r);
+                    return Task.CompletedTask;
+                }
+            )
+            .And(
+                (d, r) =>
+                {
+                    Assert.Equal(2, r.Length);
+                    Assert.Equal(1, d.a);
+                    return Task.CompletedTask;
+                }
+            )
+            .And(r =>
+            {
+                Assert.NotEqual(1, r.Length);
+                return Task.CompletedTask;
+            })
+            .And((d, r) => Assert.NotEqual(d.a, r.Length))
+            .And(r => Assert.NotEqual(1, r.Length));
 
     private static Task<int> SomeAsyncFunction(int i) => throw new Exception("Some failure");
 

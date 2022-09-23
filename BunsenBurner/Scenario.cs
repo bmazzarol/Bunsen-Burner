@@ -1,4 +1,20 @@
-﻿namespace FluentTests;
+﻿namespace BunsenBurner;
+
+/// <summary>
+/// Supported syntax for the scenario
+/// </summary>
+public interface Syntax
+{
+    /// <summary>
+    /// Arrange, act, assert.
+    /// </summary>
+    public readonly struct Aaa : Syntax { }
+
+    /// <summary>
+    /// Given, when, then
+    /// </summary>
+    public readonly struct Bdd : Syntax { }
+}
 
 /// <summary>
 /// A scenario defines a blueprint for an executable test.
@@ -10,7 +26,8 @@
 ///
 /// This construct can represent any single test, and provides the foundation for building tests as data.
 /// </summary>
-public abstract record Scenario
+/// <typeparam name="TSyntax">Supported syntax</typeparam>
+public abstract record Scenario<TSyntax> where TSyntax : struct, Syntax
 {
     /// <summary>
     /// Optional name for the scenario
@@ -26,7 +43,7 @@ public abstract record Scenario
     /// <param name="ArrangeScenario">operation to arrange the data for acting on the scenario</param>
     /// <typeparam name="TData">type of data required to act on the scenario</typeparam>
     public sealed record Arranged<TData>(string? Name, Func<Task<TData>> ArrangeScenario)
-        : Scenario(Name);
+        : Scenario<TSyntax>(Name);
 
     /// <summary>
     /// A scenario that has been arranged and acted on
@@ -40,7 +57,7 @@ public abstract record Scenario
         string? Name,
         Func<Task<TData>> ArrangeScenario,
         Func<TData, Task<TResult>> ActOnScenario
-    ) : Scenario(Name);
+    ) : Scenario<TSyntax>(Name);
 
     /// <summary>
     /// A scenario that has been arranged and acted and asserted against
@@ -56,7 +73,7 @@ public abstract record Scenario
         Func<Task<TData>> ArrangeScenario,
         Func<TData, Task<TResult>> ActOnScenario,
         Func<TData, TResult, Task> AssertAgainstResult
-    ) : Scenario(Name)
+    ) : Scenario<TSyntax>(Name)
     {
         internal async Task Run()
         {

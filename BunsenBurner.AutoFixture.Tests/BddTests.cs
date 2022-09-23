@@ -1,7 +1,6 @@
 using AutoFixture;
-using static FluentTests.Dsl.Bdd;
 
-namespace FluentTests.AutoFixture.Tests;
+namespace BunsenBurner.AutoFixture.Tests;
 
 using static Bdd;
 

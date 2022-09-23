@@ -1,7 +1,6 @@
 using AutoFixture;
-using static FluentTests.Dsl.Aaa;
 
-namespace FluentTests.AutoFixture.Tests;
+namespace BunsenBurner.AutoFixture.Tests;
 
 using static Aaa;
 
@@ -24,7 +23,7 @@ public class AaaTests
     [Fact(DisplayName = "async auto arrange works")]
     public async Task Case3() =>
         await "some description"
-            .AutoArrange(f => f.CreateMany<string>())
+            .AutoArrange(f => Task.FromResult(f.CreateMany<string>()))
             .Act(d => d.Select(x => x.Length))
             .Assert(r => Assert.All(r, i => Assert.True(i > 0)));
 

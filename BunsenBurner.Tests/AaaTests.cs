@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace FluentTests.Tests;
-using static Dsl.Aaa;
+namespace BunsenBurner.Tests;
+using static Aaa;
 
 public class AaaTests
 {

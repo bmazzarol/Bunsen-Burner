@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentTests", "FluentTests\FluentTests.csproj", "{1166C16C-5AE3-4075-BBB4-B43C0B712026}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner", "BunsenBurner\BunsenBurner.csproj", "{1166C16C-5AE3-4075-BBB4-B43C0B712026}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentTests.Tests", "FluentTests.Tests\FluentTests.Tests.csproj", "{A6D826B6-1440-4169-B5F6-EF79F801BCCA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.Tests", "BunsenBurner.Tests\BunsenBurner.Tests.csproj", "{A6D826B6-1440-4169-B5F6-EF79F801BCCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentTests.AutoFixture", "FluentTests.AutoFixture\FluentTests.AutoFixture.csproj", "{09AB3D92-4B13-4DBB-9BB1-3460C7CFC4A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.AutoFixture", "BunsenBurner.AutoFixture\BunsenBurner.AutoFixture.csproj", "{09AB3D92-4B13-4DBB-9BB1-3460C7CFC4A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentTests.AutoFixture.Tests", "FluentTests.AutoFixture.Tests\FluentTests.AutoFixture.Tests.csproj", "{A1392A79-D7D5-4A21-BCEC-A240F3BEB5EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.AutoFixture.Tests", "BunsenBurner.AutoFixture.Tests\BunsenBurner.AutoFixture.Tests.csproj", "{A1392A79-D7D5-4A21-BCEC-A240F3BEB5EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

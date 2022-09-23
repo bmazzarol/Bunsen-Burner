@@ -1,6 +1,8 @@
 ﻿using AutoFixture;
 
-namespace FluentTests.AutoFixture;
+namespace BunsenBurner.AutoFixture;
+
+using BddScenario = Scenario<Syntax.Bdd>;
 
 /// <summary>
 /// Provides support for auto fixture in constructing given steps
@@ -13,8 +15,8 @@ public static class Bdd
     /// <param name="fn">async given function</param>
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
-    public static Scenario.Arranged<TData> AutoGiven<TData>(Func<Fixture, Task<TData>> fn) =>
-        Aaa.AutoArrange(fn);
+    public static BddScenario.Arranged<TData> AutoGiven<TData>(Func<Fixture, Task<TData>> fn) =>
+        Shared.AutoArrange<TData, Syntax.Bdd>(fn);
 
     /// <summary>
     /// Auto complete the given step in the scenario using auto fixture
@@ -22,8 +24,8 @@ public static class Bdd
     /// <param name="fn">given function</param>
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
-    public static Scenario.Arranged<TData> AutoGiven<TData>(Func<Fixture, TData> fn) =>
-        Aaa.AutoArrange(fn);
+    public static BddScenario.Arranged<TData> AutoGiven<TData>(Func<Fixture, TData> fn) =>
+        Shared.AutoArrange<TData, Syntax.Bdd>(fn);
 
     /// <summary>
     /// Auto complete the given step in the scenario using auto fixture
@@ -32,10 +34,10 @@ public static class Bdd
     /// <param name="fn">async given function</param>
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
-    public static Scenario.Arranged<TData> AutoGiven<TData>(
+    public static BddScenario.Arranged<TData> AutoGiven<TData>(
         this string name,
         Func<Fixture, Task<TData>> fn
-    ) => name.AutoArrange(fn);
+    ) => name.AutoArrange<TData, Syntax.Bdd>(fn);
 
     /// <summary>
     /// Auto complete the given step in the scenario using auto fixture
@@ -44,8 +46,8 @@ public static class Bdd
     /// <param name="fn">given function</param>
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
-    public static Scenario.Arranged<TData> AutoGiven<TData>(
+    public static BddScenario.Arranged<TData> AutoGiven<TData>(
         this string name,
         Func<Fixture, TData> fn
-    ) => name.AutoArrange(fn);
+    ) => name.AutoArrange<TData, Syntax.Bdd>(fn);
 }

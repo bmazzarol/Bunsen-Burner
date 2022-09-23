@@ -1,6 +1,8 @@
 ﻿using AutoFixture;
 
-namespace FluentTests.AutoFixture;
+namespace BunsenBurner.AutoFixture;
+
+using AaaScenario = Scenario<Syntax.Aaa>;
 
 /// <summary>
 /// Provides support for auto fixture in constructing arrange steps
@@ -13,8 +15,8 @@ public static class Aaa
     /// <param name="fn">async arrange function</param>
     /// <typeparam name="TData">auto arranged data to act on</typeparam>
     /// <returns>arranged scenario</returns>
-    public static Scenario.Arranged<TData> AutoArrange<TData>(Func<Fixture, Task<TData>> fn) =>
-        new(default, () => fn(new Fixture()));
+    public static AaaScenario.Arranged<TData> AutoArrange<TData>(Func<Fixture, Task<TData>> fn) =>
+        Shared.AutoArrange<TData, Syntax.Aaa>(fn);
 
     /// <summary>
     /// Auto arrange the scenario using auto fixture
@@ -22,8 +24,8 @@ public static class Aaa
     /// <param name="fn">arrange function</param>
     /// <typeparam name="TData">auto arranged data to act on</typeparam>
     /// <returns>arranged scenario</returns>
-    public static Scenario.Arranged<TData> AutoArrange<TData>(Func<Fixture, TData> fn) =>
-        AutoArrange(fixture => Task.FromResult(fn(fixture)));
+    public static AaaScenario.Arranged<TData> AutoArrange<TData>(Func<Fixture, TData> fn) =>
+        Shared.AutoArrange<TData, Syntax.Aaa>(fn);
 
     /// <summary>
     /// Auto arrange the scenario using auto fixture
@@ -32,10 +34,10 @@ public static class Aaa
     /// <param name="fn">async arrange function</param>
     /// <typeparam name="TData">auto arranged data to act on</typeparam>
     /// <returns>arranged scenario</returns>
-    public static Scenario.Arranged<TData> AutoArrange<TData>(
+    public static AaaScenario.Arranged<TData> AutoArrange<TData>(
         this string name,
         Func<Fixture, Task<TData>> fn
-    ) => new(name, () => fn(new Fixture()));
+    ) => name.AutoArrange<TData, Syntax.Aaa>(fn);
 
     /// <summary>
     /// Auto arrange the scenario using auto fixture
@@ -44,8 +46,8 @@ public static class Aaa
     /// <param name="fn">arrange function</param>
     /// <typeparam name="TData">auto arranged data to act on</typeparam>
     /// <returns>arranged scenario</returns>
-    public static Scenario.Arranged<TData> AutoArrange<TData>(
+    public static AaaScenario.Arranged<TData> AutoArrange<TData>(
         this string name,
         Func<Fixture, TData> fn
-    ) => name.AutoArrange(fixture => Task.FromResult(fn(fixture)));
+    ) => name.AutoArrange<TData, Syntax.Aaa>(fn);
 }

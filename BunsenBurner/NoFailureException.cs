@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
-namespace FluentTests;
+namespace BunsenBurner;
 
 /// <summary>
 /// Thrown when a scenario is expected to fail and it succeeds

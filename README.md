@@ -1,16 +1,18 @@
-﻿![FluentTests](logo.jpg?raw=true "FluentTests.NET")
+﻿# :fire: Bunsen Burner :fire:
+> Set fire to your old unit tests!
+---
 
-Fluent test builder for DotNET.
+A better way to write tests in C#.
 
 * Test framework agnostic
 * Zero dependencies
 * Easy to use and extend
+* More maintainable
 
 ```c#
 // can use implicit usings
 using Xunit;
-using static Dsl.Shared;
-using static Dsl.Aaa;
+using static BunsenBurner.Aaa;
 
 namespace SomeNamespace
 
@@ -30,7 +32,7 @@ Coming Soon.
 
 ## Why?
 
-Most tests in the DotNET ecosystem are written in an arrange, act, assert style, like so,
+Most tests in the C# are written in an arrange, act, assert style, like so,
 
 ```c#
 using Xunit;
@@ -59,14 +61,13 @@ This library aims to formalize this structure in the following ways,
 * Enforces that all tests must be arranged before acting and acted upon before assertions can occur
 * Converts tests to data, which can be composed and built up then executed
   * Works well wth theories
-* Because the fluent tests are just data, functions can be used to extend them and compose them together
-  * Works will with dotnet extension methods and other test libraries
+* Because tests are just data, functions can be used to extend them and compose them together
+  * Works will with extension methods and other test libraries, use cases
 
 ```c#
 // can use implicit usings
 using Xunit;
-using static Dsl.Shared;
-using static Dsl.Aaa;
+using static BunsenBurner.Aaa;
 
 namespace SomeNamespace
 
