@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
+        <PackageReference Include="NUnit" Version="3.13.3" />
+        <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+        <PackageReference Include="NUnit.Analyzers" Version="3.3.0" />
+        <PackageReference Include="coverlet.collector" Version="3.1.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\BunsenBurner.Verify.NUnit\BunsenBurner.Verify.NUnit.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="__snapshots__\AaaTests.Case1.verified.txt">
+        <ParentFile>AaaTests</ParentFile>
+        <DependentUpon>AaaTests.cs</DependentUpon>
+      </None>
+      <None Update="__snapshots__\AaaTests.Case2_Some description.verified.txt">
+        <ParentFile>AaaTests</ParentFile>
+        <DependentUpon>AaaTests.cs</DependentUpon>
+      </None>
+      <None Update="__snapshots__\AaaTests.Case3.verified.txt">
+        <ParentFile>AaaTests</ParentFile>
+        <DependentUpon>AaaTests.cs</DependentUpon>
+      </None>
+      <None Update="__snapshots__\AaaTests.Case4_Some description.verified.txt">
+        <ParentFile>AaaTests</ParentFile>
+        <DependentUpon>AaaTests.cs</DependentUpon>
+      </None>
+      <None Update="__snapshots__\BddTests.Case2_Some description.verified.txt">
+        <ParentFile>BddTests</ParentFile>
+        <DependentUpon>BddTests.cs</DependentUpon>
+      </None>
+      <None Update="__snapshots__\BddTests.Case4_Some description.verified.txt">
+        <ParentFile>BddTests</ParentFile>
+        <DependentUpon>BddTests.cs</DependentUpon>
+      </None>
+      <None Update="__snapshots__\BddTests.Case3.verified.txt">
+        <ParentFile>BddTests</ParentFile>
+        <DependentUpon>BddTests.cs</DependentUpon>
+      </None>
+      <None Update="__snapshots__\BddTests.Case1.verified.txt">
+        <ParentFile>BddTests</ParentFile>
+        <DependentUpon>BddTests.cs</DependentUpon>
+      </None>
+    </ItemGroup>
+
+</Project>
