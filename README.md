@@ -20,7 +20,7 @@ public static class Tests
 {
     [Fact(DisplayName = "Example AAA test!!!")]
     public static async Task SomeTest() =>
-        await Arrange(() => new new SUT(...))
+        await Arrange(() => new SUT(...))
              .Act(async sut => await sut.SomeMethod(...))
              .Assert(result => Assert.Equal("should be this", result));
 }
@@ -76,7 +76,7 @@ public static class Tests
     [Fact(DisplayName = "Example AAA test!!!")]
     public static async Task SomeTest() =>
               // arrange starts a new test, whatever type it returns can be used when acting 
-        await Arrange(() => new new SUT(...))
+        await Arrange(() => new SUT(...))
               // act on the arranged data, async is supported in all test steps
              .Act(async sut => await sut.SomeMethod(...))
               // assert against the result of acting
