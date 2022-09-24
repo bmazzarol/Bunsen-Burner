@@ -8,6 +8,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.AutoFixture", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.AutoFixture.Tests", "BunsenBurner.AutoFixture.Tests\BunsenBurner.AutoFixture.Tests.csproj", "{A1392A79-D7D5-4A21-BCEC-A240F3BEB5EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.Verify.Xunit", "BunsenBurner.Verify.Xunit\BunsenBurner.Verify.Xunit.csproj", "{4951587D-A155-456A-8E86-F705F47B34DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.Verify.Xunit.Tests", "BunsenBurner.Verify.Xunit.Tests\BunsenBurner.Verify.Xunit.Tests.csproj", "{05A3C6A3-761C-454B-B8FC-F0E87978E063}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Verify", "Verify", "{EE0D5B71-EC3F-4DCB-B291-35B8AFD0CCD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +36,17 @@ Global
 		{A1392A79-D7D5-4A21-BCEC-A240F3BEB5EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1392A79-D7D5-4A21-BCEC-A240F3BEB5EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1392A79-D7D5-4A21-BCEC-A240F3BEB5EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4951587D-A155-456A-8E86-F705F47B34DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4951587D-A155-456A-8E86-F705F47B34DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4951587D-A155-456A-8E86-F705F47B34DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4951587D-A155-456A-8E86-F705F47B34DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05A3C6A3-761C-454B-B8FC-F0E87978E063}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05A3C6A3-761C-454B-B8FC-F0E87978E063}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05A3C6A3-761C-454B-B8FC-F0E87978E063}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05A3C6A3-761C-454B-B8FC-F0E87978E063}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4951587D-A155-456A-8E86-F705F47B34DD} = {EE0D5B71-EC3F-4DCB-B291-35B8AFD0CCD4}
+		{05A3C6A3-761C-454B-B8FC-F0E87978E063} = {EE0D5B71-EC3F-4DCB-B291-35B8AFD0CCD4}
 	EndGlobalSection
 EndGlobal

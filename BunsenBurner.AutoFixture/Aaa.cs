@@ -15,6 +15,7 @@ public static class Aaa
     /// <param name="fn">async arrange function</param>
     /// <typeparam name="TData">auto arranged data to act on</typeparam>
     /// <returns>arranged scenario</returns>
+    [Pure]
     public static AaaScenario.Arranged<TData> AutoArrange<TData>(Func<Fixture, Task<TData>> fn) =>
         Shared.AutoArrange<TData, Syntax.Aaa>(fn);
 
@@ -24,6 +25,7 @@ public static class Aaa
     /// <param name="fn">arrange function</param>
     /// <typeparam name="TData">auto arranged data to act on</typeparam>
     /// <returns>arranged scenario</returns>
+    [Pure]
     public static AaaScenario.Arranged<TData> AutoArrange<TData>(Func<Fixture, TData> fn) =>
         Shared.AutoArrange<TData, Syntax.Aaa>(fn);
 
@@ -34,6 +36,7 @@ public static class Aaa
     /// <param name="fn">async arrange function</param>
     /// <typeparam name="TData">auto arranged data to act on</typeparam>
     /// <returns>arranged scenario</returns>
+    [Pure]
     public static AaaScenario.Arranged<TData> AutoArrange<TData>(
         this string name,
         Func<Fixture, Task<TData>> fn
@@ -46,6 +49,7 @@ public static class Aaa
     /// <param name="fn">arrange function</param>
     /// <typeparam name="TData">auto arranged data to act on</typeparam>
     /// <returns>arranged scenario</returns>
+    [Pure]
     public static AaaScenario.Arranged<TData> AutoArrange<TData>(
         this string name,
         Func<Fixture, TData> fn

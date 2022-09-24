@@ -15,6 +15,7 @@ public static class Bdd
     /// <param name="fn">async function returning scenario data</param>
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
+    [Pure]
     public static BddScenario.Arranged<TData> Given<TData>(Func<Task<TData>> fn) =>
         Shared.Arrange<TData, Syntax.Bdd>(fn);
 
@@ -24,6 +25,7 @@ public static class Bdd
     /// <param name="fn">function returning scenario data</param>
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
+    [Pure]
     public static BddScenario.Arranged<TData> Given<TData>(Func<TData> fn) =>
         Shared.Arrange<TData, Syntax.Bdd>(fn);
 
@@ -34,6 +36,7 @@ public static class Bdd
     /// <param name="fn">async function returning scenario data</param>
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
+    [Pure]
     public static BddScenario.Arranged<TData> Given<TData>(
         this string name,
         Func<Task<TData>> fn
@@ -46,6 +49,7 @@ public static class Bdd
     /// <param name="fn">async function returning scenario data</param>
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
+    [Pure]
     public static BddScenario.Arranged<TData> Given<TData>(this string name, Func<TData> fn) =>
         name.Arrange<TData, Syntax.Bdd>(fn);
 
@@ -57,6 +61,7 @@ public static class Bdd
     /// <typeparam name="TData">initial scenario data</typeparam>
     /// <typeparam name="TDataNext">next scenario data</typeparam>
     /// <returns>scenario with the given data</returns>
+    [Pure]
     public static BddScenario.Arranged<TDataNext> And<TData, TDataNext>(
         this BddScenario.Arranged<TData> scenario,
         Func<TData, Task<TDataNext>> fn
@@ -70,6 +75,7 @@ public static class Bdd
     /// <typeparam name="TData">initial scenario data</typeparam>
     /// <typeparam name="TDataNext">next scenario data</typeparam>
     /// <returns>scenario with the given data</returns>
+    [Pure]
     public static BddScenario.Arranged<TDataNext> And<TData, TDataNext>(
         this BddScenario.Arranged<TData> scenario,
         Func<TData, TDataNext> fn
@@ -83,6 +89,7 @@ public static class Bdd
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>scenario that is run</returns>
+    [Pure]
     public static BddScenario.Acted<TData, TResult> When<TData, TResult>(
         this BddScenario.Arranged<TData> scenario,
         Func<TData, Task<TResult>> fn
@@ -96,6 +103,7 @@ public static class Bdd
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>scenario that is run</returns>
+    [Pure]
     public static BddScenario.Acted<TData, TResult> When<TData, TResult>(
         this BddScenario.Arranged<TData> scenario,
         Func<TData, TResult> fn
@@ -110,6 +118,7 @@ public static class Bdd
     /// <typeparam name="TResult">initial result of running the scenario</typeparam>
     /// <typeparam name="TResultNext">result of running the scenario</typeparam>
     /// <returns>scenario that is run</returns>
+    [Pure]
     public static BddScenario.Acted<TData, TResultNext> And<TData, TResult, TResultNext>(
         this BddScenario.Acted<TData, TResult> scenario,
         Func<TData, TResult, Task<TResultNext>> fn
@@ -124,6 +133,7 @@ public static class Bdd
     /// <typeparam name="TResult">initial result of running the scenario</typeparam>
     /// <typeparam name="TResultNext">result of running the scenario</typeparam>
     /// <returns>scenario that is run</returns>
+    [Pure]
     public static BddScenario.Acted<TData, TResultNext> And<TData, TResult, TResultNext>(
         this BddScenario.Acted<TData, TResult> scenario,
         Func<TData, TResult, TResultNext> fn
@@ -137,6 +147,7 @@ public static class Bdd
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
+    [Pure]
     public static BddScenario.Asserted<TData, TResult> Then<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Func<TData, TResult, Task> fn
@@ -150,6 +161,7 @@ public static class Bdd
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
+    [Pure]
     public static BddScenario.Asserted<TData, TResult> Then<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Func<TResult, Task> fn
@@ -163,6 +175,7 @@ public static class Bdd
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
+    [Pure]
     public static BddScenario.Asserted<TData, TResult> Then<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Action<TData, TResult> fn
@@ -176,6 +189,7 @@ public static class Bdd
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
+    [Pure]
     public static BddScenario.Asserted<TData, TResult> Then<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Action<TResult> fn
@@ -189,6 +203,7 @@ public static class Bdd
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
+    [Pure]
     public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Func<TData, Exception, Task> fn
@@ -202,6 +217,7 @@ public static class Bdd
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
+    [Pure]
     public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Func<Exception, Task> fn
@@ -215,6 +231,7 @@ public static class Bdd
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
+    [Pure]
     public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Action<TData, Exception> fn
@@ -228,6 +245,7 @@ public static class Bdd
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
+    [Pure]
     public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Action<Exception> fn
@@ -241,6 +259,7 @@ public static class Bdd
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
+    [Pure]
     public static BddScenario.Asserted<TData, TResult> And<TData, TResult>(
         this BddScenario.Asserted<TData, TResult> scenario,
         Func<TData, TResult, Task> fn
@@ -254,6 +273,7 @@ public static class Bdd
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
+    [Pure]
     public static BddScenario.Asserted<TData, TResult> And<TData, TResult>(
         this BddScenario.Asserted<TData, TResult> scenario,
         Func<TResult, Task> fn
@@ -267,6 +287,7 @@ public static class Bdd
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
+    [Pure]
     public static BddScenario.Asserted<TData, TResult> And<TData, TResult>(
         this BddScenario.Asserted<TData, TResult> scenario,
         Action<TData, TResult> fn
@@ -280,6 +301,7 @@ public static class Bdd
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
+    [Pure]
     public static BddScenario.Asserted<TData, TResult> And<TData, TResult>(
         this BddScenario.Asserted<TData, TResult> scenario,
         Action<TResult> fn

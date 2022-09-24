@@ -15,6 +15,7 @@ public static class Bdd
     /// <param name="fn">async given function</param>
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
+    [Pure]
     public static BddScenario.Arranged<TData> AutoGiven<TData>(Func<Fixture, Task<TData>> fn) =>
         Shared.AutoArrange<TData, Syntax.Bdd>(fn);
 
@@ -24,6 +25,7 @@ public static class Bdd
     /// <param name="fn">given function</param>
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
+    [Pure]
     public static BddScenario.Arranged<TData> AutoGiven<TData>(Func<Fixture, TData> fn) =>
         Shared.AutoArrange<TData, Syntax.Bdd>(fn);
 
@@ -34,6 +36,7 @@ public static class Bdd
     /// <param name="fn">async given function</param>
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
+    [Pure]
     public static BddScenario.Arranged<TData> AutoGiven<TData>(
         this string name,
         Func<Fixture, Task<TData>> fn
@@ -46,6 +49,7 @@ public static class Bdd
     /// <param name="fn">given function</param>
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
+    [Pure]
     public static BddScenario.Arranged<TData> AutoGiven<TData>(
         this string name,
         Func<Fixture, TData> fn

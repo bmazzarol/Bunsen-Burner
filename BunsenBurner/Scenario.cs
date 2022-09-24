@@ -6,7 +6,7 @@
 public interface Syntax
 {
     /// <summary>
-    /// Arrange, act, assert.
+    /// Arrange, act, assert
     /// </summary>
     public readonly struct Aaa : Syntax { }
 

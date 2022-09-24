@@ -15,6 +15,7 @@ public static class Aaa
     /// <param name="fn">async function returning test data</param>
     /// <typeparam name="TData">data required to act on the test</typeparam>
     /// <returns>arranged scenario</returns>
+    [Pure]
     public static AaaScenario.Arranged<TData> Arrange<TData>(Func<Task<TData>> fn) =>
         Shared.Arrange<TData, Syntax.Aaa>(fn);
 
@@ -24,6 +25,7 @@ public static class Aaa
     /// <param name="fn">function returning test data</param>
     /// <typeparam name="TData">data required to act on the test</typeparam>
     /// <returns>arranged scenario</returns>
+    [Pure]
     public static AaaScenario.Arranged<TData> Arrange<TData>(Func<TData> fn) =>
         Shared.Arrange<TData, Syntax.Aaa>(fn);
 
@@ -34,6 +36,7 @@ public static class Aaa
     /// <param name="fn">async function returning test data</param>
     /// <typeparam name="TData">data required to act on the test</typeparam>
     /// <returns>arranged scenario</returns>
+    [Pure]
     public static AaaScenario.Arranged<TData> Arrange<TData>(
         this string name,
         Func<Task<TData>> fn
@@ -46,6 +49,7 @@ public static class Aaa
     /// <param name="fn">function returning test data</param>
     /// <typeparam name="TData">data required to act on the test</typeparam>
     /// <returns>arranged scenario</returns>
+    [Pure]
     public static AaaScenario.Arranged<TData> Arrange<TData>(this string name, Func<TData> fn) =>
         name.Arrange<TData, Syntax.Aaa>(fn);
 
@@ -57,6 +61,7 @@ public static class Aaa
     /// <typeparam name="TData">initial data required to act on the test</typeparam>
     /// <typeparam name="TDataNext">next data required to act on the test</typeparam>
     /// <returns>arranged scenario</returns>
+    [Pure]
     public static AaaScenario.Arranged<TDataNext> And<TData, TDataNext>(
         this AaaScenario.Arranged<TData> scenario,
         Func<TData, Task<TDataNext>> fn
@@ -70,6 +75,7 @@ public static class Aaa
     /// <typeparam name="TData">initial data required to act on the test</typeparam>
     /// <typeparam name="TDataNext">next data required to act on the test</typeparam>
     /// <returns>arranged scenario</returns>
+    [Pure]
     public static AaaScenario.Arranged<TDataNext> And<TData, TDataNext>(
         this AaaScenario.Arranged<TData> scenario,
         Func<TData, TDataNext> fn
@@ -83,6 +89,7 @@ public static class Aaa
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">result of acting on the test data</typeparam>
     /// <returns>acted scenario</returns>
+    [Pure]
     public static AaaScenario.Acted<TData, TResult> Act<TData, TResult>(
         this AaaScenario.Arranged<TData> scenario,
         Func<TData, Task<TResult>> fn
@@ -96,6 +103,7 @@ public static class Aaa
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">result of acting on the test data</typeparam>
     /// <returns>acted scenario</returns>
+    [Pure]
     public static AaaScenario.Acted<TData, TResult> Act<TData, TResult>(
         this AaaScenario.Arranged<TData> scenario,
         Func<TData, TResult> fn
@@ -110,6 +118,7 @@ public static class Aaa
     /// <typeparam name="TResult">initial result of acting on the test data</typeparam>
     /// <typeparam name="TResultNext">next result of acting on the test data and last result</typeparam>
     /// <returns>acted scenario</returns>
+    [Pure]
     public static AaaScenario.Acted<TData, TResultNext> And<TData, TResult, TResultNext>(
         this AaaScenario.Acted<TData, TResult> scenario,
         Func<TData, TResult, Task<TResultNext>> fn
@@ -124,6 +133,7 @@ public static class Aaa
     /// <typeparam name="TResult">initial result of acting on the test data</typeparam>
     /// <typeparam name="TResultNext">next result of acting on the test data and last result</typeparam>
     /// <returns>acted scenario</returns>
+    [Pure]
     public static AaaScenario.Acted<TData, TResultNext> And<TData, TResult, TResultNext>(
         this AaaScenario.Acted<TData, TResult> scenario,
         Func<TData, TResult, TResultNext> fn
@@ -137,6 +147,7 @@ public static class Aaa
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted scenario</returns>
+    [Pure]
     public static AaaScenario.Asserted<TData, TResult> Assert<TData, TResult>(
         this AaaScenario.Acted<TData, TResult> scenario,
         Func<TData, TResult, Task> fn
@@ -150,6 +161,7 @@ public static class Aaa
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted scenario</returns>
+    [Pure]
     public static AaaScenario.Asserted<TData, TResult> Assert<TData, TResult>(
         this AaaScenario.Acted<TData, TResult> scenario,
         Func<TResult, Task> fn
@@ -163,6 +175,7 @@ public static class Aaa
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted scenario</returns>
+    [Pure]
     public static AaaScenario.Asserted<TData, TResult> Assert<TData, TResult>(
         this AaaScenario.Acted<TData, TResult> scenario,
         Action<TData, TResult> fn
@@ -176,6 +189,7 @@ public static class Aaa
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted scenario</returns>
+    [Pure]
     public static AaaScenario.Asserted<TData, TResult> Assert<TData, TResult>(
         this AaaScenario.Acted<TData, TResult> scenario,
         Action<TResult> fn
@@ -189,6 +203,7 @@ public static class Aaa
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted and failed scenario</returns>
+    [Pure]
     public static AaaScenario.Asserted<TData, Exception> AssertFailsWith<TData, TResult>(
         this AaaScenario.Acted<TData, TResult> scenario,
         Func<TData, Exception, Task> fn
@@ -202,6 +217,7 @@ public static class Aaa
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted and failed scenario</returns>
+    [Pure]
     public static AaaScenario.Asserted<TData, Exception> AssertFailsWith<TData, TResult>(
         this AaaScenario.Acted<TData, TResult> scenario,
         Func<Exception, Task> fn
@@ -215,6 +231,7 @@ public static class Aaa
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted and failed scenario</returns>
+    [Pure]
     public static AaaScenario.Asserted<TData, Exception> AssertFailsWith<TData, TResult>(
         this AaaScenario.Acted<TData, TResult> scenario,
         Action<TData, Exception> fn
@@ -228,6 +245,7 @@ public static class Aaa
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted and failed scenario</returns>
+    [Pure]
     public static AaaScenario.Asserted<TData, Exception> AssertFailsWith<TData, TResult>(
         this AaaScenario.Acted<TData, TResult> scenario,
         Action<Exception> fn
@@ -241,6 +259,7 @@ public static class Aaa
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted scenario</returns>
+    [Pure]
     public static AaaScenario.Asserted<TData, TResult> And<TData, TResult>(
         this AaaScenario.Asserted<TData, TResult> scenario,
         Func<TData, TResult, Task> fn
@@ -254,6 +273,7 @@ public static class Aaa
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted scenario</returns>
+    [Pure]
     public static AaaScenario.Asserted<TData, TResult> And<TData, TResult>(
         this AaaScenario.Asserted<TData, TResult> scenario,
         Func<TResult, Task> fn
@@ -267,6 +287,7 @@ public static class Aaa
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted scenario</returns>
+    [Pure]
     public static AaaScenario.Asserted<TData, TResult> And<TData, TResult>(
         this AaaScenario.Asserted<TData, TResult> scenario,
         Action<TData, TResult> fn
@@ -280,6 +301,7 @@ public static class Aaa
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted scenario</returns>
+    [Pure]
     public static AaaScenario.Asserted<TData, TResult> And<TData, TResult>(
         this AaaScenario.Asserted<TData, TResult> scenario,
         Action<TResult> fn
