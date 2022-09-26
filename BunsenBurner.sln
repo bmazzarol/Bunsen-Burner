@@ -18,6 +18,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.Verify.NUnit",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.Verify.NUnit.Tests", "BunsenBurner.Verify.NUnit.Tests\BunsenBurner.Verify.NUnit.Tests.csproj", "{ECB3CE41-45A0-4D0D-80E5-AFECD9B155EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.Http", "BunsenBurner.Http\BunsenBurner.Http.csproj", "{37626CD0-F66F-418E-9BC2-4140AF0566A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.Http.Tests", "BunsenBurner.Http.Tests\BunsenBurner.Http.Tests.csproj", "{1B3275A1-00E5-40D1-9E6F-4EA3E049FE15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +60,14 @@ Global
 		{ECB3CE41-45A0-4D0D-80E5-AFECD9B155EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECB3CE41-45A0-4D0D-80E5-AFECD9B155EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECB3CE41-45A0-4D0D-80E5-AFECD9B155EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37626CD0-F66F-418E-9BC2-4140AF0566A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37626CD0-F66F-418E-9BC2-4140AF0566A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37626CD0-F66F-418E-9BC2-4140AF0566A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37626CD0-F66F-418E-9BC2-4140AF0566A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B3275A1-00E5-40D1-9E6F-4EA3E049FE15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B3275A1-00E5-40D1-9E6F-4EA3E049FE15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B3275A1-00E5-40D1-9E6F-4EA3E049FE15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B3275A1-00E5-40D1-9E6F-4EA3E049FE15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4951587D-A155-456A-8E86-F705F47B34DD} = {EE0D5B71-EC3F-4DCB-B291-35B8AFD0CCD4}
