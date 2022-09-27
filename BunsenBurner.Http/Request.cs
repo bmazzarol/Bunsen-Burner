@@ -40,6 +40,24 @@ public abstract record Request
 
     internal abstract Body? InternalBody();
 
+    /// <summary>
+    /// Request content
+    /// </summary>
+    /// <returns>request content</returns>
+    public string? Content() => InternalBody()?.Data;
+
+    /// <summary>
+    /// Content type
+    /// </summary>
+    /// <returns>content type</returns>
+    public string? ContentType() => InternalBody()?.ContentType;
+
+    /// <summary>
+    /// Content length
+    /// </summary>
+    /// <returns>content length</returns>
+    public long? ContentLength() => Content()?.Length;
+
     public sealed record Get(Url Url, Headers Headers) : Request(nameof(Get), Url, Headers)
     {
         internal override Body? InternalBody() => default;
