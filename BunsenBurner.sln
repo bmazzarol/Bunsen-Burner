@@ -22,6 +22,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.Http", "Bunsen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.Http.Tests", "BunsenBurner.Http.Tests\BunsenBurner.Http.Tests.csproj", "{1B3275A1-00E5-40D1-9E6F-4EA3E049FE15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.Bogus", "BunsenBurner.Bogus\BunsenBurner.Bogus.csproj", "{FA72EF60-F268-44FA-9095-9C717BB31CB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.Bogus.Tests", "BunsenBurner.Bogus.Tests\BunsenBurner.Bogus.Tests.csproj", "{720A6E07-2F53-46EC-8A9D-93A6BE2D7492}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +72,14 @@ Global
 		{1B3275A1-00E5-40D1-9E6F-4EA3E049FE15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B3275A1-00E5-40D1-9E6F-4EA3E049FE15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B3275A1-00E5-40D1-9E6F-4EA3E049FE15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA72EF60-F268-44FA-9095-9C717BB31CB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA72EF60-F268-44FA-9095-9C717BB31CB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA72EF60-F268-44FA-9095-9C717BB31CB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA72EF60-F268-44FA-9095-9C717BB31CB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{720A6E07-2F53-46EC-8A9D-93A6BE2D7492}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{720A6E07-2F53-46EC-8A9D-93A6BE2D7492}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{720A6E07-2F53-46EC-8A9D-93A6BE2D7492}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{720A6E07-2F53-46EC-8A9D-93A6BE2D7492}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4951587D-A155-456A-8E86-F705F47B34DD} = {EE0D5B71-EC3F-4DCB-B291-35B8AFD0CCD4}
