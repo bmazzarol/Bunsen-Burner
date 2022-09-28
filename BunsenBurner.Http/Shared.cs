@@ -40,7 +40,7 @@ internal static class Shared
         new(
             scenario.Name,
             scenario.ArrangeScenario,
-            async data => await InternalCall(fn(data), server.CreateClient())
+            data => InternalCall(fn(data), server.CreateClient())
         );
 
     [Pure]
@@ -49,7 +49,7 @@ internal static class Shared
         TestServer server
     )
         where TRequest : Request
-        where TSyntax : struct, Syntax => scenario.ActAndCall(_ => _, server);
+        where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _, server);
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<TData, Response> ActAndCall<TData, TRequest, TSyntax>(
@@ -61,7 +61,7 @@ internal static class Shared
         new(
             scenario.Name,
             scenario.ArrangeScenario,
-            async data => await InternalCall(fn(data), new HttpClient())
+            data => InternalCall(fn(data), new HttpClient())
         );
 
     [Pure]
@@ -69,5 +69,5 @@ internal static class Shared
         this Scenario<TSyntax>.Arranged<TRequest> scenario
     )
         where TRequest : Request
-        where TSyntax : struct, Syntax => scenario.ActAndCall(_ => _);
+        where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _);
 }

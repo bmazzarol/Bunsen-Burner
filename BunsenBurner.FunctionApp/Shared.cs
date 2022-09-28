@@ -18,5 +18,5 @@ internal static class Shared
     )
         where TFunction : class
         where TSyntax : struct, Syntax =>
-        new(scenario.Name, scenario.ArrangeScenario, async data => await fn(data, functionApp));
+        new(scenario.Name, scenario.ArrangeScenario, data => fn(data, functionApp));
 }

@@ -81,7 +81,7 @@ internal static class Shared
         bool scrubResults = false
     ) where TSyntax : struct, Syntax =>
         scenario.AssertResultIsUnchanged(
-            _ => _,
+            static _ => _,
             folder,
             sourceFilePath,
             matchConfiguration,
