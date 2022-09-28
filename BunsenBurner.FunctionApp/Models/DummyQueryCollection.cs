@@ -11,17 +11,17 @@ namespace BunsenBurner.FunctionApp.Models;
 internal static class DummyQueryCollectionExt
 {
     [Pure]
-    internal static StringValues ToStringValues(this object value) =>
+    internal static StringValues ToStringValues(this object? value) =>
         value switch
         {
             string s => new StringValues(s),
-            string[] strings
+            string?[] strings
                 => strings.Length == 1 ? new StringValues(strings[0]) : new StringValues(strings),
-            object[] objects
+            object?[] objects when objects.All(x => x != null)
                 => objects.Length == 1
-                    ? new StringValues(objects[0].ToString())
-                    : new StringValues(objects.Select(x => x.ToString()).ToArray()),
-            _ => new StringValues(value.ToString())
+                    ? new StringValues(objects[0]?.ToString())
+                    : new StringValues(objects.Select(x => x?.ToString()).ToArray()),
+            _ => new StringValues(value?.ToString())
         };
 }
 

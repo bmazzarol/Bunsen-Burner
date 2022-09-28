@@ -1,5 +1,7 @@
 using System.Net;
+using System.Web.Http;
 using BunsenBurner.Http;
+using Flurl;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
@@ -35,7 +37,16 @@ internal sealed class Function
     [FunctionName(nameof(SomeFunctionTrigger))]
     public async Task<IActionResult> SomeFunctionTrigger(
         [HttpTrigger(AuthorizationLevel.Anonymous)] HttpRequest req
-    ) => new OkObjectResult(await _service.SomeMethod());
+    )
+    {
+        if (req.Query.ContainsKey("empty"))
+            return new EmptyResult();
+        if (req.Query.ContainsKey("fail"))
+            return new InternalServerErrorResult();
+        if (req.Query.ContainsKey("noBody"))
+            return new OkResult();
+        return new OkObjectResult(await _service.SomeMethod());
+    }
 }
 
 public class AaaTests
@@ -53,5 +64,60 @@ public class AaaTests
                     return result.AsResponse();
                 }
             )
-            .Assert(resp => Assert.Equal(HttpStatusCode.OK, resp.Code));
+            .Assert(resp =>
+            {
+                Assert.Equal(HttpStatusCode.OK, resp.Code);
+                Assert.Equal("1", resp.Content);
+            });
+
+    [Fact(DisplayName = "Executing a http trigger function works with no response body")]
+    public async Task Case2() =>
+        await Arrange(() => 2)
+            .ActAndExecute(
+                FunctionAppBuilder.Create<Startup, Function>(),
+                async (i, function) =>
+                {
+                    var result = await function.SomeFunctionTrigger(
+                        Request.GET($"/some-path/{i}".SetQueryParam("noBody")).AsHttpRequest()
+                    );
+                    return result.AsResponse();
+                }
+            )
+            .Assert(resp =>
+            {
+                Assert.Equal(HttpStatusCode.OK, resp.Code);
+                Assert.Empty(resp.Content ?? string.Empty);
+            });
+
+    [Fact(DisplayName = "Executing a http trigger function can fail without issue")]
+    public async Task Case3() =>
+        await Arrange(() => 2)
+            .ActAndExecute(
+                FunctionAppBuilder.Create<Startup, Function>(),
+                async (i, function) =>
+                {
+                    var result = await function.SomeFunctionTrigger(
+                        Request.GET($"/some-path/{i}".SetQueryParam("fail")).AsHttpRequest()
+                    );
+                    return result.AsResponse();
+                }
+            )
+            .Assert(resp => Assert.Equal(HttpStatusCode.InternalServerError, resp.Code));
+
+    [Fact(
+        DisplayName = "Executing a http trigger function can return a non http object result without issue"
+    )]
+    public async Task Case4() =>
+        await Arrange(() => 2)
+            .ActAndExecute(
+                FunctionAppBuilder.Create<Startup, Function>(),
+                async (i, function) =>
+                {
+                    var result = await function.SomeFunctionTrigger(
+                        Request.GET($"/some-path/{i}".SetQueryParam("empty")).AsHttpRequest()
+                    );
+                    return result.AsResponse();
+                }
+            )
+            .Assert(resp => Assert.Equal(HttpStatusCode.InternalServerError, resp.Code));
 }

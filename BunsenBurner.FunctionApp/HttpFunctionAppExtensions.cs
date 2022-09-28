@@ -4,6 +4,7 @@ using BunsenBurner.FunctionApp.Models;
 using BunsenBurner.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace BunsenBurner.FunctionApp;
 
@@ -27,17 +28,28 @@ public static class HttpFunctionAppExtensions
     /// <returns>response</returns>
     [Pure]
     public static Response AsResponse(this IActionResult actionResult) =>
-        actionResult is ObjectResult { Value: not null } objectResult
-            ? new Response(
-                (HttpStatusCode)objectResult.StatusCode.GetValueOrDefault(),
-                objectResult.Value.ToString(),
-                objectResult.ContentTypes.FirstOrDefault(),
-                Enumerable.Empty<Header>()
-            )
-            : new Response(
-                HttpStatusCode.InternalServerError,
-                "Failed to process action result",
-                MediaTypeNames.Text.Plain,
-                Enumerable.Empty<Header>()
-            );
+        actionResult switch
+        {
+            ObjectResult { Value: not null } objectResult
+                => new Response(
+                    (HttpStatusCode)objectResult.StatusCode.GetValueOrDefault(),
+                    objectResult.Value.ToString(),
+                    objectResult.ContentTypes.FirstOrDefault(),
+                    Enumerable.Empty<Header>()
+                ),
+            IStatusCodeActionResult statusCodeResult
+                => new Response(
+                    (HttpStatusCode)statusCodeResult.StatusCode.GetValueOrDefault(),
+                    string.Empty,
+                    string.Empty,
+                    Enumerable.Empty<Header>()
+                ),
+            _
+                => new Response(
+                    HttpStatusCode.InternalServerError,
+                    "Failed to process action result",
+                    MediaTypeNames.Text.Plain,
+                    Enumerable.Empty<Header>()
+                )
+        };
 }
