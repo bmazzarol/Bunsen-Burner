@@ -12,7 +12,7 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>
 {
     private readonly LogMessageStore _store;
 
-    private DummyLogger(LogMessageStore store) => _store = store;
+    public DummyLogger(LogMessageStore store) => _store = store;
 
     [Pure]
     public static DummyLogger<T> New(LogMessageStore? store = default) =>

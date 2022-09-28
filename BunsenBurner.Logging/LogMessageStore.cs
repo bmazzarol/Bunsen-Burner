@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 
 namespace BunsenBurner.Logging;
@@ -8,18 +9,14 @@ namespace BunsenBurner.Logging;
 /// </summary>
 public sealed record LogMessageStore : IEnumerable<LogMessage>
 {
-    private readonly List<LogMessage> _logMessages;
+    private readonly ConcurrentBag<LogMessage> _logMessages;
 
-    private LogMessageStore() => _logMessages = new List<LogMessage>();
+    private LogMessageStore() => _logMessages = new ConcurrentBag<LogMessage>();
 
     [Pure]
     public static LogMessageStore New() => new();
 
-    internal LogMessageStore Log(LogMessage message)
-    {
-        _logMessages.Add(message);
-        return this;
-    }
+    internal void Log(LogMessage message) => _logMessages.Add(message);
 
     public IEnumerator<LogMessage> GetEnumerator() => _logMessages.GetEnumerator();
 
