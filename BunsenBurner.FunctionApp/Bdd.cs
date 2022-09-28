@@ -8,6 +8,50 @@ using BddScenario = Scenario<Syntax.Bdd>;
 public static class Bdd
 {
     /// <summary>
+    /// Given a function app
+    /// </summary>
+    /// <typeparam name="TStartup">function app startup</typeparam>
+    /// <typeparam name="TFunction">function app</typeparam>
+    /// <returns>given scenario</returns>
+    [Pure]
+    public static BddScenario.Arranged<TFunction> GivenFunctionApp<TStartup, TFunction>()
+        where TFunction : class
+        where TStartup : FunctionsStartup, new() =>
+        Shared.ArrangeFunctionApp<TStartup, TFunction, Syntax.Bdd>();
+
+    /// <summary>
+    /// Given a function app
+    /// </summary>
+    /// <param name="name">name/description</param>
+    /// <typeparam name="TStartup">function app startup</typeparam>
+    /// <typeparam name="TFunction">function app</typeparam>
+    /// <returns>given scenario</returns>
+    [Pure]
+    public static BddScenario.Arranged<TFunction> GivenFunctionApp<TStartup, TFunction>(
+        this string name
+    )
+        where TFunction : class
+        where TStartup : FunctionsStartup, new() =>
+        name.ArrangeFunctionApp<TStartup, TFunction, Syntax.Bdd>();
+
+    /// <summary>
+    /// Given a function app
+    /// </summary>
+    /// <typeparam name="TData">existing arranged data</typeparam>
+    /// <typeparam name="TStartup">function app startup</typeparam>
+    /// <typeparam name="TFunction">function app</typeparam>
+    /// <returns>given scenario</returns>
+    [Pure]
+    public static BddScenario.Arranged<(TData Data, TFunction FunctionApp)> AndFunctionApp<
+        TData,
+        TStartup,
+        TFunction
+    >(this BddScenario.Arranged<TData> scenario)
+        where TFunction : class
+        where TStartup : FunctionsStartup, new() =>
+        scenario.AndFunctionApp<TData, TStartup, TFunction, Syntax.Bdd>();
+
+    /// <summary>
     /// Executes the function app
     /// </summary>
     /// <param name="scenario">given scenario</param>
@@ -20,7 +64,21 @@ public static class Bdd
     [Pure]
     public static BddScenario.Acted<TData, TResult> WhenExecuted<TData, TResult, TFunction>(
         this BddScenario.Arranged<TData> scenario,
-        TFunction functionApp,
+        Func<TData, TFunction> functionApp,
         Func<TData, TFunction, Task<TResult>> fn
     ) where TFunction : class => scenario.ActAndExecute(functionApp, fn);
+
+    /// <summary>
+    /// Executes the function app
+    /// </summary>
+    /// <param name="scenario">given scenario</param>
+    /// <param name="fn">execute the function app, returning a result</param>
+    /// <typeparam name="TResult">result of executing the function app</typeparam>
+    /// <typeparam name="TFunction">function app to execute</typeparam>
+    /// <returns>scenario that is run</returns>
+    [Pure]
+    public static BddScenario.Acted<TFunction, TResult> WhenExecuted<TFunction, TResult>(
+        this BddScenario.Arranged<TFunction> scenario,
+        Func<TFunction, Task<TResult>> fn
+    ) where TFunction : class => scenario.ActAndExecute(fn);
 }

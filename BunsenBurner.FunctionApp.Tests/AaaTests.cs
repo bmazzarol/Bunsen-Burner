@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BunsenBurner.FunctionApp.Tests;
 using static BunsenBurner.Aaa;
+using static Aaa;
 
 internal interface ISomeService
 {
@@ -53,17 +54,31 @@ public class AaaTests
 {
     [Fact(DisplayName = "Executing a http trigger function works")]
     public async Task Case1() =>
-        await Arrange(() => 2)
-            .ActAndExecute(
-                FunctionAppBuilder.Create<Startup, Function>(),
-                async (i, function) =>
-                {
-                    var result = await function.SomeFunctionTrigger(
-                        Request.GET($"/some-path/{i}").AsHttpRequest()
-                    );
-                    return result.AsResponse();
-                }
-            )
+        await ArrangeFunctionApp<Startup, Function>()
+            .ActAndExecute(async function =>
+            {
+                var result = await function.SomeFunctionTrigger(
+                    Request.GET($"/some-path").AsHttpRequest()
+                );
+                return result.AsResponse();
+            })
+            .Assert(resp =>
+            {
+                Assert.Equal(HttpStatusCode.OK, resp.Code);
+                Assert.Equal("1", resp.Content);
+            });
+
+    [Fact(DisplayName = "Executing a http trigger function works with description")]
+    public async Task Case2() =>
+        await "Some description"
+            .ArrangeFunctionApp<Startup, Function>()
+            .ActAndExecute(async function =>
+            {
+                var result = await function.SomeFunctionTrigger(
+                    Request.GET($"/some-path").AsHttpRequest()
+                );
+                return result.AsResponse();
+            })
             .Assert(resp =>
             {
                 Assert.Equal(HttpStatusCode.OK, resp.Code);
@@ -71,14 +86,15 @@ public class AaaTests
             });
 
     [Fact(DisplayName = "Executing a http trigger function works with no response body")]
-    public async Task Case2() =>
+    public async Task Case3() =>
         await Arrange(() => 2)
+            .AndFunctionApp<int, Startup, Function>()
             .ActAndExecute(
-                FunctionAppBuilder.Create<Startup, Function>(),
+                x => x.FunctionApp,
                 async (i, function) =>
                 {
                     var result = await function.SomeFunctionTrigger(
-                        Request.GET($"/some-path/{i}".SetQueryParam("noBody")).AsHttpRequest()
+                        Request.GET($"/some-path/{i.Data}".SetQueryParam("noBody")).AsHttpRequest()
                     );
                     return result.AsResponse();
                 }
@@ -90,10 +106,10 @@ public class AaaTests
             });
 
     [Fact(DisplayName = "Executing a http trigger function can fail without issue")]
-    public async Task Case3() =>
+    public async Task Case4() =>
         await Arrange(() => 2)
             .ActAndExecute(
-                FunctionAppBuilder.Create<Startup, Function>(),
+                _ => FunctionAppBuilder.Create<Startup, Function>(),
                 async (i, function) =>
                 {
                     var result = await function.SomeFunctionTrigger(
@@ -107,10 +123,10 @@ public class AaaTests
     [Fact(
         DisplayName = "Executing a http trigger function can return a non http object result without issue"
     )]
-    public async Task Case4() =>
+    public async Task Case5() =>
         await Arrange(() => 2)
             .ActAndExecute(
-                FunctionAppBuilder.Create<Startup, Function>(),
+                _ => FunctionAppBuilder.Create<Startup, Function>(),
                 async (i, function) =>
                 {
                     var result = await function.SomeFunctionTrigger(
