@@ -9,7 +9,8 @@ public class BddTests
     [Fact(DisplayName = "Executing a http trigger function works")]
     public async Task Case1() =>
         await Given(() => 2)
-            .WhenExecuted<int, Response, Startup, Function>(
+            .WhenExecuted(
+                FunctionAppBuilder.Create<Startup, Function>(),
                 async (i, function) =>
                 {
                     var result = await function.SomeFunctionTrigger(

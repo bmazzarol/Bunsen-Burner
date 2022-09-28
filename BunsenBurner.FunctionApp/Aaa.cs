@@ -11,20 +11,17 @@ public static class Aaa
     /// Executes the function app
     /// </summary>
     /// <param name="scenario">arranged scenario</param>
+    /// <param name="functionApp">function app to test</param>
     /// <param name="fn">execute the function app, returning a result</param>
     /// <typeparam name="TData">arranged data</typeparam>
     /// <typeparam name="TResult">result of executing the function app</typeparam>
-    /// <typeparam name="TStartup">supported startup class, required to bootstrap the function app</typeparam>
     /// <typeparam name="TFunction">function app to execute</typeparam>
     /// <returns>acted scenario</returns>
     [Pure]
-    public static AaaScenario.Acted<TData, TResult> ActAndExecute<
-        TData,
-        TResult,
-        TStartup,
-        TFunction
-    >(this AaaScenario.Arranged<TData> scenario, Func<TData, TFunction, Task<TResult>> fn)
-        where TStartup : FunctionsStartup, new()
-        where TFunction : class =>
-        scenario.ActAndExecute<TData, TResult, TStartup, TFunction, Syntax.Aaa>(fn);
+    public static AaaScenario.Acted<TData, TResult> ActAndExecute<TData, TResult, TFunction>(
+        this AaaScenario.Arranged<TData> scenario,
+        TFunction functionApp,
+        Func<TData, TFunction, Task<TResult>> fn
+    ) where TFunction : class =>
+        scenario.ActAndExecute<TData, TResult, TFunction, Syntax.Aaa>(functionApp, fn);
 }

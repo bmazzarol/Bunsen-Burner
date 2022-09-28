@@ -43,7 +43,8 @@ public class AaaTests
     [Fact(DisplayName = "Executing a http trigger function works")]
     public async Task Case1() =>
         await Arrange(() => 2)
-            .ActAndExecute<int, Response, Startup, Function>(
+            .ActAndExecute(
+                FunctionAppBuilder.Create<Startup, Function>(),
                 async (i, function) =>
                 {
                     var result = await function.SomeFunctionTrigger(
