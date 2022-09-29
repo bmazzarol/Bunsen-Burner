@@ -22,4 +22,6 @@ public sealed record LogMessageStore : IEnumerable<LogMessage>
 
     [ExcludeFromCodeCoverage]
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+    public void Clear() => _logMessages.Clear();
 }
