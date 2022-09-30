@@ -21,5 +21,8 @@ internal sealed record DummyLoggerProvider : ILoggerProvider
         return logger as ILogger ?? throw new InvalidOperationException();
     }
 
-    public void Dispose() { }
+    public void Dispose()
+    {
+        // Method intentionally left empty.
+    }
 }

@@ -14,10 +14,6 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>
 
     public DummyLogger(LogMessageStore store) => _store = store;
 
-    [Pure]
-    public static DummyLogger<T> New(LogMessageStore? store = default) =>
-        new(store ?? LogMessageStore.New());
-
     public void Log<TState>(
         LogLevel logLevel,
         EventId eventId,
@@ -32,11 +28,21 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>
 
     private sealed record NoopScope : IDisposable
     {
-        public void Dispose() { }
+        public void Dispose()
+        {
+            // Method intentionally left empty.
+        }
     }
 
     public IEnumerator<LogMessage> GetEnumerator() => _store.GetEnumerator();
 
     [ExcludeFromCodeCoverage]
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+}
+
+public static class DummyLogger
+{
+    [Pure]
+    public static DummyLogger<T> New<T>(LogMessageStore? store = default) =>
+        new(store ?? LogMessageStore.New());
 }

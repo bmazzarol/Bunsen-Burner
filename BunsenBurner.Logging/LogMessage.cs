@@ -7,11 +7,11 @@ namespace BunsenBurner.Logging;
 /// </summary>
 public sealed record LogMessage
 {
-    public readonly Type ClassType;
-    public readonly LogLevel Level;
-    public readonly EventId EventId;
-    public readonly Exception? Exception;
-    public readonly string Message;
+    public Type ClassType { get; }
+    public LogLevel Level { get; }
+    public EventId EventId { get; }
+    public Exception? Exception { get; }
+    public string Message { get; }
 
     private LogMessage(
         Type classType,

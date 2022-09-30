@@ -35,7 +35,7 @@ To start using it import the logger and create an instance of it,
 ```c#
 using BunsenBurner.Logging;
 
-var logger = DummyLogger.New();
+var logger = DummyLogger.New<object>();
 
 logger.LogInformation("Some log message");
 

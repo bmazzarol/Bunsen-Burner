@@ -8,7 +8,7 @@ public static class DummyLoggerTests
     [Fact(DisplayName = "Can log messages and get them back")]
     public static void Case1()
     {
-        var logger = DummyLogger<object>.New();
+        var logger = DummyLogger.New<object>();
         logger.LogInformation("information");
         logger.LogWarning("warning");
         logger.LogError("error");
@@ -30,7 +30,7 @@ public static class DummyLoggerTests
     [InlineData(LogLevel.Warning)]
     [InlineData(LogLevel.None)]
     public static void Case2(LogLevel level) =>
-        Assert.True(DummyLogger<object>.New().IsEnabled(level));
+        Assert.True(DummyLogger.New<object>().IsEnabled(level));
 
     [Fact(DisplayName = "Logger provider creates loggers from service collections")]
     public static void Case3()
