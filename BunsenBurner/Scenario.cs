@@ -1,4 +1,7 @@
-﻿namespace BunsenBurner;
+﻿#pragma warning disable S101
+#pragma warning disable CA1715
+
+namespace BunsenBurner;
 
 /// <summary>
 /// Supported syntax for the scenario
@@ -32,7 +35,9 @@ public abstract record Scenario<TSyntax> where TSyntax : struct, Syntax
     /// <summary>
     /// Optional name for the scenario
     /// </summary>
-    public readonly string Name;
+    public string Name { get; }
+
+    public sealed override string ToString() => Name;
 
     private Scenario(string? name) => Name = name ?? string.Empty;
 

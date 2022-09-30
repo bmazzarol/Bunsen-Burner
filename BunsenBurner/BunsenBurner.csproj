@@ -5,6 +5,14 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <AnalysisMode>Recommended</AnalysisMode>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="SonarAnalyzer.CSharp" Version="8.45.0.54064">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
 
 </Project>

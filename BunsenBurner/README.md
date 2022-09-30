@@ -28,10 +28,10 @@ a single test. It has the following structure,
 
 ```c#
 Scenario<
- // Supported Synstax, either arrange act assert (Aaa) or given when then (Bdd)
+ // Supported Syntax, either arrange act assert (Aaa) or given when then (Bdd)
     TSyntax
 >.(
- // Scernaio that has been arranged and is ready to act on, returning a TData   
+ // Scenario that has been arranged and is ready to act on, returning a TData   
     Arranged<TData> | 
  // Scenario that has been acted on, taking a TData returning a TResult and is ready to assert against 
     Acted<TData, TResult> | 
