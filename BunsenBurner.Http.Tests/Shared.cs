@@ -9,29 +9,32 @@ namespace BunsenBurner.Http.Tests;
 
 internal static class Shared
 {
-    public static readonly Lazy<TestServer> SimpleResponse =
-        new(
-            () =>
-                CreateTestServer(async ctx =>
-                {
-                    ctx.Response.Headers.Add("custom", "123");
-                    await ctx.Response.WriteAsync("test");
-                })
+    public static TestServer SimpleResponse() =>
+        CreateTestServer(
+            nameof(SimpleResponse),
+            async ctx =>
+            {
+                ctx.Response.Headers.Add("custom", "123");
+                await ctx.Response.WriteAsync("test");
+            }
         );
 
-    public static readonly Lazy<TestServer> MirrorResponse =
-        new(
-            () =>
-                CreateTestServer(async ctx =>
-                {
-                    ctx.Response.Headers.Add("custom", "123");
-                    var reader = new StreamReader(ctx.Request.Body);
-                    await ctx.Response.WriteAsync(await reader.ReadToEndAsync());
-                })
+    public static TestServer MirrorResponse() =>
+        CreateTestServer(
+            nameof(MirrorResponse),
+            async ctx =>
+            {
+                ctx.Response.Headers.Add("custom", "123");
+                var reader = new StreamReader(ctx.Request.Body);
+                await ctx.Response.WriteAsync(await reader.ReadToEndAsync());
+            }
         );
 
-    private static TestServer CreateTestServer(RequestDelegate requestDelegate) =>
-        new(new WebHostBuilder().Configure(x => x.Run(requestDelegate)));
+    private static TestServer CreateTestServer(string name, RequestDelegate requestDelegate) =>
+        TestServerBuilder.Create(
+            name,
+            configureHost: builder => builder.Configure(x => x.Run(requestDelegate))
+        );
 
     private static Scenario<TSyntax>.Asserted<TRequest, Response> AssertOnResponse<
         TRequest,

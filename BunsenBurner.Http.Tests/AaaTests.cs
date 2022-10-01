@@ -18,7 +18,7 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
             .GET("/hello-world".SetQueryParam("a", 1))
             .WithHeader("b", 123, x => x.ToString())
             .ArrangeRequest()
-            .ActAndCall(SimpleResponse.Value)
+            .ActAndCall(SimpleResponse())
             .Assert(resp =>
             {
                 Assert.Equal(HttpStatusCode.OK, resp.Code);
@@ -36,7 +36,7 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
                     .GET("/hello-world".SetQueryParam("a", 1))
                     .WithHeader("b", 123, x => x.ToString())
             )
-            .ActAndCall(SimpleResponse.Value)
+            .ActAndCall(SimpleResponse())
             .IsOk();
 
     [Fact(DisplayName = "POST request can be made to a test server")]
@@ -45,7 +45,7 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
             .POST("/hello-world".SetQueryParam("a", 1), new { A = "1" })
             .WithHeader("b", 123, x => x.ToString())
             .ArrangeRequest()
-            .ActAndCall(MirrorResponse.Value)
+            .ActAndCall(MirrorResponse())
             .IsOk()
             .ResponseContentMatchesRequestBody();
 
@@ -55,7 +55,7 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
             .PUT("/hello-world".SetQueryParam("a", 1), new { A = "1" })
             .WithHeader("b", 123, x => x.ToString())
             .ArrangeRequest()
-            .ActAndCall(MirrorResponse.Value)
+            .ActAndCall(MirrorResponse())
             .IsOk()
             .ResponseContentMatchesRequestBody();
 
@@ -65,7 +65,7 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
             .PATCH("/hello-world".SetQueryParam("a", 1), new { A = "1" })
             .WithHeader("b", 123, x => x.ToString())
             .ArrangeRequest()
-            .ActAndCall(MirrorResponse.Value)
+            .ActAndCall(MirrorResponse())
             .IsOk()
             .ResponseContentMatchesRequestBody();
 
@@ -75,28 +75,20 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
             .DELETE("/hello-world")
             .WithHeaders(new Header("A", "1"), new Header("B", "2"))
             .ArrangeRequest()
-            .ActAndCall(SimpleResponse.Value)
+            .ActAndCall(SimpleResponse())
             .IsOk();
 
     [Fact(DisplayName = "OPTION request can be made to a test server")]
     public async Task Case7() =>
-        await Request
-            .OPTION("/hello-world")
-            .ArrangeRequest()
-            .ActAndCall(SimpleResponse.Value)
-            .IsOk();
+        await Request.OPTION("/hello-world").ArrangeRequest().ActAndCall(SimpleResponse()).IsOk();
 
     [Fact(DisplayName = "HEAD request can be made to a test server")]
     public async Task Case8() =>
-        await Request.HEAD("/hello-world").ArrangeRequest().ActAndCall(SimpleResponse.Value).IsOk();
+        await Request.HEAD("/hello-world").ArrangeRequest().ActAndCall(SimpleResponse()).IsOk();
 
     [Fact(DisplayName = "TRACE request can be made to a test server")]
     public async Task Case9() =>
-        await Request
-            .TRACE("/hello-world")
-            .ArrangeRequest()
-            .ActAndCall(SimpleResponse.Value)
-            .IsOk();
+        await Request.TRACE("/hello-world").ArrangeRequest().ActAndCall(SimpleResponse()).IsOk();
 
     [Fact(DisplayName = "CONNECT request can be made to a test server")]
     public async Task Case10() =>
@@ -106,7 +98,7 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
             .WithHeader("a", "2")
             .WithHeader("a", "1")
             .ArrangeRequest()
-            .ActAndCall(SimpleResponse.Value)
+            .ActAndCall(SimpleResponse())
             .IsOk();
 
     [Fact(DisplayName = "GET request can be made to a real server")]
@@ -142,6 +134,6 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
                     SomeOtherData: "test"
                 );
             })
-            .ActAndCall(x => x.Req, SimpleResponse.Value)
+            .ActAndCall(x => x.Req, SimpleResponse())
             .Assert(resp => Assert.Equal(HttpStatusCode.OK, resp.Code));
 }

@@ -18,7 +18,7 @@ public class BddTests : IClassFixture<MockServerFixture>
             .GET("/hello-world".SetQueryParam("a", 1))
             .WithHeader("b", 123, x => x.ToString())
             .GivenRequest()
-            .WhenCalled(SimpleResponse.Value)
+            .WhenCalled(SimpleResponse())
             .Then(resp =>
             {
                 Assert.Equal(HttpStatusCode.OK, resp.Code);
@@ -34,7 +34,7 @@ public class BddTests : IClassFixture<MockServerFixture>
                     .GET("/hello-world".SetQueryParam("a", 1))
                     .WithHeader("b", 123, x => x.ToString())
             )
-            .WhenCalled(SimpleResponse.Value)
+            .WhenCalled(SimpleResponse())
             .IsOk();
 
     [Fact(DisplayName = "POST request can be made to a test server")]
@@ -43,7 +43,7 @@ public class BddTests : IClassFixture<MockServerFixture>
             .POST("/hello-world".SetQueryParam("a", 1), new { A = "1" })
             .WithHeader("b", 123, x => x.ToString())
             .GivenRequest()
-            .WhenCalled(MirrorResponse.Value)
+            .WhenCalled(MirrorResponse())
             .IsOk()
             .ResponseContentMatchesRequestBody();
 
@@ -53,7 +53,7 @@ public class BddTests : IClassFixture<MockServerFixture>
             .PUT("/hello-world".SetQueryParam("a", 1), new { A = "1" })
             .WithHeader("b", 123, x => x.ToString())
             .GivenRequest()
-            .WhenCalled(MirrorResponse.Value)
+            .WhenCalled(MirrorResponse())
             .IsOk()
             .ResponseContentMatchesRequestBody();
 
@@ -63,7 +63,7 @@ public class BddTests : IClassFixture<MockServerFixture>
             .PATCH("/hello-world".SetQueryParam("a", 1), new { A = "1" })
             .WithHeader("b", 123, x => x.ToString())
             .GivenRequest()
-            .WhenCalled(MirrorResponse.Value)
+            .WhenCalled(MirrorResponse())
             .IsOk()
             .ResponseContentMatchesRequestBody();
 
@@ -73,20 +73,20 @@ public class BddTests : IClassFixture<MockServerFixture>
             .DELETE("/hello-world")
             .WithHeaders(new Header("A", "1"), new Header("B", "2"))
             .GivenRequest()
-            .WhenCalled(SimpleResponse.Value)
+            .WhenCalled(SimpleResponse())
             .IsOk();
 
     [Fact(DisplayName = "OPTION request can be made to a test server")]
     public async Task Case7() =>
-        await Request.OPTION("/hello-world").GivenRequest().WhenCalled(SimpleResponse.Value).IsOk();
+        await Request.OPTION("/hello-world").GivenRequest().WhenCalled(SimpleResponse()).IsOk();
 
     [Fact(DisplayName = "HEAD request can be made to a test server")]
     public async Task Case8() =>
-        await Request.HEAD("/hello-world").GivenRequest().WhenCalled(SimpleResponse.Value).IsOk();
+        await Request.HEAD("/hello-world").GivenRequest().WhenCalled(SimpleResponse()).IsOk();
 
     [Fact(DisplayName = "TRACE request can be made to a test server")]
     public async Task Case9() =>
-        await Request.TRACE("/hello-world").GivenRequest().WhenCalled(SimpleResponse.Value).IsOk();
+        await Request.TRACE("/hello-world").GivenRequest().WhenCalled(SimpleResponse()).IsOk();
 
     [Fact(DisplayName = "CONNECT request can be made to a test server")]
     public async Task Case10() =>
@@ -96,7 +96,7 @@ public class BddTests : IClassFixture<MockServerFixture>
             .WithHeader("a", "2")
             .WithHeader("a", "1")
             .GivenRequest()
-            .WhenCalled(SimpleResponse.Value)
+            .WhenCalled(SimpleResponse())
             .IsOk();
 
     [Fact(DisplayName = "GET request can be made to a real server")]
@@ -132,6 +132,6 @@ public class BddTests : IClassFixture<MockServerFixture>
                     SomeOtherData: "test"
                 );
             })
-            .WhenCalled(x => x.Req, SimpleResponse.Value)
+            .WhenCalled(x => x.Req, SimpleResponse())
             .Then(resp => Assert.Equal(HttpStatusCode.OK, resp.Code));
 }
