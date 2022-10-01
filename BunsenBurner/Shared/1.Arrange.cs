@@ -30,7 +30,15 @@ internal static partial class Shared
         this Scenario<TSyntax>.Arranged<TData> scenario,
         Func<TData, Task<TDataNext>> fn
     ) where TSyntax : struct, Syntax =>
-        new(scenario.Name, async () => await fn(await scenario.ArrangeScenario()));
+        new(
+            scenario.Name,
+            async () =>
+            {
+                var result = await scenario.ArrangeScenario().ConfigureAwait(false);
+                var nextResult = await fn(result).ConfigureAwait(false);
+                return nextResult;
+            }
+        );
 
     [Pure]
     internal static Scenario<TSyntax>.Arranged<TDataNext> And<TData, TDataNext, TSyntax>(

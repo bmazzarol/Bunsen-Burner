@@ -82,9 +82,9 @@ public abstract record Scenario<TSyntax> where TSyntax : struct, Syntax
     {
         internal async Task Run()
         {
-            var data = await ArrangeScenario();
-            var result = await ActOnScenario(data);
-            await AssertAgainstResult(data, result);
+            var data = await ArrangeScenario().ConfigureAwait(false);
+            var result = await ActOnScenario(data).ConfigureAwait(false);
+            await AssertAgainstResult(data, result).ConfigureAwait(false);
         }
     }
 }

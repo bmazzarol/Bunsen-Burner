@@ -8,7 +8,7 @@ using Microsoft.Extensions.Primitives;
 namespace BunsenBurner.FunctionApp.Models;
 
 [ExcludeFromCodeCoverage]
-internal sealed class DummyHttpRequest : HttpRequest
+internal sealed class DummyHttpRequest : HttpRequest, IDisposable
 {
     private readonly string? _content;
     private Stream? _stream;
@@ -33,7 +33,8 @@ internal sealed class DummyHttpRequest : HttpRequest
         CancellationToken cancellationToken = new()
     ) =>
         Task.FromResult(
-            (IFormCollection)new FormCollection(new Dictionary<string, StringValues>())
+            (IFormCollection)
+                new FormCollection(new Dictionary<string, StringValues>(StringComparer.Ordinal))
         );
 
     public override HttpContext HttpContext { get; }
@@ -59,4 +60,6 @@ internal sealed class DummyHttpRequest : HttpRequest
 
     public override bool HasFormContentType => false;
     public override IFormCollection? Form { get; set; }
+
+    public void Dispose() => _stream?.Dispose();
 }

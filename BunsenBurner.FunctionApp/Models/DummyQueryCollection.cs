@@ -32,9 +32,9 @@ internal sealed record DummyQueryCollection : IQueryCollection
 
     public DummyQueryCollection(Url url) =>
         Store = url.QueryParams
-            .GroupBy(x => x.Name)
+            .GroupBy(x => x.Name, StringComparer.Ordinal)
             .Select(x => (x.Key, Value: x.Select(y => y.Value).ToArray().ToStringValues()))
-            .ToDictionary(x => x.Key, x => x.Value);
+            .ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
 
     public StringValues this[string key] =>
         Store.TryGetValue(key, out var values) ? values : default;

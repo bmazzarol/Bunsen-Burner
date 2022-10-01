@@ -51,7 +51,7 @@ internal static partial class Shared
             {
                 try
                 {
-                    await scenario.ActOnScenario(data);
+                    await scenario.ActOnScenario(data).ConfigureAwait(false);
                     throw new NoFailureException();
                 }
                 catch (NoFailureException)
@@ -108,8 +108,8 @@ internal static partial class Shared
             scenario.ActOnScenario,
             async (data, result) =>
             {
-                await scenario.AssertAgainstResult(data, result);
-                await fn(data, result);
+                await scenario.AssertAgainstResult(data, result).ConfigureAwait(false);
+                await fn(data, result).ConfigureAwait(false);
             }
         );
 

@@ -25,8 +25,8 @@ internal static class Shared
     private static async Task<Response> InternalCall<TRequest>(TRequest request, HttpClient client)
         where TRequest : Request
     {
-        var httpResp = await client.SendAsync(request.HttpRequestMessage());
-        return await Response.New(httpResp);
+        var httpResp = await client.SendAsync(request.HttpRequestMessage()).ConfigureAwait(false);
+        return await Response.New(httpResp).ConfigureAwait(false);
     }
 
     [Pure]

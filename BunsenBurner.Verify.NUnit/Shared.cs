@@ -64,7 +64,9 @@ internal static class Shared
                     scenario.Name != string.Empty
                         ? settings.UseTextForParameters(scenario.Name)
                         : settings;
-                await (matchConfiguration != null ? matchConfiguration(settings) : settings);
+                await (
+                    matchConfiguration != null ? matchConfiguration(settings) : settings
+                ).ConfigureAwait(false);
             }
         );
 

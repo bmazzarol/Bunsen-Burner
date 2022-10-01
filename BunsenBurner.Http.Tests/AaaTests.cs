@@ -22,7 +22,9 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
             .Assert(resp =>
             {
                 Assert.Equal(HttpStatusCode.OK, resp.Code);
+                Assert.Equal(200, resp.RawStatusCode);
                 Assert.Equal("test", resp.Content);
+                Assert.Equal(4, resp.Length);
                 Assert.Equal("123", resp.Headers.FirstOrDefault(x => x.Key == "custom")?.Value);
             });
 

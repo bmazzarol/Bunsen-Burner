@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Logging;
+
 namespace BunsenBurner.Background.Tests;
 
 using static Bdd;
@@ -12,7 +14,15 @@ public static class BddTests
             .Then(store =>
             {
                 Assert.NotEmpty(store);
-                Assert.Contains(store, x => x.Message == "Work complete");
+                Assert.Contains(
+                    store,
+                    x =>
+                        x.Message == "Work complete"
+                        && x.Level == LogLevel.Information
+                        && x.ClassType == typeof(Background).FullName
+                        && x.Exception == null
+                        && x.EventId.Id == 0
+                );
             });
 
     [Fact(

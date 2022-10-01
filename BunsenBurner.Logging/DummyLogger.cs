@@ -10,9 +10,14 @@ namespace BunsenBurner.Logging;
 /// <typeparam name="T">Some T</typeparam>
 public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>
 {
+    private readonly string _ownerClassName;
     private readonly LogMessageStore _store;
 
-    public DummyLogger(LogMessageStore store) => _store = store;
+    internal DummyLogger(LogMessageStore store, string ownerClassName)
+    {
+        _store = store;
+        _ownerClassName = ownerClassName;
+    }
 
     public void Log<TState>(
         LogLevel logLevel,
@@ -20,7 +25,16 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>
         TState state,
         Exception? exception,
         Func<TState, Exception?, string> formatter
-    ) => _store.Log(LogMessage.New<T>(logLevel, eventId, exception, formatter(state, exception)));
+    ) =>
+        _store.Log(
+            LogMessage.New(
+                _ownerClassName,
+                logLevel,
+                eventId,
+                exception,
+                formatter(state, exception)
+            )
+        );
 
     public bool IsEnabled(LogLevel logLevel) => true;
 
@@ -44,5 +58,11 @@ public static class DummyLogger
 {
     [Pure]
     public static DummyLogger<T> New<T>(LogMessageStore? store = default) =>
-        new(store ?? LogMessageStore.New());
+        new(store ?? LogMessageStore.New(), typeof(T).FullName ?? string.Empty);
+
+    [Pure]
+    public static DummyLogger<object> New(
+        string ownerClassName,
+        LogMessageStore? store = default
+    ) => new(store ?? LogMessageStore.New(), ownerClassName);
 }

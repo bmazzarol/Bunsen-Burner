@@ -46,7 +46,7 @@ internal static class Shared
             scenario.Name,
             async () =>
             {
-                var data = await scenario.ArrangeScenario();
+                var data = await scenario.ArrangeScenario().ConfigureAwait(false);
                 var ctx = BackgroundServiceBuilder.Create<TStartup, TBackgroundService>();
                 return (Data: data, BackgroundServiceContext: ctx);
             }
@@ -70,9 +70,9 @@ internal static class Shared
             async data =>
             {
                 var (service, store) = fn(data);
-                await service.StartAsync(CancellationToken.None);
-                await Task.Delay(runDuration);
-                await service.StopAsync(CancellationToken.None);
+                await service.StartAsync(CancellationToken.None).ConfigureAwait(false);
+                await Task.Delay(runDuration).ConfigureAwait(false);
+                await service.StopAsync(CancellationToken.None).ConfigureAwait(false);
                 return store;
             }
         );

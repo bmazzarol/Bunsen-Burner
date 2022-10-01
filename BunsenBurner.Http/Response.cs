@@ -21,16 +21,16 @@ public sealed record Response(
     /// <summary>
     /// Raw status code
     /// </summary>
-    public readonly int RawStatusCode = (int)Code;
+    public int RawStatusCode { get; } = (int)Code;
 
     /// <summary>
     /// Content length
     /// </summary>
-    public readonly int? Length = Content?.Length;
+    public int? Length { get; } = Content?.Length;
 
     internal static async Task<Response> New(HttpResponseMessage httpResp)
     {
-        var content = await httpResp.Content.ReadAsStringAsync();
+        var content = await httpResp.Content.ReadAsStringAsync().ConfigureAwait(false);
         return new Response(
             httpResp.StatusCode,
             content,

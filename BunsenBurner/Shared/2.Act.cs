@@ -30,7 +30,12 @@ internal static partial class Shared
         new(
             scenario.Name,
             scenario.ArrangeScenario,
-            async data => await fn(data, await scenario.ActOnScenario(data))
+            async data =>
+            {
+                var result = await scenario.ActOnScenario(data).ConfigureAwait(false);
+                var nextResult = await fn(data, result).ConfigureAwait(false);
+                return nextResult;
+            }
         );
 
     [Pure]

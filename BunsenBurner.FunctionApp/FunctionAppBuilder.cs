@@ -10,7 +10,8 @@ namespace BunsenBurner.FunctionApp;
 /// </summary>
 public static class FunctionAppBuilder
 {
-    private static ConcurrentDictionary<string, Lazy<IHost>> HostCache => new();
+    private static ConcurrentDictionary<string, Lazy<IHost>> HostCache =>
+        new(StringComparer.Ordinal);
 
     /// <summary>
     /// Creates a new instance of the function app from the provided startup class

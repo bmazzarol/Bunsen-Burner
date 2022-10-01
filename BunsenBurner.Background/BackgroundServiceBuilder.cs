@@ -11,7 +11,7 @@ namespace BunsenBurner.Background;
 public static class BackgroundServiceBuilder
 {
     private static ConcurrentDictionary<string, Lazy<IServiceProvider>> ServiceProviderCache =>
-        new();
+        new(StringComparer.Ordinal);
 
     /// <summary>
     /// Creates a new instance of the background service and log message store from the provided startup class

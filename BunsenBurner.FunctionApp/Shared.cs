@@ -41,7 +41,7 @@ internal static class Shared
             scenario.Name,
             async () =>
             {
-                var data = await scenario.ArrangeScenario();
+                var data = await scenario.ArrangeScenario().ConfigureAwait(false);
                 var ctx = FunctionAppBuilder.Create<TStartup, TFunction>();
                 return (Data: data, FunctionApp: ctx);
             }

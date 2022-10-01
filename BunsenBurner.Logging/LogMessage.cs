@@ -7,14 +7,14 @@ namespace BunsenBurner.Logging;
 /// </summary>
 public sealed record LogMessage
 {
-    public Type ClassType { get; }
+    public string ClassType { get; }
     public LogLevel Level { get; }
     public EventId EventId { get; }
     public Exception? Exception { get; }
     public string Message { get; }
 
     private LogMessage(
-        Type classType,
+        string classType,
         LogLevel level,
         EventId eventId,
         Exception? exception,
@@ -28,10 +28,11 @@ public sealed record LogMessage
         Message = message;
     }
 
-    internal static LogMessage New<T>(
+    internal static LogMessage New(
+        string classType,
         LogLevel level,
         EventId eventId,
         Exception? exception,
         string message
-    ) => new(typeof(T), level, eventId, exception, message);
+    ) => new(classType, level, eventId, exception, message);
 }

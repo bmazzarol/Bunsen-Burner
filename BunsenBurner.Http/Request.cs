@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿using System.Globalization;
+using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using Flurl;
@@ -19,12 +20,12 @@ public abstract record Request
     /// <summary>
     /// Verb
     /// </summary>
-    public readonly string Verb;
+    public string Verb { get; }
 
     /// <summary>
     /// Url
     /// </summary>
-    public readonly Url Url;
+    public Url Url { get; }
 
     /// <summary>
     /// Headers
@@ -33,7 +34,7 @@ public abstract record Request
 
     private Request(string verb, Url url, Headers headers)
     {
-        Verb = verb.ToUpper();
+        Verb = verb.ToUpper(CultureInfo.InvariantCulture);
         Url = url.IsRelative ? HttpsLocalhost + url : url;
         Headers = headers;
     }
@@ -58,7 +59,7 @@ public abstract record Request
     /// <returns>content length</returns>
     public long? ContentLength() => Content()?.Length;
 
-    public sealed record Get(Url Url, Headers Headers) : Request(nameof(Get), Url, Headers)
+    public sealed record GetRequest(Url Url, Headers Headers) : Request(nameof(GET), Url, Headers)
     {
         internal override Body? InternalBody() => default;
     }
@@ -70,11 +71,11 @@ public abstract record Request
     /// <param name="headers">optional headers</param>
     /// <returns>get request</returns>
     [Pure]
-    public static Get GET(Url url, Headers? headers = default) =>
+    public static GetRequest GET(Url url, Headers? headers = default) =>
         new(url, headers ?? Array.Empty<Header>());
 
-    public sealed record Post(Url Url, Headers Headers, Body? Body)
-        : Request(nameof(Post), Url, Headers)
+    public sealed record PostRequest(Url Url, Headers Headers, Body? Body)
+        : Request(nameof(POST), Url, Headers)
     {
         internal override Body? InternalBody() => Body;
     }
@@ -87,7 +88,7 @@ public abstract record Request
     /// <param name="headers">optional headers</param>
     /// <returns>post request</returns>
     [Pure]
-    public static Post POST(Url url, Body? body, Headers? headers = default) =>
+    public static PostRequest POST(Url url, Body? body, Headers? headers = default) =>
         new(url, headers ?? Array.Empty<Header>(), body);
 
     /// <summary>
@@ -98,15 +99,15 @@ public abstract record Request
     /// <param name="headers">optional headers</param>
     /// <returns>post request</returns>
     [Pure]
-    public static Post POST<T>(Url url, T data, Headers? headers = default) =>
+    public static PostRequest POST<T>(Url url, T data, Headers? headers = default) =>
         POST(
             url,
             new Body(MediaTypeNames.Application.Json, JsonSerializer.Serialize(data)),
             headers
         );
 
-    public sealed record Put(Url Url, Headers Headers, Body Body)
-        : Request(nameof(Put), Url, Headers)
+    public sealed record PutRequest(Url Url, Headers Headers, Body Body)
+        : Request(nameof(PUT), Url, Headers)
     {
         internal override Body? InternalBody() => Body;
     }
@@ -119,7 +120,7 @@ public abstract record Request
     /// <param name="headers">optional headers</param>
     /// <returns>put request</returns>
     [Pure]
-    public static Put PUT(Url url, Body body, Headers? headers = default) =>
+    public static PutRequest PUT(Url url, Body body, Headers? headers = default) =>
         new(url, headers ?? Array.Empty<Header>(), body);
 
     /// <summary>
@@ -130,15 +131,15 @@ public abstract record Request
     /// <param name="headers">optional headers</param>
     /// <returns>put request</returns>
     [Pure]
-    public static Put PUT<T>(Url url, T data, Headers? headers = default) =>
+    public static PutRequest PUT<T>(Url url, T data, Headers? headers = default) =>
         PUT(
             url,
             new Body(MediaTypeNames.Application.Json, JsonSerializer.Serialize(data)),
             headers
         );
 
-    public sealed record Patch(Url Url, Headers Headers, Body Body)
-        : Request(nameof(Patch), Url, Headers)
+    public sealed record PatchRequest(Url Url, Headers Headers, Body Body)
+        : Request(nameof(PATCH), Url, Headers)
     {
         internal override Body? InternalBody() => Body;
     }
@@ -151,7 +152,7 @@ public abstract record Request
     /// <param name="headers">optional headers</param>
     /// <returns>patch request</returns>
     [Pure]
-    public static Patch PATCH(Url url, Body body, Headers? headers = default) =>
+    public static PatchRequest PATCH(Url url, Body body, Headers? headers = default) =>
         new(url, headers ?? Array.Empty<Header>(), body);
 
     /// <summary>
@@ -162,14 +163,15 @@ public abstract record Request
     /// <param name="headers">optional headers</param>
     /// <returns>patch request</returns>
     [Pure]
-    public static Patch PATCH<T>(Url url, T data, Headers? headers = default) =>
+    public static PatchRequest PATCH<T>(Url url, T data, Headers? headers = default) =>
         PATCH(
             url,
             new Body(MediaTypeNames.Application.Json, JsonSerializer.Serialize(data)),
             headers
         );
 
-    public sealed record Delete(Url Url, Headers Headers) : Request(nameof(Delete), Url, Headers)
+    public sealed record DeleteRequest(Url Url, Headers Headers)
+        : Request(nameof(DELETE), Url, Headers)
     {
         internal override Body? InternalBody() => default;
     }
@@ -181,10 +183,11 @@ public abstract record Request
     /// <param name="headers">optional headers</param>
     /// <returns>delete request</returns>
     [Pure]
-    public static Delete DELETE(Url url, Headers? headers = default) =>
+    public static DeleteRequest DELETE(Url url, Headers? headers = default) =>
         new(url, headers ?? Array.Empty<Header>());
 
-    public sealed record Option(Url Url, Headers Headers) : Request(nameof(Option), Url, Headers)
+    public sealed record OptionRequest(Url Url, Headers Headers)
+        : Request(nameof(OPTION), Url, Headers)
     {
         internal override Body? InternalBody() => default;
     }
@@ -196,10 +199,10 @@ public abstract record Request
     /// <param name="headers">optional headers</param>
     /// <returns>option request</returns>
     [Pure]
-    public static Option OPTION(Url url, Headers? headers = default) =>
+    public static OptionRequest OPTION(Url url, Headers? headers = default) =>
         new(url, headers ?? Array.Empty<Header>());
 
-    public sealed record Head(Url Url, Headers Headers) : Request(nameof(Head), Url, Headers)
+    public sealed record HeadRequest(Url Url, Headers Headers) : Request(nameof(HEAD), Url, Headers)
     {
         internal override Body? InternalBody() => default;
     }
@@ -211,10 +214,11 @@ public abstract record Request
     /// <param name="headers">optional headers</param>
     /// <returns>head request</returns>
     [Pure]
-    public static Head HEAD(Url url, Headers? headers = default) =>
+    public static HeadRequest HEAD(Url url, Headers? headers = default) =>
         new(url, headers ?? Array.Empty<Header>());
 
-    public sealed record Trace(Url Url, Headers Headers) : Request(nameof(Trace), Url, Headers)
+    public sealed record TraceRequest(Url Url, Headers Headers)
+        : Request(nameof(TRACE), Url, Headers)
     {
         internal override Body? InternalBody() => default;
     }
@@ -226,10 +230,11 @@ public abstract record Request
     /// <param name="headers">optional headers</param>
     /// <returns>trace request</returns>
     [Pure]
-    public static Trace TRACE(Url url, Headers? headers = default) =>
+    public static TraceRequest TRACE(Url url, Headers? headers = default) =>
         new(url, headers ?? Array.Empty<Header>());
 
-    public sealed record Connect(Url Url, Headers Headers) : Request(nameof(Connect), Url, Headers)
+    public sealed record ConnectRequest(Url Url, Headers Headers)
+        : Request(nameof(CONNECT), Url, Headers)
     {
         internal override Body? InternalBody() => default;
     }
@@ -241,7 +246,7 @@ public abstract record Request
     /// <param name="headers">optional headers</param>
     /// <returns>connect request</returns>
     [Pure]
-    public static Connect CONNECT(Url url, Headers? headers = default) =>
+    public static ConnectRequest CONNECT(Url url, Headers? headers = default) =>
         new(url, headers ?? Array.Empty<Header>());
 
     /// <summary>
@@ -283,14 +288,14 @@ public static class RequestExt
         request with
         {
             Headers = request.Headers
-                .Where(x => x.Key != key)
+                .Where(x => !string.Equals(x.Key, key, StringComparison.Ordinal))
                 .Append(
                     new Header(
                         key,
                         string.Join(
                             ",",
                             request.Headers
-                                .Where(x => x.Key == key)
+                                .Where(x => string.Equals(x.Key, key, StringComparison.Ordinal))
                                 .SelectMany(x => x.Value.Split(","))
                                 .Append(value)
                                 .Select(x => x.Trim())
