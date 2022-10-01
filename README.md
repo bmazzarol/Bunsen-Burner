@@ -3,7 +3,7 @@
 > Set fire to your old unit tests!
 ---
 
-A better way to write tests in C#.
+A better way to write tests :test_tube: in C#.
 
 * Test framework agnostic
 * Zero dependencies
