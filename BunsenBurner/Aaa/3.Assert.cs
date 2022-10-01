@@ -69,15 +69,15 @@ public static partial class Aaa
     /// Asserts on the result of acting on the test
     /// </summary>
     /// <param name="scenario">acted on scenario</param>
-    /// <param name="fn">assert expression</param>
+    /// <param name="expression">assert expression</param>
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted scenario</returns>
     [Pure]
     public static AaaScenario.Asserted<TData, TResult> Assert<TData, TResult>(
         this AaaScenario.Acted<TData, TResult> scenario,
-        Expression<Func<TResult, bool>> fn
-    ) => scenario.Assert<TData, TResult, Syntax.Aaa>(fn);
+        Expression<Func<TResult, bool>> expression
+    ) => scenario.Assert<TData, TResult, Syntax.Aaa>(expression);
 
     /// <summary>
     /// Asserts on the result of a failure when acting
@@ -190,6 +190,20 @@ public static partial class Aaa
         this AaaScenario.Asserted<TData, TResult> scenario,
         Action<TResult> fn
     ) => Shared.And(scenario, fn);
+
+    /// <summary>
+    /// Asserts again on the result of acting on the test
+    /// </summary>
+    /// <param name="scenario">asserted on scenario</param>
+    /// <param name="expression">assert expression</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>asserted scenario</returns>
+    [Pure]
+    public static AaaScenario.Asserted<TData, TResult> And<TData, TResult>(
+        this AaaScenario.Asserted<TData, TResult> scenario,
+        Expression<Func<TResult, bool>> expression
+    ) => scenario.And<TData, TResult, Syntax.Aaa>(expression);
 
     /// <summary>
     /// Awaiter for a scenario so it can be run

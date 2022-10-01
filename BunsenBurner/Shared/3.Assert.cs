@@ -7,6 +7,18 @@ namespace BunsenBurner;
 /// </summary>
 internal static partial class Shared
 {
+    private static void RunExpressionAssertion<TResult>(
+        this TResult result,
+        Expression<Func<TResult, bool>> expression
+    )
+    {
+        var fn = expression.Compile();
+        if (!fn(result))
+            throw new InvalidOperationException(
+                $"{expression.ToString()} is not true for the result {result}"
+            );
+    }
+
     [Pure]
     internal static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Acted<TData, TResult> scenario,
@@ -42,18 +54,8 @@ internal static partial class Shared
     [Pure]
     internal static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Acted<TData, TResult> scenario,
-        Expression<Func<TResult, bool>> fn
-    ) where TSyntax : struct, Syntax =>
-        scenario.Assert(
-            (_, r) =>
-            {
-                var compiled = fn.Compile();
-                if (!compiled(r))
-                    throw new InvalidOperationException(
-                        $"{fn.ToString()} is not true for the result {r}"
-                    );
-            }
-        );
+        Expression<Func<TResult, bool>> expression
+    ) where TSyntax : struct, Syntax => scenario.Assert(r => r.RunExpressionAssertion(expression));
 
     [Pure]
     internal static Scenario<TSyntax>.Asserted<TData, Exception> AssertFailsWith<
@@ -155,4 +157,10 @@ internal static partial class Shared
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
         Action<TResult> fn
     ) where TSyntax : struct, Syntax => scenario.And((_, r) => fn(r));
+
+    [Pure]
+    internal static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
+        this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
+        Expression<Func<TResult, bool>> expression
+    ) where TSyntax : struct, Syntax => scenario.And(r => r.RunExpressionAssertion(expression));
 }

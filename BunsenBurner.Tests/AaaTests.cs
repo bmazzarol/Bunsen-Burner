@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 namespace BunsenBurner.Tests;
+
 using static Aaa;
 
 public class AaaTests
@@ -135,7 +136,7 @@ public class AaaTests
 
     [Fact(DisplayName = "Expression based assertions work")]
     public async Task Case11() =>
-        await Arrange(() => 1).Act(x => x + 2).Assert(x => x > 0 && x < 4);
+        await Arrange(() => 1).Act(x => x + 2).Assert(x => x > 0 && x < 4).And(x => x % 1 == 0);
 
     [Fact(DisplayName = "Expression based assertions that are wrong fail")]
     public async Task Case12()
