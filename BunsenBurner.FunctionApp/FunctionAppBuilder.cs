@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -10,6 +11,20 @@ namespace BunsenBurner.FunctionApp;
 /// </summary>
 public static class FunctionAppBuilder
 {
+#pragma warning disable S3963
+    [ExcludeFromCodeCoverage]
+    static FunctionAppBuilder() =>
+        AppDomain.CurrentDomain.ProcessExit += (_, _) =>
+        {
+            foreach (var (_, host) in HostCache)
+            {
+                if (host.IsValueCreated)
+                    host.Value.Dispose();
+            }
+            HostCache.Clear();
+        };
+#pragma warning restore S3963
+
     private static ConcurrentDictionary<string, Lazy<IHost>> HostCache =>
         new(StringComparer.Ordinal);
 

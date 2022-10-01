@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using BunsenBurner.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,6 +11,10 @@ namespace BunsenBurner.Background;
 /// </summary>
 public static class BackgroundServiceBuilder
 {
+    [ExcludeFromCodeCoverage]
+    static BackgroundServiceBuilder() =>
+        AppDomain.CurrentDomain.ProcessExit += (_, _) => ServiceProviderCache.Clear();
+
     private static ConcurrentDictionary<string, Lazy<IServiceProvider>> ServiceProviderCache =>
         new(StringComparer.Ordinal);
 
