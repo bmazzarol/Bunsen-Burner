@@ -19,11 +19,14 @@ public class BddTests : IClassFixture<MockServerFixture>
             .WithHeader("b", 123, x => x.ToString())
             .GivenRequest()
             .WhenCalled(SimpleResponse())
-            .Then(resp =>
+            .Then(ctx =>
             {
-                Assert.Equal(HttpStatusCode.OK, resp.Code);
-                Assert.Equal("test", resp.Content);
-                Assert.Equal("123", resp.Headers.FirstOrDefault(x => x.Key == "custom")?.Value);
+                Assert.Equal(HttpStatusCode.OK, ctx.Response.Code);
+                Assert.Equal("test", ctx.Response.Content);
+                Assert.Equal(
+                    "123",
+                    ctx.Response.Headers.FirstOrDefault(x => x.Key == "custom")?.Value
+                );
             });
 
     [Fact(DisplayName = "GET request can be made to a test server, with a named test")]
@@ -124,6 +127,12 @@ public class BddTests : IClassFixture<MockServerFixture>
 
     [Fact(DisplayName = "GET request can be made to a test server, with mixed data")]
     public async Task Case13() =>
+        await Given(() => (Req: Request.GET($"/hello-world"), SomeOtherData: "test"))
+            .WhenCalled(x => x.Req, SimpleResponse())
+            .Then(ctx => Assert.Equal(HttpStatusCode.OK, ctx.Response.Code));
+
+    [Fact(DisplayName = "GET request can be made with mixed data")]
+    public async Task Case14() =>
         await Given(() =>
             {
                 _server.WithHelloWorld();
@@ -132,6 +141,6 @@ public class BddTests : IClassFixture<MockServerFixture>
                     SomeOtherData: "test"
                 );
             })
-            .WhenCalled(x => x.Req, SimpleResponse())
+            .WhenCalled(x => x.Req)
             .Then(resp => Assert.Equal(HttpStatusCode.OK, resp.Code));
 }

@@ -42,7 +42,7 @@ public static class Bdd
     /// <typeparam name="TRequest">request</typeparam>
     /// <returns>scenario that is run</returns>
     [Pure]
-    public static BddScenario.Acted<TData, Response> WhenCalled<TData, TRequest>(
+    public static BddScenario.Acted<TData, ResponseContext> WhenCalled<TData, TRequest>(
         this BddScenario.Arranged<TData> scenario,
         Func<TData, TRequest> fn,
         TestServer server
@@ -56,7 +56,7 @@ public static class Bdd
     /// <typeparam name="TRequest">request</typeparam>
     /// <returns>scenario that is run</returns>
     [Pure]
-    public static BddScenario.Acted<TRequest, Response> WhenCalled<TRequest>(
+    public static BddScenario.Acted<TRequest, ResponseContext> WhenCalled<TRequest>(
         this BddScenario.Arranged<TRequest> scenario,
         TestServer server
     ) where TRequest : Request => scenario.ActAndCall(server);

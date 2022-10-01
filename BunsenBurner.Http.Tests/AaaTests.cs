@@ -19,13 +19,16 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
             .WithHeader("b", 123, x => x.ToString())
             .ArrangeRequest()
             .ActAndCall(SimpleResponse())
-            .Assert(resp =>
+            .Assert(ctx =>
             {
-                Assert.Equal(HttpStatusCode.OK, resp.Code);
-                Assert.Equal(200, resp.RawStatusCode);
-                Assert.Equal("test", resp.Content);
-                Assert.Equal(4, resp.Length);
-                Assert.Equal("123", resp.Headers.FirstOrDefault(x => x.Key == "custom")?.Value);
+                Assert.Equal(HttpStatusCode.OK, ctx.Response.Code);
+                Assert.Equal(200, ctx.Response.RawStatusCode);
+                Assert.Equal("test", ctx.Response.Content);
+                Assert.Equal(4, ctx.Response.Length);
+                Assert.Equal(
+                    "123",
+                    ctx.Response.Headers.FirstOrDefault(x => x.Key == "custom")?.Value
+                );
             });
 
     [Fact(DisplayName = "GET request can be made to a test server, with a named test")]
@@ -126,6 +129,12 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
 
     [Fact(DisplayName = "GET request can be made to a test server, with mixed data")]
     public async Task Case13() =>
+        await Arrange(() => (Req: Request.GET($"/hello-world"), SomeOtherData: "test"))
+            .ActAndCall(x => x.Req, SimpleResponse())
+            .Assert(ctx => Assert.Equal(HttpStatusCode.OK, ctx.Response.Code));
+
+    [Fact(DisplayName = "GET request can be made with mixed data")]
+    public async Task Case14() =>
         await Arrange(() =>
             {
                 _server.WithHelloWorld();
@@ -134,6 +143,23 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
                     SomeOtherData: "test"
                 );
             })
-            .ActAndCall(x => x.Req, SimpleResponse())
+            .ActAndCall(x => x.Req)
             .Assert(resp => Assert.Equal(HttpStatusCode.OK, resp.Code));
+
+    [Fact(DisplayName = "POST request can be made to a real server")]
+    public async Task Case15() =>
+        await Arrange(() =>
+            {
+                _server
+                    .Given(
+                        WireMock.RequestBuilders.Request
+                            .Create()
+                            .WithPath("/hello-world")
+                            .UsingPost()
+                    )
+                    .RespondWith(WireMock.ResponseBuilders.Response.Create().WithSuccess());
+                return Request.POST($"{_server.Urls.First()}/hello-world", new { A = "test" });
+            })
+            .ActAndCall()
+            .IsOk();
 }

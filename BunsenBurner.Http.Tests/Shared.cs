@@ -36,6 +36,26 @@ internal static class Shared
             configureHost: builder => builder.Configure(x => x.Run(requestDelegate))
         );
 
+    private static Scenario<TSyntax>.Asserted<TRequest, ResponseContext> AssertOnResponse<
+        TRequest,
+        TSyntax
+    >(
+        this Scenario<TSyntax>.Acted<TRequest, ResponseContext> scenario,
+        Action<TRequest, Response> assert
+    )
+        where TRequest : Request
+        where TSyntax : struct, Syntax =>
+        new(
+            scenario.Name,
+            scenario.ArrangeScenario,
+            scenario.ActOnScenario,
+            (req, ctx) =>
+            {
+                assert(req, ctx.Response);
+                return Task.CompletedTask;
+            }
+        );
+
     private static Scenario<TSyntax>.Asserted<TRequest, Response> AssertOnResponse<
         TRequest,
         TSyntax
@@ -53,20 +73,20 @@ internal static class Shared
             }
         );
 
-    private static Scenario<TSyntax>.Asserted<TRequest, Response> AssertOnResponse<
+    private static Scenario<TSyntax>.Asserted<TRequest, ResponseContext> AssertOnResponse<
         TRequest,
         TSyntax
     >(
-        this Scenario<TSyntax>.Asserted<TRequest, Response> scenario,
+        this Scenario<TSyntax>.Asserted<TRequest, ResponseContext> scenario,
         Action<TRequest, Response> assert
     )
         where TRequest : Request
         where TSyntax : struct, Syntax =>
         scenario with
         {
-            AssertAgainstResult = (req, resp) =>
+            AssertAgainstResult = (req, ctx) =>
             {
-                assert(req, resp);
+                assert(req, ctx.Response);
                 return Task.CompletedTask;
             }
         };
@@ -78,11 +98,18 @@ internal static class Shared
         where TSyntax : struct, Syntax =>
         scenario.AssertOnResponse((_, resp) => Assert.Equal(HttpStatusCode.OK, resp.Code));
 
+    internal static Scenario<TSyntax>.Asserted<TRequest, ResponseContext> IsOk<TRequest, TSyntax>(
+        this Scenario<TSyntax>.Acted<TRequest, ResponseContext> scenario
+    )
+        where TRequest : Request
+        where TSyntax : struct, Syntax =>
+        scenario.AssertOnResponse((_, resp) => Assert.Equal(HttpStatusCode.OK, resp.Code));
+
     internal static Scenario<TSyntax>.Asserted<
         TRequest,
-        Response
+        ResponseContext
     > ResponseContentMatchesRequestBody<TRequest, TSyntax>(
-        this Scenario<TSyntax>.Asserted<TRequest, Response> scenario
+        this Scenario<TSyntax>.Asserted<TRequest, ResponseContext> scenario
     )
         where TRequest : Request
         where TSyntax : struct, Syntax =>

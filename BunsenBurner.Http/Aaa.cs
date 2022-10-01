@@ -42,7 +42,7 @@ public static class Aaa
     /// <typeparam name="TRequest">request</typeparam>
     /// <returns>acted scenario</returns>
     [Pure]
-    public static AaaScenario.Acted<TData, Response> ActAndCall<TData, TRequest>(
+    public static AaaScenario.Acted<TData, ResponseContext> ActAndCall<TData, TRequest>(
         this AaaScenario.Arranged<TData> scenario,
         Func<TData, TRequest> fn,
         TestServer server
@@ -56,7 +56,7 @@ public static class Aaa
     /// <typeparam name="TRequest">request</typeparam>
     /// <returns>acted scenario</returns>
     [Pure]
-    public static AaaScenario.Acted<TRequest, Response> ActAndCall<TRequest>(
+    public static AaaScenario.Acted<TRequest, ResponseContext> ActAndCall<TRequest>(
         this AaaScenario.Arranged<TRequest> scenario,
         TestServer server
     ) where TRequest : Request => scenario.ActAndCall<TRequest, Syntax.Aaa>(server);

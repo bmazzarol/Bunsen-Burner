@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.TestHost;
+﻿using BunsenBurner.Logging;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BunsenBurner.Http;
 
@@ -30,24 +32,32 @@ internal static class Shared
     }
 
     [Pure]
-    internal static Scenario<TSyntax>.Acted<TData, Response> ActAndCall<TData, TRequest, TSyntax>(
-        this Scenario<TSyntax>.Arranged<TData> scenario,
-        Func<TData, TRequest> fn,
-        TestServer server
-    )
+    internal static Scenario<TSyntax>.Acted<TData, ResponseContext> ActAndCall<
+        TData,
+        TRequest,
+        TSyntax
+    >(this Scenario<TSyntax>.Arranged<TData> scenario, Func<TData, TRequest> fn, TestServer server)
         where TRequest : Request
         where TSyntax : struct, Syntax =>
         new(
             scenario.Name,
             scenario.ArrangeScenario,
-            data => InternalCall(fn(data), server.CreateClient())
+            async data =>
+            {
+                var resp = await InternalCall(fn(data), server.CreateClient())
+                    .ConfigureAwait(false);
+                return new ResponseContext(
+                    resp,
+                    server.Services.GetService<LogMessageStore>() ?? LogMessageStore.New()
+                );
+            }
         );
 
     [Pure]
-    internal static Scenario<TSyntax>.Acted<TRequest, Response> ActAndCall<TRequest, TSyntax>(
-        this Scenario<TSyntax>.Arranged<TRequest> scenario,
-        TestServer server
-    )
+    internal static Scenario<TSyntax>.Acted<TRequest, ResponseContext> ActAndCall<
+        TRequest,
+        TSyntax
+    >(this Scenario<TSyntax>.Arranged<TRequest> scenario, TestServer server)
         where TRequest : Request
         where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _, server);
 
