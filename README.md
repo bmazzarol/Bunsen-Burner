@@ -66,6 +66,7 @@ Click through to the links bellow for further details.
 | [Logging](./BunsenBurner.Logging/README.md)           | Core logging abstractions. Used to assert against logged messages, useful for cases like testing background services | Coming Soon |
 | [AutoFixture](./BunsenBurner.AutoFixture/README.md)   | Integration with [AutoFixture](https://github.com/AutoFixture) to simplify arrange steps                             | Coming Soon |
 | [Bogus](./BunsenBurner.Bogus/README.md)               | Integration with [Bogus](https://github.com/bchavez/Bogus) to simplify arrange steps                                 | Coming Soon |
+| [Hedgehog](./BunsenBurner.Hedgehog/README.md)         | Integration with [Hedgehog](https://github.com/hedgehogqa/fsharp-hedgehog) to write property based tests             | Coming Soon |
 | [Verify.Xunit](./BunsenBurner.Verify.Xunit/README.md) | Integration with [Verify.Xunit](https://github.com/VerifyTests/Verify) to simplify assert steps                      | Coming Soon |
 | [Verify.Xunit](./BunsenBurner.Verify.NUnit/README.md) | Integration with [Verify.NUnit](https://github.com/VerifyTests/Verify) to simplify assert steps                      | Coming Soon |
 | [Http](./BunsenBurner.Http/README.md)                 | Extension methods for testing Http servers                                                                           | Coming Soon |
