@@ -1,4 +1,6 @@
-﻿namespace BunsenBurner;
+﻿using System.Linq.Expressions;
+
+namespace BunsenBurner;
 
 using AaaScenario = Scenario<Syntax.Aaa>;
 
@@ -62,6 +64,20 @@ public static partial class Aaa
         this AaaScenario.Acted<TData, TResult> scenario,
         Action<TResult> fn
     ) => Shared.Assert(scenario, fn);
+
+    /// <summary>
+    /// Asserts on the result of acting on the test
+    /// </summary>
+    /// <param name="scenario">acted on scenario</param>
+    /// <param name="fn">assert expression</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>asserted scenario</returns>
+    [Pure]
+    public static AaaScenario.Asserted<TData, TResult> Assert<TData, TResult>(
+        this AaaScenario.Acted<TData, TResult> scenario,
+        Expression<Func<TResult, bool>> fn
+    ) => scenario.Assert<TData, TResult, Syntax.Aaa>(fn);
 
     /// <summary>
     /// Asserts on the result of a failure when acting

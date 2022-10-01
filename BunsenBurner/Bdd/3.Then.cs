@@ -1,4 +1,6 @@
-﻿namespace BunsenBurner;
+﻿using System.Linq.Expressions;
+
+namespace BunsenBurner;
 
 using BddScenario = Scenario<Syntax.Bdd>;
 
@@ -19,7 +21,7 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, TResult> Then<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Func<TData, TResult, Task> fn
-    ) => Shared.Assert(scenario, fn);
+    ) => scenario.Assert(fn);
 
     /// <summary>
     /// Then verify the scenario
@@ -33,7 +35,7 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, TResult> Then<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Func<TResult, Task> fn
-    ) => Shared.Assert(scenario, fn);
+    ) => scenario.Assert(fn);
 
     /// <summary>
     /// Then verify the scenario
@@ -47,7 +49,7 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, TResult> Then<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Action<TData, TResult> fn
-    ) => Shared.Assert(scenario, fn);
+    ) => scenario.Assert(fn);
 
     /// <summary>
     /// Then verify the scenario
@@ -61,7 +63,21 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, TResult> Then<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Action<TResult> fn
-    ) => Shared.Assert(scenario, fn);
+    ) => scenario.Assert(fn);
+
+    /// <summary>
+    /// Then verify the scenario
+    /// </summary>
+    /// <param name="scenario">run scenario</param>
+    /// <param name="fn">then expression</param>
+    /// <typeparam name="TData">scenario data</typeparam>
+    /// <typeparam name="TResult">result of running the scenario</typeparam>
+    /// <returns>completed scenario</returns>
+    [Pure]
+    public static BddScenario.Asserted<TData, TResult> Then<TData, TResult>(
+        this BddScenario.Acted<TData, TResult> scenario,
+        Expression<Func<TResult, bool>> fn
+    ) => scenario.Assert(fn);
 
     /// <summary>
     /// Then verify the scenario fails
@@ -75,7 +91,7 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Func<TData, Exception, Task> fn
-    ) => Shared.AssertFailsWith(scenario, fn);
+    ) => scenario.AssertFailsWith(fn);
 
     /// <summary>
     /// Then verify the scenario fails
@@ -89,7 +105,7 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Func<Exception, Task> fn
-    ) => Shared.AssertFailsWith(scenario, fn);
+    ) => scenario.AssertFailsWith(fn);
 
     /// <summary>
     /// Then verify the scenario fails
@@ -103,7 +119,7 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Action<TData, Exception> fn
-    ) => Shared.AssertFailsWith(scenario, fn);
+    ) => scenario.AssertFailsWith(fn);
 
     /// <summary>
     /// Then verify the scenario fails
@@ -117,7 +133,7 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Action<Exception> fn
-    ) => Shared.AssertFailsWith(scenario, fn);
+    ) => scenario.AssertFailsWith(fn);
 
     /// <summary>
     /// Allows for additional then steps

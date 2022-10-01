@@ -132,4 +132,17 @@ public class AaaTests
                     Assert.Equal("Some failure", e.Message);
                 }
             );
+
+    [Fact(DisplayName = "Expression based assertions work")]
+    public async Task Case11() =>
+        await Arrange(() => 1).Act(x => x + 2).Assert(x => x > 0 && x < 4);
+
+    [Fact(DisplayName = "Expression based assertions that are wrong fail")]
+    public async Task Case12()
+    {
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(
+            async () => await Arrange(() => 1).Act(x => x + 2).Assert(x => x > 4 && x < 6)
+        );
+        Assert.Equal("x => ((x > 4) AndAlso (x < 6)) is not true for the result 3", exception.Message);
+    }
 }

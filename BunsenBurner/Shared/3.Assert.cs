@@ -1,4 +1,6 @@
-﻿namespace BunsenBurner;
+﻿using System.Linq.Expressions;
+
+namespace BunsenBurner;
 
 /// <summary>
 /// Shared builder function implementations for assert steps
@@ -36,6 +38,22 @@ internal static partial class Shared
         this Scenario<TSyntax>.Acted<TData, TResult> scenario,
         Action<TResult> fn
     ) where TSyntax : struct, Syntax => scenario.Assert((_, r) => fn(r));
+
+    [Pure]
+    internal static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
+        this Scenario<TSyntax>.Acted<TData, TResult> scenario,
+        Expression<Func<TResult, bool>> fn
+    ) where TSyntax : struct, Syntax =>
+        scenario.Assert(
+            (_, r) =>
+            {
+                var compiled = fn.Compile();
+                if (!compiled(r))
+                    throw new InvalidOperationException(
+                        $"{fn.ToString()} is not true for the result {r}"
+                    );
+            }
+        );
 
     [Pure]
     internal static Scenario<TSyntax>.Asserted<TData, Exception> AssertFailsWith<
