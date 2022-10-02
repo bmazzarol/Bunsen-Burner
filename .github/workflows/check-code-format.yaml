@@ -2,10 +2,10 @@
 on:
   pull_request:
     branches:
-      - 'master'
+      - 'main'
 jobs:
   check_formatting:
-    runs-on: [ self-hosted, generic ]
+    runs-on: ubuntu-latest
     name: Check C# Formatting
     steps:
       - uses: actions/checkout@v2
