@@ -1,11 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <Authors>Ben Mazzarol</Authors>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageId>BunsenBurner.FunctionApp</PackageId>
+        <Title>Bunsen Burner Function App</Title>
+        <Description>Extension methods for testing Function apps </Description>
+        <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests, Http, Function App</PackageTags>
+        <PackageProjectUrl>https://github.com/bmazzarol/Bunsen-Burner</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
+        <ProjectGuid>a3d8f2b2-f7e8-44fd-8cd7-cc369c4079b1</ProjectGuid>
+        <IncludeSymbols>true</IncludeSymbols>
+        <IsPackable>True</IsPackable>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <AnalysisMode>Recommended</AnalysisMode>
+        <OutputType>library</OutputType>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>

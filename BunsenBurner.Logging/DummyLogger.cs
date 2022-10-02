@@ -19,6 +19,7 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>
         _ownerClassName = ownerClassName;
     }
 
+    /// <inheritdoc />
     public void Log<TState>(
         LogLevel logLevel,
         EventId eventId,
@@ -36,8 +37,10 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>
             )
         );
 
+    /// <inheritdoc />
     public bool IsEnabled(LogLevel logLevel) => true;
 
+    /// <inheritdoc />
     public IDisposable BeginScope<TState>(TState state) => new NoopScope();
 
     private sealed record NoopScope : IDisposable
@@ -48,18 +51,34 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>
         }
     }
 
+    /// <inheritdoc />
     public IEnumerator<LogMessage> GetEnumerator() => _store.GetEnumerator();
 
     [ExcludeFromCodeCoverage]
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
 
+/// <summary>
+/// Dummy logger constructors
+/// </summary>
 public static class DummyLogger
 {
+    /// <summary>
+    /// Creates a new typed dummy logger
+    /// </summary>
+    /// <param name="store">log message store</param>
+    /// <typeparam name="T">some parent T</typeparam>
+    /// <returns>dummy logger T</returns>
     [Pure]
     public static DummyLogger<T> New<T>(LogMessageStore? store = default) =>
         new(store ?? LogMessageStore.New(), typeof(T).FullName ?? string.Empty);
 
+    /// <summary>
+    /// Creates a new un-typed dummy logger
+    /// </summary>
+    /// <param name="ownerClassName">some parent class name</param>
+    /// <param name="store">log message store</param>
+    /// <returns>dummy logger</returns>
     [Pure]
     public static DummyLogger<object> New(
         string ownerClassName,

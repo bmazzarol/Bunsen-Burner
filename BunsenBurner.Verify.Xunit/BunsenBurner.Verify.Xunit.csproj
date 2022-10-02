@@ -1,11 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <Authors>Ben Mazzarol</Authors>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageId>BunsenBurner.Verify.Xunit</PackageId>
+        <Title>Bunsen Burner Verify Xunit</Title>
+        <Description>Integration with [Verify.Xunit](https://github.com/VerifyTests/Verify) to simplify assert steps</Description>
+        <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests, Xunit</PackageTags>
+        <PackageProjectUrl>https://github.com/bmazzarol/Bunsen-Burner</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
+        <ProjectGuid>2df5525d-d70f-4994-84b5-7b5d9531004a</ProjectGuid>
+        <IncludeSymbols>true</IncludeSymbols>
+        <IsPackable>True</IsPackable>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <AnalysisMode>Recommended</AnalysisMode>
+        <OutputType>library</OutputType>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>

@@ -3,6 +3,9 @@ using Microsoft.Extensions.Logging;
 
 namespace BunsenBurner.Logging;
 
+/// <summary>
+/// Extension methods for working with DI and the dummy logger
+/// </summary>
 public static class ServiceCollectionExtensions
 {
     /// <summary>

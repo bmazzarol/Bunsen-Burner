@@ -1,11 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <Authors>Ben Mazzarol</Authors>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageId>BunsenBurner.Background</PackageId>
+        <Title>Bunsen Burner Background</Title>
+        <Description>Extension methods for testing Background services</Description>
+        <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests, Background service</PackageTags>
+        <PackageProjectUrl>https://github.com/bmazzarol/Bunsen-Burner</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
+        <ProjectGuid>2aafd9cc-f4a0-466e-adce-2c495447f59b</ProjectGuid>
+        <IncludeSymbols>true</IncludeSymbols>
+        <IsPackable>True</IsPackable>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <AnalysisMode>Recommended</AnalysisMode>
+        <OutputType>library</OutputType>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>

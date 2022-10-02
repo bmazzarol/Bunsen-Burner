@@ -59,6 +59,11 @@ public abstract record Request
     /// <returns>content length</returns>
     public long? ContentLength() => Content()?.Length;
 
+    /// <summary>
+    /// Get request
+    /// </summary>
+    /// <param name="Url">url</param>
+    /// <param name="Headers">headers</param>
     public sealed record GetRequest(Url Url, Headers Headers) : Request(nameof(GET), Url, Headers)
     {
         internal override Body? InternalBody() => default;
@@ -74,6 +79,12 @@ public abstract record Request
     public static GetRequest GET(Url url, Headers? headers = default) =>
         new(url, headers ?? Array.Empty<Header>());
 
+    /// <summary>
+    /// Post request
+    /// </summary>
+    /// <param name="Url">url</param>
+    /// <param name="Headers">headers</param>
+    /// <param name="Body">post body</param>
     public sealed record PostRequest(Url Url, Headers Headers, Body? Body)
         : Request(nameof(POST), Url, Headers)
     {
@@ -106,6 +117,12 @@ public abstract record Request
             headers
         );
 
+    /// <summary>
+    /// Put request
+    /// </summary>
+    /// <param name="Url">url</param>
+    /// <param name="Headers">headers</param>
+    /// <param name="Body">put body</param>
     public sealed record PutRequest(Url Url, Headers Headers, Body Body)
         : Request(nameof(PUT), Url, Headers)
     {
@@ -138,6 +155,12 @@ public abstract record Request
             headers
         );
 
+    /// <summary>
+    /// Patch request
+    /// </summary>
+    /// <param name="Url">url</param>
+    /// <param name="Headers">headers</param>
+    /// <param name="Body">patch body</param>
     public sealed record PatchRequest(Url Url, Headers Headers, Body Body)
         : Request(nameof(PATCH), Url, Headers)
     {
@@ -170,6 +193,11 @@ public abstract record Request
             headers
         );
 
+    /// <summary>
+    /// Delete request
+    /// </summary>
+    /// <param name="Url">url</param>
+    /// <param name="Headers">headers</param>
     public sealed record DeleteRequest(Url Url, Headers Headers)
         : Request(nameof(DELETE), Url, Headers)
     {
@@ -186,6 +214,11 @@ public abstract record Request
     public static DeleteRequest DELETE(Url url, Headers? headers = default) =>
         new(url, headers ?? Array.Empty<Header>());
 
+    /// <summary>
+    /// Option request
+    /// </summary>
+    /// <param name="Url">url</param>
+    /// <param name="Headers">headers</param>
     public sealed record OptionRequest(Url Url, Headers Headers)
         : Request(nameof(OPTION), Url, Headers)
     {
@@ -202,6 +235,11 @@ public abstract record Request
     public static OptionRequest OPTION(Url url, Headers? headers = default) =>
         new(url, headers ?? Array.Empty<Header>());
 
+    /// <summary>
+    /// Head request
+    /// </summary>
+    /// <param name="Url">url</param>
+    /// <param name="Headers">headers</param>
     public sealed record HeadRequest(Url Url, Headers Headers) : Request(nameof(HEAD), Url, Headers)
     {
         internal override Body? InternalBody() => default;
@@ -217,6 +255,11 @@ public abstract record Request
     public static HeadRequest HEAD(Url url, Headers? headers = default) =>
         new(url, headers ?? Array.Empty<Header>());
 
+    /// <summary>
+    /// Trace request
+    /// </summary>
+    /// <param name="Url">url</param>
+    /// <param name="Headers">headers</param>
     public sealed record TraceRequest(Url Url, Headers Headers)
         : Request(nameof(TRACE), Url, Headers)
     {
@@ -233,6 +276,11 @@ public abstract record Request
     public static TraceRequest TRACE(Url url, Headers? headers = default) =>
         new(url, headers ?? Array.Empty<Header>());
 
+    /// <summary>
+    /// Connect request
+    /// </summary>
+    /// <param name="Url">url</param>
+    /// <param name="Headers">headers</param>
     public sealed record ConnectRequest(Url Url, Headers Headers)
         : Request(nameof(CONNECT), Url, Headers)
     {
@@ -272,6 +320,9 @@ public abstract record Request
     }
 }
 
+/// <summary>
+/// Extension for all requests
+/// </summary>
 public static class RequestExt
 {
     /// <summary>

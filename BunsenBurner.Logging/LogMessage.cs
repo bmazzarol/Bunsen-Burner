@@ -7,10 +7,29 @@ namespace BunsenBurner.Logging;
 /// </summary>
 public sealed record LogMessage
 {
+    /// <summary>
+    /// Parent class name
+    /// </summary>
     public string ClassType { get; }
+
+    /// <summary>
+    /// Log level
+    /// </summary>
     public LogLevel Level { get; }
+
+    /// <summary>
+    /// Log event id
+    /// </summary>
     public EventId EventId { get; }
+
+    /// <summary>
+    /// Optional exception
+    /// </summary>
     public Exception? Exception { get; }
+
+    /// <summary>
+    /// Log message
+    /// </summary>
     public string Message { get; }
 
     private LogMessage(

@@ -37,6 +37,7 @@ public abstract record Scenario<TSyntax> where TSyntax : struct, Syntax
     /// </summary>
     public string Name { get; }
 
+    /// <inheritdoc/>
     public sealed override string ToString() => Name;
 
     private Scenario(string? name) => Name = name ?? string.Empty;
