@@ -27,8 +27,8 @@ internal static class Shared
     private static async Task<Response> InternalCall<TRequest>(TRequest request, HttpClient client)
         where TRequest : Request
     {
-        var httpResp = await client.SendAsync(request.HttpRequestMessage()).ConfigureAwait(false);
-        return await Response.New(httpResp).ConfigureAwait(false);
+        var httpResp = await client.SendAsync(request.HttpRequestMessage());
+        return await Response.New(httpResp);
     }
 
     [Pure]
@@ -44,8 +44,7 @@ internal static class Shared
             scenario.ArrangeScenario,
             async data =>
             {
-                var resp = await InternalCall(fn(data), server.CreateClient())
-                    .ConfigureAwait(false);
+                var resp = await InternalCall(fn(data), server.CreateClient());
                 return new ResponseContext(
                     resp,
                     server.Services.GetService<LogMessageStore>() ?? LogMessageStore.New()

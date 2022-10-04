@@ -32,8 +32,8 @@ internal static partial class Shared
             scenario.ArrangeScenario,
             async data =>
             {
-                var result = await scenario.ActOnScenario(data).ConfigureAwait(false);
-                var nextResult = await fn(data, result).ConfigureAwait(false);
+                var result = await scenario.ActOnScenario(data);
+                var nextResult = await fn(data, result);
                 return nextResult;
             }
         );

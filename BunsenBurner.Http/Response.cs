@@ -30,7 +30,7 @@ public sealed record Response(
 
     internal static async Task<Response> New(HttpResponseMessage httpResp)
     {
-        var content = await httpResp.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var content = await httpResp.Content.ReadAsStringAsync();
         return new Response(
             httpResp.StatusCode,
             content,
