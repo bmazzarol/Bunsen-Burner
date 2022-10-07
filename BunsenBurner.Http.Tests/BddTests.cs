@@ -23,10 +23,7 @@ public class BddTests : IClassFixture<MockServerFixture>
             {
                 Assert.Equal(HttpStatusCode.OK, ctx.Response.Code);
                 Assert.Equal("test", ctx.Response.Content);
-                Assert.Equal(
-                    "123",
-                    ctx.Response.Headers.FirstOrDefault(x => x.Key == "custom")?.Value
-                );
+                Assert.Equal("123", ctx.Response.Headers.Get("custom"));
             });
 
     [Fact(DisplayName = "GET request can be made to a test server, with a named test")]
@@ -74,7 +71,7 @@ public class BddTests : IClassFixture<MockServerFixture>
     public async Task Case6() =>
         await Request
             .DELETE("/hello-world")
-            .WithHeaders(new Header("A", "1"), new Header("B", "2"))
+            .WithHeaders(KeyValuePair.Create("A", "1"), KeyValuePair.Create("B", "2"))
             .GivenRequest()
             .WhenCalled(SimpleResponse())
             .IsOk();

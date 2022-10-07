@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Immutable;
+using System.Net;
 using System.Net.Mime;
 using BunsenBurner.FunctionApp.Models;
 using BunsenBurner.Http;
@@ -35,21 +36,21 @@ public static class HttpFunctionAppExtensions
                     (HttpStatusCode)objectResult.StatusCode.GetValueOrDefault(),
                     objectResult.Value.ToString(),
                     objectResult.ContentTypes.FirstOrDefault(),
-                    Enumerable.Empty<Header>()
+                    ImmutableDictionary<string, string>.Empty
                 ),
             IStatusCodeActionResult statusCodeResult
                 => new Response(
                     (HttpStatusCode)statusCodeResult.StatusCode.GetValueOrDefault(),
                     string.Empty,
                     string.Empty,
-                    Enumerable.Empty<Header>()
+                    ImmutableDictionary<string, string>.Empty
                 ),
             _
                 => new Response(
                     HttpStatusCode.InternalServerError,
                     "Failed to process action result",
                     MediaTypeNames.Text.Plain,
-                    Enumerable.Empty<Header>()
+                    ImmutableDictionary<string, string>.Empty
                 )
         };
 }

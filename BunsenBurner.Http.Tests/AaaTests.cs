@@ -1,8 +1,11 @@
 using System.Net;
 using WireMock.Server;
 using Flurl;
+using JWT.Builder;
+using Newtonsoft.Json;
 using static BunsenBurner.Http.Tests.Shared;
 using static BunsenBurner.Aaa;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace BunsenBurner.Http.Tests;
 
@@ -25,10 +28,7 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
                 Assert.Equal(200, ctx.Response.RawStatusCode);
                 Assert.Equal("test", ctx.Response.Content);
                 Assert.Equal(4, ctx.Response.Length);
-                Assert.Equal(
-                    "123",
-                    ctx.Response.Headers.FirstOrDefault(x => x.Key == "custom")?.Value
-                );
+                Assert.Equal("123", ctx.Response.Headers.Get("custom"));
             });
 
     [Fact(DisplayName = "GET request can be made to a test server, with a named test")]
@@ -76,7 +76,7 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
     public async Task Case6() =>
         await Request
             .DELETE("/hello-world")
-            .WithHeaders(new Header("A", "1"), new Header("B", "2"))
+            .WithHeaders(KeyValuePair.Create("A", "1"), KeyValuePair.Create("B", "2"))
             .ArrangeRequest()
             .ActAndCall(SimpleResponse())
             .IsOk();
@@ -162,4 +162,61 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
             })
             .ActAndCall()
             .IsOk();
+
+    [Fact(DisplayName = "Authorized request can be made")]
+    public async Task Case16() =>
+        await Request
+            .GET($"/hello-world")
+            .WithBearerToken(
+                Token
+                    .New()
+                    .WithClaim(ClaimName.Subject, "1", "2", "3")
+                    .WithHeader(HeaderName.KeyId, "1", "2", "3")
+            )
+            .ArrangeRequest()
+            .ActAndCall(SimpleResponse())
+            .Assert(ctx => Assert.Equal(HttpStatusCode.OK, ctx.Response.Code))
+            .And(
+                (req, _) =>
+                {
+                    Assert.Contains(
+                        req.Headers,
+                        h => h.Key == "Authorization" && h.Value != string.Empty
+                    );
+                    var token = Token.FromRaw(req.Headers.Get("Authorization")!);
+                    Assert.Equal("1,2,3", token?.Headers.Get("kid"));
+                    Assert.Equal("1,2,3", token?.Claims.Get("sub"));
+                }
+            );
+
+    [Fact(DisplayName = "Authorized request can be made and configured by function")]
+    public async Task Case17() =>
+        await Request
+            .GET($"/hello-world")
+            .WithBearerToken(
+                t =>
+                    t.WithClaim(ClaimName.Subject, "123").WithHeader(HeaderName.ContentType, "text")
+            )
+            .ArrangeRequest()
+            .ActAndCall(SimpleResponse())
+            .Assert(ctx => Assert.Equal(HttpStatusCode.OK, ctx.Response.Code))
+            .And(
+                (req, _) =>
+                {
+                    Assert.Contains(
+                        req.Headers,
+                        h => h.Key == "Authorization" && h.Value != string.Empty
+                    );
+                    Assert.NotNull(
+                        Token.FromRaw(
+                            req.Headers.Get("Authorization")?.Replace("Bearer ", "") ?? string.Empty
+                        )
+                    );
+                    Assert.Null(
+                        Token.FromRaw(
+                            req.Headers.Get("Authorization")?.Replace("Bearer ", "") + ".extra"
+                        )
+                    );
+                }
+            );
 }

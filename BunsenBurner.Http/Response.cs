@@ -1,8 +1,9 @@
-﻿using System.Net;
+﻿using System.Collections.Immutable;
+using System.Net;
 
 namespace BunsenBurner.Http;
 
-using Headers = IEnumerable<Header>;
+using Headers = IImmutableDictionary<string, string>;
 
 /// <summary>
 /// HTTP Response
@@ -35,7 +36,9 @@ public sealed record Response(
             httpResp.StatusCode,
             content,
             httpResp.Content.Headers.ContentType?.MediaType,
-            httpResp.Headers.Select(x => new Header(x.Key, string.Join(',', x.Value)))
+            httpResp.Headers
+                .Select(x => new KeyValuePair<string, string>(x.Key, string.Join(',', x.Value)))
+                .ToImmutableDictionary()
         );
     }
 }

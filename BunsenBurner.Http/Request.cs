@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Immutable;
+using System.Globalization;
 using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
@@ -8,7 +9,8 @@ using Flurl;
 
 namespace BunsenBurner.Http;
 
-using Headers = IEnumerable<Header>;
+using Header = KeyValuePair<string, string>;
+using Headers = IImmutableDictionary<string, string>;
 
 /// <summary>
 /// HTTP Request
@@ -16,6 +18,7 @@ using Headers = IEnumerable<Header>;
 public abstract record Request
 {
     private const string HttpsLocalhost = "https://localhost";
+    private static readonly Headers EmptyHeaders = ImmutableDictionary<string, string>.Empty;
 
     /// <summary>
     /// Verb
@@ -77,7 +80,7 @@ public abstract record Request
     /// <returns>get request</returns>
     [Pure]
     public static GetRequest GET(Url url, Headers? headers = default) =>
-        new(url, headers ?? Array.Empty<Header>());
+        new(url, headers ?? EmptyHeaders);
 
     /// <summary>
     /// Post request
@@ -100,7 +103,7 @@ public abstract record Request
     /// <returns>post request</returns>
     [Pure]
     public static PostRequest POST(Url url, Body? body, Headers? headers = default) =>
-        new(url, headers ?? Array.Empty<Header>(), body);
+        new(url, headers ?? EmptyHeaders, body);
 
     /// <summary>
     /// Create a new POST request
@@ -138,7 +141,7 @@ public abstract record Request
     /// <returns>put request</returns>
     [Pure]
     public static PutRequest PUT(Url url, Body body, Headers? headers = default) =>
-        new(url, headers ?? Array.Empty<Header>(), body);
+        new(url, headers ?? EmptyHeaders, body);
 
     /// <summary>
     /// Create a new PUT request
@@ -176,7 +179,7 @@ public abstract record Request
     /// <returns>patch request</returns>
     [Pure]
     public static PatchRequest PATCH(Url url, Body body, Headers? headers = default) =>
-        new(url, headers ?? Array.Empty<Header>(), body);
+        new(url, headers ?? EmptyHeaders, body);
 
     /// <summary>
     /// Create a new PATCH request
@@ -212,7 +215,7 @@ public abstract record Request
     /// <returns>delete request</returns>
     [Pure]
     public static DeleteRequest DELETE(Url url, Headers? headers = default) =>
-        new(url, headers ?? Array.Empty<Header>());
+        new(url, headers ?? EmptyHeaders);
 
     /// <summary>
     /// Option request
@@ -233,7 +236,7 @@ public abstract record Request
     /// <returns>option request</returns>
     [Pure]
     public static OptionRequest OPTION(Url url, Headers? headers = default) =>
-        new(url, headers ?? Array.Empty<Header>());
+        new(url, headers ?? EmptyHeaders);
 
     /// <summary>
     /// Head request
@@ -253,7 +256,7 @@ public abstract record Request
     /// <returns>head request</returns>
     [Pure]
     public static HeadRequest HEAD(Url url, Headers? headers = default) =>
-        new(url, headers ?? Array.Empty<Header>());
+        new(url, headers ?? EmptyHeaders);
 
     /// <summary>
     /// Trace request
@@ -274,7 +277,7 @@ public abstract record Request
     /// <returns>trace request</returns>
     [Pure]
     public static TraceRequest TRACE(Url url, Headers? headers = default) =>
-        new(url, headers ?? Array.Empty<Header>());
+        new(url, headers ?? EmptyHeaders);
 
     /// <summary>
     /// Connect request
@@ -295,7 +298,7 @@ public abstract record Request
     /// <returns>connect request</returns>
     [Pure]
     public static ConnectRequest CONNECT(Url url, Headers? headers = default) =>
-        new(url, headers ?? Array.Empty<Header>());
+        new(url, headers ?? EmptyHeaders);
 
     /// <summary>
     /// Converts a request to a http request message to send.
@@ -338,22 +341,7 @@ public static class RequestExt
         where TRequest : Request =>
         request with
         {
-            Headers = request.Headers
-                .Where(x => !string.Equals(x.Key, key, StringComparison.Ordinal))
-                .Append(
-                    new Header(
-                        key,
-                        string.Join(
-                            ",",
-                            request.Headers
-                                .Where(x => string.Equals(x.Key, key, StringComparison.Ordinal))
-                                .SelectMany(x => x.Value.Split(","))
-                                .Append(value)
-                                .Select(x => x.Trim())
-                                .Distinct(StringComparer.Ordinal)
-                        )
-                    )
-                )
+            Headers = request.Headers.AddOrUpdate(new Header(key, value))
         };
 
     /// <summary>
@@ -383,6 +371,37 @@ public static class RequestExt
     /// <typeparam name="TRequest">valid request type</typeparam>
     /// <returns>request with header added</returns>
     public static TRequest WithHeaders<TRequest>(this TRequest request, params Header[] headers)
+        where TRequest : Request => request.WithHeaders(headers.ToImmutableDictionary());
+
+    /// <summary>
+    /// Add new headers to the request
+    /// </summary>
+    /// <remarks>if the key exists the value is appended, only unique values are maintained</remarks>
+    /// <param name="request">request</param>
+    /// <param name="headers">headers to add</param>
+    /// <typeparam name="TRequest">valid request type</typeparam>
+    /// <returns>request with header added</returns>
+    public static TRequest WithHeaders<TRequest>(this TRequest request, Headers headers)
         where TRequest : Request =>
         headers.Aggregate(request, (r, h) => r.WithHeader(h.Key, h.Value));
+
+    /// <summary>
+    /// Adds bearer authentication
+    /// </summary>
+    /// <param name="request">request</param>
+    /// <param name="token">bearer token (JWT)</param>
+    /// <typeparam name="TRequest">valid request type</typeparam>
+    /// <returns>request with bearer authentication token</returns>
+    public static TRequest WithBearerToken<TRequest>(this TRequest request, Token token)
+        where TRequest : Request => request.WithHeader("Authorization", $"Bearer {token.Encode()}");
+
+    /// <summary>
+    /// Adds bearer authentication
+    /// </summary>
+    /// <param name="request">request</param>
+    /// <param name="fn">bearer token config function (JWT)</param>
+    /// <typeparam name="TRequest">valid request type</typeparam>
+    /// <returns>request with bearer authentication token</returns>
+    public static TRequest WithBearerToken<TRequest>(this TRequest request, Func<Token, Token> fn)
+        where TRequest : Request => request.WithBearerToken(fn(Token.New()));
 }
