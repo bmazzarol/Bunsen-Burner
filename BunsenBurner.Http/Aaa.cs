@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.TestHost;
+﻿using System.Linq.Expressions;
+using LanguageExt;
+using Microsoft.AspNetCore.TestHost;
 
 namespace BunsenBurner.Http;
 
@@ -85,4 +87,41 @@ public static class Aaa
     public static AaaScenario.Acted<TRequest, Response> ActAndCall<TRequest>(
         this AaaScenario.Arranged<TRequest> scenario
     ) where TRequest : Request => scenario.ActAndCall<Syntax.Aaa, TRequest>();
+
+    /// <summary>
+    /// Makes a call repeatedly to the real server, stops once the predicate is true or the schedule completes
+    /// </summary>
+    /// <param name="scenario">arranged scenario</param>
+    /// <param name="fn">get the request to use from the data</param>
+    /// <param name="schedule">provided schedule, can be used to determine the number and duration of waits between each call</param>
+    /// <param name="predicate">predicate against the responses returned, when true the response is returned</param>
+    /// <exception cref="InvalidOperationException">if the schedule completes before the provided predicate returns true</exception>
+    /// <typeparam name="TData">arranged data</typeparam>
+    /// <typeparam name="TRequest">request</typeparam>
+    /// <returns>acted scenario</returns>
+    [Pure]
+    public static AaaScenario.Acted<TData, Response> ActAndCallUntil<TData, TRequest>(
+        this AaaScenario.Arranged<TData> scenario,
+        Func<TData, TRequest> fn,
+        Schedule schedule,
+        Expression<Func<Response, bool>> predicate
+    ) where TRequest : Request =>
+        scenario.ActAndCallUntil<TData, TRequest, Syntax.Aaa>(fn, schedule, predicate);
+
+    /// <summary>
+    /// Makes a call repeatedly to the real server, stops once the predicate is true or the schedule completes
+    /// </summary>
+    /// <param name="scenario">arranged scenario</param>
+    /// <param name="schedule">provided schedule, can be used to determine the number and duration of waits between each call</param>
+    /// <param name="predicate">predicate against the responses returned, when true the response is returned</param>
+    /// <exception cref="InvalidOperationException">if the schedule completes before the provided predicate returns true</exception>
+    /// <typeparam name="TRequest">request</typeparam>
+    /// <returns>acted scenario</returns>
+    [Pure]
+    public static AaaScenario.Acted<TRequest, Response> ActAndCallUntil<TRequest>(
+        this AaaScenario.Arranged<TRequest> scenario,
+        Schedule schedule,
+        Expression<Func<Response, bool>> predicate
+    ) where TRequest : Request =>
+        scenario.ActAndCallUntil<Syntax.Aaa, TRequest>(schedule, predicate);
 }

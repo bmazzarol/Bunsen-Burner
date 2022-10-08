@@ -44,15 +44,16 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="JWT" Version="9.0.3"/>
-        <PackageReference Include="Flurl" Version="3.0.6"/>
-        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.9"/>
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.12.2"/>
+        <PackageReference Include="JWT" Version="9.0.3" />
+        <PackageReference Include="Flurl" Version="3.0.6" />
+        <PackageReference Include="LanguageExt.Core" Version="4.2.9" />
+        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.9" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.12.2" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\BunsenBurner.Logging\BunsenBurner.Logging.csproj"/>
-        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj"/>
+        <ProjectReference Include="..\BunsenBurner.Logging\BunsenBurner.Logging.csproj" />
+        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj" />
     </ItemGroup>
 
 </Project>

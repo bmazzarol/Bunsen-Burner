@@ -1,4 +1,6 @@
-﻿using BunsenBurner.Logging;
+﻿using System.Linq.Expressions;
+using BunsenBurner.Logging;
+using LanguageExt;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -79,4 +81,47 @@ internal static class Shared
     )
         where TRequest : Request
         where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _);
+
+    [Pure]
+    internal static Scenario<TSyntax>.Acted<TData, Response> ActAndCallUntil<
+        TData,
+        TRequest,
+        TSyntax
+    >(
+        this Scenario<TSyntax>.Arranged<TData> scenario,
+        Func<TData, TRequest> fn,
+        Schedule schedule,
+        Expression<Func<Response, bool>> predicate
+    )
+        where TRequest : Request
+        where TSyntax : struct, Syntax =>
+        new(
+            scenario.Name,
+            scenario.ArrangeScenario,
+            async data =>
+            {
+                var compiledPred = predicate.Compile();
+                foreach (var duration in schedule.Run())
+                {
+                    var resp = await InternalCall(fn(data), new HttpClient());
+                    if (compiledPred(resp))
+                        return resp;
+                    await Task.Delay((TimeSpan)duration);
+                }
+
+                throw new InvalidOperationException(
+                    $"Condition {predicate} was not met before the schedule completed"
+                );
+            }
+        );
+
+    [Pure]
+    internal static Scenario<TSyntax>.Acted<TRequest, Response> ActAndCallUntil<TSyntax, TRequest>(
+        this Scenario<TSyntax>.Arranged<TRequest> scenario,
+        Schedule schedule,
+        Expression<Func<Response, bool>> predicate
+    )
+        where TRequest : Request
+        where TSyntax : struct, Syntax =>
+        scenario.ActAndCallUntil(static _ => _, schedule, predicate);
 }

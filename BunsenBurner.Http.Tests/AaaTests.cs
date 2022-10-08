@@ -2,10 +2,8 @@ using System.Net;
 using WireMock.Server;
 using Flurl;
 using JWT.Builder;
-using Newtonsoft.Json;
 using static BunsenBurner.Http.Tests.Shared;
 using static BunsenBurner.Aaa;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace BunsenBurner.Http.Tests;
 
@@ -219,4 +217,126 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
                     );
                 }
             );
+
+    [Fact(DisplayName = "Repeated GET requests can be made to a real server")]
+    public async Task Case18() =>
+        await Arrange(() =>
+            {
+                var req = WireMock.RequestBuilders.Request
+                    .Create()
+                    .WithPath("/hello-world")
+                    .UsingGet();
+                _server
+                    .Given(req)
+                    .InScenario(nameof(Case18))
+                    .WillSetStateTo(1)
+                    .RespondWith(
+                        WireMock.ResponseBuilders.Response
+                            .Create()
+                            .WithStatusCode(HttpStatusCode.InternalServerError)
+                    );
+                _server
+                    .Given(req)
+                    .InScenario(nameof(Case18))
+                    .WhenStateIs(1)
+                    .WillSetStateTo(2)
+                    .RespondWith(
+                        WireMock.ResponseBuilders.Response
+                            .Create()
+                            .WithStatusCode(HttpStatusCode.InternalServerError)
+                    );
+                _server
+                    .Given(req)
+                    .InScenario(nameof(Case18))
+                    .WhenStateIs(2)
+                    .WillSetStateTo(3)
+                    .RespondWith(WireMock.ResponseBuilders.Response.Create().WithSuccess());
+                return Request.GET($"{_server.Urls.First()}/hello-world");
+            })
+            .ActAndCallUntil(
+                Schedule.spaced(10 * ms) & Schedule.recurs(4),
+                resp => resp.Code == HttpStatusCode.OK
+            )
+            .IsOk();
+
+    [Fact(DisplayName = "Repeated GET requests can be made to a real server with extra data")]
+    public async Task Case19() =>
+        await Arrange(() =>
+            {
+                var req = WireMock.RequestBuilders.Request
+                    .Create()
+                    .WithPath("/hello-world")
+                    .UsingGet();
+                _server
+                    .Given(req)
+                    .InScenario(nameof(Case19))
+                    .WillSetStateTo(1)
+                    .RespondWith(
+                        WireMock.ResponseBuilders.Response
+                            .Create()
+                            .WithStatusCode(HttpStatusCode.InternalServerError)
+                    );
+                _server
+                    .Given(req)
+                    .InScenario(nameof(Case19))
+                    .WhenStateIs(1)
+                    .WillSetStateTo(2)
+                    .RespondWith(
+                        WireMock.ResponseBuilders.Response
+                            .Create()
+                            .WithStatusCode(HttpStatusCode.InternalServerError)
+                    );
+                _server
+                    .Given(req)
+                    .InScenario(nameof(Case19))
+                    .WhenStateIs(2)
+                    .WillSetStateTo(3)
+                    .RespondWith(WireMock.ResponseBuilders.Response.Create().WithSuccess());
+                return _server.Urls.First();
+            })
+            .ActAndCallUntil(
+                url => Request.GET($"{url}/hello-world"),
+                Schedule.spaced(10 * ms) & Schedule.recurs(4),
+                resp => resp.Code == HttpStatusCode.OK
+            )
+            .Assert(resp => resp.Code == HttpStatusCode.OK);
+
+    [Fact(DisplayName = "Repeated GET requests can fail after the schedule completes")]
+    public async Task Case20() =>
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            async () =>
+                await Arrange(() =>
+                    {
+                        var req = WireMock.RequestBuilders.Request
+                            .Create()
+                            .WithPath("/hello-world")
+                            .UsingGet();
+                        var resp = WireMock.ResponseBuilders.Response
+                            .Create()
+                            .WithStatusCode(HttpStatusCode.InternalServerError);
+                        _server
+                            .Given(req)
+                            .InScenario(nameof(Case20))
+                            .WillSetStateTo(1)
+                            .RespondWith(resp);
+                        _server
+                            .Given(req)
+                            .InScenario(nameof(Case20))
+                            .WhenStateIs(1)
+                            .WillSetStateTo(2)
+                            .RespondWith(resp);
+                        _server
+                            .Given(req)
+                            .InScenario(nameof(Case20))
+                            .WhenStateIs(2)
+                            .WillSetStateTo(3)
+                            .RespondWith(resp);
+                        return Request.GET($"{_server.Urls.First()}/hello-world");
+                    })
+                    .ActAndCallUntil(
+                        Schedule.spaced(10 * ms) & Schedule.Once,
+                        resp => resp.Code == HttpStatusCode.OK
+                    )
+                    .Assert(resp => resp.Code == HttpStatusCode.OK)
+        );
 }
