@@ -80,6 +80,20 @@ public static partial class Bdd
     ) => scenario.Assert(expression);
 
     /// <summary>
+    /// Then verify the scenario
+    /// </summary>
+    /// <param name="scenario">run scenario</param>
+    /// <param name="expression">then expression</param>
+    /// <typeparam name="TData">scenario data</typeparam>
+    /// <typeparam name="TResult">result of running the scenario</typeparam>
+    /// <returns>completed scenario</returns>
+    [Pure]
+    public static BddScenario.Asserted<TData, TResult> Then<TData, TResult>(
+        this BddScenario.Acted<TData, TResult> scenario,
+        Expression<Func<TData, TResult, bool>> expression
+    ) => scenario.Assert(expression);
+
+    /// <summary>
     /// Then verify the scenario fails
     /// </summary>
     /// <param name="scenario">run scenario</param>
@@ -203,6 +217,20 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, TResult> And<TData, TResult>(
         this BddScenario.Asserted<TData, TResult> scenario,
         Expression<Func<TResult, bool>> expression
+    ) => scenario.And<TData, TResult, Syntax.Bdd>(expression);
+
+    /// <summary>
+    /// Allows for additional then steps
+    /// </summary>
+    /// <param name="scenario">run scenario</param>
+    /// <param name="expression">then expression</param>
+    /// <typeparam name="TData">scenario data</typeparam>
+    /// <typeparam name="TResult">result of running the scenario</typeparam>
+    /// <returns>completed scenario</returns>
+    [Pure]
+    public static BddScenario.Asserted<TData, TResult> And<TData, TResult>(
+        this BddScenario.Asserted<TData, TResult> scenario,
+        Expression<Func<TData, TResult, bool>> expression
     ) => scenario.And<TData, TResult, Syntax.Bdd>(expression);
 
     /// <summary>

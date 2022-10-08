@@ -15,7 +15,20 @@ internal static partial class Shared
         var fn = expression.Compile();
         if (!fn(result))
             throw new InvalidOperationException(
-                $"{expression.ToString()} is not true for the result {result}"
+                $"{expression} is not true for the result {result}"
+            );
+    }
+
+    private static void RunExpressionAssertion<TData, TResult>(
+        TData data,
+        TResult result,
+        Expression<Func<TData, TResult, bool>> expression
+    )
+    {
+        var fn = expression.Compile();
+        if (!fn(data, result))
+            throw new InvalidOperationException(
+                $"{expression} is not true for the result {result} and data {data}"
             );
     }
 
@@ -56,6 +69,13 @@ internal static partial class Shared
         this Scenario<TSyntax>.Acted<TData, TResult> scenario,
         Expression<Func<TResult, bool>> expression
     ) where TSyntax : struct, Syntax => scenario.Assert(r => r.RunExpressionAssertion(expression));
+
+    [Pure]
+    internal static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
+        this Scenario<TSyntax>.Acted<TData, TResult> scenario,
+        Expression<Func<TData, TResult, bool>> expression
+    ) where TSyntax : struct, Syntax =>
+        scenario.Assert((d, r) => RunExpressionAssertion(d, r, expression));
 
     [Pure]
     internal static Scenario<TSyntax>.Asserted<TData, Exception> AssertFailsWith<
@@ -163,4 +183,11 @@ internal static partial class Shared
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
         Expression<Func<TResult, bool>> expression
     ) where TSyntax : struct, Syntax => scenario.And(r => r.RunExpressionAssertion(expression));
+
+    [Pure]
+    internal static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
+        this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
+        Expression<Func<TData, TResult, bool>> expression
+    ) where TSyntax : struct, Syntax =>
+        scenario.And((d, r) => RunExpressionAssertion(d, r, expression));
 }
