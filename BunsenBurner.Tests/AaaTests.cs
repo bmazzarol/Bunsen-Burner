@@ -170,4 +170,31 @@ public class AaaTests
             exception.Message
         );
     }
+
+    [Fact(DisplayName = "Expression based assertions on failures work")]
+    public async Task Case15() =>
+        // ReSharper disable once IntDivisionByZero
+        await 1
+            .ArrangeData()
+            .Act(x => x / 0)
+            .AssertFailsWith(e => e.Message == "Attempted to divide by zero.");
+
+    [Fact(DisplayName = "Expression based assertions on failures with data work")]
+    public async Task Case16() =>
+        // ReSharper disable once IntDivisionByZero
+        await 1
+            .ArrangeData()
+            .Act(x => x / 0)
+            .AssertFailsWith((r, e) => r == 1 && e.Message == "Attempted to divide by zero.");
+
+    [Fact(DisplayName = "Expression based assertions on typed failures work")]
+    public async Task Case17() =>
+        // ReSharper disable once IntDivisionByZero
+        await 1
+            .ArrangeData()
+            .Act(x => x / 0)
+            .AssertFailsWith(
+                (int r, DivideByZeroException e) =>
+                    r == 1 && e.Message == "Attempted to divide by zero."
+            );
 }

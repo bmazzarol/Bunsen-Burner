@@ -100,12 +100,102 @@ public static partial class Bdd
     /// <param name="fn">then on failure function</param>
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <returns>completed scenario</returns>
+    [Pure]
+    public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
+        this BddScenario.Acted<TData, TResult> scenario,
+        Func<TData, TException, Task> fn
+    ) where TException : Exception => scenario.AssertFailsWith(fn);
+
+    /// <summary>
+    /// Then verify the scenario fails
+    /// </summary>
+    /// <param name="scenario">run scenario</param>
+    /// <param name="fn">then on failure function</param>
+    /// <typeparam name="TData">scenario data</typeparam>
+    /// <typeparam name="TResult">result of running the scenario</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <returns>completed scenario</returns>
+    [Pure]
+    public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
+        this BddScenario.Acted<TData, TResult> scenario,
+        Func<TException, Task> fn
+    ) where TException : Exception => scenario.AssertFailsWith(fn);
+
+    /// <summary>
+    /// Then verify the scenario fails
+    /// </summary>
+    /// <param name="scenario">run scenario</param>
+    /// <param name="fn">then on failure function</param>
+    /// <typeparam name="TData">scenario data</typeparam>
+    /// <typeparam name="TResult">result of running the scenario</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <returns>completed scenario</returns>
+    [Pure]
+    public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
+        this BddScenario.Acted<TData, TResult> scenario,
+        Action<TData, TException> fn
+    ) where TException : Exception => scenario.AssertFailsWith(fn);
+
+    /// <summary>
+    /// Then verify the scenario fails
+    /// </summary>
+    /// <param name="scenario">run scenario</param>
+    /// <param name="fn">then on failure function</param>
+    /// <typeparam name="TData">scenario data</typeparam>
+    /// <typeparam name="TResult">result of running the scenario</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <returns>completed scenario</returns>
+    [Pure]
+    public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
+        this BddScenario.Acted<TData, TResult> scenario,
+        Action<TException> fn
+    ) where TException : Exception => scenario.AssertFailsWith(fn);
+
+    /// <summary>
+    /// Then verify the scenario fails
+    /// </summary>
+    /// <param name="scenario">run scenario</param>
+    /// <param name="fn">then on failure function</param>
+    /// <typeparam name="TData">scenario data</typeparam>
+    /// <typeparam name="TResult">result of running the scenario</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <returns>completed scenario</returns>
+    [Pure]
+    public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
+        this BddScenario.Acted<TData, TResult> scenario,
+        Expression<Func<TData, TException, bool>> fn
+    ) where TException : Exception => scenario.AssertFailsWith(fn);
+
+    /// <summary>
+    /// Then verify the scenario fails
+    /// </summary>
+    /// <param name="scenario">run scenario</param>
+    /// <param name="fn">then on failure function</param>
+    /// <typeparam name="TData">scenario data</typeparam>
+    /// <typeparam name="TResult">result of running the scenario</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <returns>completed scenario</returns>
+    [Pure]
+    public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
+        this BddScenario.Acted<TData, TResult> scenario,
+        Expression<Func<TException, bool>> fn
+    ) where TException : Exception => scenario.AssertFailsWith(fn);
+
+    /// <summary>
+    /// Then verify the scenario fails
+    /// </summary>
+    /// <param name="scenario">run scenario</param>
+    /// <param name="fn">then on failure function</param>
+    /// <typeparam name="TData">scenario data</typeparam>
+    /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
     public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Func<TData, Exception, Task> fn
-    ) => scenario.AssertFailsWith(fn);
+    ) => ThenFailsWith<TData, TResult, Exception>(scenario, fn);
 
     /// <summary>
     /// Then verify the scenario fails
@@ -119,7 +209,7 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Func<Exception, Task> fn
-    ) => scenario.AssertFailsWith(fn);
+    ) => ThenFailsWith<TData, TResult, Exception>(scenario, fn);
 
     /// <summary>
     /// Then verify the scenario fails
@@ -133,7 +223,7 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Action<TData, Exception> fn
-    ) => scenario.AssertFailsWith(fn);
+    ) => ThenFailsWith<TData, TResult, Exception>(scenario, fn);
 
     /// <summary>
     /// Then verify the scenario fails
@@ -147,7 +237,35 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
         this BddScenario.Acted<TData, TResult> scenario,
         Action<Exception> fn
-    ) => scenario.AssertFailsWith(fn);
+    ) => ThenFailsWith<TData, TResult, Exception>(scenario, fn);
+
+    /// <summary>
+    /// Then verify the scenario fails
+    /// </summary>
+    /// <param name="scenario">run scenario</param>
+    /// <param name="fn">then on failure function</param>
+    /// <typeparam name="TData">scenario data</typeparam>
+    /// <typeparam name="TResult">result of running the scenario</typeparam>
+    /// <returns>completed scenario</returns>
+    [Pure]
+    public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
+        this BddScenario.Acted<TData, TResult> scenario,
+        Expression<Func<TData, Exception, bool>> fn
+    ) => ThenFailsWith<TData, TResult, Exception>(scenario, fn);
+
+    /// <summary>
+    /// Then verify the scenario fails
+    /// </summary>
+    /// <param name="scenario">run scenario</param>
+    /// <param name="fn">then on failure function</param>
+    /// <typeparam name="TData">scenario data</typeparam>
+    /// <typeparam name="TResult">result of running the scenario</typeparam>
+    /// <returns>completed scenario</returns>
+    [Pure]
+    public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
+        this BddScenario.Acted<TData, TResult> scenario,
+        Expression<Func<Exception, bool>> fn
+    ) => ThenFailsWith<TData, TResult, Exception>(scenario, fn);
 
     /// <summary>
     /// Allows for additional then steps

@@ -100,12 +100,114 @@ public static partial class Aaa
     /// <param name="fn">async assert failure function</param>
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <returns>asserted and failed scenario</returns>
+    [Pure]
+    public static AaaScenario.Asserted<TData, TException> AssertFailsWith<
+        TData,
+        TResult,
+        TException
+    >(this AaaScenario.Acted<TData, TResult> scenario, Func<TData, TException, Task> fn)
+        where TException : Exception => Shared.AssertFailsWith(scenario, fn);
+
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">async assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <returns>asserted and failed scenario</returns>
+    [Pure]
+    public static AaaScenario.Asserted<TData, TException> AssertFailsWith<
+        TData,
+        TResult,
+        TException
+    >(this AaaScenario.Acted<TData, TResult> scenario, Func<TException, Task> fn)
+        where TException : Exception => Shared.AssertFailsWith(scenario, fn);
+
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <returns>asserted and failed scenario</returns>
+    [Pure]
+    public static AaaScenario.Asserted<TData, TException> AssertFailsWith<
+        TData,
+        TResult,
+        TException
+    >(this AaaScenario.Acted<TData, TResult> scenario, Action<TData, TException> fn)
+        where TException : Exception => Shared.AssertFailsWith(scenario, fn);
+
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <returns>asserted and failed scenario</returns>
+    [Pure]
+    public static AaaScenario.Asserted<TData, TException> AssertFailsWith<
+        TData,
+        TResult,
+        TException
+    >(this AaaScenario.Acted<TData, TResult> scenario, Action<TException> fn)
+        where TException : Exception => Shared.AssertFailsWith(scenario, fn);
+
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <returns>asserted and failed scenario</returns>
+    [Pure]
+    public static AaaScenario.Asserted<TData, TException> AssertFailsWith<
+        TData,
+        TResult,
+        TException
+    >(this AaaScenario.Acted<TData, TResult> scenario, Expression<Func<TData, TException, bool>> fn)
+        where TException : Exception => Shared.AssertFailsWith(scenario, fn);
+
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <returns>asserted and failed scenario</returns>
+    [Pure]
+    public static AaaScenario.Asserted<TData, TException> AssertFailsWith<
+        TData,
+        TResult,
+        TException
+    >(this AaaScenario.Acted<TData, TResult> scenario, Expression<Func<TException, bool>> fn)
+        where TException : Exception => Shared.AssertFailsWith(scenario, fn);
+
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">async assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted and failed scenario</returns>
     [Pure]
     public static AaaScenario.Asserted<TData, Exception> AssertFailsWith<TData, TResult>(
         this AaaScenario.Acted<TData, TResult> scenario,
         Func<TData, Exception, Task> fn
-    ) => Shared.AssertFailsWith(scenario, fn);
+    ) => AssertFailsWith<TData, TResult, Exception>(scenario, fn);
 
     /// <summary>
     /// Asserts on the result of a failure when acting
@@ -119,7 +221,7 @@ public static partial class Aaa
     public static AaaScenario.Asserted<TData, Exception> AssertFailsWith<TData, TResult>(
         this AaaScenario.Acted<TData, TResult> scenario,
         Func<Exception, Task> fn
-    ) => Shared.AssertFailsWith(scenario, fn);
+    ) => AssertFailsWith<TData, TResult, Exception>(scenario, fn);
 
     /// <summary>
     /// Asserts on the result of a failure when acting
@@ -133,7 +235,7 @@ public static partial class Aaa
     public static AaaScenario.Asserted<TData, Exception> AssertFailsWith<TData, TResult>(
         this AaaScenario.Acted<TData, TResult> scenario,
         Action<TData, Exception> fn
-    ) => Shared.AssertFailsWith(scenario, fn);
+    ) => AssertFailsWith<TData, TResult, Exception>(scenario, fn);
 
     /// <summary>
     /// Asserts on the result of a failure when acting
@@ -147,7 +249,35 @@ public static partial class Aaa
     public static AaaScenario.Asserted<TData, Exception> AssertFailsWith<TData, TResult>(
         this AaaScenario.Acted<TData, TResult> scenario,
         Action<Exception> fn
-    ) => Shared.AssertFailsWith(scenario, fn);
+    ) => AssertFailsWith<TData, TResult, Exception>(scenario, fn);
+
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>asserted and failed scenario</returns>
+    [Pure]
+    public static AaaScenario.Asserted<TData, Exception> AssertFailsWith<TData, TResult>(
+        this AaaScenario.Acted<TData, TResult> scenario,
+        Expression<Func<TData, Exception, bool>> fn
+    ) => AssertFailsWith<TData, TResult, Exception>(scenario, fn);
+
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>asserted and failed scenario</returns>
+    [Pure]
+    public static AaaScenario.Asserted<TData, Exception> AssertFailsWith<TData, TResult>(
+        this AaaScenario.Acted<TData, TResult> scenario,
+        Expression<Func<Exception, bool>> fn
+    ) => AssertFailsWith<TData, TResult, Exception>(scenario, fn);
 
     /// <summary>
     /// Asserts again on the result of acting on the test

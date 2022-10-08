@@ -78,11 +78,13 @@ internal static partial class Shared
         scenario.Assert((d, r) => RunExpressionAssertion(d, r, expression));
 
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, Exception> AssertFailsWith<
+    internal static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
         TData,
         TResult,
+        TException,
         TSyntax
-    >(this Scenario<TSyntax>.Acted<TData, TResult> scenario, Func<TData, Exception, Task> fn)
+    >(this Scenario<TSyntax>.Acted<TData, TResult> scenario, Func<TData, TException, Task> fn)
+        where TException : Exception
         where TSyntax : struct, Syntax =>
         new(
             scenario.Name,
@@ -94,11 +96,12 @@ internal static partial class Shared
                     await scenario.ActOnScenario(data);
                     throw new NoFailureException();
                 }
+                // ReSharper disable once RedundantCatchClause
                 catch (NoFailureException)
                 {
                     throw;
                 }
-                catch (Exception e)
+                catch (TException e)
                 {
                     return e;
                 }
@@ -107,21 +110,26 @@ internal static partial class Shared
         );
 
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, Exception> AssertFailsWith<
+    internal static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
         TData,
         TResult,
+        TException,
         TSyntax
-    >(this Scenario<TSyntax>.Acted<TData, TResult> scenario, Func<Exception, Task> fn)
-        where TSyntax : struct, Syntax => scenario.AssertFailsWith((_, e) => fn(e));
+    >(this Scenario<TSyntax>.Acted<TData, TResult> scenario, Func<TException, Task> fn)
+        where TException : Exception
+        where TSyntax : struct, Syntax =>
+        scenario.AssertFailsWith<TData, TResult, TException, TSyntax>((_, e) => fn(e));
 
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, Exception> AssertFailsWith<
+    internal static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
         TData,
         TResult,
+        TException,
         TSyntax
-    >(this Scenario<TSyntax>.Acted<TData, TResult> scenario, Action<TData, Exception> fn)
+    >(this Scenario<TSyntax>.Acted<TData, TResult> scenario, Action<TData, TException> fn)
+        where TException : Exception
         where TSyntax : struct, Syntax =>
-        scenario.AssertFailsWith(
+        scenario.AssertFailsWith<TData, TResult, TException, TSyntax>(
             (d, e) =>
             {
                 fn(d, e);
@@ -130,12 +138,44 @@ internal static partial class Shared
         );
 
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, Exception> AssertFailsWith<
+    internal static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
         TData,
         TResult,
+        TException,
         TSyntax
-    >(this Scenario<TSyntax>.Acted<TData, TResult> scenario, Action<Exception> fn)
-        where TSyntax : struct, Syntax => scenario.AssertFailsWith((_, e) => fn(e));
+    >(this Scenario<TSyntax>.Acted<TData, TResult> scenario, Action<TException> fn)
+        where TException : Exception
+        where TSyntax : struct, Syntax =>
+        scenario.AssertFailsWith<TData, TResult, TException, TSyntax>((_, e) => fn(e));
+
+    [Pure]
+    internal static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
+        TData,
+        TResult,
+        TException,
+        TSyntax
+    >(
+        this Scenario<TSyntax>.Acted<TData, TResult> scenario,
+        Expression<Func<TData, TException, bool>> fn
+    )
+        where TException : Exception
+        where TSyntax : struct, Syntax =>
+        scenario.AssertFailsWith<TData, TResult, TException, TSyntax>(
+            (d, e) => RunExpressionAssertion(d, e, fn)
+        );
+
+    [Pure]
+    internal static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
+        TData,
+        TResult,
+        TException,
+        TSyntax
+    >(this Scenario<TSyntax>.Acted<TData, TResult> scenario, Expression<Func<TException, bool>> fn)
+        where TException : Exception
+        where TSyntax : struct, Syntax =>
+        scenario.AssertFailsWith<TData, TResult, TException, TSyntax>(
+            (_, e) => RunExpressionAssertion(e, fn)
+        );
 
     [Pure]
     internal static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(

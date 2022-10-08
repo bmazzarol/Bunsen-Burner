@@ -149,4 +149,31 @@ public class BddTests
             exception.Message
         );
     }
+
+    [Fact(DisplayName = "Expression based assertions on failures work")]
+    public async Task Case15() =>
+        // ReSharper disable once IntDivisionByZero
+        await 1
+            .GivenData()
+            .When(x => x / 0)
+            .ThenFailsWith(e => e.Message == "Attempted to divide by zero.");
+
+    [Fact(DisplayName = "Expression based assertions on failures with data work")]
+    public async Task Case16() =>
+        // ReSharper disable once IntDivisionByZero
+        await 1
+            .GivenData()
+            .When(x => x / 0)
+            .ThenFailsWith((r, e) => r == 1 && e.Message == "Attempted to divide by zero.");
+
+    [Fact(DisplayName = "Expression based assertions on typed failures work")]
+    public async Task Case17() =>
+        // ReSharper disable once IntDivisionByZero
+        await 1
+            .GivenData()
+            .When(x => x / 0)
+            .ThenFailsWith(
+                (int r, DivideByZeroException e) =>
+                    r == 1 && e.Message == "Attempted to divide by zero."
+            );
 }
