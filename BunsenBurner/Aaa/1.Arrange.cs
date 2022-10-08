@@ -30,6 +30,16 @@ public static partial class Aaa
     /// <summary>
     /// Arranges the test data
     /// </summary>
+    /// <param name="data">test data</param>
+    /// <typeparam name="TData">data required to act on the test</typeparam>
+    /// <returns>arranged scenario</returns>
+    [Pure]
+    public static AaaScenario.Arranged<TData> Arrange<TData>(TData data) =>
+        Shared.Arrange<TData, Syntax.Aaa>(data);
+
+    /// <summary>
+    /// Arranges the test data
+    /// </summary>
     /// <param name="name">name/description for the test</param>
     /// <param name="fn">async function returning test data</param>
     /// <typeparam name="TData">data required to act on the test</typeparam>
@@ -50,6 +60,27 @@ public static partial class Aaa
     [Pure]
     public static AaaScenario.Arranged<TData> Arrange<TData>(this string name, Func<TData> fn) =>
         name.Arrange<TData, Syntax.Aaa>(fn);
+
+    /// <summary>
+    /// Arranges the test data
+    /// </summary>
+    /// <param name="name">name/description for the test</param>
+    /// <param name="data">test data</param>
+    /// <typeparam name="TData">data required to act on the test</typeparam>
+    /// <returns>arranged scenario</returns>
+    [Pure]
+    public static AaaScenario.Arranged<TData> Arrange<TData>(this string name, TData data) =>
+        name.Arrange<TData, Syntax.Aaa>(data);
+
+    /// <summary>
+    /// Arranges the test data
+    /// </summary>
+    /// <param name="data">test data</param>
+    /// <typeparam name="TData">data required to act on the test</typeparam>
+    /// <returns>arranged scenario</returns>
+    [Pure]
+    public static AaaScenario.Arranged<TData> ArrangeData<TData>(this TData data) =>
+        Shared.Arrange<TData, Syntax.Aaa>(data);
 
     /// <summary>
     /// Allows for additional arranging of test data

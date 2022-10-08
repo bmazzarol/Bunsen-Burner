@@ -31,7 +31,7 @@ public class AaaTests
     [Fact(DisplayName = "Mixing sync and async methods operate correctly")]
     public async Task Case3() =>
         await "Some description"
-            .Arrange(() => 2)
+            .Arrange(2)
             .Act(x => Task.FromResult(x.ToString()))
             .Assert(r => Assert.Equal("2", r));
 
@@ -77,7 +77,8 @@ public class AaaTests
 
     [Fact(DisplayName = "Failure assertions work on async functions")]
     public async Task Case6() =>
-        await Arrange(() => 1)
+        await "Some description"
+            .Arrange(() => 1)
             .Act(SomeAsyncFunction)
             .AssertFailsWith(
                 (_, e) =>
@@ -152,7 +153,7 @@ public class AaaTests
 
     [Fact(DisplayName = "Expression based assertions with data work")]
     public async Task Case13() =>
-        await Arrange(() => 1)
+        await Arrange(1)
             .Act(x => x + 2)
             .Assert((r, x) => r == 1 && x > 0 && x < 4)
             .And((r, x) => x % r == 0);
@@ -162,7 +163,7 @@ public class AaaTests
     {
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
             async () =>
-                await Arrange(() => 1).Act(x => x + 2).Assert((r, x) => r == 2 && x > 4 && x < 6)
+                await 1.ArrangeData().Act(x => x + 2).Assert((r, x) => r == 2 && x > 4 && x < 6)
         );
         Assert.Equal(
             "(r, x) => (((r == 2) AndAlso (x > 4)) AndAlso (x < 6)) is not true for the result 3 and data 1",

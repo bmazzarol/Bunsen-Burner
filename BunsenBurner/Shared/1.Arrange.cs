@@ -14,6 +14,10 @@ internal static partial class Shared
         where TSyntax : struct, Syntax => Arrange<TData, TSyntax>(() => Task.FromResult(fn()));
 
     [Pure]
+    internal static Scenario<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(TData data)
+        where TSyntax : struct, Syntax => Arrange<TData, TSyntax>(() => Task.FromResult(data));
+
+    [Pure]
     internal static Scenario<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(
         this string name,
         Func<Task<TData>> fn
@@ -24,6 +28,12 @@ internal static partial class Shared
         this string name,
         Func<TData> fn
     ) where TSyntax : struct, Syntax => name.Arrange<TData, TSyntax>(() => Task.FromResult(fn()));
+
+    [Pure]
+    internal static Scenario<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(
+        this string name,
+        TData data
+    ) where TSyntax : struct, Syntax => name.Arrange<TData, TSyntax>(() => Task.FromResult(data));
 
     [Pure]
     internal static Scenario<TSyntax>.Arranged<TDataNext> And<TData, TDataNext, TSyntax>(

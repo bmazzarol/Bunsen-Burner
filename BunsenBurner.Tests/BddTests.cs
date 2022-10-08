@@ -29,7 +29,7 @@ public class BddTests
     [Fact(DisplayName = "Mixing sync and async methods operate correctly")]
     public async Task Case3() =>
         await "Some description"
-            .Given(() => 2)
+            .Given(2)
             .When(x => Task.FromResult(x.ToString()))
             .Then(r => Assert.Equal("2", r));
 
@@ -75,7 +75,8 @@ public class BddTests
 
     [Fact(DisplayName = "Failure assertions work on async functions")]
     public async Task Case6() =>
-        await Given(() => 1)
+        await "Some description"
+            .Given(() => 1)
             .When(SomeAsyncFunction)
             .ThenFailsWith(
                 (_, e) =>
@@ -131,7 +132,8 @@ public class BddTests
 
     [Fact(DisplayName = "Expression based assertions with data work")]
     public async Task Case13() =>
-        await Given(() => 1)
+        await 1
+            .GivenData()
             .When(x => x + 2)
             .Then((r, x) => r == 1 && x > 0 && x < 4)
             .And((r, x) => x % r == 0);
@@ -140,8 +142,7 @@ public class BddTests
     public async Task Case14()
     {
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            async () =>
-                await Given(() => 1).When(x => x + 2).Then((r, x) => r == 2 && x > 4 && x < 6)
+            async () => await Given(1).When(x => x + 2).Then((r, x) => r == 2 && x > 4 && x < 6)
         );
         Assert.Equal(
             "(r, x) => (((r == 2) AndAlso (x > 4)) AndAlso (x < 6)) is not true for the result 3 and data 1",

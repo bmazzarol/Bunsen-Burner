@@ -30,6 +30,16 @@ public static partial class Bdd
     /// <summary>
     /// Given the scenario data
     /// </summary>
+    /// <param name="data">scenario data</param>
+    /// <typeparam name="TData">data required to when the scenario is run</typeparam>
+    /// <returns>scenario with the given data</returns>
+    [Pure]
+    public static BddScenario.Arranged<TData> Given<TData>(TData data) =>
+        Shared.Arrange<TData, Syntax.Bdd>(data);
+
+    /// <summary>
+    /// Given the scenario data
+    /// </summary>
     /// <param name="name">name/description for the scenario</param>
     /// <param name="fn">async function returning scenario data</param>
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
@@ -50,6 +60,27 @@ public static partial class Bdd
     [Pure]
     public static BddScenario.Arranged<TData> Given<TData>(this string name, Func<TData> fn) =>
         name.Arrange<TData, Syntax.Bdd>(fn);
+
+    /// <summary>
+    /// Given the scenario data
+    /// </summary>
+    /// <param name="name">name/description for the scenario</param>
+    /// <param name="data">scenario data</param>
+    /// <typeparam name="TData">data required to when the scenario is run</typeparam>
+    /// <returns>scenario with the given data</returns>
+    [Pure]
+    public static BddScenario.Arranged<TData> Given<TData>(this string name, TData data) =>
+        name.Arrange<TData, Syntax.Bdd>(data);
+
+    /// <summary>
+    /// Given the scenario data
+    /// </summary>
+    /// <param name="data">scenario data</param>
+    /// <typeparam name="TData">data required to when the scenario is run</typeparam>
+    /// <returns>scenario with the given data</returns>
+    [Pure]
+    public static BddScenario.Arranged<TData> GivenData<TData>(this TData data) =>
+        Shared.Arrange<TData, Syntax.Bdd>(data);
 
     /// <summary>
     /// Allows for additional given steps
