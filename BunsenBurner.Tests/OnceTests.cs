@@ -51,4 +51,35 @@ public static class OnceTests
                 return await Task.WhenAll(result);
             })
             .Assert(r => r.Distinct().Count() == 1);
+
+    [Fact(DisplayName = "Once's can be mapped")]
+    public static async Task Case4() =>
+        await Arrange(Once.New(() => DateTime.Now))
+            .Act(async o => await o.Select(x => x.ToFileTime()))
+            .Assert(r => r != 0);
+
+    [Fact(DisplayName = "Once's can be combined")]
+    public static async Task Case5() =>
+        await Arrange(
+                from o1 in Once.New(() => DateTime.Now)
+                from o2 in Once.New(() => DateTime.Now)
+                from o3 in Once.New(() => DateTime.Now)
+                select (o1, o2, o3)
+            )
+            .Act(async o =>
+            {
+                var result = Enumerable.Range(1, 1000).Select(async _ => await o);
+                return await Task.WhenAll(result);
+            })
+            .Assert(r => r.Distinct().Count() == 1);
+
+    [Fact(DisplayName = "Once's can be combined once")]
+    public static async Task Case6() =>
+        await Arrange(Once.New(() => DateTime.Now).SelectMany(x => Once.New(() => (x, 1))))
+            .Act(async o =>
+            {
+                var result = Enumerable.Range(1, 1000).Select(async _ => await o);
+                return await Task.WhenAll(result);
+            })
+            .Assert(r => r.Distinct().Count() == 1);
 }
