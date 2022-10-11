@@ -1,0 +1,8 @@
+{
+  "name": "bunsen-burner",
+  "version": "1.0.0",
+  "devDependencies": {
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0"
+  }
+}
