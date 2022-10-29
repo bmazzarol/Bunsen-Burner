@@ -1,4 +1,4 @@
-﻿name: Check C# Formatting
+﻿name: 'Check C# Formatting'
 
 on:
   pull_request:
