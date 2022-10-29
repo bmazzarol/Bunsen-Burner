@@ -1,0 +1,28 @@
+﻿name: CD Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: 
+      - main
+
+env:
+  PACKAGE_VERSION: ${{ github.ref == 'refs/heads/master' && format('3.0.{0}', github.run_number) || format('3.0.{0}-beta', github.run_number) }}
+  NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+      - name: Publish and Push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          dotnet publish --configuration Release -p:PackageVersion=$PACKAGE_VERSION
+          find ./ -name '*.nupkg' -exec dotnet nuget push -s '${{ env.NUGET_API_URL }}' --api-key '${{ env.NUGET_API_KEY }}' {} \;
+

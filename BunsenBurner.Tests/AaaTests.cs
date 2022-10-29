@@ -195,6 +195,6 @@ public class AaaTests
             .Act(x => x / 0)
             .AssertFailsWith(
                 (int r, DivideByZeroException e) =>
-                    r == 1 && e.Message == "Attempted to divide by zero."
+                    r == 1 && e.Message == "Attempted to divide by zeros."
             );
 }
