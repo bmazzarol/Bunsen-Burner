@@ -1,8 +1,10 @@
 ﻿name: Check Commit Message
+
 on:
   pull_request:
     branches:
       - 'main'
+
 jobs:
   commitlint:
     runs-on: ubuntu-latest
