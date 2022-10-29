@@ -1,10 +1,9 @@
-﻿name: 'Test Reporter'
+﻿name: "Test Reporter"
 
 on:
   workflow_run:
-    workflows: [ 'CI' ]
-    types:
-      - completed
+    workflows: [ 'CI Build' ]
+    types: [ 'completed' ]
 
 jobs:
   report:

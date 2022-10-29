@@ -1,9 +1,8 @@
-﻿name: 'Check Commit Message'
+﻿name: "Check Commit Message"
 
 on:
   pull_request:
-    branches:
-      - 'main'
+    branches: [ 'main' ]
 
 jobs:
   commitlint:

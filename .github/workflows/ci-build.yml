@@ -1,10 +1,9 @@
-name: 'CI'
+name: "CI Build"
 
 on:
   workflow_dispatch:
   pull_request:
-    branches:
-      - 'main'
+    branches: [ 'main' ]
 
 jobs:
   build:
