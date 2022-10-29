@@ -7,6 +7,13 @@
                 "csharpier",
                 "."
             ]
+        },
+        {
+            "name": "Test C# Code",
+            "command": "dotnet",
+            "args": [
+                "test"
+            ]
         }
     ]
 }
