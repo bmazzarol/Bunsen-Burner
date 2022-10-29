@@ -1,4 +1,5 @@
 ﻿# :fire: Bunsen Burner :fire:
+[![Coverage Status](https://coveralls.io/repos/github/bmazzarol/Bunsen-Burner/badge.svg?branch=main)](https://coveralls.io/github/bmazzarol/Bunsen-Burner?branch=main)
 
 > Set fire to your old unit tests!
 ---
