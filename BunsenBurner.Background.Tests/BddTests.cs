@@ -65,7 +65,7 @@ public static class BddTests
     public static async Task Case4() =>
         await GivenABackgroundService<Startup, Background>()
             .WhenRunUntil(
-                Schedule.Forever,
+                Schedule.spaced(1 * ms) & Schedule.maxCumulativeDelay(5 * minutes),
                 context => context.Store.Any(x => x.Message == "Work complete")
             )
             .Then(store =>
@@ -81,7 +81,7 @@ public static class BddTests
         await "Some description"
             .GivenABackgroundService<Startup, Background>()
             .WhenRunUntil(
-                Schedule.Forever,
+                Schedule.spaced(1 * ms) & Schedule.maxCumulativeDelay(5 * minutes),
                 context => context.Store.Any(x => x.Message == "Work complete")
             )
             .Then(store =>
@@ -98,7 +98,7 @@ public static class BddTests
             .AndABackgroundService<int, Startup, Background>()
             .WhenRunUntil(
                 x => x.BackgroundServiceContext,
-                Schedule.Forever,
+                Schedule.spaced(1 * ms) & Schedule.maxCumulativeDelay(5 * minutes),
                 context => context.Store.Any(x => x.Message == "Work complete")
             )
             .Then(store =>

@@ -20,7 +20,7 @@ internal sealed class Background : BackgroundService
         _logger.LogInformation("Starting work...");
         while (!stoppingToken.IsCancellationRequested)
         {
-            var delay = TimeSpan.FromMilliseconds(10);
+            var delay = 1 * ms;
             _logger.LogInformation("Doing work for {Delay} duration", delay);
             await Task.Delay(delay, stoppingToken);
             _logger.LogInformation("Work complete");
@@ -89,7 +89,7 @@ public static class AaaTests
     public static async Task Case4() =>
         await ArrangeBackgroundService<Startup, Background>()
             .ActAndRunUntil(
-                Schedule.Forever,
+                Schedule.spaced(1 * ms) & Schedule.maxCumulativeDelay(5 * minutes),
                 context => context.Store.Any(x => x.Message == "Work complete")
             )
             .Assert(store =>
@@ -105,7 +105,7 @@ public static class AaaTests
         await "Some description"
             .ArrangeBackgroundService<Startup, Background>()
             .ActAndRunUntil(
-                Schedule.Forever,
+                Schedule.spaced(1 * ms) & Schedule.maxCumulativeDelay(5 * minutes),
                 context => context.Store.Any(x => x.Message == "Work complete")
             )
             .Assert(store =>
@@ -122,7 +122,7 @@ public static class AaaTests
             .AndABackgroundService<int, Startup, Background>()
             .ActAndRunUntil(
                 x => x.BackgroundServiceContext,
-                Schedule.Forever,
+                Schedule.spaced(1 * ms) & Schedule.maxCumulativeDelay(5 * minutes),
                 context => context.Store.Any(x => x.Message == "Work complete")
             )
             .Assert(store =>
