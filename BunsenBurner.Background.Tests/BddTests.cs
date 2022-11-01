@@ -10,7 +10,10 @@ public static class BddTests
     [Fact(DisplayName = "A background service can be started and run for a period")]
     public static async Task Case1() =>
         await GivenABackgroundService<Startup, Background>()
-            .WhenRunFor(TimeSpan.FromMilliseconds(40))
+            .WhenRunFor(
+                5 * minutes,
+                context => context.Store.Any(x => x.Message == "Work complete")
+            )
             .Then(store =>
             {
                 Assert.NotEmpty(store);
@@ -31,7 +34,10 @@ public static class BddTests
     public static async Task Case2() =>
         await "Some description"
             .GivenABackgroundService<Startup, Background>()
-            .WhenRunFor(TimeSpan.FromMilliseconds(40))
+            .WhenRunFor(
+                5 * minutes,
+                context => context.Store.Any(x => x.Message == "Work complete")
+            )
             .Then(store =>
             {
                 Assert.NotEmpty(store);
@@ -44,7 +50,57 @@ public static class BddTests
     public static async Task Case3() =>
         await Given(() => 1)
             .AndABackgroundService<int, Startup, Background>()
-            .WhenRunFor(x => x.BackgroundServiceContext, TimeSpan.FromMilliseconds(40))
+            .WhenRunFor(
+                x => x.BackgroundServiceContext,
+                5 * minutes,
+                context => context.Store.Any(x => x.Message == "Work complete")
+            )
+            .Then(store =>
+            {
+                Assert.NotEmpty(store);
+                Assert.Contains(store, x => x.Message == "Work complete");
+            });
+
+    [Fact(DisplayName = "A background service can be started and run against a schedule")]
+    public static async Task Case4() =>
+        await GivenABackgroundService<Startup, Background>()
+            .WhenRunUntil(
+                Schedule.spaced(1 * ms) & Schedule.maxCumulativeDelay(5 * minutes),
+                context => context.Store.Any(x => x.Message == "Work complete")
+            )
+            .Then(store =>
+            {
+                Assert.NotEmpty(store);
+                Assert.Contains(store, x => x.Message == "Work complete");
+            });
+
+    [Fact(
+        DisplayName = "A background service can be started and run against a schedule with a description"
+    )]
+    public static async Task Case5() =>
+        await "Some description"
+            .GivenABackgroundService<Startup, Background>()
+            .WhenRunUntil(
+                Schedule.spaced(1 * ms) & Schedule.maxCumulativeDelay(5 * minutes),
+                context => context.Store.Any(x => x.Message == "Work complete")
+            )
+            .Then(store =>
+            {
+                Assert.NotEmpty(store);
+                Assert.Contains(store, x => x.Message == "Work complete");
+            });
+
+    [Fact(
+        DisplayName = "A background service can be started and run against a schedule with existing arranged data"
+    )]
+    public static async Task Case6() =>
+        await Given(() => 1)
+            .AndABackgroundService<int, Startup, Background>()
+            .WhenRunUntil(
+                x => x.BackgroundServiceContext,
+                Schedule.spaced(1 * ms) & Schedule.maxCumulativeDelay(5 * minutes),
+                context => context.Store.Any(x => x.Message == "Work complete")
+            )
             .Then(store =>
             {
                 Assert.NotEmpty(store);

@@ -53,14 +53,15 @@ internal static class Shared
         );
 
     [Pure]
-    internal static Scenario<TSyntax>.Acted<TData, LogMessageStore> ActAndRunFor<
+    internal static Scenario<TSyntax>.Acted<TData, LogMessageStore> ActAndRunUntil<
         TData,
         TBackgroundService,
         TSyntax
     >(
         this Scenario<TSyntax>.Arranged<TData> scenario,
-        Func<TData, BackgroundServiceContext<TBackgroundService>> fn,
-        TimeSpan runDuration
+        Func<TData, BackgroundServiceContext<TBackgroundService>> selector,
+        Schedule schedule,
+        Func<BackgroundServiceContext<TBackgroundService>, bool> pred
     )
         where TBackgroundService : IHostedService
         where TSyntax : struct, Syntax =>
@@ -69,9 +70,16 @@ internal static class Shared
             scenario.ArrangeScenario,
             async data =>
             {
-                var (service, store) = fn(data);
+                var (service, store) = selector(data);
                 await service.StartAsync(CancellationToken.None);
-                await Task.Delay(runDuration);
+                foreach (var duration in schedule.Run())
+                {
+                    if (pred(new BackgroundServiceContext<TBackgroundService>(service, store)))
+                    {
+                        break;
+                    }
+                    await Task.Delay((TimeSpan)duration);
+                }
                 await service.StopAsync(CancellationToken.None);
                 return store;
             }
@@ -81,10 +89,42 @@ internal static class Shared
     internal static Scenario<TSyntax>.Acted<
         BackgroundServiceContext<TBackgroundService>,
         LogMessageStore
-    > ActAndRunFor<TBackgroundService, TSyntax>(
+    > ActAndRunUntil<TBackgroundService, TSyntax>(
         this Scenario<TSyntax>.Arranged<BackgroundServiceContext<TBackgroundService>> scenario,
-        TimeSpan runDuration
+        Schedule schedule,
+        Func<BackgroundServiceContext<TBackgroundService>, bool> pred
     )
         where TBackgroundService : IHostedService
-        where TSyntax : struct, Syntax => scenario.ActAndRunFor(_ => _, runDuration);
+        where TSyntax : struct, Syntax => scenario.ActAndRunUntil(_ => _, schedule, pred);
+
+    [Pure]
+    internal static Scenario<TSyntax>.Acted<TData, LogMessageStore> ActAndRunFor<
+        TData,
+        TBackgroundService,
+        TSyntax
+    >(
+        this Scenario<TSyntax>.Arranged<TData> scenario,
+        Func<TData, BackgroundServiceContext<TBackgroundService>> fn,
+        Duration maxCumulativeDelay,
+        Func<BackgroundServiceContext<TBackgroundService>, bool> pred
+    )
+        where TBackgroundService : IHostedService
+        where TSyntax : struct, Syntax =>
+        scenario.ActAndRunUntil(
+            fn,
+            Schedule.fixedInterval(1 * ms) & Schedule.maxCumulativeDelay(maxCumulativeDelay),
+            pred
+        );
+
+    [Pure]
+    internal static Scenario<TSyntax>.Acted<
+        BackgroundServiceContext<TBackgroundService>,
+        LogMessageStore
+    > ActAndRunFor<TBackgroundService, TSyntax>(
+        this Scenario<TSyntax>.Arranged<BackgroundServiceContext<TBackgroundService>> scenario,
+        Duration maxCumulativeDelay,
+        Func<BackgroundServiceContext<TBackgroundService>, bool> pred
+    )
+        where TBackgroundService : IHostedService
+        where TSyntax : struct, Syntax => scenario.ActAndRunFor(_ => _, maxCumulativeDelay, pred);
 }
