@@ -44,8 +44,8 @@
     </ItemGroup>
 
     <Target Name="husky" BeforeTargets="Restore;CollectPackageReferences" Condition="'$(HUSKY)' != 0">
-        <Exec Command="dotnet tool restore" WorkingDirectory="../"/>
-        <Exec Command="dotnet husky install" WorkingDirectory="../"/>
+        <Exec Command="dotnet tool restore" WorkingDirectory="../" />
+        <Exec Command="dotnet husky install" WorkingDirectory="../" />
     </Target>
 
 </Project>

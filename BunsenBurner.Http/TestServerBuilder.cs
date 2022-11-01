@@ -1,6 +1,5 @@
-﻿using System.Collections.Concurrent;
-using System.Diagnostics.CodeAnalysis;
-using BunsenBurner.Logging;
+﻿using BunsenBurner.Logging;
+using BunsenBurner.Utility;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -16,23 +15,7 @@ namespace BunsenBurner.Http;
 /// </summary>
 public static class TestServerBuilder
 {
-#pragma warning disable S3963
-    [ExcludeFromCodeCoverage]
-    static TestServerBuilder() =>
-        AppDomain.CurrentDomain.ProcessExit += (_, _) =>
-        {
-            foreach (var (_, server) in TestServerCache)
-            {
-                if (server.IsValueCreated)
-                    server.Value.Dispose();
-            }
-
-            TestServerCache.Clear();
-        };
-#pragma warning restore S3963
-
-    private static readonly ConcurrentDictionary<string, Lazy<TestServer>> TestServerCache =
-        new(StringComparer.Ordinal);
+    private static readonly Cache<TestServer> TestServerCache = Cache.New<TestServer>();
 
     /// <summary>
     /// Creates a new test service instance
@@ -106,63 +89,52 @@ public static class TestServerBuilder
         Action<IWebHostBuilder>? configureHost = default,
         IDictionary<string, string>? appSettingsToOverride = default
     ) =>
-        TestServerCache
-            .GetOrAdd(
-                name,
-                static (_, ctx) =>
-                    new Lazy<TestServer>(() =>
-                    {
-                        var builder = new WebHostBuilder();
-                        builder.UseEnvironment(ctx.environmentName);
-                        if (ctx.startupClass != default)
-                            builder.UseStartup(ctx.startupClass);
-                        builder
-                            .ConfigureServices(
-                                (context, services) =>
-                                {
-                                    ctx.configureServices?.Invoke(context, services);
-                                    var store = LogMessageStore.New();
-                                    services
-                                        // remove any logger factories
-                                        .RemoveAll(typeof(ILoggerFactory))
-                                        // use dummy logger
-                                        .AddSingleton(store)
-                                        .ClearLoggingProviders()
-                                        .AddDummyLogger(store)
-                                        // remove hosted services
-                                        .RemoveAll(typeof(IHostedService));
-                                }
-                            )
-                            .ConfigureAppConfiguration(
-                                (context, configBuilder) =>
-                                {
-                                    ctx.configureAppConfiguration?.Invoke(context, configBuilder);
-                                    configBuilder
-                                        .SetBasePath(Directory.GetCurrentDirectory())
-                                        .AddJsonFile(
-                                            $"appsettings.{ctx.environmentName}.json",
-                                            optional: true,
-                                            reloadOnChange: false
-                                        )
-                                        .AddInMemoryCollection(ctx.appSettingsToOverride);
-                                }
-                            );
-                        ctx.configureHost?.Invoke(builder);
-                        var server = new TestServer(builder);
-                        // might be required, no harm enabling it for testing
-                        server.AllowSynchronousIO = true;
-                        // required for all thread local access, such flurl test client
-                        server.PreserveExecutionContext = true;
-                        return server;
-                    }),
-                (
-                    startupClass,
-                    environmentName,
-                    configureServices,
-                    configureAppConfiguration,
-                    configureHost,
-                    appSettingsToOverride
-                )
-            )
-            .Value;
+        TestServerCache.Get(
+            name,
+            _ =>
+            {
+                var builder = new WebHostBuilder();
+                builder.UseEnvironment(environmentName);
+                if (startupClass != default)
+                    builder.UseStartup(startupClass);
+                builder
+                    .ConfigureServices(
+                        (context, services) =>
+                        {
+                            configureServices?.Invoke(context, services);
+                            var store = LogMessageStore.New();
+                            services
+                                // remove any logger factories
+                                .RemoveAll(typeof(ILoggerFactory))
+                                // use dummy logger
+                                .AddSingleton(store)
+                                .ClearLoggingProviders()
+                                .AddDummyLogger(store)
+                                // remove hosted services
+                                .RemoveAll(typeof(IHostedService));
+                        }
+                    )
+                    .ConfigureAppConfiguration(
+                        (context, configBuilder) =>
+                        {
+                            configureAppConfiguration?.Invoke(context, configBuilder);
+                            configBuilder
+                                .SetBasePath(Directory.GetCurrentDirectory())
+                                .AddJsonFile(
+                                    $"appsettings.{environmentName}.json",
+                                    optional: true,
+                                    reloadOnChange: false
+                                )
+                                .AddInMemoryCollection(appSettingsToOverride);
+                        }
+                    );
+                configureHost?.Invoke(builder);
+                var server = new TestServer(builder);
+                // might be required, no harm enabling it for testing
+                server.AllowSynchronousIO = true;
+                // required for all thread local access, such flurl test client
+                server.PreserveExecutionContext = true;
+                return server;
+            }
+        );
 }

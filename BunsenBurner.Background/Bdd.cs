@@ -58,26 +58,66 @@ public static class Bdd
         scenario.AndABackgroundService<TData, TStartup, TBackgroundService, Syntax.Bdd>();
 
     /// <summary>
+    /// Runs the background service until the predicate returns true, or the schedule ends, returning any log messages
+    /// </summary>
+    /// <param name="scenario">arranged scenario</param>
+    /// <param name="fn">function to setup and return the background service and store</param>
+    /// <param name="schedule">custom schedule to supply waits</param>
+    /// <param name="pred">predicate that indicates the job is complete, if this returns false, delay will be applied based on the schedule</param>
+    /// <typeparam name="TData">arranged data</typeparam>
+    /// <typeparam name="TBackgroundService">background service to test</typeparam>
+    /// <returns>scenario that is run</returns>
+    [Pure]
+    public static BddScenario.Acted<TData, LogMessageStore> WhenRunUntil<TData, TBackgroundService>(
+        this BddScenario.Arranged<TData> scenario,
+        Func<TData, BackgroundServiceContext<TBackgroundService>> fn,
+        Schedule schedule,
+        Func<BackgroundServiceContext<TBackgroundService>, bool> pred
+    ) where TBackgroundService : IHostedService => scenario.ActAndRunUntil(fn, schedule, pred);
+
+    /// <summary>
+    /// Runs the background service until the predicate returns true, or the schedule ends, returning any log messages
+    /// </summary>
+    /// <param name="scenario">arranged scenario</param>
+    /// <param name="schedule">custom schedule to supply waits</param>
+    /// <param name="pred">predicate that indicates the job is complete, if this returns false, delay will be applied based on the schedule</param>
+    /// <typeparam name="TBackgroundService">background service to test</typeparam>
+    /// <returns>scenario that is run</returns>
+    [Pure]
+    public static BddScenario.Acted<
+        BackgroundServiceContext<TBackgroundService>,
+        LogMessageStore
+    > WhenRunUntil<TBackgroundService>(
+        this BddScenario.Arranged<BackgroundServiceContext<TBackgroundService>> scenario,
+        Schedule schedule,
+        Func<BackgroundServiceContext<TBackgroundService>, bool> pred
+    ) where TBackgroundService : IHostedService => scenario.ActAndRunUntil(schedule, pred);
+
+    /// <summary>
     /// Runs the background service for the given time, returning any log messages
     /// </summary>
-    /// <param name="scenario">given scenario</param>
+    /// <param name="scenario">arranged scenario</param>
     /// <param name="fn">function to setup and return the background service and store</param>
-    /// <param name="runDuration">duration the background service should run for</param>
-    /// <typeparam name="TData">given data</typeparam>
+    /// <param name="maxCumulativeDelay">max cumulative delay to apply before cancelling the job, will stop early if the predicate returns true</param>
+    /// <param name="pred">predicate that indicates the job is complete, if this returns false, 1 millisecond will be awaited and the predicate is rerun, stopping after maxCumulativeDelay</param>
+    /// <typeparam name="TData">arranged data</typeparam>
     /// <typeparam name="TBackgroundService">background service to test</typeparam>
     /// <returns>scenario that is run</returns>
     [Pure]
     public static BddScenario.Acted<TData, LogMessageStore> WhenRunFor<TData, TBackgroundService>(
         this BddScenario.Arranged<TData> scenario,
         Func<TData, BackgroundServiceContext<TBackgroundService>> fn,
-        TimeSpan runDuration
-    ) where TBackgroundService : IHostedService => scenario.ActAndRunFor(fn, runDuration);
+        Duration maxCumulativeDelay,
+        Func<BackgroundServiceContext<TBackgroundService>, bool> pred
+    ) where TBackgroundService : IHostedService =>
+        scenario.ActAndRunFor(fn, maxCumulativeDelay, pred);
 
     /// <summary>
     /// Runs the background service for the given time, returning any log messages
     /// </summary>
-    /// <param name="scenario">given scenario</param>
-    /// <param name="runDuration">duration the background service should run for</param>
+    /// <param name="scenario">arranged scenario</param>
+    /// <param name="maxCumulativeDelay">max cumulative delay to apply before cancelling the job, will stop early if the predicate returns true</param>
+    /// <param name="pred">predicate that indicates the job is complete, if this returns false, 1 millisecond will be awaited and the predicate is rerun, stopping after maxCumulativeDelay</param>
     /// <typeparam name="TBackgroundService">background service to test</typeparam>
     /// <returns>scenario that is run</returns>
     [Pure]
@@ -86,6 +126,7 @@ public static class Bdd
         LogMessageStore
     > WhenRunFor<TBackgroundService>(
         this BddScenario.Arranged<BackgroundServiceContext<TBackgroundService>> scenario,
-        TimeSpan runDuration
-    ) where TBackgroundService : IHostedService => scenario.ActAndRunFor(runDuration);
+        Duration maxCumulativeDelay,
+        Func<BackgroundServiceContext<TBackgroundService>, bool> pred
+    ) where TBackgroundService : IHostedService => scenario.ActAndRunFor(maxCumulativeDelay, pred);
 }
