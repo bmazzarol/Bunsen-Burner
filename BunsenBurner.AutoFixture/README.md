@@ -28,14 +28,13 @@ using static BunsenBurner.AutoFixture.Bdd;
 builder with a large number of extensions.
 
 For some tests it can reduce code and increase test coverage, while
-focusing the developer on the core logic begin tested. (I highly recommend
+focusing the developer on the core logic under test. (I highly recommend
 reading [Mark Seemann](https://blog.ploeh.dk/2009/03/22/AnnouncingAutoFixture/)
 everything he writes is great and informative)
 
 ## How to use
 
-To start using it import the syntax that your test project is using, for the
-examples I will use arrange act assert style.
+To start using it import the syntax that your test project is using.
 
 ```c#
 using static BunsenBurner.AutoFixture.Aaa;
