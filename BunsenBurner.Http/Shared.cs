@@ -65,22 +65,24 @@ internal static class Shared
     [Pure]
     internal static Scenario<TSyntax>.Acted<TData, Response> ActAndCall<TData, TRequest, TSyntax>(
         this Scenario<TSyntax>.Arranged<TData> scenario,
-        Func<TData, TRequest> fn
+        Func<TData, TRequest> fn,
+        Func<HttpClient>? clientFactory = default
     )
         where TRequest : Request
         where TSyntax : struct, Syntax =>
         new(
             scenario.Name,
             scenario.ArrangeScenario,
-            data => InternalCall(fn(data), new HttpClient())
+            data => InternalCall(fn(data), clientFactory?.Invoke() ?? new HttpClient())
         );
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<TRequest, Response> ActAndCall<TSyntax, TRequest>(
-        this Scenario<TSyntax>.Arranged<TRequest> scenario
+        this Scenario<TSyntax>.Arranged<TRequest> scenario,
+        Func<HttpClient>? clientFactory = default
     )
         where TRequest : Request
-        where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _);
+        where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _, clientFactory);
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<TData, Response> ActAndCallUntil<
@@ -91,7 +93,8 @@ internal static class Shared
         this Scenario<TSyntax>.Arranged<TData> scenario,
         Func<TData, TRequest> fn,
         Schedule schedule,
-        Expression<Func<Response, bool>> predicate
+        Expression<Func<Response, bool>> predicate,
+        Func<HttpClient>? clientFactory = default
     )
         where TRequest : Request
         where TSyntax : struct, Syntax =>
@@ -103,7 +106,10 @@ internal static class Shared
                 var compiledPred = predicate.Compile();
                 foreach (var duration in schedule.Run())
                 {
-                    var resp = await InternalCall(fn(data), new HttpClient());
+                    var resp = await InternalCall(
+                        fn(data),
+                        clientFactory?.Invoke() ?? new HttpClient()
+                    );
                     if (compiledPred(resp))
                         return resp;
                     await Task.Delay((TimeSpan)duration);
@@ -119,9 +125,10 @@ internal static class Shared
     internal static Scenario<TSyntax>.Acted<TRequest, Response> ActAndCallUntil<TSyntax, TRequest>(
         this Scenario<TSyntax>.Arranged<TRequest> scenario,
         Schedule schedule,
-        Expression<Func<Response, bool>> predicate
+        Expression<Func<Response, bool>> predicate,
+        Func<HttpClient>? clientFactory = default
     )
         where TRequest : Request
         where TSyntax : struct, Syntax =>
-        scenario.ActAndCallUntil(static _ => _, schedule, predicate);
+        scenario.ActAndCallUntil(static _ => _, schedule, predicate, clientFactory);
 }

@@ -31,10 +31,9 @@ internal static class Shared
         );
 
     private static TestServer CreateTestServer(string name, RequestDelegate requestDelegate) =>
-        TestServerBuilder.Create(
-            name,
-            configureHost: builder => builder.Configure(x => x.Run(requestDelegate))
-        );
+        TestServerBuilderOptions
+            .New(name, configureHost: builder => builder.Configure(x => x.Run(requestDelegate)))
+            .Build();
 
     private static Scenario<TSyntax>.Asserted<TRequest, ResponseContext> AssertOnResponse<
         TRequest,

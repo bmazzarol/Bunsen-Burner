@@ -1,5 +1,7 @@
-﻿using BunsenBurner.Logging;
+﻿using System.Text;
+using BunsenBurner.Logging;
 using BunsenBurner.Utility;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BunsenBurner.Http;
 
@@ -18,46 +23,60 @@ public static class TestServerBuilder
     private static readonly Cache<TestServer> TestServerCache = Cache.New<TestServer>();
 
     /// <summary>
-    /// Creates a new test service instance
+    /// Creates a Symmetric Security Key from a given string.
+    /// The minimum key size is 128 bytes therefore the provided string must be at least 16 characters.
+    /// Smaller strings will be padded to the right with spaces.
     /// </summary>
-    /// <remarks>
-    /// Does the following,
-    ///
-    /// * Sets the environment name
-    /// * Removes all background services
-    /// * Replaces all loggers with the dummy logger
-    /// * Enables both Synchronous IO and Preserve execution context
-    /// * Wires up an appsettings.{testing-env-name}.json files
-    /// * Runs all delegates and replacements
-    /// </remarks>
-    /// <param name="name">optional name to post-append to the startup class name, used as the cache key</param>
-    /// <param name="environmentName">optional environment name to use, default Constants.TestEnvironmentName</param>
-    /// <param name="configureServices">optional action to configure services</param>
-    /// <param name="configureAppConfiguration">optional action to configure configuration</param>
-    /// <param name="configureHost">optional action to configure host</param>
-    /// <param name="appSettingsToOverride">optional app settings to override</param>
-    /// <typeparam name="TStartup">valid startup class</typeparam>
-    /// <returns>test server</returns>
-    public static TestServer Create<TStartup>(
-        string? name = default,
-        string environmentName = Constants.TestEnvironmentName,
-        Action<WebHostBuilderContext, IServiceCollection>? configureServices = default,
-        Action<WebHostBuilderContext, IConfigurationBuilder>? configureAppConfiguration = default,
-        Action<IWebHostBuilder>? configureHost = default,
-        IDictionary<string, string>? appSettingsToOverride = default
-    ) where TStartup : IStartup
+    private static SymmetricSecurityKey AsSymmetricSecurityKey(this string key)
     {
-        var type = typeof(TStartup);
-        return Create(
-            $"{type.FullName ?? type.Name}{name}",
-            type,
-            environmentName,
-            configureServices,
-            configureAppConfiguration,
-            configureHost,
-            appSettingsToOverride
-        );
+        const int minKeySize = 16;
+        return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key.PadRight(minKeySize)));
     }
+
+    private static IServiceCollection ConfigureTestAuth(
+        this IServiceCollection services,
+        string issuer,
+        string signingKey
+    ) =>
+        services.PostConfigure<JwtBearerOptions>(
+            JwtBearerDefaults.AuthenticationScheme,
+            jwtOptions =>
+            {
+                var key = signingKey.AsSymmetricSecurityKey();
+                var config = new OpenIdConnectConfiguration { Issuer = issuer };
+                config.SigningKeys.Add(key);
+                jwtOptions.TokenValidationParameters.ValidIssuer = issuer;
+                jwtOptions.TokenValidationParameters.IssuerSigningKey = key;
+                jwtOptions.ConfigurationManager =
+                    new StaticConfigurationManager<OpenIdConnectConfiguration>(config);
+            }
+        );
+
+    private static IServiceCollection ConfigureTestLogging(
+        this IServiceCollection services,
+        LogMessageStore store
+    ) =>
+        services
+            // remove any logger factories
+            .RemoveAll(typeof(ILoggerFactory))
+            // use dummy logger
+            .AddSingleton(store)
+            .ClearLoggingProviders()
+            .AddDummyLogger(store);
+
+    private static IConfigurationBuilder ConfigureTestSettings(
+        this IConfigurationBuilder builder,
+        string environmentName,
+        IDictionary<string, string>? appSettingsToOverride
+    ) =>
+        builder
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile(
+                $"appsettings.{environmentName}.json",
+                optional: true,
+                reloadOnChange: false
+            )
+            .AddInMemoryCollection(appSettingsToOverride);
 
     /// <summary>
     /// Creates a new test service instance
@@ -68,67 +87,48 @@ public static class TestServerBuilder
     /// * Sets the environment name
     /// * Removes all background services
     /// * Replaces all loggers with the dummy logger
+    /// * Replaces the JWT token configuration to allow for test tokens
     /// * Enables both Synchronous IO and Preserve execution context
     /// * Wires up an appsettings.{testing-env-name}.json files
     /// * Runs all delegates and replacements
     /// </remarks>
-    /// <param name="name">name to cache against</param>
-    /// <param name="startupClass">optional startup class to use</param>
-    /// <param name="environmentName">optional environment name to use, default Constants.TestEnvironmentName</param>
-    /// <param name="configureServices">optional action to configure services</param>
-    /// <param name="configureAppConfiguration">optional action to configure configuration</param>
-    /// <param name="configureHost">optional action to configure host</param>
-    /// <param name="appSettingsToOverride">optional app settings to override</param>
+    /// <param name="options">options to use when building the test server</param>
     /// <returns>test server</returns>
-    public static TestServer Create(
-        string name,
-        Type? startupClass = default,
-        string environmentName = Constants.TestEnvironmentName,
-        Action<WebHostBuilderContext, IServiceCollection>? configureServices = default,
-        Action<WebHostBuilderContext, IConfigurationBuilder>? configureAppConfiguration = default,
-        Action<IWebHostBuilder>? configureHost = default,
-        IDictionary<string, string>? appSettingsToOverride = default
-    ) =>
+    public static TestServer Create(TestServerBuilderOptions options) =>
         TestServerCache.Get(
-            name,
+            options.Name,
             _ =>
             {
                 var builder = new WebHostBuilder();
-                builder.UseEnvironment(environmentName);
-                if (startupClass != default)
-                    builder.UseStartup(startupClass);
+                builder.UseEnvironment(options.EnvironmentName);
+                if (options.StartupClass != default)
+                    builder.UseStartup(options.StartupClass);
                 builder
                     .ConfigureServices(
                         (context, services) =>
                         {
-                            configureServices?.Invoke(context, services);
+                            options.ConfigureServices?.Invoke(context, services);
                             var store = LogMessageStore.New();
                             services
-                                // remove any logger factories
-                                .RemoveAll(typeof(ILoggerFactory))
-                                // use dummy logger
-                                .AddSingleton(store)
-                                .ClearLoggingProviders()
-                                .AddDummyLogger(store)
+                                // setup test loggers
+                                .ConfigureTestLogging(store)
                                 // remove hosted services
-                                .RemoveAll(typeof(IHostedService));
+                                .RemoveAll(typeof(IHostedService))
+                                // setup test auth
+                                .ConfigureTestAuth(options.Issuer, options.SigningKey);
                         }
                     )
                     .ConfigureAppConfiguration(
                         (context, configBuilder) =>
                         {
-                            configureAppConfiguration?.Invoke(context, configBuilder);
-                            configBuilder
-                                .SetBasePath(Directory.GetCurrentDirectory())
-                                .AddJsonFile(
-                                    $"appsettings.{environmentName}.json",
-                                    optional: true,
-                                    reloadOnChange: false
-                                )
-                                .AddInMemoryCollection(appSettingsToOverride);
+                            options.ConfigureAppConfiguration?.Invoke(context, configBuilder);
+                            configBuilder.ConfigureTestSettings(
+                                options.EnvironmentName,
+                                options.AppSettingsToOverride
+                            );
                         }
                     );
-                configureHost?.Invoke(builder);
+                options.ConfigureHost?.Invoke(builder);
                 var server = new TestServer(builder);
                 // might be required, no harm enabling it for testing
                 server.AllowSynchronousIO = true;
@@ -137,4 +137,22 @@ public static class TestServerBuilder
                 return server;
             }
         );
+
+    /// <summary>
+    /// Creates a new test service instance
+    /// </summary>
+    /// <remarks>
+    /// Does the following,
+    ///
+    /// * Sets the environment name
+    /// * Removes all background services
+    /// * Replaces all loggers with the dummy logger
+    /// * Replaces the JWT token configuration to allow for test tokens
+    /// * Enables both Synchronous IO and Preserve execution context
+    /// * Wires up an appsettings.{testing-env-name}.json files
+    /// * Runs all delegates and replacements
+    /// </remarks>
+    /// <param name="options">options to use when building the test server</param>
+    /// <returns>test server</returns>
+    public static TestServer Build(this TestServerBuilderOptions options) => Create(options);
 }

@@ -68,25 +68,29 @@ public static class Bdd
     /// </summary>
     /// <param name="scenario">scenario</param>
     /// <param name="fn">get the request to use from the data</param>
+    /// <param name="clientFactory">optional http client factory, can be used to customize the client</param>
     /// <typeparam name="TData">given data</typeparam>
     /// <typeparam name="TRequest">request</typeparam>
     /// <returns>scenario that is run</returns>
     [Pure]
     public static BddScenario.Acted<TData, Response> WhenCalled<TData, TRequest>(
         this BddScenario.Arranged<TData> scenario,
-        Func<TData, TRequest> fn
-    ) where TRequest : Request => scenario.ActAndCall(fn);
+        Func<TData, TRequest> fn,
+        Func<HttpClient>? clientFactory = default
+    ) where TRequest : Request => scenario.ActAndCall(fn, clientFactory);
 
     /// <summary>
     /// Makes a call to the real server
     /// </summary>
     /// <param name="scenario">scenario</param>
+    /// <param name="clientFactory">optional http client factory, can be used to customize the client</param>
     /// <typeparam name="TRequest">request</typeparam>
     /// <returns>scenario that is run</returns>
     [Pure]
     public static BddScenario.Acted<TRequest, Response> WhenCalled<TRequest>(
-        this BddScenario.Arranged<TRequest> scenario
-    ) where TRequest : Request => scenario.ActAndCall();
+        this BddScenario.Arranged<TRequest> scenario,
+        Func<HttpClient>? clientFactory = default
+    ) where TRequest : Request => scenario.ActAndCall(clientFactory);
 
     /// <summary>
     /// Makes a call repeatedly to the real server, stops once the predicate is true or the schedule completes
@@ -95,6 +99,7 @@ public static class Bdd
     /// <param name="fn">get the request to use from the data</param>
     /// <param name="schedule">provided schedule, can be used to determine the number and duration of waits between each call</param>
     /// <param name="predicate">predicate against the responses returned, when true the response is returned</param>
+    /// <param name="clientFactory">optional http client factory, can be used to customize the client</param>
     /// <exception cref="InvalidOperationException">if the schedule completes before the provided predicate returns true</exception>
     /// <typeparam name="TData">given data</typeparam>
     /// <typeparam name="TRequest">request</typeparam>
@@ -104,8 +109,9 @@ public static class Bdd
         this BddScenario.Arranged<TData> scenario,
         Func<TData, TRequest> fn,
         Schedule schedule,
-        Expression<Func<Response, bool>> predicate
-    ) where TRequest : Request => scenario.ActAndCallUntil(fn, schedule, predicate);
+        Expression<Func<Response, bool>> predicate,
+        Func<HttpClient>? clientFactory = default
+    ) where TRequest : Request => scenario.ActAndCallUntil(fn, schedule, predicate, clientFactory);
 
     /// <summary>
     /// Makes a call repeatedly to the real server, stops once the predicate is true or the schedule completes
@@ -113,6 +119,7 @@ public static class Bdd
     /// <param name="scenario">scenario</param>
     /// <param name="schedule">provided schedule, can be used to determine the number and duration of waits between each call</param>
     /// <param name="predicate">predicate against the responses returned, when true the response is returned</param>
+    /// <param name="clientFactory">optional http client factory, can be used to customize the client</param>
     /// <exception cref="InvalidOperationException">if the schedule completes before the provided predicate returns true</exception>
     /// <typeparam name="TRequest">request</typeparam>
     /// <returns>scenario that is run</returns>
@@ -120,6 +127,7 @@ public static class Bdd
     public static BddScenario.Acted<TRequest, Response> WhenCalledRepeatedly<TRequest>(
         this BddScenario.Arranged<TRequest> scenario,
         Schedule schedule,
-        Expression<Func<Response, bool>> predicate
-    ) where TRequest : Request => scenario.ActAndCallUntil(schedule, predicate);
+        Expression<Func<Response, bool>> predicate,
+        Func<HttpClient>? clientFactory = default
+    ) where TRequest : Request => scenario.ActAndCallUntil(schedule, predicate, clientFactory);
 }
