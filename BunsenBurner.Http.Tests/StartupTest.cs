@@ -42,7 +42,7 @@ public static class StartupTest
         await Request
             .GET("/health")
             .ArrangeRequest()
-            .ActAndCall(TestServerBuilder.Create<Startup>())
+            .ActAndCall(TestServerBuilderOptions.New<Startup>().Build())
             .IsOk()
             .And(ctx => Assert.Contains(ctx.Store, x => x.Message == "Health checked"));
 }

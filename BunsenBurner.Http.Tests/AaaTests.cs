@@ -89,7 +89,12 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
 
     [Fact(DisplayName = "TRACE request can be made to a test server")]
     public async Task Case9() =>
-        await Request.TRACE("/hello-world").ArrangeRequest().ActAndCall(SimpleResponse()).IsOk();
+        await Request
+            .TRACE("/hello-world")
+            .ArrangeRequest()
+            .ActAndCall(SimpleResponse())
+            .IsOk()
+            .And(x => x.Response.Length > 0);
 
     [Fact(DisplayName = "CONNECT request can be made to a test server")]
     public async Task Case10() =>
@@ -141,7 +146,7 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
                     SomeOtherData: "test"
                 );
             })
-            .ActAndCall(x => x.Req)
+            .ActAndCall(x => x.Req, () => new HttpClient().WithoutSslCertChecks())
             .Assert(resp => Assert.Equal(HttpStatusCode.OK, resp.Code));
 
     [Fact(DisplayName = "POST request can be made to a real server")]

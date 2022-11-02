@@ -68,25 +68,30 @@ public static class Aaa
     /// </summary>
     /// <param name="scenario">arranged scenario</param>
     /// <param name="fn">get the request to use from the data</param>
+    /// <param name="clientFactory">optional http client factory, can be used to customize the client</param>
     /// <typeparam name="TData">arranged data</typeparam>
     /// <typeparam name="TRequest">request</typeparam>
     /// <returns>acted scenario</returns>
     [Pure]
     public static AaaScenario.Acted<TData, Response> ActAndCall<TData, TRequest>(
         this AaaScenario.Arranged<TData> scenario,
-        Func<TData, TRequest> fn
-    ) where TRequest : Request => scenario.ActAndCall<TData, TRequest, Syntax.Aaa>(fn);
+        Func<TData, TRequest> fn,
+        Func<HttpClient>? clientFactory = default
+    ) where TRequest : Request =>
+        scenario.ActAndCall<TData, TRequest, Syntax.Aaa>(fn, clientFactory);
 
     /// <summary>
     /// Makes a call to the real server
     /// </summary>
     /// <param name="scenario">arranged scenario</param>
+    /// <param name="clientFactory">optional http client factory, can be used to customize the client</param>
     /// <typeparam name="TRequest">request</typeparam>
     /// <returns>acted scenario</returns>
     [Pure]
     public static AaaScenario.Acted<TRequest, Response> ActAndCall<TRequest>(
-        this AaaScenario.Arranged<TRequest> scenario
-    ) where TRequest : Request => scenario.ActAndCall<Syntax.Aaa, TRequest>();
+        this AaaScenario.Arranged<TRequest> scenario,
+        Func<HttpClient>? clientFactory = default
+    ) where TRequest : Request => scenario.ActAndCall<Syntax.Aaa, TRequest>(clientFactory);
 
     /// <summary>
     /// Makes a call repeatedly to the real server, stops once the predicate is true or the schedule completes
@@ -95,6 +100,7 @@ public static class Aaa
     /// <param name="fn">get the request to use from the data</param>
     /// <param name="schedule">provided schedule, can be used to determine the number and duration of waits between each call</param>
     /// <param name="predicate">predicate against the responses returned, when true the response is returned</param>
+    /// <param name="clientFactory">optional http client factory, can be used to customize the client</param>
     /// <exception cref="InvalidOperationException">if the schedule completes before the provided predicate returns true</exception>
     /// <typeparam name="TData">arranged data</typeparam>
     /// <typeparam name="TRequest">request</typeparam>
@@ -104,9 +110,15 @@ public static class Aaa
         this AaaScenario.Arranged<TData> scenario,
         Func<TData, TRequest> fn,
         Schedule schedule,
-        Expression<Func<Response, bool>> predicate
+        Expression<Func<Response, bool>> predicate,
+        Func<HttpClient>? clientFactory = default
     ) where TRequest : Request =>
-        scenario.ActAndCallUntil<TData, TRequest, Syntax.Aaa>(fn, schedule, predicate);
+        scenario.ActAndCallUntil<TData, TRequest, Syntax.Aaa>(
+            fn,
+            schedule,
+            predicate,
+            clientFactory
+        );
 
     /// <summary>
     /// Makes a call repeatedly to the real server, stops once the predicate is true or the schedule completes
@@ -114,6 +126,7 @@ public static class Aaa
     /// <param name="scenario">arranged scenario</param>
     /// <param name="schedule">provided schedule, can be used to determine the number and duration of waits between each call</param>
     /// <param name="predicate">predicate against the responses returned, when true the response is returned</param>
+    /// <param name="clientFactory">optional http client factory, can be used to customize the client</param>
     /// <exception cref="InvalidOperationException">if the schedule completes before the provided predicate returns true</exception>
     /// <typeparam name="TRequest">request</typeparam>
     /// <returns>acted scenario</returns>
@@ -121,7 +134,8 @@ public static class Aaa
     public static AaaScenario.Acted<TRequest, Response> ActAndCallUntil<TRequest>(
         this AaaScenario.Arranged<TRequest> scenario,
         Schedule schedule,
-        Expression<Func<Response, bool>> predicate
+        Expression<Func<Response, bool>> predicate,
+        Func<HttpClient>? clientFactory = default
     ) where TRequest : Request =>
-        scenario.ActAndCallUntil<Syntax.Aaa, TRequest>(schedule, predicate);
+        scenario.ActAndCallUntil<Syntax.Aaa, TRequest>(schedule, predicate, clientFactory);
 }
