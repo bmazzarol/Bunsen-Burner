@@ -1,12 +1,15 @@
 ﻿# Bunsen Burner Core
 
+![Nuget](https://img.shields.io/nuget/v/BunsenBurner)
+
 This provides the core dependency free test abstraction that Bunsen Burner is
 built on.
 
 ## Getting Started
 
 To use this library, simply include `BunsenBurner.dll` in your project or grab
-it from NuGet (Coming Soon), and add this to the top of each test `.cs` file
+it from [NuGet](https://www.nuget.org/packages/BunsenBurner/), and add this to
+the top of each test `.cs` file
 that needs it:
 
 ```C#
@@ -39,7 +42,8 @@ Scenario<
     Asserted<TData, TResult>)
 ```
 
-This structure represents a lazy asynchronous immutable test that can be composed and
+This structure represents a lazy asynchronous immutable test that can be
+composed and
 later run.
 
 The aim is for the type parameters to be fully inferable. There are a few edge

@@ -1,5 +1,7 @@
 ﻿# Bunsen Burner Hedgehog
 
+![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Hedgehog)
+
 This provides integration
 with [Hedgehog](https://github.com/hedgehogqa/fsharp-hedgehog) to write clean
 and easy property based tests.
@@ -9,7 +11,8 @@ and easy property based tests.
 To use this library, simply include `BunsenBurner.Hedgehog.dll` in your
 project
 or grab
-it from NuGet (Coming Soon), and add this to the top of each test `.cs` file
+it from [NuGet](https://www.nuget.org/packages/BunsenBurner.Hedgehog/), and add
+this to the top of each test `.cs` file
 that needs it:
 
 ```C#

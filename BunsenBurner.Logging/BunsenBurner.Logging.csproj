@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageId>BunsenBurner.Logger</PackageId>
+        <PackageId>BunsenBurner.Logging</PackageId>
         <Title>Bunsen Burner Logging</Title>
         <Description>
             This provides a set of logging abstractions that allow for assertions to be made

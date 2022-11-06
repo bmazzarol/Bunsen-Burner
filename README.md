@@ -1,4 +1,5 @@
 ﻿# :fire: Bunsen Burner :fire:
+
 [![Coverage Status](https://coveralls.io/repos/github/bmazzarol/Bunsen-Burner/badge.svg?branch=main)](https://coveralls.io/github/bmazzarol/Bunsen-Burner?branch=main)
 [![CodeQL](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/codeql.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/codeql.yml)
 
@@ -47,7 +48,8 @@ public static class Tests
 ## Getting Started
 
 To use this library, simply include `BunsenBurner.dll` in your project or grab
-it from NuGet (Coming Soon), and add this to the top of each test `.cs` file
+it from [NuGet](https://www.nuget.org/packages/BunsenBurner/), and add this to
+the top of each test `.cs` file
 that needs it:
 
 ```C#
@@ -62,18 +64,18 @@ using static BunsenBurner.Bdd; // For Given when then
 
 Click through to the links bellow for further details.
 
-| Library                                               | Description                                                                                                          | Nu-Get      |
-|-------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|-------------|
-| [Core](./BunsenBurner/README.md)                      | Core test abstraction that makes it all possible. This is all that is required to get started!                       | Coming Soon |
-| [Logging](./BunsenBurner.Logging/README.md)           | Core logging abstractions. Used to assert against logged messages, useful for cases like testing background services | Coming Soon |
-| [AutoFixture](./BunsenBurner.AutoFixture/README.md)   | Integration with [AutoFixture](https://github.com/AutoFixture) to simplify arrange steps                             | Coming Soon |
-| [Bogus](./BunsenBurner.Bogus/README.md)               | Integration with [Bogus](https://github.com/bchavez/Bogus) to simplify arrange steps                                 | Coming Soon |
-| [Hedgehog](./BunsenBurner.Hedgehog/README.md)         | Integration with [Hedgehog](https://github.com/hedgehogqa/fsharp-hedgehog) to write property based tests             | Coming Soon |
-| [Verify.Xunit](./BunsenBurner.Verify.Xunit/README.md) | Integration with [Verify.Xunit](https://github.com/VerifyTests/Verify) to simplify assert steps                      | Coming Soon |
-| [Verify.NUnit](./BunsenBurner.Verify.NUnit/README.md) | Integration with [Verify.NUnit](https://github.com/VerifyTests/Verify) to simplify assert steps                      | Coming Soon |
-| [Http](./BunsenBurner.Http/README.md)                 | Extension methods for testing Http servers                                                                           | Coming Soon |
-| [FunctionApp](./BunsenBurner.FunctionApp/README.md)   | Extension methods for testing Function apps                                                                          | Coming Soon |
-| [Background](./BunsenBurner.Background/README.md)     | Extension methods for testing Background services                                                                    | Coming Soon |
+| Library                                               | Description                                                                                                          | Nu-Get                                                             |
+|-------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
+| [Core](./BunsenBurner/README.md)                      | Core test abstraction that makes it all possible. This is all that is required to get started!                       | ![Nuget](https://img.shields.io/nuget/v/BunsenBurner)              |
+| [Logging](./BunsenBurner.Logging/README.md)           | Core logging abstractions. Used to assert against logged messages, useful for cases like testing background services | ![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Logging)      |
+| [AutoFixture](./BunsenBurner.AutoFixture/README.md)   | Integration with [AutoFixture](https://github.com/AutoFixture) to simplify arrange steps                             | ![Nuget](https://img.shields.io/nuget/v/BunsenBurner.AutoFixtuer)  |
+| [Bogus](./BunsenBurner.Bogus/README.md)               | Integration with [Bogus](https://github.com/bchavez/Bogus) to simplify arrange steps                                 | ![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Bogus)        |
+| [Hedgehog](./BunsenBurner.Hedgehog/README.md)         | Integration with [Hedgehog](https://github.com/hedgehogqa/fsharp-hedgehog) to write property based tests             | ![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Hedgehog)     |
+| [Verify.Xunit](./BunsenBurner.Verify.Xunit/README.md) | Integration with [Verify.Xunit](https://github.com/VerifyTests/Verify) to simplify assert steps                      | ![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Verify.Xunit) |
+| [Verify.NUnit](./BunsenBurner.Verify.NUnit/README.md) | Integration with [Verify.NUnit](https://github.com/VerifyTests/Verify) to simplify assert steps                      | ![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Verify.NUnit) |
+| [Http](./BunsenBurner.Http/README.md)                 | Extension methods for testing Http servers                                                                           | ![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Http)         |
+| [FunctionApp](./BunsenBurner.FunctionApp/README.md)   | Extension methods for testing Function apps                                                                          | ![Nuget](https://img.shields.io/nuget/v/BunsenBurner.FunctionApp)  |
+| [Background](./BunsenBurner.Background/README.md)     | Extension methods for testing Background services                                                                    | ![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Background)   |
 
 ## Why?
 

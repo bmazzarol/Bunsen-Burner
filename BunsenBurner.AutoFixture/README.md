@@ -1,5 +1,7 @@
 ﻿# Bunsen Burner Auto Fixture
 
+![Nuget](https://img.shields.io/nuget/v/BunsenBurner.AutoFixture)
+
 This provides extension methods to
 integrate [AutoFixture](https://github.com/AutoFixture) into the arrange/given
 step.
@@ -9,7 +11,8 @@ step.
 To use this library, simply include `BunsenBurner.AutoFixture.dll` in your
 project
 or grab
-it from NuGet (Coming Soon), and add this to the top of each test `.cs` file
+it from [NuGet](https://www.nuget.org/packages/BunsenBurner.AutoFixture/), and
+add this to the top of each test `.cs` file
 that needs it:
 
 ```C#
