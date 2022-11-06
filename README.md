@@ -2,7 +2,8 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/bmazzarol/Bunsen-Burner/badge.svg?branch=main)](https://coveralls.io/github/bmazzarol/Bunsen-Burner?branch=main)
 [![CodeQL](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/codeql.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/codeql.yml)
-![Nuget](https://img.shields.io/nuget/v/BunsenBurner)
+[![CD Build](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/cd-build.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/cd-build.yml)
+[![Nuget](https://img.shields.io/nuget/v/BunsenBurner)](https://www.nuget.org/packages/BunsenBurner/)
 
 > Set :fire: to your old unit tests!
 ---
