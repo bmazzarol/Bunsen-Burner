@@ -37,6 +37,6 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Release Build
-        run: dotnet pack --configuration Release -p:PackageVersion=${{ env.PACKAGE_VERSION }} ${{ matrix.project-name }}/${{ matrix.project-name }}.csproj
+        run: dotnet pack --configuration Release -p:ContinuousIntegrationBuild=true -p:PackageVersion=${{ env.PACKAGE_VERSION }} ${{ matrix.project-name }}/${{ matrix.project-name }}.csproj
       - name: Push to Nuget
         run: dotnet nuget push **\*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
