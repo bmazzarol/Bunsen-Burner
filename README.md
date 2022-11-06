@@ -70,7 +70,7 @@ Click through to the links bellow for further details.
 | [Bogus](./BunsenBurner.Bogus/README.md)               | Integration with [Bogus](https://github.com/bchavez/Bogus) to simplify arrange steps                                 | Coming Soon |
 | [Hedgehog](./BunsenBurner.Hedgehog/README.md)         | Integration with [Hedgehog](https://github.com/hedgehogqa/fsharp-hedgehog) to write property based tests             | Coming Soon |
 | [Verify.Xunit](./BunsenBurner.Verify.Xunit/README.md) | Integration with [Verify.Xunit](https://github.com/VerifyTests/Verify) to simplify assert steps                      | Coming Soon |
-| [Verify.Xunit](./BunsenBurner.Verify.NUnit/README.md) | Integration with [Verify.NUnit](https://github.com/VerifyTests/Verify) to simplify assert steps                      | Coming Soon |
+| [Verify.NUnit](./BunsenBurner.Verify.NUnit/README.md) | Integration with [Verify.NUnit](https://github.com/VerifyTests/Verify) to simplify assert steps                      | Coming Soon |
 | [Http](./BunsenBurner.Http/README.md)                 | Extension methods for testing Http servers                                                                           | Coming Soon |
 | [FunctionApp](./BunsenBurner.FunctionApp/README.md)   | Extension methods for testing Function apps                                                                          | Coming Soon |
 | [Background](./BunsenBurner.Background/README.md)     | Extension methods for testing Background services                                                                    | Coming Soon |
