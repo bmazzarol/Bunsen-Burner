@@ -7,13 +7,14 @@
     <PropertyGroup>
         <PackageId>BunsenBurner.FunctionApp</PackageId>
         <Title>Bunsen Burner Function App</Title>
-        <Description>Extension methods for testing Function apps </Description>
+        <Description>Extension methods for testing Function apps</Description>
         <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests, Http, Function App</PackageTags>
         <PackageProjectUrl>https://github.com/bmazzarol/Bunsen-Burner</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
         <ProjectGuid>a3d8f2b2-f7e8-44fd-8cd7-cc369c4079b1</ProjectGuid>
         <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IsPackable>True</IsPackable>
         <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -43,8 +44,8 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Roslynator.Analyzers" Version="4.1.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="SonarAnalyzer.CSharp" Version="8.47.0.55603">
             <PrivateAssets>all</PrivateAssets>
@@ -53,12 +54,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BunsenBurner.Http\BunsenBurner.Http.csproj" />
-      <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj" />
+        <ProjectReference Include="..\BunsenBurner.Http\BunsenBurner.Http.csproj"/>
+        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
+        <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0"/>
     </ItemGroup>
 
 </Project>

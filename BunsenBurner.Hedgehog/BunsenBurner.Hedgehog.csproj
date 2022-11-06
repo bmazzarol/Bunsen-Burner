@@ -14,6 +14,7 @@
         <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
         <ProjectGuid>8d91239f-7947-427e-81eb-3fa03b5fca51</ProjectGuid>
         <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IsPackable>True</IsPackable>
         <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -43,21 +44,21 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Roslynator.Analyzers" Version="4.1.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="SonarAnalyzer.CSharp" Version="8.47.0.55603">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
-    
+
     <ItemGroup>
-        <PackageReference Include="Hedgehog" Version="0.13.0" />
+        <PackageReference Include="Hedgehog" Version="0.13.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj" />
+        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj"/>
     </ItemGroup>
 
 </Project>

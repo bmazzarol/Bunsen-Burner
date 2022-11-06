@@ -14,6 +14,7 @@
         <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
         <ProjectGuid>2df5525d-d70f-4994-84b5-7b5d9531004a</ProjectGuid>
         <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IsPackable>True</IsPackable>
         <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -43,8 +44,8 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Roslynator.Analyzers" Version="4.1.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="SonarAnalyzer.CSharp" Version="8.47.0.55603">
             <PrivateAssets>all</PrivateAssets>
@@ -53,11 +54,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Verify.NUnit" Version="18.3.0" />
+        <PackageReference Include="Verify.NUnit" Version="18.3.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj" />
+        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj"/>
     </ItemGroup>
 
 </Project>

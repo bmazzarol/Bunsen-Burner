@@ -14,6 +14,7 @@
         <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
         <ProjectGuid>63939c2f-f3c4-490b-adc9-3eaa7e9222ae</ProjectGuid>
         <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IsPackable>True</IsPackable>
         <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -43,8 +44,8 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Roslynator.Analyzers" Version="4.1.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="SonarAnalyzer.CSharp" Version="8.47.0.55603">
             <PrivateAssets>all</PrivateAssets>
@@ -53,17 +54,17 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="JWT" Version="9.0.3" />
-        <PackageReference Include="Flurl" Version="3.0.6" />
-        <PackageReference Include="LanguageExt.Core" Version="4.2.9" />
-        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.10" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10" />
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.25.0" />
+        <PackageReference Include="JWT" Version="9.0.3"/>
+        <PackageReference Include="Flurl" Version="3.0.6"/>
+        <PackageReference Include="LanguageExt.Core" Version="4.2.9"/>
+        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.10"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10"/>
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.25.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\BunsenBurner.Logging\BunsenBurner.Logging.csproj" />
-        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj" />
+        <ProjectReference Include="..\BunsenBurner.Logging\BunsenBurner.Logging.csproj"/>
+        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj"/>
     </ItemGroup>
 
 </Project>
