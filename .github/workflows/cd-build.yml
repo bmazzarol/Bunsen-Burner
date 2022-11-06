@@ -1,6 +1,7 @@
 ﻿name: CD Build
 
 on:
+  workflow_dispatch:
   release:
     types: [ published ]
 
