@@ -1,0 +1,36 @@
+﻿name: CD Build
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  publish:
+    name: Publish to Nuget
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '6.0.x' ]
+        project-name:
+          - BunsenBurner
+          - BunsenBurner.AutoFixture
+          - BunsenBurner.Background
+          - BunsenBurner.Bogus
+          - BunsenBurner.FunctionApp
+          - BunsenBurner.Hedgehog
+          - BunsenBurner.Http
+          - BunsenBurner.Logging
+          - BunsenBurner.Verify.Xunit
+          - BunsenBurner.Verify.NUnit
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Release Build
+        run: dotnet pack ---configuration Release -p:PackageVersion=${{ github.event.release.tag_name }} ${{ matrix.project-name }}/${{ matrix.project-name }}.csproj
+      - name: Push to Nuget
+        run: |
+          dotnet nuget push --api-key ${{ secrets.NUGET_API_KEY }} ${{ matrix.project-name }}/bin/Release/${{ matrix.project-name }}.${{ github.event.release.tag_name }}.nupkg
+          dotnet nuget push --api-key ${{ secrets.NUGET_API_KEY }} ${{ matrix.project-name }}/bin/Release/${{ matrix.project-name }}.${{ github.event.release.tag_name }}.symbols.nupkg
