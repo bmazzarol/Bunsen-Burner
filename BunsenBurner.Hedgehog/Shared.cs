@@ -11,44 +11,46 @@ namespace BunsenBurner.Hedgehog;
 internal static class Shared
 {
     [Pure]
-    internal static Scenario<TSyntax>.Arranged<Gen<TData>> ArrangeGenerator<TData, TSyntax>(
-        this string name,
-        Gen<TData> generator
-    ) where TSyntax : struct, Syntax => new(name, () => Task.FromResult(generator));
+    internal static Scenario<TSyntax>.Acted<Gen<TData>, Property<TData>> ArrangeGenerator<
+        TData,
+        TSyntax
+    >(this string name, Gen<TData> generator) where TSyntax : struct, Syntax =>
+        new(name, () => Task.FromResult(generator), gen => Task.FromResult(Property.ForAll(gen)));
 
     [Pure]
-    internal static Scenario<TSyntax>.Arranged<Gen<TData>> ArrangeGenerator<TData, TSyntax>(
-        this Gen<TData> generator
-    ) where TSyntax : struct, Syntax => string.Empty.ArrangeGenerator<TData, TSyntax>(generator);
+    internal static Scenario<TSyntax>.Acted<Gen<TData>, Property<TData>> ArrangeGenerator<
+        TData,
+        TSyntax
+    >(this Gen<TData> generator) where TSyntax : struct, Syntax =>
+        string.Empty.ArrangeGenerator<TData, TSyntax>(generator);
 
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<Gen<TData>, bool> AssertPropertyHolds<
+    internal static Scenario<TSyntax>.Asserted<Gen<TData>, Property<TData>> AssertPropertyHolds<
         TData,
         TSyntax
     >(
-        this Scenario<TSyntax>.Arranged<Gen<TData>> scenario,
+        this Scenario<TSyntax>.Acted<Gen<TData>, Property<TData>> scenario,
         Func<TData, bool> fn,
         PropertyConfig? config = default
     ) where TSyntax : struct, Syntax =>
         new(
             scenario.Name,
             scenario.ArrangeScenario,
-            gen =>
+            scenario.ActOnScenario,
+            (_, x) =>
             {
-                var property = Property.ForAll(gen).Select(fn);
-                property.Check(config ?? global::Hedgehog.Linq.PropertyConfig.Default);
+                x.Select(fn).Check(config ?? global::Hedgehog.Linq.PropertyConfig.Default);
                 return Task.FromResult(true);
-            },
-            (_, _) => Task.CompletedTask
+            }
         );
 
     [Pure]
     [ExcludeFromCodeCoverage]
-    internal static Scenario<TSyntax>.Asserted<Gen<TData>, bool> AssertPropertyHolds<
+    internal static Scenario<TSyntax>.Asserted<Gen<TData>, Property<TData>> AssertPropertyHolds<
         TData,
         TSyntax
     >(
-        this Scenario<TSyntax>.Arranged<Gen<TData>> scenario,
+        this Scenario<TSyntax>.Acted<Gen<TData>, Property<TData>> scenario,
         Action<TData> fn,
         PropertyConfig? config = default
     ) where TSyntax : struct, Syntax =>
