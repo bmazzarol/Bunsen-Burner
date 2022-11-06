@@ -15,7 +15,7 @@ public static class Aaa
     /// <typeparam name="TData">data to generate</typeparam>
     /// <returns>arranged scenario</returns>
     [Pure]
-    public static AaaScenario.Arranged<Gen<TData>> ArrangeGenerator<TData>(
+    public static AaaScenario.Acted<Gen<TData>, Property<TData>> ArrangeGenerator<TData>(
         this string name,
         Gen<TData> generator
     ) => name.ArrangeGenerator<TData, Syntax.Aaa>(generator);
@@ -27,7 +27,7 @@ public static class Aaa
     /// <typeparam name="TData">data to generate</typeparam>
     /// <returns>arranged scenario</returns>
     [Pure]
-    public static AaaScenario.Arranged<Gen<TData>> ArrangeGenerator<TData>(
+    public static AaaScenario.Acted<Gen<TData>, Property<TData>> ArrangeGenerator<TData>(
         this Gen<TData> generator
     ) => generator.ArrangeGenerator<TData, Syntax.Aaa>();
 
@@ -40,8 +40,8 @@ public static class Aaa
     /// <typeparam name="TData">some data</typeparam>
     /// <returns>asserted scenario</returns>
     [Pure]
-    public static AaaScenario.Asserted<Gen<TData>, bool> AssertPropertyHolds<TData>(
-        this AaaScenario.Arranged<Gen<TData>> scenario,
+    public static AaaScenario.Asserted<Gen<TData>, Property<TData>> AssertPropertyHolds<TData>(
+        this AaaScenario.Acted<Gen<TData>, Property<TData>> scenario,
         Func<TData, bool> fn,
         PropertyConfig? config = default
     ) => scenario.AssertPropertyHolds<TData, Syntax.Aaa>(fn, config);
@@ -55,8 +55,8 @@ public static class Aaa
     /// <typeparam name="TData">some data</typeparam>
     /// <returns>asserted scenario</returns>
     [Pure]
-    public static AaaScenario.Asserted<Gen<TData>, bool> AssertPropertyHolds<TData>(
-        this AaaScenario.Arranged<Gen<TData>> scenario,
+    public static AaaScenario.Asserted<Gen<TData>, Property<TData>> AssertPropertyHolds<TData>(
+        this AaaScenario.Acted<Gen<TData>, Property<TData>> scenario,
         Action<TData> fn,
         PropertyConfig? config = default
     ) => scenario.AssertPropertyHolds<TData, Syntax.Aaa>(fn, config);

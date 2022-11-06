@@ -15,7 +15,7 @@ public static class Bdd
     /// <typeparam name="TData">data to generate</typeparam>
     /// <returns>given scenario</returns>
     [Pure]
-    public static BddScenario.Arranged<Gen<TData>> GivenGenerator<TData>(
+    public static BddScenario.Acted<Gen<TData>, Property<TData>> GivenGenerator<TData>(
         this string name,
         Gen<TData> generator
     ) => name.ArrangeGenerator<TData, Syntax.Bdd>(generator);
@@ -27,7 +27,7 @@ public static class Bdd
     /// <typeparam name="TData">data to generate</typeparam>
     /// <returns>given scenario</returns>
     [Pure]
-    public static BddScenario.Arranged<Gen<TData>> GivenGenerator<TData>(
+    public static BddScenario.Acted<Gen<TData>, Property<TData>> GivenGenerator<TData>(
         this Gen<TData> generator
     ) => generator.ArrangeGenerator<TData, Syntax.Bdd>();
 
@@ -40,8 +40,8 @@ public static class Bdd
     /// <typeparam name="TData">some data</typeparam>
     /// <returns>scenario that is run</returns>
     [Pure]
-    public static BddScenario.Asserted<Gen<TData>, bool> ThenPropertyHolds<TData>(
-        this BddScenario.Arranged<Gen<TData>> scenario,
+    public static BddScenario.Asserted<Gen<TData>, Property<TData>> ThenPropertyHolds<TData>(
+        this BddScenario.Acted<Gen<TData>, Property<TData>> scenario,
         Func<TData, bool> fn,
         PropertyConfig? config = default
     ) => scenario.AssertPropertyHolds(fn, config);
@@ -55,8 +55,8 @@ public static class Bdd
     /// <typeparam name="TData">some data</typeparam>
     /// <returns>scenario that is run</returns>
     [Pure]
-    public static BddScenario.Asserted<Gen<TData>, bool> ThenPropertyHolds<TData>(
-        this BddScenario.Arranged<Gen<TData>> scenario,
+    public static BddScenario.Asserted<Gen<TData>, Property<TData>> ThenPropertyHolds<TData>(
+        this BddScenario.Acted<Gen<TData>, Property<TData>> scenario,
         Action<TData> fn,
         PropertyConfig? config = default
     ) => scenario.AssertPropertyHolds(fn, config);

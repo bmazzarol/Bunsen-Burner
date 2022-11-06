@@ -1,3 +1,5 @@
+using Gen = Hedgehog.Linq.Gen;
+
 namespace BunsenBurner.Hedgehog.Tests;
 
 public static class AaaTests
@@ -35,4 +37,14 @@ public static class AaaTests
                 Assert.NotEmpty(s);
                 Assert.Equal(25, s.Length);
             });
+
+    [Fact(DisplayName = "Generators can be combined")]
+    public static async Task Case6() =>
+        await (
+            from name in Gen.Alpha.String(Range.FromValue(25))
+            from age in Gen.Int32(Range.LinearFromInt32(1, 20, 99))
+            select (name, age)
+        )
+            .ArrangeGenerator()
+            .AssertPropertyHolds(t => t.name != null && t.age > 0);
 }
