@@ -39,6 +39,4 @@ jobs:
       - name: Release Build
         run: dotnet pack --configuration Release -p:PackageVersion=${{ env.PACKAGE_VERSION }} ${{ matrix.project-name }}/${{ matrix.project-name }}.csproj
       - name: Push to Nuget
-        run: |
-          dotnet nuget push ${{ matrix.project-name }}/bin/Release/${{ matrix.project-name }}.${{ env.PACKAGE_VERSION }}.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
-          dotnet nuget push ${{ matrix.project-name }}/bin/Release/${{ matrix.project-name }}.${{ env.PACKAGE_VERSION }}.symbols.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push **\*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
