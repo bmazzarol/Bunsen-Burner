@@ -1,5 +1,7 @@
 ﻿# Bunsen Burner Logging
 
+![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Logging)
+
 This provides a set of logging abstractions that allow for assertions to be made
 against logging done by the SUT.
 
@@ -7,7 +9,8 @@ against logging done by the SUT.
 
 To use this library, simply include `BunsenBurner.Logging.dll` in your project
 or grab
-it from NuGet (Coming Soon), and add this to the top of each test `.cs` file
+it from [NuGet](https://www.nuget.org/packages/BunsenBurner.Logging/), and add
+this to the top of each test `.cs` file
 that needs it:
 
 ```C#

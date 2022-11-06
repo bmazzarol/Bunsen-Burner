@@ -15,4 +15,9 @@ public sealed class NoFailureException : Exception
     [ExcludeFromCodeCoverage]
     private NoFailureException(SerializationInfo info, StreamingContext context)
         : base(info, context) { }
+
+    internal NoFailureException(string message) : base(message) { }
+
+    internal NoFailureException(string message, Exception innerException)
+        : base(message, innerException) { }
 }

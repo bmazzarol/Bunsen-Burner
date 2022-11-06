@@ -1,5 +1,7 @@
 ﻿# Bunsen Burner Verify Xunit
 
+![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Verify.Xunit)
+
 This provides extension methods to
 integrate [Verify.Xunit](https://github.com/VerifyTests/Verify) into the
 assert/then
@@ -10,7 +12,8 @@ step.
 To use this library, simply include `BunsenBurner.Verify.Xunit.dll` in your
 project
 or grab
-it from NuGet (Coming Soon), and add this to the top of each test `.cs` file
+it from [NuGet](https://www.nuget.org/packages/BunsenBurner.Verify.Xunit/), and
+add this to the top of each test `.cs` file
 that needs it:
 
 ```C#
@@ -44,5 +47,6 @@ public static class AaaTests
 }
 ```
 
-For more information on the added assert/then functions check out the code and the
+For more information on the added assert/then functions check out the code and
+the
 tests.

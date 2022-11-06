@@ -16,6 +16,7 @@
         <IncludeSymbols>true</IncludeSymbols>
         <IsPackable>True</IsPackable>
         <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -27,6 +28,10 @@
         <OutputType>library</OutputType>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
+    
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="AsyncFixer" Version="1.6.0">
@@ -37,6 +42,10 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Roslynator.Analyzers" Version="4.1.2">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="SonarAnalyzer.CSharp" Version="8.47.0.55603">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -44,11 +53,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj"/>
+        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoFixture" Version="4.17.0"/>
+        <PackageReference Include="AutoFixture" Version="4.17.0" />
     </ItemGroup>
 
 </Project>
