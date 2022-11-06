@@ -1,6 +1,6 @@
 ﻿# Bunsen Burner Function App
 
-![Nuget](https://img.shields.io/nuget/v/BunsenBurner.FunctionApp)
+[![Nuget](https://img.shields.io/nuget/v/BunsenBurner.FunctionApp)](https://www.nuget.org/packages/BunsenBurner.FunctionApp/)
 
 ## Getting Started
 

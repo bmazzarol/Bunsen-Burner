@@ -1,6 +1,6 @@
 ﻿# Bunsen Burner Background
 
-![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Background)
+[![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Background)](https://www.nuget.org/packages/BunsenBurner.Background/)
 
 ## Getting Started
 

@@ -1,6 +1,6 @@
 ﻿# Bunsen Burner Core
 
-![Nuget](https://img.shields.io/nuget/v/BunsenBurner)
+[![Nuget](https://img.shields.io/nuget/v/BunsenBurner)](https://www.nuget.org/packages/BunsenBurner/)
 
 This provides the core dependency free test abstraction that Bunsen Burner is
 built on.

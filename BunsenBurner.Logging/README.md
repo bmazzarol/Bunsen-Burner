@@ -1,6 +1,6 @@
 ﻿# Bunsen Burner Logging
 
-![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Logging)
+[![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Logging)](https://www.nuget.org/packages/BunsenBurner.Logging/)
 
 This provides a set of logging abstractions that allow for assertions to be made
 against logging done by the SUT.

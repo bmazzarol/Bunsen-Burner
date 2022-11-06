@@ -1,6 +1,6 @@
 ﻿# Bunsen Burner Bogus
 
-![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Bogus)
+[![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Bogus)](https://www.nuget.org/packages/BunsenBurner.Bogus/)
 
 This provides extension methods to
 integrate [Bogus](https://github.com/bchavez/Bogus) into the arrange/given

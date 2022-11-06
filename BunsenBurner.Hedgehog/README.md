@@ -1,6 +1,6 @@
 ﻿# Bunsen Burner Hedgehog
 
-![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Hedgehog)
+[![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Hedgehog)](https://www.nuget.org/packages/BunsenBurner.Hedgehog/)
 
 This provides integration
 with [Hedgehog](https://github.com/hedgehogqa/fsharp-hedgehog) to write clean

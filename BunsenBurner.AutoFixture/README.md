@@ -1,6 +1,6 @@
 ﻿# Bunsen Burner Auto Fixture
 
-![Nuget](https://img.shields.io/nuget/v/BunsenBurner.AutoFixture)
+[![Nuget](https://img.shields.io/nuget/v/BunsenBurner.AutoFixture)](https://www.nuget.org/packages/BunsenBurner.AutoFixture/)
 
 This provides extension methods to
 integrate [AutoFixture](https://github.com/AutoFixture) into the arrange/given

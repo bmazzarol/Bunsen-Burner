@@ -1,6 +1,6 @@
 ﻿# Bunsen Burner Http
 
-![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Http)
+[![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Http)](https://www.nuget.org/packages/BunsenBurner.Http/)
 
 ## Getting Started
 

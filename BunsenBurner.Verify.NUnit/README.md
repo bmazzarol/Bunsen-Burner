@@ -1,6 +1,6 @@
 ﻿# Bunsen Burner Verify NUnit
 
-![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Verify.NUnit)
+[![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Verify.NUnit)](https://www.nuget.org/packages/BunsenBurner.Verify.NUnit/)
 
 This provides extension methods to
 integrate [Verify.NUnit](https://github.com/VerifyTests/Verify) into the
