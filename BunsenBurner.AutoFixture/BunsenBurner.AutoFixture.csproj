@@ -33,8 +33,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\"/>
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+        <None Include="README.md" Pack="true" PackagePath="\" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
     </ItemGroup>
 
     <ItemGroup>
@@ -42,7 +42,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Meziantou.Analyzer" Version="1.0.744">
+        <PackageReference Include="Meziantou.Analyzer" Version="1.0.745">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -57,11 +57,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj"/>
+        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoFixture" Version="4.17.0"/>
+        <PackageReference Include="AutoFixture" Version="4.17.0" />
     </ItemGroup>
 
 </Project>
