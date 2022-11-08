@@ -31,7 +31,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -39,7 +39,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Meziantou.Analyzer" Version="1.0.744">
+        <PackageReference Include="Meziantou.Analyzer" Version="1.0.745">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -54,11 +54,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Verify.NUnit" Version="18.3.0"/>
+        <PackageReference Include="Verify.NUnit" Version="18.4.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj"/>
+        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj" />
     </ItemGroup>
 
 </Project>

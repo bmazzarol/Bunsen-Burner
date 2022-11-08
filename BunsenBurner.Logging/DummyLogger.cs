@@ -41,7 +41,7 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>
     public bool IsEnabled(LogLevel logLevel) => true;
 
     /// <inheritdoc />
-    public IDisposable BeginScope<TState>(TState state) => new NoopScope();
+    public IDisposable BeginScope<TState>(TState state) where TState : notnull => new NoopScope();
 
     private sealed record NoopScope : IDisposable
     {

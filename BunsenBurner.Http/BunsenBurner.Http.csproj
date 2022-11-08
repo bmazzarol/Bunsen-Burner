@@ -31,7 +31,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -54,17 +54,17 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="JWT" Version="9.0.3"/>
-        <PackageReference Include="Flurl" Version="3.0.6"/>
-        <PackageReference Include="LanguageExt.Core" Version="4.2.9"/>
-        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.10"/>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10"/>
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.25.0"/>
+        <PackageReference Include="JWT" Version="9.0.3" />
+        <PackageReference Include="Flurl" Version="3.0.6" />
+        <PackageReference Include="LanguageExt.Core" Version="4.2.9" />
+        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.11" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.25.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\BunsenBurner.Logging\BunsenBurner.Logging.csproj"/>
-        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj"/>
+        <ProjectReference Include="..\BunsenBurner.Logging\BunsenBurner.Logging.csproj" />
+        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj" />
     </ItemGroup>
 
 </Project>
