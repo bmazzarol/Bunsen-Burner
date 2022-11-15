@@ -46,11 +46,9 @@ internal static class Shared
             scenario.ArrangeScenario,
             async data =>
             {
+                var store = server.Host.Services.GetService<LogMessageStore>();
                 var resp = await InternalCall(fn(data), server.CreateClient());
-                return new ResponseContext(
-                    resp,
-                    server.Services.GetService<LogMessageStore>() ?? LogMessageStore.New()
-                );
+                return new ResponseContext(resp, store ?? LogMessageStore.New());
             }
         );
 

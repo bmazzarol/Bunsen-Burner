@@ -74,7 +74,10 @@ public sealed class AaaTests : IClassFixture<MockServerFixture>
     public async Task Case6() =>
         await Request
             .DELETE("/hello-world")
-            .WithHeaders(KeyValuePair.Create("A", "1"), KeyValuePair.Create("B", "2"))
+            .WithHeaders(
+                new KeyValuePair<string, string>("A", "1"),
+                new KeyValuePair<string, string>("B", "2")
+            )
             .ArrangeRequest()
             .ActAndCall(SimpleResponse())
             .IsOk();

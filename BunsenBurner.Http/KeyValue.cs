@@ -22,7 +22,7 @@ public static class KeyValuePairExt
             string.Join(
                 ",",
                 (kv.Value ?? String.Empty)
-                    .Split(",")
+                    .Split(',')
                     .Append(value)
                     .Select(x => x.Trim())
                     .Distinct(StringComparer.Ordinal)

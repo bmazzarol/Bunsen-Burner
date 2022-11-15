@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Http.Features;
 
 #pragma warning disable CS8610
@@ -21,6 +22,11 @@ internal sealed class DummyHttpContext : HttpContext
     public override HttpResponse? Response => null;
     public override ConnectionInfo? Connection => null;
     public override WebSocketManager? WebSockets => null;
+
+    [Obsolete(
+        "This is obsolete and will be removed in a future version. The recommended alternative is to use Microsoft.AspNetCore.Authentication.AuthenticationHttpContextExtensions. See https://go.microsoft.com/fwlink/?linkid=845470."
+    )]
+    public override AuthenticationManager? Authentication => null;
 
     public override ClaimsPrincipal? User { get; set; }
     public override IDictionary<object, object> Items { get; set; } =
