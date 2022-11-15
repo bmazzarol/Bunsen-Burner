@@ -18,7 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: [ '6.0.x' ]
         project-name:
           - BunsenBurner
           - BunsenBurner.AutoFixture
@@ -33,9 +32,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: ${{ matrix.dotnet-version }}
+          dotnet-version: |
+            6.0.x
+            7.0.x
       - name: Release Build
         run: dotnet pack --configuration Release -p:ContinuousIntegrationBuild=true -p:PackageVersion=${{ env.PACKAGE_VERSION }} ${{ matrix.project-name }}/${{ matrix.project-name }}.csproj
       - name: Push to Nuget
