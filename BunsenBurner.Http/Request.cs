@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using System.Globalization;
-using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using Flurl;
@@ -17,6 +16,7 @@ using Headers = IImmutableDictionary<string, string>;
 /// </summary>
 public abstract record Request
 {
+    private const string JsonContentType = "application/json";
     private const string HttpsLocalhost = "https://localhost";
     private static readonly Headers EmptyHeaders = ImmutableDictionary<string, string>.Empty;
 
@@ -114,11 +114,7 @@ public abstract record Request
     /// <returns>post request</returns>
     [Pure]
     public static PostRequest POST<T>(Url url, T data, Headers? headers = default) =>
-        POST(
-            url,
-            new Body(MediaTypeNames.Application.Json, JsonSerializer.Serialize(data)),
-            headers
-        );
+        POST(url, new Body(JsonContentType, JsonSerializer.Serialize(data)), headers);
 
     /// <summary>
     /// Put request
@@ -152,11 +148,7 @@ public abstract record Request
     /// <returns>put request</returns>
     [Pure]
     public static PutRequest PUT<T>(Url url, T data, Headers? headers = default) =>
-        PUT(
-            url,
-            new Body(MediaTypeNames.Application.Json, JsonSerializer.Serialize(data)),
-            headers
-        );
+        PUT(url, new Body(JsonContentType, JsonSerializer.Serialize(data)), headers);
 
     /// <summary>
     /// Patch request
@@ -190,11 +182,7 @@ public abstract record Request
     /// <returns>patch request</returns>
     [Pure]
     public static PatchRequest PATCH<T>(Url url, T data, Headers? headers = default) =>
-        PATCH(
-            url,
-            new Body(MediaTypeNames.Application.Json, JsonSerializer.Serialize(data)),
-            headers
-        );
+        PATCH(url, new Body(JsonContentType, JsonSerializer.Serialize(data)), headers);
 
     /// <summary>
     /// Delete request
@@ -316,8 +304,8 @@ public abstract record Request
                 : default
         };
 
-        foreach (var (key, value) in Headers)
-            requestMessage.Headers.Add(key, value);
+        foreach (var kv in Headers)
+            requestMessage.Headers.Add(kv.Key, kv.Value);
 
         return requestMessage;
     }

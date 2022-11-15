@@ -76,7 +76,12 @@ public static class TestServerBuilder
                 optional: true,
                 reloadOnChange: false
             )
-            .AddInMemoryCollection(appSettingsToOverride);
+            .AddInMemoryCollection(
+                (
+                    appSettingsToOverride?.AsEnumerable()
+                    ?? Array.Empty<KeyValuePair<string, string>>()
+                ).OfType<KeyValuePair<string, string?>>()
+            );
 
     /// <summary>
     /// Creates a new test service instance
@@ -130,10 +135,12 @@ public static class TestServerBuilder
                     );
                 options.ConfigureHost?.Invoke(builder);
                 var server = new TestServer(builder);
+#if NETCOREAPP3_1_OR_GREATER
                 // might be required, no harm enabling it for testing
                 server.AllowSynchronousIO = true;
                 // required for all thread local access, such flurl test client
                 server.PreserveExecutionContext = true;
+#endif
                 return server;
             }
         );

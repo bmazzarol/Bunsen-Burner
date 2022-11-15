@@ -67,9 +67,9 @@ public sealed record Token
                 .ToLower(CultureInfo.InvariantCulture)
                 .StartsWith("bearer ", StringComparison.Ordinal)
         )
-            rawToken = rawToken.Split(" ").LastOrDefault() ?? string.Empty;
+            rawToken = rawToken.Split(' ').LastOrDefault() ?? string.Empty;
 
-        var parts = rawToken.Split(".");
+        var parts = rawToken.Split('.');
 
         if (parts.Length != 3)
             return default;
@@ -86,11 +86,23 @@ public sealed record Token
         {
             Headers =
                 headers
-                    ?.Select(v => KeyValuePair.Create(v.Key, v.Value.ToString() ?? string.Empty))
+                    ?.Select(
+                        v =>
+                            new KeyValuePair<string, string>(
+                                v.Key,
+                                v.Value.ToString() ?? string.Empty
+                            )
+                    )
                     .ToImmutableDictionary() ?? Empty,
             Claims =
                 claims
-                    ?.Select(v => KeyValuePair.Create(v.Key, v.Value.ToString() ?? string.Empty))
+                    ?.Select(
+                        v =>
+                            new KeyValuePair<string, string>(
+                                v.Key,
+                                v.Value.ToString() ?? string.Empty
+                            )
+                    )
                     .ToImmutableDictionary() ?? Empty
         };
     }

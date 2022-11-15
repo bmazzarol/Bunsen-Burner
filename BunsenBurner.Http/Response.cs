@@ -37,7 +37,16 @@ public sealed record Response(
             content,
             httpResp.Content.Headers.ContentType?.MediaType,
             httpResp.Headers
-                .Select(x => new KeyValuePair<string, string>(x.Key, string.Join(',', x.Value)))
+                .Select(
+                    x =>
+                        new KeyValuePair<string, string>(
+                            x.Key,
+                            x.Value.Aggregate(
+                                string.Empty,
+                                (a, b) => a != string.Empty ? $"{a},{b}" : b
+                            )
+                        )
+                )
                 .ToImmutableDictionary()
         );
     }
