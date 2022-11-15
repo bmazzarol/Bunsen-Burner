@@ -20,6 +20,7 @@
         <IsPackable>True</IsPackable>
         <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>fire-icon.png</PackageIcon>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -34,8 +35,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="..\fire-icon.png" Pack="true" PackagePath="\"/>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -58,34 +60,34 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="JWT" Version="9.0.3" />
-        <PackageReference Include="Flurl" Version="3.0.6" />
-        <PackageReference Include="LanguageExt.Core" Version="4.2.9" />
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.25.0" />
+        <PackageReference Include="JWT" Version="9.0.3"/>
+        <PackageReference Include="Flurl" Version="3.0.6"/>
+        <PackageReference Include="LanguageExt.Core" Version="4.2.9"/>
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.25.0"/>
     </ItemGroup>
 
     <!-- target framework versions -->
     <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.2.0"/>
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0"/>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0"/>
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="3.1.31" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.31" />
+        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="3.1.31"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.31"/>
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.11" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" />
+        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.11"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11"/>
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\BunsenBurner.Logging\BunsenBurner.Logging.csproj" />
-        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj" />
+        <ProjectReference Include="..\BunsenBurner.Logging\BunsenBurner.Logging.csproj"/>
+        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj"/>
     </ItemGroup>
 
 </Project>
