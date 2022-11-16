@@ -1,12 +1,12 @@
 ﻿namespace BunsenBurner.Tests;
 
-public static class LinqTests
+public static class ArrangeLinqTests
 {
     [Fact(DisplayName = "Arranged Aaa scenarios can be selected")]
     public static async Task Case1() =>
         await Aaa.Arrange(1).Select(x => x.ToString()).Act(_ => _).Assert(r => r == "1");
 
-    [Fact(DisplayName = "Arranged Aaa scenarios can be selected")]
+    [Fact(DisplayName = "Arranged Bdd scenarios can be selected")]
     public static async Task Case2() =>
         await Bdd.Given(1).Select(x => x.ToString()).When(_ => _).Then(r => r == "1");
 
