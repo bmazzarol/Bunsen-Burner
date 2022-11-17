@@ -62,7 +62,7 @@
     <ItemGroup>
         <PackageReference Include="JWT" Version="9.0.3"/>
         <PackageReference Include="Flurl" Version="3.0.6"/>
-        <PackageReference Include="LanguageExt.Core" Version="4.2.9"/>
+        <PackageReference Include="LanguageExt.Core" Version="4.4.0"/>
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.25.0"/>
     </ItemGroup>
 
