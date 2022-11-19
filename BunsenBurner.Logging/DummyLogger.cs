@@ -8,11 +8,12 @@ namespace BunsenBurner.Logging;
 /// Dummy logger that can be used to create assertions against
 /// </summary>
 /// <typeparam name="T">Some T</typeparam>
-public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>
+public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>, IDisposable
 {
     private readonly string _ownerClassName;
     private readonly LogMessageStore _store;
     private readonly Sink? _sink;
+    private IEnumerable<Scope> _scopes = Enumerable.Empty<Scope>();
 
     internal DummyLogger(LogMessageStore store, string ownerClassName, Sink? sink)
     {
@@ -35,7 +36,8 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>
             logLevel,
             eventId,
             exception,
-            formatter(state, exception)
+            formatter(state, exception),
+            _scopes.Select(x => x.State)
         );
         _store.Log(message);
         _sink?.Write(message);
@@ -45,13 +47,23 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>
     public bool IsEnabled(LogLevel logLevel) => true;
 
     /// <inheritdoc />
-    public IDisposable BeginScope<TState>(TState state) where TState : notnull => new NoopScope();
-
-    private sealed record NoopScope : IDisposable
+    public IDisposable BeginScope<TState>(TState state) where TState : notnull
     {
+        lock (_scopes)
+        {
+            var scope = new Scope(state, this);
+            _scopes = _scopes.Append(scope);
+            return scope;
+        }
+    }
+
+    private sealed record Scope(object State, DummyLogger<T> Parent) : IDisposable
+    {
+        [ExcludeFromCodeCoverage]
         public void Dispose()
         {
-            // Method intentionally left empty.
+            lock (Parent._scopes)
+                Parent._scopes = Parent._scopes.Where(x => x != this);
         }
     }
 
@@ -60,6 +72,16 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>
 
     [ExcludeFromCodeCoverage]
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        foreach (var scope in _scopes)
+        {
+            scope.Dispose();
+        }
+        _scopes = Enumerable.Empty<Scope>();
+    }
 }
 
 /// <summary>

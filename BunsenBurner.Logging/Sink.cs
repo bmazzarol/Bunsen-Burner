@@ -1,11 +1,18 @@
-﻿namespace BunsenBurner.Logging;
+﻿using static System.DateTimeOffset;
+
+namespace BunsenBurner.Logging;
+
+using LogFormatter = Func<LogMessage, string>;
 
 /// <summary>
 /// Provides a simple sink for rendered log message strings
 /// </summary>
 public readonly struct Sink
 {
-    private readonly Func<LogMessage, string>? _formatter;
+    private static readonly LogFormatter DefaultFormatter = message =>
+        $"{message.Level} ({Now:s}) [{message.EventId}]: {message.Message}";
+
+    private readonly LogFormatter? _formatter;
     private readonly Action<string> _logSink;
 
     private Sink(Action<string> logSink, Func<LogMessage, string>? formatter)
@@ -28,5 +35,5 @@ public readonly struct Sink
     /// </summary>
     /// <param name="message">message</param>
     public void Write(LogMessage message) =>
-        _logSink(_formatter?.Invoke(message) ?? message.Message);
+        _logSink((_formatter ?? DefaultFormatter).Invoke(message));
 }

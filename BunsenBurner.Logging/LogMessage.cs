@@ -32,12 +32,18 @@ public sealed record LogMessage
     /// </summary>
     public string Message { get; }
 
+    /// <summary>
+    /// 0 or more scopes
+    /// </summary>
+    public IEnumerable<object> Scopes { get; }
+
     private LogMessage(
         string classType,
         LogLevel level,
         EventId eventId,
         Exception? exception,
-        string message
+        string message,
+        IEnumerable<object> scopes
     )
     {
         ClassType = classType;
@@ -45,6 +51,7 @@ public sealed record LogMessage
         EventId = eventId;
         Exception = exception;
         Message = message;
+        Scopes = scopes;
     }
 
     internal static LogMessage New(
@@ -52,6 +59,7 @@ public sealed record LogMessage
         LogLevel level,
         EventId eventId,
         Exception? exception,
-        string message
-    ) => new(classType, level, eventId, exception, message);
+        string message,
+        IEnumerable<object> scopes
+    ) => new(classType, level, eventId, exception, message, scopes);
 }
