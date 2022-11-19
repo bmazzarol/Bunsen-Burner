@@ -36,7 +36,7 @@ public static class TheoryTests
             .Assert(r => r.Count() == 2);
 
     public static TheoryData<TestScenario> TestCases = TheoryData(
-        "Some test".Arrange(1).Act(x => x.ToString()).Assert(r => r == "1"),
+        "Some test2".Arrange(1).Act(x => x.ToString()).Assert(r => r == "1"),
         "Some other test".Arrange(2).Act(x => x.ToString()).Assert(r => r == "2")
     );
 
