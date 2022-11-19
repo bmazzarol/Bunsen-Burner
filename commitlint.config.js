@@ -16,7 +16,8 @@ module.exports = {
                 "logging",
                 "verify-nunit",
                 "verify-xunit",
-                "xunit"
+                "xunit",
+                "nunit"
             ]
         ]
     }

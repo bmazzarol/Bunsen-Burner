@@ -13,46 +13,17 @@
         <PackageReference Include="NUnit" Version="3.13.3" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.3.0" />
         <PackageReference Include="NUnit.Analyzers" Version="3.5.0" />
-        <PackageReference Include="coverlet.collector" Version="3.2.0" />
+        <PackageReference Include="coverlet.collector" Version="3.2.0">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BunsenBurner.Verify.NUnit\BunsenBurner.Verify.NUnit.csproj" />
+        <ProjectReference Include="..\BunsenBurner.Verify.NUnit\BunsenBurner.Verify.NUnit.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="__snapshots__\AaaTests.Case1.verified.txt">
-        <ParentFile>AaaTests</ParentFile>
-        <DependentUpon>AaaTests.cs</DependentUpon>
-      </None>
-      <None Update="__snapshots__\AaaTests.Case2_Some description.verified.txt">
-        <ParentFile>AaaTests</ParentFile>
-        <DependentUpon>AaaTests.cs</DependentUpon>
-      </None>
-      <None Update="__snapshots__\AaaTests.Case3.verified.txt">
-        <ParentFile>AaaTests</ParentFile>
-        <DependentUpon>AaaTests.cs</DependentUpon>
-      </None>
-      <None Update="__snapshots__\AaaTests.Case4_Some description.verified.txt">
-        <ParentFile>AaaTests</ParentFile>
-        <DependentUpon>AaaTests.cs</DependentUpon>
-      </None>
-      <None Update="__snapshots__\BddTests.Case2_Some description.verified.txt">
-        <ParentFile>BddTests</ParentFile>
-        <DependentUpon>BddTests.cs</DependentUpon>
-      </None>
-      <None Update="__snapshots__\BddTests.Case4_Some description.verified.txt">
-        <ParentFile>BddTests</ParentFile>
-        <DependentUpon>BddTests.cs</DependentUpon>
-      </None>
-      <None Update="__snapshots__\BddTests.Case3.verified.txt">
-        <ParentFile>BddTests</ParentFile>
-        <DependentUpon>BddTests.cs</DependentUpon>
-      </None>
-      <None Update="__snapshots__\BddTests.Case1.verified.txt">
-        <ParentFile>BddTests</ParentFile>
-        <DependentUpon>BddTests.cs</DependentUpon>
-      </None>
+        <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
     </ItemGroup>
-
 </Project>
