@@ -36,6 +36,13 @@ internal sealed record DummyLoggerProvider : ILoggerProvider
 
     public void Dispose()
     {
-        // Method intentionally left empty.
+        foreach (
+            var logger in _loggers.Where(x => x.Value.IsValueCreated).Select(x => x.Value.Value)
+        )
+        {
+            logger.Dispose();
+        }
+
+        _loggers.Clear();
     }
 }
