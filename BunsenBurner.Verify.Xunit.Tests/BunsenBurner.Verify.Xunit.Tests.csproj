@@ -4,7 +4,6 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
@@ -25,4 +24,7 @@
       <ProjectReference Include="..\BunsenBurner.Verify.Xunit\BunsenBurner.Verify.Xunit.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute"/>
+    </ItemGroup>
 </Project>

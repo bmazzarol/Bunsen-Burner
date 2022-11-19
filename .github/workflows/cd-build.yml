@@ -30,6 +30,7 @@ jobs:
           - BunsenBurner.Verify.Xunit
           - BunsenBurner.Verify.NUnit
           - BunsenBurner.Xunit
+          - BunsenBurner.NUnit
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET
