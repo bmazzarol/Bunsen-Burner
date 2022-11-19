@@ -1,4 +1,4 @@
-﻿# Bunsen Burner Auto Fixture
+﻿# <img height="50" src="https://raw.githubusercontent.com/bmazzarol/Bunsen-Burner/main/fire-icon.png" width="50"/> Bunsen Burner Auto Fixture
 
 [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.AutoFixture)](https://www.nuget.org/packages/BunsenBurner.AutoFixture/)
 
