@@ -23,6 +23,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BunsenBurner.Logging\BunsenBurner.Logging.csproj" />
+      <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj" />
     </ItemGroup>
 
 </Project>
