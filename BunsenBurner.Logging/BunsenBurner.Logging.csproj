@@ -67,4 +67,10 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>BunsenBurner.Xunit</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
 </Project>

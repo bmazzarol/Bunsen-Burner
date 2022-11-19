@@ -12,11 +12,13 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>
 {
     private readonly string _ownerClassName;
     private readonly LogMessageStore _store;
+    private readonly Sink? _sink;
 
-    internal DummyLogger(LogMessageStore store, string ownerClassName)
+    internal DummyLogger(LogMessageStore store, string ownerClassName, Sink? sink)
     {
         _store = store;
         _ownerClassName = ownerClassName;
+        _sink = sink;
     }
 
     /// <inheritdoc />
@@ -26,16 +28,18 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>
         TState state,
         Exception? exception,
         Func<TState, Exception?, string> formatter
-    ) =>
-        _store.Log(
-            LogMessage.New(
-                _ownerClassName,
-                logLevel,
-                eventId,
-                exception,
-                formatter(state, exception)
-            )
+    )
+    {
+        var message = LogMessage.New(
+            _ownerClassName,
+            logLevel,
+            eventId,
+            exception,
+            formatter(state, exception)
         );
+        _store.Log(message);
+        _sink?.Write(message);
+    }
 
     /// <inheritdoc />
     public bool IsEnabled(LogLevel logLevel) => true;
@@ -67,21 +71,24 @@ public static class DummyLogger
     /// Creates a new typed dummy logger
     /// </summary>
     /// <param name="store">log message store</param>
+    /// <param name="sink">optional message sink to log through to</param>
     /// <typeparam name="T">some parent T</typeparam>
     /// <returns>dummy logger T</returns>
     [Pure]
-    public static DummyLogger<T> New<T>(LogMessageStore? store = default) =>
-        new(store ?? LogMessageStore.New(), typeof(T).FullName ?? string.Empty);
+    public static DummyLogger<T> New<T>(LogMessageStore? store = default, Sink? sink = default) =>
+        new(store ?? LogMessageStore.New(), typeof(T).FullName ?? string.Empty, sink);
 
     /// <summary>
     /// Creates a new un-typed dummy logger
     /// </summary>
     /// <param name="ownerClassName">some parent class name</param>
     /// <param name="store">log message store</param>
+    /// <param name="sink">optional message sink to log through to</param>
     /// <returns>dummy logger</returns>
     [Pure]
     public static DummyLogger<object> New(
         string ownerClassName,
-        LogMessageStore? store = default
-    ) => new(store ?? LogMessageStore.New(), ownerClassName);
+        LogMessageStore? store = default,
+        Sink? sink = default
+    ) => new(store ?? LogMessageStore.New(), ownerClassName, sink);
 }
