@@ -1,4 +1,4 @@
-# Bunsen Burner xUnit.net
+# <img height="50" src="https://raw.githubusercontent.com/bmazzarol/Bunsen-Burner/main/fire-icon.png" width="50"/> Bunsen Burner xUnit.net
 
 [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Xunit)](https://www.nuget.org/packages/BunsenBurner.Xunit/)
 

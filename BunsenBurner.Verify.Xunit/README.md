@@ -1,4 +1,4 @@
-﻿# Bunsen Burner Verify Xunit
+﻿# <img height="50" src="https://raw.githubusercontent.com/bmazzarol/Bunsen-Burner/main/fire-icon.png" width="50"/> Bunsen Burner Verify Xunit
 
 [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Verify.Xunit)](https://www.nuget.org/packages/BunsenBurner.Verify.Xunit/)
 

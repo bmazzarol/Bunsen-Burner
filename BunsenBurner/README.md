@@ -1,4 +1,4 @@
-﻿# Bunsen Burner Core
+﻿# <img height="50" src="https://raw.githubusercontent.com/bmazzarol/Bunsen-Burner/main/fire-icon.png" width="50"/> Bunsen Burner Core
 
 [![Nuget](https://img.shields.io/nuget/v/BunsenBurner)](https://www.nuget.org/packages/BunsenBurner/)
 
