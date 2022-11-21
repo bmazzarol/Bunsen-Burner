@@ -1,18 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <Authors>Ben Mazzarol</Authors>
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageId>BunsenBurner</PackageId>
-        <Title>Bunsen Burner Core</Title>
-        <Description>This provides the core dependency free test abstraction that Bunsen Burner is built on</Description>
-        <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests</PackageTags>
+        <PackageId>BunsenBurner.BenchmarkDotNet</PackageId>
+        <Title>Bunsen Burner BenchmarkDotNet</Title>
+        <Description>Integration with [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet) to write performance tests</Description>
+        <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests, Performance Tests</PackageTags>
         <PackageProjectUrl>https://github.com/bmazzarol/Bunsen-Burner</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
-        <ProjectGuid>7785ca26-4a1d-42cb-acb1-d8de50fa9666</ProjectGuid>
+        <ProjectGuid>8d91239f-7947-427e-81eb-4fa03b5fba51</ProjectGuid>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -36,6 +36,7 @@
     <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="\" />
         <None Include="..\fire-icon.png" Pack="true" PackagePath="\" />
+        <PackageReference Include="BenchmarkDotNet" Version="0.13.2" />
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
     </ItemGroup>
 
@@ -58,9 +59,14 @@
         </PackageReference>
     </ItemGroup>
 
-    <Target Name="husky" BeforeTargets="Restore;CollectPackageReferences" Condition="'$(HUSKY)' != 0">
-        <Exec Command="dotnet tool restore" WorkingDirectory="../" />
-        <Exec Command="dotnet husky install" WorkingDirectory="../" />
-    </Target>
+    <ItemGroup>
+        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>BunsenBurner.BenchmarkDotNet.Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
 
 </Project>

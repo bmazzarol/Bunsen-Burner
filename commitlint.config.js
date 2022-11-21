@@ -17,7 +17,8 @@ module.exports = {
                 "verify-nunit",
                 "verify-xunit",
                 "xunit",
-                "nunit"
+                "nunit",
+                "benchmarkdotnet"
             ]
         ]
     }
