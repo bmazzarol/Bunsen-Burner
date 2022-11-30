@@ -23,6 +23,11 @@ using BunsenBurner.Xunit;
 
 [xUnit.net](https://github.com/xunit/xunit) is a testing framework for Dotnet.
 
+This also pulls in
+the [Meziantou.Xunit.ParallelTestFramework](https://github.com/meziantou/Meziantou.Xunit.ParallelTestFramework)
+which will run all tests in parallel by default, which works better with the
+BunsenBurner design.
+
 ## How to use
 
 To start using it import the extension methods and start building tests.

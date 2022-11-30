@@ -23,6 +23,15 @@ using BunsenBurner.NUnit;
 
 [NUnit](https://github.com/nunit/nunit) is a testing framework for Dotnet.
 
+It is recommended full parallelization be used, this can be done at the
+assembly level.
+
+```c#
+using NUnit.Framework;
+
+[assembly: Parallelizable(ParallelScope.All)]
+```
+
 ## How to use
 
 To start using it import the extension methods and start building tests.
@@ -41,7 +50,7 @@ public static TheoryData<TestScenario> TestCases = TheoryData(
 
 // run them
 [Test(Description = "Example running scenarios from theory data")]
-[MemberData(nameof(TestCases))]
+[TestCaseSource(nameof(TestCases))]
 public static async Task Case4(TestScenario scenario) => await scenario;
 ```
 
