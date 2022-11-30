@@ -1,9 +1,10 @@
+#pragma warning disable CS8764
+
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using BunsenBurner.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
-#pragma warning disable CS8764
 
 namespace BunsenBurner.FunctionApp.Models;
 

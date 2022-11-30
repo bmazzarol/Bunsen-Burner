@@ -1,12 +1,10 @@
+#pragma warning disable CS8610, CS8609, CS8764
+
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Http.Features;
-
-#pragma warning disable CS8610
-#pragma warning disable CS8609
-#pragma warning disable CS8764
 
 namespace BunsenBurner.FunctionApp.Models;
 

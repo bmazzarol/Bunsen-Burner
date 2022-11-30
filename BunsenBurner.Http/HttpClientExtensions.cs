@@ -1,6 +1,4 @@
-﻿#pragma warning disable S4830
-#pragma warning disable CA5359
-#pragma warning disable MA0039
+﻿#pragma warning disable S4830, CA5359, MA0039
 
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
