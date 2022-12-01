@@ -1,4 +1,8 @@
-﻿# ![](https://raw.githubusercontent.com/bmazzarol/Bunsen-Burner/main/fire-icon-small.png) Bunsen Burner BenchmarkDotNet
+﻿<!-- markdownlint-disable MD013 -->
+
+# ![Bunsen Burner](https://raw.githubusercontent.com/bmazzarol/Bunsen-Burner/main/fire-icon-small.png) Bunsen Burner BenchmarkDotNet
+
+<!-- markdownlint-enable MD013 -->
 
 [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.BenchmarkDotNet)](https://www.nuget.org/packages/BunsenBurner.BenchmarkDotNet/)
 

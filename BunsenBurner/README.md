@@ -1,4 +1,8 @@
-﻿# ![](https://raw.githubusercontent.com/bmazzarol/Bunsen-Burner/main/fire-icon-small.png) Bunsen Burner Core
+﻿<!-- markdownlint-disable MD013 -->
+
+# ![Bunsen Burner](https://raw.githubusercontent.com/bmazzarol/Bunsen-Burner/main/fire-icon-small.png) Bunsen Burner Core
+
+<!-- markdownlint-enable MD013 -->
 
 [![Nuget](https://img.shields.io/nuget/v/BunsenBurner)](https://www.nuget.org/packages/BunsenBurner/)
 
@@ -36,7 +40,8 @@ Scenario<
 >.(
  // Scenario that has been arranged and is ready to act on, returning a TData   
     Arranged<TData> | 
- // Scenario that has been acted on, taking a TData returning a TResult and is ready to assert against 
+ // Scenario that has been acted on, taking a TData returning a TResult and is 
+ // ready to assert against 
     Acted<TData, TResult> | 
  // Scenario that is asserted against a TResult. This can be run.
     Asserted<TData, TResult>)
@@ -91,24 +96,24 @@ if all your components are synchronous.
 
 * Standardised - All tests are built on the same abstraction, it can model any
   test,
-    * Must be composed in the correct sequence
-        * Arrange/Given
-        * Act/When
-        * Assert/Then
-    * And steps can be used between to allow for transformations
+  * Must be composed in the correct sequence
+    * Arrange/Given
+    * Act/When
+    * Assert/Then
+  * And steps can be used between to allow for transformations
 * Data driven - Scenarios are just data, can be passed to and from functions,
   can be put
   in a list, assigned to variables
 * Composable - Both within a single test and over multiple tests
-    * Write custom extension methods to extend the syntax in any direction, with
-      the comfort of knowing it will make sure the developer uses it correctly.
-      Just look at the other libraries provided for inspiration
-    * Functional first, its just data with functions that operate on that data
+  * Write custom extension methods to extend the syntax in any direction, with
+    the comfort of knowing it will make sure the developer uses it correctly.
+    Just look at the other libraries provided for inspiration
+  * Functional first, its just data with functions that operate on that data
 * Readable - Enforced structures with no easy way to shoot yourself in the foot,
   should result in code that is easier to maintain and read
 * Simple - 1 data type, and functions that operate on it
 * Flexible
-    * No dependencies
-    * No assumptions around test frameworks
-    * No assumptions around SUT
-    * No requirements on the user code
+  * No dependencies
+  * No assumptions around test frameworks
+  * No assumptions around SUT
+  * No requirements on the user code

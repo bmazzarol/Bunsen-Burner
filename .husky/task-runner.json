@@ -9,6 +9,16 @@
             ]
         },
         {
+            "name": "Lint Markdown",
+            "command": "npx",
+            "args": [
+                "markdownlint-cli2",
+                "BunsenBurner*/**/*.md",
+                "Docs/**/*.md",
+                "*.md"
+            ]
+        },
+        {
             "name": "Test C# Code",
             "command": "dotnet",
             "args": [

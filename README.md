@@ -1,4 +1,8 @@
-﻿# <img height="50" src="fire-icon.png" width="50"/> Bunsen Burner
+﻿<!-- markdownlint-disable MD033 -->
+
+# <img height="50" src="fire-icon.png" width="50"/> Bunsen Burner
+
+<!-- markdownlint-enabled MD033 -->
 
 [![Coverage Status](https://coveralls.io/repos/github/bmazzarol/Bunsen-Burner/badge.svg?branch=main)](https://coveralls.io/github/bmazzarol/Bunsen-Burner?branch=main)
 [![CodeQL](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/codeql.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/codeql.yml)
@@ -65,6 +69,7 @@ using static BunsenBurner.Bdd; // For Given when then
 ```
 
 Click through to the links bellow for further details.
+<!-- markdownlint-disable MD013 -->
 
 | Library                                                     | Description                                                                                                          | Nu-Get                                                                                                                                |
 |-------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
@@ -81,6 +86,8 @@ Click through to the links bellow for further details.
 | [Http](./BunsenBurner.Http/README.md)                       | Extension methods for testing Http servers                                                                           | [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Http)](https://www.nuget.org/packages/BunsenBurner.Http/)                       |
 | [FunctionApp](./BunsenBurner.FunctionApp/README.md)         | Extension methods for testing Function apps                                                                          | [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.FunctionApp)](https://www.nuget.org/packages/BunsenBurner.FunctionApp/)         |
 | [Background](./BunsenBurner.Background/README.md)           | Extension methods for testing Background services                                                                    | [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Background)](https://www.nuget.org/packages/BunsenBurner.Background/)           |
+
+<!-- markdownlint-enable MD013 -->
 
 ## Why?
 
@@ -113,10 +120,10 @@ This library aims to formalize this structure in the following ways,
 * Enforces that all tests must be arranged before acting and acted upon before
   assertions can occur
 * Converts tests to data, which can be composed and built up then executed
-    * Works well wth theories
+  * Works well wth theories
 * Because tests are just data, functions can be used to extend them and compose
   them together
-    * Works will with extension methods and other test libraries, use cases
+  * Works will with extension methods and other test libraries, use cases
 
 ```c#
 // can use implicit usings
@@ -129,7 +136,8 @@ public static class Tests
 {
     [Fact(DisplayName = "Example AAA test!!!")]
     public static async Task SomeTest() =>
-              // arrange starts a new test, whatever type it returns can be used when acting 
+              // arrange starts a new test, 
+              // whatever type it returns can be used when acting 
         await Arrange(() => new SUT(...))
               // act on the arranged data, async is supported in all test steps
              .Act(async sut => await sut.SomeMethod(...))

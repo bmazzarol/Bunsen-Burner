@@ -1,4 +1,8 @@
-﻿# ![](https://raw.githubusercontent.com/bmazzarol/Bunsen-Burner/main/fire-icon-small.png) Bunsen Burner Logging
+﻿<!-- markdownlint-disable MD013 -->
+
+# ![Bunsen Burner](https://raw.githubusercontent.com/bmazzarol/Bunsen-Burner/main/fire-icon-small.png) Bunsen Burner Logging
+
+<!-- markdownlint-enabled MD013 -->
 
 [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Logging)](https://www.nuget.org/packages/BunsenBurner.Logging/)
 

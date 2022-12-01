@@ -8,4 +8,4 @@
 
 ## Reporting a Vulnerability
 
-Please raise an issue if you have identified a potential vulnerability 
+Please raise an issue if you have identified a potential vulnerability.
