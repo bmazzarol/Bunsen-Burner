@@ -1,5 +1,4 @@
-﻿#pragma warning disable S101
-#pragma warning disable CA1715
+﻿#pragma warning disable S101, CA1715
 
 namespace BunsenBurner;
 
@@ -84,8 +83,24 @@ public abstract record Scenario<TSyntax> where TSyntax : struct, Syntax
         internal async Task Run()
         {
             var data = await ArrangeScenario();
-            var result = await ActOnScenario(data);
-            await AssertAgainstResult(data, result);
+            try
+            {
+                var result = await ActOnScenario(data);
+                try
+                {
+                    await AssertAgainstResult(data, result);
+                }
+                finally
+                {
+                    if (result is IDisposable d)
+                        d.Dispose();
+                }
+            }
+            finally
+            {
+                if (data is IDisposable d)
+                    d.Dispose();
+            }
         }
     }
 }
