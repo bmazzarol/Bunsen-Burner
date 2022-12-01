@@ -6,9 +6,9 @@ on:
       - main
     paths:
       - "Docs/**"
+      - ".github/workflows/sync-wiki.yml"
   repository_dispatch:
     types: [ docs ]
-  gollum:
 
 env:
   GIT_AUTHOR_NAME: Ben Mazzarol
@@ -17,7 +17,6 @@ env:
 jobs:
   job-sync-docs-to-wiki:
     runs-on: ubuntu-latest
-    if: github.event_name != 'gollum'
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
@@ -26,25 +25,6 @@ jobs:
         with:
           source: Docs
           destination: wiki
-          token: ${{ secrets.wiki_sync_token }}
-          gitAuthorName: ${{ env.GIT_AUTHOR_NAME }}
-          gitAuthorEmail: ${{ env.GIT_AUTHOR_EMAIL }}
-          branch: main
-  
-  job-sync-wiki-to-docs:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'gollum'
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.github_token }}
-          ref: main
-      - name: Sync Wiki to Docs
-        uses: newrelic/wiki-sync-action@main
-        with:
-          source: wiki
-          destination: Docs
           token: ${{ secrets.wiki_sync_token }}
           gitAuthorName: ${{ env.GIT_AUTHOR_NAME }}
           gitAuthorEmail: ${{ env.GIT_AUTHOR_EMAIL }}
