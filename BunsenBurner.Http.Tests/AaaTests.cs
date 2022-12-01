@@ -2,7 +2,6 @@ using System.Net;
 using WireMock.Server;
 using Flurl;
 using JWT.Builder;
-using Meziantou.Xunit;
 using static BunsenBurner.Http.Tests.Shared;
 using static BunsenBurner.Aaa;
 
