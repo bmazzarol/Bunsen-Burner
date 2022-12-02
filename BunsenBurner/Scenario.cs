@@ -29,7 +29,7 @@ public interface Syntax
 /// This construct can represent any single test, and provides the foundation for building tests as data.
 /// </summary>
 /// <typeparam name="TSyntax">Supported syntax</typeparam>
-public abstract record Scenario<TSyntax> where TSyntax : struct, Syntax
+public abstract partial record Scenario<TSyntax> where TSyntax : struct, Syntax
 {
     /// <summary>
     /// Optional name for the scenario
@@ -39,68 +39,20 @@ public abstract record Scenario<TSyntax> where TSyntax : struct, Syntax
     /// <inheritdoc/>
     public sealed override string ToString() => Name;
 
-    private Scenario(string? name) => Name = name ?? string.Empty;
-
     /// <summary>
-    /// A scenario that has been arranged and is ready to act on
+    /// Stores any disposables for cleanup after the scenario is run
     /// </summary>
-    /// <param name="Name">optional name</param>
-    /// <param name="ArrangeScenario">operation to arrange the data for acting on the scenario</param>
-    /// <typeparam name="TData">type of data required to act on the scenario</typeparam>
-    public sealed record Arranged<TData>(string? Name, Func<Task<TData>> ArrangeScenario)
-        : Scenario<TSyntax>(Name);
+    internal HashSet<IDisposable> Disposables { get; } = new();
 
-    /// <summary>
-    /// A scenario that has been arranged and acted on
-    /// </summary>
-    /// <param name="Name">optional name</param>
-    /// <param name="ArrangeScenario">operation to arrange the data for acting on the scenario</param>
-    /// <param name="ActOnScenario">operation to act, based on the data, and perform the scenario</param>
-    /// <typeparam name="TData">type of data required to act on the scenario</typeparam>
-    /// <typeparam name="TResult">type of data returned from the result of acting</typeparam>
-    public sealed record Acted<TData, TResult>(
-        string? Name,
-        Func<Task<TData>> ArrangeScenario,
-        Func<TData, Task<TResult>> ActOnScenario
-    ) : Scenario<TSyntax>(Name);
-
-    /// <summary>
-    /// A scenario that has been arranged and acted and asserted against
-    /// </summary>
-    /// <param name="Name">optional name</param>
-    /// <param name="ArrangeScenario">operation to arrange the data for acting on the scenario</param>
-    /// <param name="ActOnScenario">operation to act, based on the data, and perform the scenario</param>
-    /// <param name="AssertAgainstResult">operation to assert against the result of acting</param>
-    /// <typeparam name="TData">type of data required to act on the scenario</typeparam>
-    /// <typeparam name="TResult">type of data returned from the result of acting</typeparam>
-    public sealed record Asserted<TData, TResult>(
-        string? Name,
-        Func<Task<TData>> ArrangeScenario,
-        Func<TData, Task<TResult>> ActOnScenario,
-        Func<TData, TResult, Task> AssertAgainstResult
-    ) : Scenario<TSyntax>(Name)
+    private void TrackPotentialDisposal<T>(T potentialDisposable)
     {
-        internal async Task Run()
-        {
-            var data = await ArrangeScenario();
-            try
-            {
-                var result = await ActOnScenario(data);
-                try
-                {
-                    await AssertAgainstResult(data, result);
-                }
-                finally
-                {
-                    if (result is IDisposable d)
-                        d.Dispose();
-                }
-            }
-            finally
-            {
-                if (data is IDisposable d)
-                    d.Dispose();
-            }
-        }
+        if (potentialDisposable is IDisposable d)
+            Disposables.Add(d);
+    }
+
+    private Scenario(string? name, HashSet<IDisposable> disposables)
+    {
+        Name = name ?? string.Empty;
+        Disposables = disposables;
     }
 }

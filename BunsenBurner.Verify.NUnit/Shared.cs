@@ -47,26 +47,17 @@ internal static class Shared
         Func<SettingsTask, SettingsTask>? matchConfiguration = null,
         bool scrubResults = false
     ) where TSyntax : struct, Syntax =>
-        new(
-            scenario.Name,
-            scenario.ArrangeScenario,
-            scenario.ActOnScenario,
-            async (_, result) =>
-            {
-                var settings = scrubResults
-                    ? result.ShouldMatchSnapshot(resultToSnap, folder, sourceFilePath)
-                    : result.ShouldMatchSnapshotWithoutScrubbing(
-                        resultToSnap,
-                        folder,
-                        sourceFilePath
-                    );
-                settings =
-                    scenario.Name != string.Empty
-                        ? settings.UseTextForParameters(scenario.Name)
-                        : settings;
-                await (matchConfiguration != null ? matchConfiguration(settings) : settings);
-            }
-        );
+        scenario.Assert(async result =>
+        {
+            var settings = scrubResults
+                ? result.ShouldMatchSnapshot(resultToSnap, folder, sourceFilePath)
+                : result.ShouldMatchSnapshotWithoutScrubbing(resultToSnap, folder, sourceFilePath);
+            settings =
+                scenario.Name != string.Empty
+                    ? settings.UseTextForParameters(scenario.Name)
+                    : settings;
+            await (matchConfiguration != null ? matchConfiguration(settings) : settings);
+        });
 
     [Pure]
     internal static Scenario<TSyntax>.Asserted<TContext, TResult> AssertResultIsUnchanged<

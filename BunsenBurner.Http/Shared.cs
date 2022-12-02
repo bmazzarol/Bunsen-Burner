@@ -3,6 +3,7 @@ using BunsenBurner.Logging;
 using LanguageExt;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using static BunsenBurner.Shared;
 
 namespace BunsenBurner.Http;
 
@@ -16,7 +17,7 @@ internal static class Shared
         this TRequest request
     )
         where TRequest : Request
-        where TSyntax : struct, Syntax => new(default, () => Task.FromResult(request));
+        where TSyntax : struct, Syntax => Arrange<TRequest, TSyntax>(request);
 
     [Pure]
     internal static Scenario<TSyntax>.Arranged<TRequest> ArrangeRequest<TRequest, TSyntax>(
@@ -24,7 +25,7 @@ internal static class Shared
         TRequest request
     )
         where TRequest : Request
-        where TSyntax : struct, Syntax => new(name, () => Task.FromResult(request));
+        where TSyntax : struct, Syntax => name.Arrange<TRequest, TSyntax>(request);
 
     private static async Task<Response> InternalCall<TRequest>(TRequest request, HttpClient client)
         where TRequest : Request
@@ -41,16 +42,12 @@ internal static class Shared
     >(this Scenario<TSyntax>.Arranged<TData> scenario, Func<TData, TRequest> fn, TestServer server)
         where TRequest : Request
         where TSyntax : struct, Syntax =>
-        new(
-            scenario.Name,
-            scenario.ArrangeScenario,
-            async data =>
-            {
-                var store = server.Host.Services.GetService<LogMessageStore>();
-                var resp = await InternalCall(fn(data), server.CreateClient());
-                return new ResponseContext(resp, store ?? LogMessageStore.New());
-            }
-        );
+        scenario.Act(async data =>
+        {
+            var store = server.Host.Services.GetService<LogMessageStore>();
+            var resp = await InternalCall(fn(data), server.CreateClient());
+            return new ResponseContext(resp, store ?? LogMessageStore.New());
+        });
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<TRequest, ResponseContext> ActAndCall<
@@ -68,19 +65,15 @@ internal static class Shared
     )
         where TRequest : Request
         where TSyntax : struct, Syntax =>
-        new(
-            scenario.Name,
-            scenario.ArrangeScenario,
-            data => InternalCall(fn(data), clientFactory?.Invoke() ?? new HttpClient())
-        );
+        scenario.Act(data => InternalCall(fn(data), clientFactory?.Invoke() ?? new HttpClient()));
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<TRequest, Response> ActAndCall<TSyntax, TRequest>(
         this Scenario<TSyntax>.Arranged<TRequest> scenario,
         Func<HttpClient>? clientFactory = default
     )
-        where TRequest : Request
-        where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _, clientFactory);
+        where TSyntax : struct, Syntax
+        where TRequest : Request => scenario.ActAndCall(static _ => _, clientFactory);
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<TData, Response> ActAndCallUntil<
@@ -96,28 +89,24 @@ internal static class Shared
     )
         where TRequest : Request
         where TSyntax : struct, Syntax =>
-        new(
-            scenario.Name,
-            scenario.ArrangeScenario,
-            async data =>
+        scenario.Act(async data =>
+        {
+            var compiledPred = predicate.Compile();
+            foreach (var duration in schedule.Run())
             {
-                var compiledPred = predicate.Compile();
-                foreach (var duration in schedule.Run())
-                {
-                    var resp = await InternalCall(
-                        fn(data),
-                        clientFactory?.Invoke() ?? new HttpClient()
-                    );
-                    if (compiledPred(resp))
-                        return resp;
-                    await Task.Delay((TimeSpan)duration);
-                }
-
-                throw new InvalidOperationException(
-                    $"Condition {predicate} was not met before the schedule completed"
+                var resp = await InternalCall(
+                    fn(data),
+                    clientFactory?.Invoke() ?? new HttpClient()
                 );
+                if (compiledPred(resp))
+                    return resp;
+                await Task.Delay((TimeSpan)duration);
             }
-        );
+
+            throw new InvalidOperationException(
+                $"Condition {predicate} was not met before the schedule completed"
+            );
+        });
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<TRequest, Response> ActAndCallUntil<TSyntax, TRequest>(
@@ -126,7 +115,7 @@ internal static class Shared
         Expression<Func<Response, bool>> predicate,
         Func<HttpClient>? clientFactory = default
     )
-        where TRequest : Request
-        where TSyntax : struct, Syntax =>
+        where TSyntax : struct, Syntax
+        where TRequest : Request =>
         scenario.ActAndCallUntil(static _ => _, schedule, predicate, clientFactory);
 }

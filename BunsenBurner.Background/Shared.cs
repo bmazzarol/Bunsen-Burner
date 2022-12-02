@@ -1,5 +1,6 @@
 ﻿using BunsenBurner.Logging;
 using Microsoft.Extensions.Hosting;
+using static BunsenBurner.Shared;
 
 namespace BunsenBurner.Background;
 
@@ -12,11 +13,10 @@ internal static class Shared
     internal static Scenario<TSyntax>.Arranged<
         BackgroundServiceContext<TBackgroundService>
     > ArrangeBackgroundService<TStartup, TBackgroundService, TSyntax>()
+        where TStartup : new()
         where TBackgroundService : IHostedService
-        where TSyntax : struct, Syntax
-        where TStartup : new() =>
-        new(
-            default,
+        where TSyntax : struct, Syntax =>
+        Arrange<BackgroundServiceContext<TBackgroundService>, TSyntax>(
             () => Task.FromResult(BackgroundServiceBuilder.Create<TStartup, TBackgroundService>())
         );
 
@@ -24,11 +24,10 @@ internal static class Shared
     internal static Scenario<TSyntax>.Arranged<
         BackgroundServiceContext<TBackgroundService>
     > ArrangeBackgroundService<TStartup, TBackgroundService, TSyntax>(this string name)
+        where TStartup : new()
         where TBackgroundService : IHostedService
-        where TSyntax : struct, Syntax
-        where TStartup : new() =>
-        new(
-            name,
+        where TSyntax : struct, Syntax =>
+        name.Arrange<BackgroundServiceContext<TBackgroundService>, TSyntax>(
             () => Task.FromResult(BackgroundServiceBuilder.Create<TStartup, TBackgroundService>())
         );
 
@@ -39,18 +38,14 @@ internal static class Shared
         TBackgroundService,
         TSyntax
     >(this Scenario<TSyntax>.Arranged<TData> scenario)
+        where TStartup : new()
         where TBackgroundService : IHostedService
-        where TSyntax : struct, Syntax
-        where TStartup : new() =>
-        new(
-            scenario.Name,
-            async () =>
-            {
-                var data = await scenario.ArrangeScenario();
-                var ctx = BackgroundServiceBuilder.Create<TStartup, TBackgroundService>();
-                return (Data: data, BackgroundServiceContext: ctx);
-            }
-        );
+        where TSyntax : struct, Syntax =>
+        scenario.And(data =>
+        {
+            var ctx = BackgroundServiceBuilder.Create<TStartup, TBackgroundService>();
+            return (Data: data, BackgroundServiceContext: ctx);
+        });
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<TData, LogMessageStore> ActAndRunUntil<
@@ -65,25 +60,21 @@ internal static class Shared
     )
         where TBackgroundService : IHostedService
         where TSyntax : struct, Syntax =>
-        new(
-            scenario.Name,
-            scenario.ArrangeScenario,
-            async data =>
+        scenario.Act(async data =>
+        {
+            var (service, store) = selector(data);
+            await service.StartAsync(CancellationToken.None);
+            foreach (var duration in schedule.Run())
             {
-                var (service, store) = selector(data);
-                await service.StartAsync(CancellationToken.None);
-                foreach (var duration in schedule.Run())
+                if (pred(new BackgroundServiceContext<TBackgroundService>(service, store)))
                 {
-                    if (pred(new BackgroundServiceContext<TBackgroundService>(service, store)))
-                    {
-                        break;
-                    }
-                    await Task.Delay((TimeSpan)duration);
+                    break;
                 }
-                await service.StopAsync(CancellationToken.None);
-                return store;
+                await Task.Delay((TimeSpan)duration);
             }
-        );
+            await service.StopAsync(CancellationToken.None);
+            return store;
+        });
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<

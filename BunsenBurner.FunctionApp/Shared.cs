@@ -1,4 +1,6 @@
-﻿namespace BunsenBurner.FunctionApp;
+﻿using static BunsenBurner.Shared;
+
+namespace BunsenBurner.FunctionApp;
 
 /// <summary>
 /// Shared builder function implementations
@@ -11,10 +13,10 @@ internal static class Shared
         TFunction,
         TSyntax
     >()
-        where TFunction : class
         where TStartup : FunctionsStartup, new()
+        where TFunction : class
         where TSyntax : struct, Syntax =>
-        new(default, () => Task.FromResult(FunctionAppBuilder.Create<TStartup, TFunction>()));
+        Arrange<TFunction, TSyntax>(FunctionAppBuilder.Create<TStartup, TFunction>());
 
     [Pure]
     internal static Scenario<TSyntax>.Arranged<TFunction> ArrangeFunctionApp<
@@ -22,10 +24,10 @@ internal static class Shared
         TFunction,
         TSyntax
     >(this string name)
-        where TFunction : class
         where TStartup : FunctionsStartup, new()
+        where TFunction : class
         where TSyntax : struct, Syntax =>
-        new(name, () => Task.FromResult(FunctionAppBuilder.Create<TStartup, TFunction>()));
+        name.Arrange<TFunction, TSyntax>(FunctionAppBuilder.Create<TStartup, TFunction>());
 
     [Pure]
     internal static Scenario<TSyntax>.Arranged<(TData Data, TFunction FunctionApp)> AndFunctionApp<
@@ -34,18 +36,14 @@ internal static class Shared
         TFunction,
         TSyntax
     >(this Scenario<TSyntax>.Arranged<TData> scenario)
-        where TFunction : class
         where TStartup : FunctionsStartup, new()
+        where TFunction : class
         where TSyntax : struct, Syntax =>
-        new(
-            scenario.Name,
-            async () =>
-            {
-                var data = await scenario.ArrangeScenario();
-                var ctx = FunctionAppBuilder.Create<TStartup, TFunction>();
-                return (Data: data, FunctionApp: ctx);
-            }
-        );
+        scenario.And(data =>
+        {
+            var ctx = FunctionAppBuilder.Create<TStartup, TFunction>();
+            return (Data: data, FunctionApp: ctx);
+        });
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<TData, TResult> ActAndExecute<
@@ -59,8 +57,7 @@ internal static class Shared
         Func<TData, TFunction, Task<TResult>> fn
     )
         where TFunction : class
-        where TSyntax : struct, Syntax =>
-        new(scenario.Name, scenario.ArrangeScenario, data => fn(data, functionApp(data)));
+        where TSyntax : struct, Syntax => scenario.Act(data => fn(data, functionApp(data)));
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<TFunction, TResult> ActAndExecute<
@@ -69,5 +66,5 @@ internal static class Shared
         TSyntax
     >(this Scenario<TSyntax>.Arranged<TFunction> scenario, Func<TFunction, Task<TResult>> fn)
         where TFunction : class
-        where TSyntax : struct, Syntax => new(scenario.Name, scenario.ArrangeScenario, fn);
+        where TSyntax : struct, Syntax => scenario.Act(fn);
 }

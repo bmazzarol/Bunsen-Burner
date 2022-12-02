@@ -15,7 +15,7 @@ internal static class Shared
         TData,
         TSyntax
     >(this string name, Gen<TData> generator) where TSyntax : struct, Syntax =>
-        new(name, () => Task.FromResult(generator), gen => Task.FromResult(Property.ForAll(gen)));
+        name.Arrange<Gen<TData>, TSyntax>(generator).Act(Property.ForAll);
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<Gen<TData>, Property<TData>> ArrangeGenerator<
@@ -33,15 +33,8 @@ internal static class Shared
         Func<TData, bool> fn,
         PropertyConfig? config = default
     ) where TSyntax : struct, Syntax =>
-        new(
-            scenario.Name,
-            scenario.ArrangeScenario,
-            scenario.ActOnScenario,
-            (_, x) =>
-            {
-                x.Select(fn).Check(config ?? global::Hedgehog.Linq.PropertyConfig.Default);
-                return Task.FromResult(true);
-            }
+        scenario.Assert(
+            r => r.Select(fn).Check(config ?? global::Hedgehog.Linq.PropertyConfig.Default)
         );
 
     [Pure]
