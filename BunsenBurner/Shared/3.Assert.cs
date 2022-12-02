@@ -5,7 +5,7 @@ namespace BunsenBurner;
 /// <summary>
 /// Shared builder function implementations for assert steps
 /// </summary>
-internal static partial class Shared
+public static partial class Shared
 {
     private static void RunExpressionAssertion<TResult>(
         this TResult result,
@@ -32,21 +32,54 @@ internal static partial class Shared
             );
     }
 
+    /// <summary>
+    /// Asserts on the result of acting on the test
+    /// </summary>
+    /// <param name="scenario">acted on scenario</param>
+    /// <param name="fn">async assert function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
+    public static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Acted<TData, TResult> scenario,
         Func<TData, TResult, Task> fn
     ) where TSyntax : struct, Syntax =>
-        new(scenario.Name, scenario.ArrangeScenario, scenario.ActOnScenario, fn);
+        new(
+            scenario.Name,
+            scenario.ArrangeScenario,
+            scenario.ActOnScenario,
+            fn,
+            scenario.Disposables
+        );
 
+    /// <summary>
+    /// Asserts on the result of acting on the test
+    /// </summary>
+    /// <param name="scenario">acted on scenario</param>
+    /// <param name="fn">async assert function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
+    public static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Acted<TData, TResult> scenario,
         Func<TResult, Task> fn
     ) where TSyntax : struct, Syntax => scenario.Assert((_, r) => fn(r));
 
+    /// <summary>
+    /// Asserts on the result of acting on the test
+    /// </summary>
+    /// <param name="scenario">acted on scenario</param>
+    /// <param name="fn">assert function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
+    public static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Acted<TData, TResult> scenario,
         Action<TData, TResult> fn
     ) where TSyntax : struct, Syntax =>
@@ -58,27 +91,64 @@ internal static partial class Shared
             }
         );
 
+    /// <summary>
+    /// Asserts on the result of acting on the test
+    /// </summary>
+    /// <param name="scenario">acted on scenario</param>
+    /// <param name="fn">assert function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
+    public static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Acted<TData, TResult> scenario,
         Action<TResult> fn
     ) where TSyntax : struct, Syntax => scenario.Assert((_, r) => fn(r));
 
+    /// <summary>
+    /// Asserts on the result of acting on the test
+    /// </summary>
+    /// <param name="scenario">acted on scenario</param>
+    /// <param name="expression">assert expression</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
+    public static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Acted<TData, TResult> scenario,
         Expression<Func<TResult, bool>> expression
     ) where TSyntax : struct, Syntax => scenario.Assert(r => r.RunExpressionAssertion(expression));
 
+    /// <summary>
+    /// Asserts on the result of acting on the test
+    /// </summary>
+    /// <param name="scenario">acted on scenario</param>
+    /// <param name="expression">assert expression</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
+    public static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Acted<TData, TResult> scenario,
         Expression<Func<TData, TResult, bool>> expression
     ) where TSyntax : struct, Syntax =>
         scenario.Assert((d, r) => RunExpressionAssertion(d, r, expression));
 
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">async assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted and failed scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
+    public static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
         TData,
         TResult,
         TException,
@@ -106,11 +176,22 @@ internal static partial class Shared
                     return e;
                 }
             },
-            fn
+            fn,
+            scenario.Disposables
         );
 
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">async assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted and failed scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
+    public static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
         TData,
         TResult,
         TException,
@@ -120,8 +201,18 @@ internal static partial class Shared
         where TSyntax : struct, Syntax =>
         scenario.AssertFailsWith<TData, TResult, TException, TSyntax>((_, e) => fn(e));
 
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted and failed scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
+    public static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
         TData,
         TResult,
         TException,
@@ -137,8 +228,18 @@ internal static partial class Shared
             }
         );
 
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted and failed scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
+    public static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
         TData,
         TResult,
         TException,
@@ -148,8 +249,18 @@ internal static partial class Shared
         where TSyntax : struct, Syntax =>
         scenario.AssertFailsWith<TData, TResult, TException, TSyntax>((_, e) => fn(e));
 
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted and failed scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
+    public static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
         TData,
         TResult,
         TException,
@@ -164,8 +275,18 @@ internal static partial class Shared
             (d, e) => RunExpressionAssertion(d, e, fn)
         );
 
+    /// <summary>
+    /// Asserts on the result of a failure when acting
+    /// </summary>
+    /// <param name="scenario">acted on scenario that is expected to fail</param>
+    /// <param name="fn">assert failure function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TException">exception type</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted and failed scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
+    public static Scenario<TSyntax>.Asserted<TData, TException> AssertFailsWith<
         TData,
         TResult,
         TException,
@@ -177,8 +298,17 @@ internal static partial class Shared
             (_, e) => RunExpressionAssertion(e, fn)
         );
 
+    /// <summary>
+    /// Asserts again on the result of acting on the test
+    /// </summary>
+    /// <param name="scenario">asserted on scenario</param>
+    /// <param name="fn">async assert function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
+    public static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
         Func<TData, TResult, Task> fn
     ) where TSyntax : struct, Syntax =>
@@ -190,17 +320,36 @@ internal static partial class Shared
             {
                 await scenario.AssertAgainstResult(data, result);
                 await fn(data, result);
-            }
+            },
+            scenario.Disposables
         );
 
+    /// <summary>
+    /// Asserts again on the result of acting on the test
+    /// </summary>
+    /// <param name="scenario">asserted on scenario</param>
+    /// <param name="fn">async assert function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
+    public static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
         Func<TResult, Task> fn
     ) where TSyntax : struct, Syntax => scenario.And((_, r) => fn(r));
 
+    /// <summary>
+    /// Asserts again on the result of acting on the test
+    /// </summary>
+    /// <param name="scenario">asserted on scenario</param>
+    /// <param name="fn">assert function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
+    public static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
         Action<TData, TResult> fn
     ) where TSyntax : struct, Syntax =>
@@ -212,20 +361,47 @@ internal static partial class Shared
             }
         );
 
+    /// <summary>
+    /// Asserts again on the result of acting on the test
+    /// </summary>
+    /// <param name="scenario">asserted on scenario</param>
+    /// <param name="fn">assert function</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
+    public static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
         Action<TResult> fn
     ) where TSyntax : struct, Syntax => scenario.And((_, r) => fn(r));
 
+    /// <summary>
+    /// Asserts again on the result of acting on the test
+    /// </summary>
+    /// <param name="scenario">asserted on scenario</param>
+    /// <param name="expression">assert expression</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
+    public static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
         Expression<Func<TResult, bool>> expression
     ) where TSyntax : struct, Syntax => scenario.And(r => r.RunExpressionAssertion(expression));
 
+    /// <summary>
+    /// Asserts again on the result of acting on the test
+    /// </summary>
+    /// <param name="scenario">asserted on scenario</param>
+    /// <param name="expression">assert expression</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted scenario</returns>
     [Pure]
-    internal static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
+    public static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
         Expression<Func<TData, TResult, bool>> expression
     ) where TSyntax : struct, Syntax =>

@@ -19,7 +19,7 @@ public static class Scenario
         this Scenario<TSyntax>.Arranged<TA> scenario,
         Func<TA, TB> fn
     ) where TSyntax : struct, Syntax =>
-        new(scenario.Name, async () => fn(await scenario.ArrangeScenario()));
+        new(scenario.Name, async () => fn(await scenario.ArrangeScenario()), scenario.Disposables);
 
     /// <summary>
     /// Select (Map) for Scenario.Act
@@ -39,7 +39,8 @@ public static class Scenario
         new(
             scenario.Name,
             scenario.ArrangeScenario,
-            async x => fn(await scenario.ActOnScenario(x))
+            async x => fn(await scenario.ActOnScenario(x)),
+            scenario.Disposables
         );
 
     /// <summary>
@@ -58,7 +59,8 @@ public static class Scenario
     ) where TSyntax : struct, Syntax =>
         new(
             scenario.Name,
-            async () => await fn(await scenario.ArrangeScenario()).ArrangeScenario()
+            async () => await fn(await scenario.ArrangeScenario()).ArrangeScenario(),
+            scenario.Disposables
         );
 
     /// <summary>
@@ -85,7 +87,8 @@ public static class Scenario
                 var ta = await scenario.ArrangeScenario();
                 var tb = await mapFn(ta).ArrangeScenario();
                 return projectFn(ta, tb);
-            }
+            },
+            scenario.Disposables
         );
 
     /// <summary>
@@ -106,7 +109,8 @@ public static class Scenario
         new(
             scenario.Name,
             scenario.ArrangeScenario,
-            async x => await fn(await scenario.ActOnScenario(x)).ActOnScenario(x)
+            async x => await fn(await scenario.ActOnScenario(x)).ActOnScenario(x),
+            scenario.Disposables
         );
 
     /// <summary>
@@ -135,6 +139,7 @@ public static class Scenario
                 var ta = await scenario.ActOnScenario(x);
                 var tb = await mapFn(ta).ActOnScenario(x);
                 return projectFn(ta, tb);
-            }
+            },
+            scenario.Disposables
         );
 }

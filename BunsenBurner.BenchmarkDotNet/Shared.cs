@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Exporters;
+using static BunsenBurner.Shared;
 
 namespace BunsenBurner.BenchmarkDotNet;
 
@@ -16,22 +17,18 @@ internal static class Shared
     )
         where TSyntax : struct, Syntax
         where TBenchmarks : class =>
-        new(
-            name,
-            () =>
-                Task.FromResult(
-                    RunContext.New<TBenchmarks>(
-                        (
-                            configure?.Invoke(ManualConfig.CreateEmpty())
-                            ?? ManualConfig
-                                .CreateMinimumViable()
-                                .AddLogger(new TestLogger(logSink ?? Console.WriteLine))
-                        )
-                            .WithOptions(ConfigOptions.DisableOptimizationsValidator)
-                            .AddExporter(BenchmarkReportExporter.Default),
-                        runParameters
-                    )
+        Arrange<RunContext, TSyntax>(
+            RunContext.New<TBenchmarks>(
+                (
+                    configure?.Invoke(ManualConfig.CreateEmpty())
+                    ?? ManualConfig
+                        .CreateMinimumViable()
+                        .AddLogger(new TestLogger(logSink ?? Console.WriteLine))
                 )
+                    .WithOptions(ConfigOptions.DisableOptimizationsValidator)
+                    .AddExporter(BenchmarkReportExporter.Default),
+                runParameters
+            )
         );
 
     [Pure]
@@ -48,9 +45,7 @@ internal static class Shared
     internal static Scenario<TSyntax>.Acted<RunContext, Summary> ActAndExecuteBenchmarks<TSyntax>(
         this Scenario<TSyntax>.Arranged<RunContext> scenario
     ) where TSyntax : struct, Syntax =>
-        new(
-            scenario.Name,
-            scenario.ArrangeScenario,
+        scenario.Act(
             ctx =>
                 Task.Run(
                     () =>

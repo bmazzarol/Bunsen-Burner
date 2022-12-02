@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using static BunsenBurner.Shared;
 
 namespace BunsenBurner.Bogus;
 
@@ -12,7 +13,7 @@ internal static class Shared
         Func<Faker<TData>, Task<TData>> fn
     )
         where TData : class
-        where TSyntax : struct, Syntax => new(default, () => fn(new Faker<TData>()));
+        where TSyntax : struct, Syntax => Arrange<TData, TSyntax>(() => fn(new Faker<TData>()));
 
     [Pure]
     internal static Scenario<TSyntax>.Arranged<TData> AutoArrange<TData, TSyntax>(
@@ -28,7 +29,8 @@ internal static class Shared
         Func<Faker<TData>, Task<TData>> fn
     )
         where TData : class
-        where TSyntax : struct, Syntax => new(name, () => fn(new Faker<TData>()));
+        where TSyntax : struct, Syntax =>
+        name.Arrange<TData, TSyntax>(() => fn(new Faker<TData>()));
 
     [Pure]
     internal static Scenario<TSyntax>.Arranged<TData> AutoArrange<TData, TSyntax>(
@@ -43,7 +45,7 @@ internal static class Shared
     internal static Scenario<TSyntax>.Arranged<TData> AutoArrange<TData, TSyntax>(
         Func<Faker, Task<TData>> fn,
         string? locale = "en"
-    ) where TSyntax : struct, Syntax => new(default, () => fn(new Faker(locale)));
+    ) where TSyntax : struct, Syntax => Arrange<TData, TSyntax>(() => fn(new Faker(locale)));
 
     [Pure]
     internal static Scenario<TSyntax>.Arranged<TData> AutoArrange<TData, TSyntax>(
@@ -57,7 +59,7 @@ internal static class Shared
         this string name,
         Func<Faker, Task<TData>> fn,
         string? locale = "en"
-    ) where TSyntax : struct, Syntax => new(name, () => fn(new Faker(locale)));
+    ) where TSyntax : struct, Syntax => name.Arrange<TData, TSyntax>(() => fn(new Faker(locale)));
 
     [Pure]
     internal static Scenario<TSyntax>.Arranged<TData> AutoArrange<TData, TSyntax>(

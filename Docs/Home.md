@@ -1,6 +1,6 @@
 ﻿<!-- markdownlint-disable MD033 -->
 
-# <img height="50" src="../fire-icon.png" width="50"/> Bunsen Burner Documentation
+# <img height="50" src="images/fire-icon.png" width="50"/> Bunsen Burner Documentation
 
 <!-- markdownlint-enabled MD033 -->
 
