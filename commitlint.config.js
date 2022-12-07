@@ -6,6 +6,7 @@ module.exports = {
             "always",
             [
                 "deps",
+                "docs",
                 "core",
                 "auto-fixture",
                 "background",

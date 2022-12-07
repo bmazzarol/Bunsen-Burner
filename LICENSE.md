@@ -1,6 +1,4 @@
-﻿<!-- markdownlint-disable MD041 -->
-The MIT License (MIT)
-<!-- markdownlint-disable MD041 -->
+﻿The MIT License (MIT)
 
 Copyright (c) 2022 Ben Mazzarol
 

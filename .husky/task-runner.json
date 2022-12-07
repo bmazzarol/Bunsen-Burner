@@ -15,7 +15,8 @@
                 "markdownlint-cli2",
                 "BunsenBurner*/**/*.md",
                 "Docs/**/*.md",
-                "*.md"
+                "*.md",
+                "!LICENSE.md"
             ]
         },
         {
