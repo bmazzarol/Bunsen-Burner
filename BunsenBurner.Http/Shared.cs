@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
 using BunsenBurner.Logging;
-using LanguageExt;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using static BunsenBurner.Shared;

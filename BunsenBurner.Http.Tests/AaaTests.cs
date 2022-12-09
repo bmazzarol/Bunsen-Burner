@@ -70,10 +70,8 @@ public static class AaaTests
     public static async Task Case6() =>
         await Request
             .DELETE("/hello-world")
-            .WithHeaders(
-                new KeyValuePair<string, string>("A", "1"),
-                new KeyValuePair<string, string>("B", "2")
-            )
+            .WithHeader("A", "1")
+            .WithHeader("B", "2")
             .ArrangeRequest()
             .ActAndCall(SimpleResponse())
             .IsOk();
@@ -180,11 +178,11 @@ public static class AaaTests
     [Fact(DisplayName = "Authorized request can be made")]
     public static async Task Case16() =>
         await Request
-            .GET($"/hello-world")
+            .GET("/hello-world")
             .WithBearerToken(
                 Token
                     .New()
-                    .WithClaim(ClaimName.Subject, "1", "2", "3")
+                    .WithClaim(ClaimName.Subject, 1, 2, 3)
                     .WithHeader(HeaderName.KeyId, "1", "2", "3")
             )
             .ArrangeRequest()
@@ -195,11 +193,16 @@ public static class AaaTests
                 {
                     Assert.Contains(
                         req.Headers,
-                        h => h.Key == "Authorization" && h.Value != string.Empty
+                        h =>
+                            h.Key == "Authorization"
+                            && req.Headers.Get("Authorization") != string.Empty
                     );
                     var token = Token.FromRaw(req.Headers.Get("Authorization")!);
-                    Assert.Equal("1,2,3", token?.Headers.Get("kid"));
-                    Assert.Equal("1,2,3", token?.Claims.Get("sub"));
+                    Assert.Equal("[1,2,3]", token?.Claims.Find("sub").First().Case.ToString());
+                    Assert.Equal(
+                        @"[""1"",""2"",""3""]",
+                        token?.Headers.Find("kid").First().Case.ToString()
+                    );
                 }
             );
 
@@ -219,7 +222,7 @@ public static class AaaTests
                 {
                     Assert.Contains(
                         req.Headers,
-                        h => h.Key == "Authorization" && h.Value != string.Empty
+                        h => h.Key == "Authorization" && (string)h.Value.Case != string.Empty
                     );
                     Assert.NotNull(
                         Token.FromRaw(

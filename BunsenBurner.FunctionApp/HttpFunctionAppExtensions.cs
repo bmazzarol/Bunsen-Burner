@@ -1,8 +1,9 @@
-﻿using System.Collections.Immutable;
-using System.Net;
+﻿using System.Net;
 using System.Net.Mime;
 using BunsenBurner.FunctionApp.Models;
 using BunsenBurner.Http;
+using LanguageExt;
+using LanguageExt.ClassInstances;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -36,21 +37,21 @@ public static class HttpFunctionAppExtensions
                     (HttpStatusCode)objectResult.StatusCode.GetValueOrDefault(),
                     objectResult.Value.ToString(),
                     objectResult.ContentTypes.FirstOrDefault(),
-                    ImmutableDictionary<string, string>.Empty
+                    Map<OrdStringOrdinal, string, Set<OrdStringOrdinal, string>>.Empty
                 ),
             IStatusCodeActionResult statusCodeResult
                 => new Response(
                     (HttpStatusCode)statusCodeResult.StatusCode.GetValueOrDefault(),
                     string.Empty,
                     string.Empty,
-                    ImmutableDictionary<string, string>.Empty
+                    Map<OrdStringOrdinal, string, Set<OrdStringOrdinal, string>>.Empty
                 ),
             _
                 => new Response(
                     HttpStatusCode.InternalServerError,
                     "Failed to process action result",
                     MediaTypeNames.Text.Plain,
-                    ImmutableDictionary<string, string>.Empty
+                    Map<OrdStringOrdinal, string, Set<OrdStringOrdinal, string>>.Empty
                 )
         };
 }

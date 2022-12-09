@@ -1,5 +1,5 @@
-﻿using System.Collections.Immutable;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 using System.Text.Json;
@@ -9,17 +9,21 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace BunsenBurner.Http;
 
-using Header = KeyValuePair<string, string>;
-using Headers = IImmutableDictionary<string, string>;
-using Claim = KeyValuePair<string, string>;
-using Claims = IImmutableDictionary<string, string>;
+using TokenPartValue = Either<object, Seq<object>>;
 
 /// <summary>
 /// Authentication token (JWT)
 /// </summary>
 public sealed record Token
 {
-    private static readonly Headers Empty = ImmutableDictionary<string, string>.Empty;
+    private enum TokenPart
+    {
+        Header,
+        Claim
+    }
+
+    private Map<(string Key, TokenPart Part), TokenPartValue> Components { get; init; } =
+        LanguageExt.Map<(string Key, TokenPart Part), TokenPartValue>.Empty;
 
     /// <summary>
     /// Signing key used
@@ -31,17 +35,30 @@ public sealed record Token
     /// </summary>
     public TimeSpan Lifetime { get; init; }
 
-    private Token(
-        string signingKey = Constants.TestSigningKey,
-        TimeSpan? lifetime = default,
-        Headers? headers = default,
-        Claims? claims = default
-    )
+    /// <summary>
+    /// Headers
+    /// </summary>
+    public Map<string, TokenPartValue> Headers =>
+        Components
+            .AsEnumerable()
+            .Where(x => x.Key.Part == TokenPart.Header)
+            .Select(x => (x.Key.Key, x.Value))
+            .ToMap();
+
+    /// <summary>
+    /// Claims
+    /// </summary>
+    public Map<string, TokenPartValue> Claims =>
+        Components
+            .AsEnumerable()
+            .Where(x => x.Key.Part == TokenPart.Claim)
+            .Select(x => (x.Key.Key, x.Value))
+            .ToMap();
+
+    private Token(string signingKey = Constants.TestSigningKey, TimeSpan? lifetime = default)
     {
         SigningKey = signingKey;
         Lifetime = lifetime ?? TimeSpan.FromSeconds(10);
-        Headers = headers ?? Empty;
-        Claims = claims ?? Empty;
     }
 
     /// <summary>
@@ -74,48 +91,24 @@ public sealed record Token
         if (parts.Length != 3)
             return default;
         var rawHeader = parts[0];
-        var headers = JsonSerializer.Deserialize<Dictionary<string, object>>(
-            Base64UrlEncoder.Decode(rawHeader)
-        );
+        var headers = (
+            JsonSerializer.Deserialize<Dictionary<string, object>>(
+                Base64UrlEncoder.Decode(rawHeader)
+            ) ?? new Dictionary<string, object>(StringComparer.Ordinal)
+        ).Select(kv => (Key: (kv.Key, Part: TokenPart.Header), kv.Value));
         var rawBody = parts[1];
-        var claims = JsonSerializer.Deserialize<Dictionary<string, object>>(
-            Base64UrlEncoder.Decode(rawBody)
-        );
+        var claims = (
+            JsonSerializer.Deserialize<Dictionary<string, object>>(Base64UrlEncoder.Decode(rawBody))
+            ?? new Dictionary<string, object>(StringComparer.Ordinal)
+        ).Select(kv => (Key: (kv.Key, Part: TokenPart.Claim), kv.Value));
 
-        return new Token
-        {
-            Headers =
-                headers
-                    ?.Select(
-                        v =>
-                            new KeyValuePair<string, string>(
-                                v.Key,
-                                v.Value.ToString() ?? string.Empty
-                            )
-                    )
-                    .ToImmutableDictionary() ?? Empty,
-            Claims =
-                claims
-                    ?.Select(
-                        v =>
-                            new KeyValuePair<string, string>(
-                                v.Key,
-                                v.Value.ToString() ?? string.Empty
-                            )
-                    )
-                    .ToImmutableDictionary() ?? Empty
-        };
+        return headers
+            .Append(claims)
+            .Aggregate(
+                new Token(),
+                (t, pair) => t.WithComponent(pair.Key.Key, pair.Key.Part, pair.Value)
+            );
     }
-
-    /// <summary>
-    /// User headers
-    /// </summary>
-    public Headers Headers { get; private init; }
-
-    /// <summary>
-    /// User claims
-    /// </summary>
-    public Claims Claims { get; private init; }
 
     private static string GetDescription<T>(T value) where T : struct, Enum
     {
@@ -127,17 +120,43 @@ public sealed record Token
                 ?.Description ?? valueString;
     }
 
+    [ExcludeFromCodeCoverage]
+    private Token WithComponent<T>(string name, TokenPart part, T value)
+    {
+        TokenPartValue SetSeqOrValue(
+            Func<object, TokenPartValue> setSingle,
+            Func<Seq<object>, TokenPartValue> setSequence
+        ) =>
+            value switch
+            {
+                IEnumerable<object> seq => setSequence(seq.ToSeq()),
+                _ => setSingle(value!)
+            };
+
+        return this with
+        {
+            Components = Components.AddOrUpdate(
+                (name, part),
+                data =>
+                    data.Match(
+                        seq => SetSeqOrValue(o => seq.Add(o!), objects => seq.Append(objects)),
+                        v =>
+                            SetSeqOrValue(o => Seq1(v).Add(o!), objects => Seq1(v).Append(objects)),
+                        () => SetSeqOrValue(TokenPartValue.Left, TokenPartValue.Right)
+                    ),
+                () => SetSeqOrValue(TokenPartValue.Left, TokenPartValue.Right)
+            )
+        };
+    }
+
     /// <summary>
     /// Adds a header to the token
     /// </summary>
     /// <param name="name">name of the header</param>
     /// <param name="value">value of the header</param>
     /// <returns>token with the header</returns>
-    public Token WithHeader(string name, string value) =>
-        this with
-        {
-            Headers = Headers.AddOrUpdate(new Header(name, value))
-        };
+    public Token WithHeader<T>(string name, T value) =>
+        WithComponent(name, TokenPart.Header, value);
 
     /// <summary>
     /// Adds a header to the token
@@ -145,7 +164,7 @@ public sealed record Token
     /// <param name="name">name of the header</param>
     /// <param name="values">values of the header</param>
     /// <returns>token with the header</returns>
-    public Token WithHeader(string name, params string[] values) =>
+    public Token WithHeader<T>(string name, params T[] values) =>
         values.Aggregate(this, (t, v) => t.WithHeader(name, v));
 
     /// <summary>
@@ -154,8 +173,7 @@ public sealed record Token
     /// <param name="name">name of the header</param>
     /// <param name="value">value of the header</param>
     /// <returns>token with the header</returns>
-    public Token WithHeader(HeaderName name, string value) =>
-        WithHeader(GetDescription(name), value);
+    public Token WithHeader<T>(HeaderName name, T value) => WithHeader(GetDescription(name), value);
 
     /// <summary>
     /// Adds the header with multiple values to the token
@@ -163,7 +181,7 @@ public sealed record Token
     /// <param name="name">name of the header</param>
     /// <param name="values">values of the header</param>
     /// <returns>token with the header</returns>
-    public Token WithHeader(HeaderName name, params string[] values) =>
+    public Token WithHeader<T>(HeaderName name, params T[] values) =>
         WithHeader(GetDescription(name), values);
 
     /// <summary>
@@ -172,11 +190,7 @@ public sealed record Token
     /// <param name="name">name of the claim</param>
     /// <param name="value">value of the claim</param>
     /// <returns>token with the claim</returns>
-    public Token WithClaim(string name, string value) =>
-        this with
-        {
-            Claims = Claims.AddOrUpdate(new Claim(name, value))
-        };
+    public Token WithClaim<T>(string name, T value) => WithComponent(name, TokenPart.Claim, value);
 
     /// <summary>
     /// Adds the claim with multiple values to the token
@@ -184,7 +198,7 @@ public sealed record Token
     /// <param name="name">name of the claim</param>
     /// <param name="values">values of the claim</param>
     /// <returns>token with the claim</returns>
-    public Token WithClaim(string name, params string[] values) =>
+    public Token WithClaim<T>(string name, params T[] values) =>
         values.Aggregate(this, (t, v) => t.WithClaim(name, v));
 
     /// <summary>
@@ -193,7 +207,7 @@ public sealed record Token
     /// <param name="name">name of the claim</param>
     /// <param name="value">value of the claim</param>
     /// <returns>token with the claim</returns>
-    public Token WithClaim(ClaimName name, string value) => WithClaim(GetDescription(name), value);
+    public Token WithClaim<T>(ClaimName name, T value) => WithClaim(GetDescription(name), value);
 
     /// <summary>
     /// Adds the claim with multiple values to the token
@@ -201,7 +215,7 @@ public sealed record Token
     /// <param name="name">name of the claim</param>
     /// <param name="values">values of the claim</param>
     /// <returns>token with the claim</returns>
-    public Token WithClaim(ClaimName name, params string[] values) =>
+    public Token WithClaim<T>(ClaimName name, params T[] values) =>
         WithClaim(GetDescription(name), values);
 
     /// <summary>
@@ -223,15 +237,26 @@ public sealed record Token
             .WithAlgorithm(new HMACSHA256Algorithm())
 #pragma warning restore CS0618
             .WithSecret(SigningKey);
-        return Headers
-            .Aggregate(builder, (b, v) => b.AddHeader(v.Key, v.Value))
+        return Components
+            .Aggregate(
+                builder,
+                (b, kv) =>
+                {
+#pragma warning disable CS8524
+                    return kv.Key.Part switch
+#pragma warning restore CS8524
+                    {
+                        TokenPart.Header => b.AddHeader(kv.Key.Key, kv.Value.Case),
+                        TokenPart.Claim => b.AddClaim(kv.Key.Key, kv.Value.Case)
+                    };
+                }
+            )
             .AddClaim(
                 ClaimName.ExpirationTime,
                 currentTime.AddMinutes(lifetimeSeconds).ToUnixTimeSeconds()
             )
             .AddClaim(ClaimName.IssuedAt, issuedAt.ToUnixTimeSeconds())
             .AddClaim(ClaimName.NotBefore, notBefore.ToUnixTimeSeconds())
-            .AddClaims(Claims.Select(x => new KeyValuePair<string, object>(x.Key, x.Value)))
             .Encode();
     }
 }

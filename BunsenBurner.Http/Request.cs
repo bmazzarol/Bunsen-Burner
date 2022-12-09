@@ -1,15 +1,15 @@
-﻿using System.Collections.Immutable;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
 using System.Text.Json;
 using Flurl;
+using LanguageExt.ClassInstances;
 
 // ReSharper disable InconsistentNaming
 
 namespace BunsenBurner.Http;
 
 using Header = KeyValuePair<string, string>;
-using Headers = IImmutableDictionary<string, string>;
+using Headers = Map<OrdStringOrdinal, string, Set<OrdStringOrdinal, string>>;
 
 /// <summary>
 /// HTTP Request
@@ -18,7 +18,7 @@ public abstract record Request
 {
     private const string JsonContentType = "application/json";
     private const string HttpsLocalhost = "https://localhost";
-    private static readonly Headers EmptyHeaders = ImmutableDictionary<string, string>.Empty;
+    private static readonly Headers EmptyHeaders = Headers.Empty;
 
     /// <summary>
     /// Verb
@@ -305,7 +305,7 @@ public abstract record Request
         };
 
         foreach (var kv in Headers)
-            requestMessage.Headers.Add(kv.Key, kv.Value);
+            requestMessage.Headers.Add(kv.Key, kv.Value.OrderBy(_ => _));
 
         return requestMessage;
     }
@@ -326,11 +326,7 @@ public static class RequestExt
     /// <typeparam name="TRequest">valid request type</typeparam>
     /// <returns>request with header added</returns>
     public static TRequest WithHeader<TRequest>(this TRequest request, string key, string value)
-        where TRequest : Request =>
-        request with
-        {
-            Headers = request.Headers.AddOrUpdate(new Header(key, value))
-        };
+        where TRequest : Request => request.WithHeaders(key, value);
 
     /// <summary>
     /// Add a new header to the request
@@ -355,23 +351,38 @@ public static class RequestExt
     /// </summary>
     /// <remarks>if the key exists the value is appended, only unique values are maintained</remarks>
     /// <param name="request">request</param>
-    /// <param name="headers">headers to add</param>
+    /// <param name="key">header</param>
+    /// <param name="values">values</param>
     /// <typeparam name="TRequest">valid request type</typeparam>
     /// <returns>request with header added</returns>
-    public static TRequest WithHeaders<TRequest>(this TRequest request, params Header[] headers)
-        where TRequest : Request => request.WithHeaders(headers.ToImmutableDictionary());
+    public static TRequest WithHeaders<TRequest>(
+        this TRequest request,
+        string key,
+        params string[] values
+    ) where TRequest : Request => request.WithHeaders(key, values.AsEnumerable());
 
     /// <summary>
     /// Add new headers to the request
     /// </summary>
     /// <remarks>if the key exists the value is appended, only unique values are maintained</remarks>
     /// <param name="request">request</param>
-    /// <param name="headers">headers to add</param>
+    /// <param name="key">header</param>
+    /// <param name="values">values</param>
     /// <typeparam name="TRequest">valid request type</typeparam>
     /// <returns>request with header added</returns>
-    public static TRequest WithHeaders<TRequest>(this TRequest request, Headers headers)
-        where TRequest : Request =>
-        headers.Aggregate(request, (r, h) => r.WithHeader(h.Key, h.Value));
+    public static TRequest WithHeaders<TRequest>(
+        this TRequest request,
+        string key,
+        IEnumerable<string> values
+    ) where TRequest : Request =>
+        request with
+        {
+            Headers = request.Headers.AddOrUpdate(
+                key,
+                x => x.TryAddRange(values),
+                toSet<OrdStringOrdinal, string>(values)
+            )
+        };
 
     /// <summary>
     /// Adds bearer authentication
@@ -392,4 +403,20 @@ public static class RequestExt
     /// <returns>request with bearer authentication token</returns>
     public static TRequest WithBearerToken<TRequest>(this TRequest request, Func<Token, Token> fn)
         where TRequest : Request => request.WithBearerToken(fn(Token.New()));
+
+    /// <summary>
+    /// Gets the header value for the key
+    /// </summary>
+    /// <param name="headers">headers</param>
+    /// <param name="key">key</param>
+    /// <returns>header value</returns>
+    public static string? Get(this Headers headers, string key) =>
+        headers
+            .Find(key)
+            .Select(
+                x =>
+                    x.OrderBy(_ => _)
+                        .Aggregate(string.Empty, (a, b) => a != string.Empty ? $"{a},{b}" : b)
+            )
+            .IfNoneUnsafe(() => null);
 }
