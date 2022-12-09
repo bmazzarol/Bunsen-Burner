@@ -17,7 +17,6 @@ using Headers = Map<OrdStringOrdinal, string, Set<OrdStringOrdinal, string>>;
 public abstract record Request
 {
     private const string JsonContentType = "application/json";
-    private const string HttpsLocalhost = "https://localhost";
     private static readonly Headers EmptyHeaders = Headers.Empty;
 
     /// <summary>
@@ -28,7 +27,7 @@ public abstract record Request
     /// <summary>
     /// Url
     /// </summary>
-    public Url Url { get; }
+    public Url Url { get; init; }
 
     /// <summary>
     /// Headers
@@ -38,7 +37,7 @@ public abstract record Request
     private Request(string verb, Url url, Headers headers)
     {
         Verb = verb.ToUpper(CultureInfo.InvariantCulture);
-        Url = url.IsRelative ? HttpsLocalhost + url : url;
+        Url = url.AsAbsoluteUrl();
         Headers = headers;
     }
 
@@ -314,8 +313,10 @@ public abstract record Request
 /// <summary>
 /// Extension for all requests
 /// </summary>
-public static class RequestExt
+public static class RequestExtensions
 {
+    private const string HttpsLocalhost = "https://localhost";
+
     /// <summary>
     /// Add a new header to the request
     /// </summary>
@@ -325,6 +326,7 @@ public static class RequestExt
     /// <param name="value">header value</param>
     /// <typeparam name="TRequest">valid request type</typeparam>
     /// <returns>request with header added</returns>
+    [Pure]
     public static TRequest WithHeader<TRequest>(this TRequest request, string key, string value)
         where TRequest : Request => request.WithHeaders(key, value);
 
@@ -339,6 +341,7 @@ public static class RequestExt
     /// <typeparam name="TRequest">valid request type</typeparam>
     /// <typeparam name="T">some T</typeparam>
     /// <returns>request with header added</returns>
+    [Pure]
     public static TRequest WithHeader<TRequest, T>(
         this TRequest request,
         string key,
@@ -355,6 +358,7 @@ public static class RequestExt
     /// <param name="values">values</param>
     /// <typeparam name="TRequest">valid request type</typeparam>
     /// <returns>request with header added</returns>
+    [Pure]
     public static TRequest WithHeaders<TRequest>(
         this TRequest request,
         string key,
@@ -370,6 +374,7 @@ public static class RequestExt
     /// <param name="values">values</param>
     /// <typeparam name="TRequest">valid request type</typeparam>
     /// <returns>request with header added</returns>
+    [Pure]
     public static TRequest WithHeaders<TRequest>(
         this TRequest request,
         string key,
@@ -384,6 +389,31 @@ public static class RequestExt
             )
         };
 
+    [Pure]
+    internal static Url AsAbsoluteUrl(this Url url) => url.IsRelative ? HttpsLocalhost + url : url;
+
+    /// <summary>
+    /// Sets the url for the request
+    /// </summary>
+    /// <param name="request">request</param>
+    /// <param name="setter">url setter</param>
+    /// <typeparam name="TRequest">valid request type</typeparam>
+    /// <returns>request with the url set</returns>
+    [Pure]
+    public static TRequest WithUrl<TRequest>(this TRequest request, Func<Url, Url> setter)
+        where TRequest : Request => request with { Url = setter(request.Url).AsAbsoluteUrl() };
+
+    /// <summary>
+    /// Sets the url for the request
+    /// </summary>
+    /// <param name="request">request</param>
+    /// <param name="url">url to set</param>
+    /// <typeparam name="TRequest">valid request type</typeparam>
+    /// <returns>request with the url set</returns>
+    [Pure]
+    public static TRequest WithUrl<TRequest>(this TRequest request, Url url)
+        where TRequest : Request => request.WithUrl(_ => url);
+
     /// <summary>
     /// Adds bearer authentication
     /// </summary>
@@ -391,6 +421,7 @@ public static class RequestExt
     /// <param name="token">bearer token (JWT)</param>
     /// <typeparam name="TRequest">valid request type</typeparam>
     /// <returns>request with bearer authentication token</returns>
+    [Pure]
     public static TRequest WithBearerToken<TRequest>(this TRequest request, Token token)
         where TRequest : Request => request.WithHeader("Authorization", $"Bearer {token.Encode()}");
 
@@ -401,6 +432,7 @@ public static class RequestExt
     /// <param name="fn">bearer token config function (JWT)</param>
     /// <typeparam name="TRequest">valid request type</typeparam>
     /// <returns>request with bearer authentication token</returns>
+    [Pure]
     public static TRequest WithBearerToken<TRequest>(this TRequest request, Func<Token, Token> fn)
         where TRequest : Request => request.WithBearerToken(fn(Token.New()));
 
@@ -410,6 +442,7 @@ public static class RequestExt
     /// <param name="headers">headers</param>
     /// <param name="key">key</param>
     /// <returns>header value</returns>
+    [Pure]
     public static string? Get(this Headers headers, string key) =>
         headers
             .Find(key)

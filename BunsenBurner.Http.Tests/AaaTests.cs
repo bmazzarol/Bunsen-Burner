@@ -23,6 +23,7 @@ public static class AaaTests
                 Assert.Equal("test", ctx.Response.Content);
                 Assert.Equal(4, ctx.Response.Length);
                 Assert.Equal("123", ctx.Response.Headers.Get("custom"));
+                Assert.Null(ctx.Response.Headers.Get("customNotThere"));
             });
 
     [Fact(DisplayName = "GET request can be made to a test server, with a named test")]
