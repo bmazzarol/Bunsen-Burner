@@ -5,7 +5,7 @@ namespace BunsenBurner;
 /// <summary>
 /// Shared builder function implementations for assert steps
 /// </summary>
-public static partial class Shared
+internal static partial class Shared
 {
     private static void RunExpressionAssertion<TResult>(
         this TResult result,
@@ -406,4 +406,67 @@ public static partial class Shared
         Expression<Func<TData, TResult, bool>> expression
     ) where TSyntax : struct, Syntax =>
         scenario.And((d, r) => RunExpressionAssertion(d, r, expression));
+
+    /// <summary>
+    /// Resets the asserted scenario back to arranged, throwing away the act and assert information
+    /// </summary>
+    /// <param name="scenario">scenario</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>arranged scenario</returns>
+    [Pure]
+    public static Scenario<TSyntax>.Arranged<TData> ResetToArranged<TData, TResult, TSyntax>(
+        this Scenario<TSyntax>.Asserted<TData, TResult> scenario
+    ) where TSyntax : struct, Syntax => Arrange<TData, TSyntax>(scenario.ArrangeScenario);
+
+    /// <summary>
+    /// Resets the asserted scenario back to acted, throwing away the information
+    /// </summary>
+    /// <param name="scenario">scenario</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>acted scenario</returns>
+    [Pure]
+    public static Scenario<TSyntax>.Acted<TData, TResult> ResetToActed<TData, TResult, TSyntax>(
+        this Scenario<TSyntax>.Asserted<TData, TResult> scenario
+    ) where TSyntax : struct, Syntax =>
+        Arrange<TData, TSyntax>(scenario.ArrangeScenario).Act(scenario.ActOnScenario);
+
+    /// <summary>
+    /// Replaces the act in the scenario keeping the assertions
+    /// </summary>
+    /// <param name="scenario">scenario</param>
+    /// <param name="fn">new act to perform</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted scenario</returns>
+    [Pure]
+    public static Scenario<TSyntax>.Asserted<TData, TResult> ReplaceAct<TData, TResult, TSyntax>(
+        this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
+        Func<TData, Task<TResult>> fn
+    ) where TSyntax : struct, Syntax =>
+        Arrange<TData, TSyntax>(scenario.ArrangeScenario)
+            .Act(fn)
+            .Assert(scenario.AssertAgainstResult);
+
+    /// <summary>
+    /// Replaces the act in the scenario keeping the assertions
+    /// </summary>
+    /// <param name="scenario">scenario</param>
+    /// <param name="fn">new act to perform</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>asserted scenario</returns>
+    [Pure]
+    public static Scenario<TSyntax>.Asserted<TData, TResult> ReplaceAct<TData, TResult, TSyntax>(
+        this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
+        Func<TData, TResult> fn
+    ) where TSyntax : struct, Syntax =>
+        Arrange<TData, TSyntax>(scenario.ArrangeScenario)
+            .Act(fn)
+            .Assert(scenario.AssertAgainstResult);
 }

@@ -373,4 +373,56 @@ public static partial class Aaa
     public static TaskAwaiter GetAwaiter<TData, TResult>(
         this AaaScenario.Asserted<TData, TResult> scenario
     ) => scenario.Run().GetAwaiter();
+
+    /// <summary>
+    /// Resets the asserted scenario back to arranged, throwing away the act and assert information
+    /// </summary>
+    /// <param name="scenario">scenario</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>arranged scenario</returns>
+    [Pure]
+    public static AaaScenario.Arranged<TData> ResetToArranged<TData, TResult>(
+        this AaaScenario.Asserted<TData, TResult> scenario
+    ) => Shared.ResetToArranged(scenario);
+
+    /// <summary>
+    /// Resets the asserted scenario back to acted, throwing away the information
+    /// </summary>
+    /// <param name="scenario">scenario</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>acted scenario</returns>
+    [Pure]
+    public static AaaScenario.Acted<TData, TResult> ResetToActed<TData, TResult>(
+        this AaaScenario.Asserted<TData, TResult> scenario
+    ) => Shared.ResetToActed(scenario);
+
+    /// <summary>
+    /// Replaces the act in the scenario keeping the assertions
+    /// </summary>
+    /// <param name="scenario">scenario</param>
+    /// <param name="fn">new act to perform</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>asserted scenario</returns>
+    [Pure]
+    public static AaaScenario.Asserted<TData, TResult> ReplaceAct<TData, TResult>(
+        this AaaScenario.Asserted<TData, TResult> scenario,
+        Func<TData, Task<TResult>> fn
+    ) => Shared.ReplaceAct(scenario, fn);
+
+    /// <summary>
+    /// Replaces the act in the scenario keeping the assertions
+    /// </summary>
+    /// <param name="scenario">scenario</param>
+    /// <param name="fn">new act to perform</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>asserted scenario</returns>
+    [Pure]
+    public static AaaScenario.Asserted<TData, TResult> ReplaceAct<TData, TResult>(
+        this AaaScenario.Asserted<TData, TResult> scenario,
+        Func<TData, TResult> fn
+    ) => Shared.ReplaceAct(scenario, fn);
 }

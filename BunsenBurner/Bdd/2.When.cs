@@ -64,4 +64,16 @@ public static partial class Bdd
         this BddScenario.Acted<TData, TResult> scenario,
         Func<TData, TResult, TResultNext> fn
     ) => Shared.And(scenario, fn);
+
+    /// <summary>
+    /// Resets the completed scenario back to given, throwing away the when information
+    /// </summary>
+    /// <param name="scenario">scenario</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>scenario with the given data</returns>
+    [Pure]
+    public static BddScenario.Arranged<TData> ResetToGiven<TData, TResult>(
+        this BddScenario.Acted<TData, TResult> scenario
+    ) => scenario.ResetToArranged();
 }
