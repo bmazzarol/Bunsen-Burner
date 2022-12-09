@@ -1,9 +1,9 @@
-﻿using System.Collections.Immutable;
-using System.Net;
+﻿using System.Net;
+using LanguageExt.ClassInstances;
 
 namespace BunsenBurner.Http;
 
-using Headers = IImmutableDictionary<string, string>;
+using Headers = Map<OrdStringOrdinal, string, Set<OrdStringOrdinal, string>>;
 
 /// <summary>
 /// HTTP Response
@@ -36,18 +36,9 @@ public sealed record Response(
             httpResp.StatusCode,
             content,
             httpResp.Content.Headers.ContentType?.MediaType,
-            httpResp.Headers
-                .Select(
-                    x =>
-                        new KeyValuePair<string, string>(
-                            x.Key,
-                            x.Value.Aggregate(
-                                string.Empty,
-                                (a, b) => a != string.Empty ? $"{a},{b}" : b
-                            )
-                        )
-                )
-                .ToImmutableDictionary()
+            toMap<OrdStringOrdinal, string, Set<OrdStringOrdinal, string>>(
+                httpResp.Headers.Select(kv => (kv.Key, toSet<OrdStringOrdinal, string>(kv.Value)))
+            )
         );
     }
 }

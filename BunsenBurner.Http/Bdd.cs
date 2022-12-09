@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using LanguageExt;
 using Microsoft.AspNetCore.TestHost;
 
 namespace BunsenBurner.Http;

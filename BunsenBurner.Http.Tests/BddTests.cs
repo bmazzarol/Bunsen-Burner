@@ -67,10 +67,8 @@ public static class BddTests
     public static async Task Case6() =>
         await Request
             .DELETE("/hello-world")
-            .WithHeaders(
-                new KeyValuePair<string, string>("A", "1"),
-                new KeyValuePair<string, string>("B", "2")
-            )
+            .WithHeader("A", "1")
+            .WithHeader("B", "2")
             .GivenRequest()
             .WhenCalled(SimpleResponse())
             .IsOk();
