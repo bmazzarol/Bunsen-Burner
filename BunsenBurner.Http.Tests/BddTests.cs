@@ -48,6 +48,7 @@ public static class BddTests
         await Request
             .PUT("/hello-world".SetQueryParam("a", 1), new { A = "1" })
             .WithHeader("b", 123, x => x.ToString())
+            .WithUrl(x => x.SetQueryParams(new { b = 2 }))
             .GivenRequest()
             .WhenCalled(MirrorResponse())
             .IsOk()
@@ -66,9 +67,10 @@ public static class BddTests
     [Fact(DisplayName = "DELETE request can be made to a test server")]
     public static async Task Case6() =>
         await Request
-            .DELETE("/hello-world")
+            .DELETE("/hello-world2")
             .WithHeader("A", "1")
             .WithHeader("B", "2")
+            .WithUrl("/hello-world")
             .GivenRequest()
             .WhenCalled(SimpleResponse())
             .IsOk();
