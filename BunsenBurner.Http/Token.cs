@@ -242,11 +242,12 @@ public sealed record Token
                 builder,
                 (b, kv) =>
                 {
+#pragma warning disable CS8524
                     return kv.Key.Part switch
+#pragma warning restore CS8524
                     {
                         TokenPart.Header => b.AddHeader(kv.Key.Key, kv.Value.Case),
-                        TokenPart.Claim => b.AddClaim(kv.Key.Key, kv.Value.Case),
-                        _ => throw new ArgumentOutOfRangeException(nameof(kv))
+                        TokenPart.Claim => b.AddClaim(kv.Key.Key, kv.Value.Case)
                     };
                 }
             )

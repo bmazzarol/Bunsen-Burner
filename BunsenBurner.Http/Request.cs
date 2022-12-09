@@ -385,18 +385,6 @@ public static class RequestExt
         };
 
     /// <summary>
-    /// Add new headers to the request
-    /// </summary>
-    /// <remarks>if the key exists the value is appended, only unique values are maintained</remarks>
-    /// <param name="request">request</param>
-    /// <param name="headers">headers to add</param>
-    /// <typeparam name="TRequest">valid request type</typeparam>
-    /// <returns>request with header added</returns>
-    public static TRequest WithHeaders<TRequest>(this TRequest request, Headers headers)
-        where TRequest : Request =>
-        headers.Aggregate(request, (r, h) => r.WithHeaders(h.Key, h.Value));
-
-    /// <summary>
     /// Adds bearer authentication
     /// </summary>
     /// <param name="request">request</param>
