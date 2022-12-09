@@ -3,7 +3,7 @@
 /// <summary>
 /// Shared builder function implementations for arrange steps
 /// </summary>
-public static partial class Shared
+internal static partial class Shared
 {
     /// <summary>
     /// Arranges a new scenario

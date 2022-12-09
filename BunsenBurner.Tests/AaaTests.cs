@@ -197,4 +197,45 @@ public class AaaTests
                 (int r, DivideByZeroException e) =>
                     r == 1 && e.Message == "Attempted to divide by zero."
             );
+
+    [Fact(DisplayName = "Scenario can be reset back to arranged from asserted")]
+    public async Task Case18()
+    {
+        int ActFn(int x) => x + 1;
+        void AssertFn(int x) => Assert.Equal(2, x);
+        await 1
+            .ArrangeData()
+            .Act(ActFn)
+            .Assert(AssertFn)
+            .ResetToArranged()
+            .Act(ActFn)
+            .Assert(AssertFn);
+    }
+
+    [Fact(DisplayName = "Scenario can be reset back to arranged from acted")]
+    public async Task Case19()
+    {
+        int ActFn(int x) => x + 1;
+        void AssertFn(int x) => Assert.Equal(2, x);
+        await 1.ArrangeData().Act(ActFn).ResetToArranged().Act(ActFn).Assert(AssertFn);
+    }
+
+    [Fact(DisplayName = "Scenario can be reset back to acted")]
+    public async Task Case20()
+    {
+        void AssertFn(int x) => Assert.Equal(2, x);
+        await 1.ArrangeData().Act(x => x + 1).Assert(AssertFn).ResetToActed().Assert(AssertFn);
+    }
+
+    [Fact(DisplayName = "Scenario can have act redefined")]
+    public async Task Case21() =>
+        await 1.ArrangeData().Act(x => x + 1).Assert(x => x == 3).ReplaceAct(x => x + 2);
+
+    [Fact(DisplayName = "Scenario can have an async act redefined")]
+    public async Task Case22() =>
+        await 1
+            .ArrangeData()
+            .Act(x => Task.FromResult(x + 1))
+            .Assert(x => x == 3)
+            .ReplaceAct(x => Task.FromResult(x + 2));
 }

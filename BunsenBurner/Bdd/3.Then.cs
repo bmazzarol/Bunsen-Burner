@@ -361,4 +361,56 @@ public static partial class Bdd
     public static TaskAwaiter GetAwaiter<TData, TResult>(
         this BddScenario.Asserted<TData, TResult> scenario
     ) => scenario.Run().GetAwaiter();
+
+    /// <summary>
+    /// Resets the then scenario back to given, throwing away the when and then information
+    /// </summary>
+    /// <param name="scenario">scenario</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>given scenario</returns>
+    [Pure]
+    public static BddScenario.Arranged<TData> ResetToGiven<TData, TResult>(
+        this BddScenario.Asserted<TData, TResult> scenario
+    ) => scenario.ResetToArranged();
+
+    /// <summary>
+    /// Resets the asserted scenario back to when, throwing away the then information
+    /// </summary>
+    /// <param name="scenario">scenario</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>scenario that is run</returns>
+    [Pure]
+    public static BddScenario.Acted<TData, TResult> ResetToWhen<TData, TResult>(
+        this BddScenario.Asserted<TData, TResult> scenario
+    ) => scenario.ResetToActed();
+
+    /// <summary>
+    /// Replaces the when in the scenario keeping the then part
+    /// </summary>
+    /// <param name="scenario">scenario</param>
+    /// <param name="fn">new act to perform</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>completed scenario</returns>
+    [Pure]
+    public static BddScenario.Asserted<TData, TResult> ReplaceWhen<TData, TResult>(
+        this BddScenario.Asserted<TData, TResult> scenario,
+        Func<TData, Task<TResult>> fn
+    ) => scenario.ReplaceAct(fn);
+
+    /// <summary>
+    /// Replaces the when in the scenario keeping the then part
+    /// </summary>
+    /// <param name="scenario">scenario</param>
+    /// <param name="fn">new act to perform</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>completed scenario</returns>
+    [Pure]
+    public static BddScenario.Asserted<TData, TResult> ReplaceWhen<TData, TResult>(
+        this BddScenario.Asserted<TData, TResult> scenario,
+        Func<TData, TResult> fn
+    ) => scenario.ReplaceAct(fn);
 }

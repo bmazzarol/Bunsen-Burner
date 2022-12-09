@@ -3,7 +3,7 @@
 /// <summary>
 /// Shared builder function implementations for act steps
 /// </summary>
-public static partial class Shared
+internal static partial class Shared
 {
     /// <summary>
     /// Acts on a scenario
@@ -86,4 +86,17 @@ public static partial class Shared
         TSyntax
     >(this Scenario<TSyntax>.Acted<TData, TResult> scenario, Func<TData, TResult, TResultNext> fn)
         where TSyntax : struct, Syntax => scenario.And((d, r) => Task.FromResult(fn(d, r)));
+
+    /// <summary>
+    /// Resets the acted scenario back to arranged, throwing away the act information
+    /// </summary>
+    /// <param name="scenario">scenario</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <typeparam name="TSyntax">supported syntax</typeparam>
+    /// <returns>arranged scenario</returns>
+    [Pure]
+    public static Scenario<TSyntax>.Arranged<TData> ResetToArranged<TData, TResult, TSyntax>(
+        this Scenario<TSyntax>.Acted<TData, TResult> scenario
+    ) where TSyntax : struct, Syntax => Arrange<TData, TSyntax>(scenario.ArrangeScenario);
 }

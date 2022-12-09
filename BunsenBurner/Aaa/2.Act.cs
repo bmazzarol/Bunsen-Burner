@@ -64,4 +64,16 @@ public static partial class Aaa
         this AaaScenario.Acted<TData, TResult> scenario,
         Func<TData, TResult, TResultNext> fn
     ) => Shared.And(scenario, fn);
+
+    /// <summary>
+    /// Resets the acted scenario back to arranged, throwing away the act information
+    /// </summary>
+    /// <param name="scenario">scenario</param>
+    /// <typeparam name="TData">test data</typeparam>
+    /// <typeparam name="TResult">test result</typeparam>
+    /// <returns>arranged scenario</returns>
+    [Pure]
+    public static AaaScenario.Arranged<TData> ResetToArranged<TData, TResult>(
+        this AaaScenario.Acted<TData, TResult> scenario
+    ) => Shared.ResetToArranged(scenario);
 }

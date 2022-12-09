@@ -176,4 +176,39 @@ public class BddTests
                 (int r, DivideByZeroException e) =>
                     r == 1 && e.Message == "Attempted to divide by zero."
             );
+
+    [Fact(DisplayName = "Scenario can be reset back to arranged from asserted")]
+    public async Task Case18()
+    {
+        int WhenFn(int x) => x + 1;
+        void ThenFn(int x) => Assert.Equal(2, x);
+        await 1.GivenData().When(WhenFn).Then(ThenFn).ResetToGiven().When(WhenFn).Then(ThenFn);
+    }
+
+    [Fact(DisplayName = "Scenario can be reset back to arranged from acted")]
+    public async Task Case19()
+    {
+        int WhenFn(int x) => x + 1;
+        void ThenFn(int x) => Assert.Equal(2, x);
+        await 1.GivenData().When(WhenFn).ResetToGiven().When(WhenFn).Then(ThenFn);
+    }
+
+    [Fact(DisplayName = "Scenario can be reset back to acted")]
+    public async Task Case20()
+    {
+        void ThenFn(int x) => Assert.Equal(2, x);
+        await 1.GivenData().When(x => x + 1).Then(ThenFn).ResetToWhen().Then(ThenFn);
+    }
+
+    [Fact(DisplayName = "Scenario can have act redefined")]
+    public async Task Case21() =>
+        await 1.GivenData().When(x => x + 1).Then(x => x == 3).ReplaceWhen(x => x + 2);
+
+    [Fact(DisplayName = "Scenario can have an async act redefined")]
+    public async Task Case22() =>
+        await 1
+            .GivenData()
+            .When(x => Task.FromResult(x + 1))
+            .Then(x => x == 3)
+            .ReplaceWhen(x => Task.FromResult(x + 2));
 }
