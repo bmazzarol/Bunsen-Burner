@@ -2,8 +2,6 @@
 using System.Net.Mime;
 using BunsenBurner.FunctionApp.Models;
 using BunsenBurner.Http;
-using LanguageExt;
-using LanguageExt.ClassInstances;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -33,25 +31,22 @@ public static class HttpFunctionAppExtensions
         actionResult switch
         {
             ObjectResult { Value: not null } objectResult
-                => new Response(
+                => Response.New(
                     (HttpStatusCode)objectResult.StatusCode.GetValueOrDefault(),
                     objectResult.Value.ToString(),
-                    objectResult.ContentTypes.FirstOrDefault(),
-                    Map<OrdStringOrdinal, string, Set<OrdStringOrdinal, string>>.Empty
+                    objectResult.ContentTypes.FirstOrDefault()
                 ),
             IStatusCodeActionResult statusCodeResult
-                => new Response(
+                => Response.New(
                     (HttpStatusCode)statusCodeResult.StatusCode.GetValueOrDefault(),
                     string.Empty,
-                    string.Empty,
-                    Map<OrdStringOrdinal, string, Set<OrdStringOrdinal, string>>.Empty
+                    string.Empty
                 ),
             _
-                => new Response(
+                => Response.New(
                     HttpStatusCode.InternalServerError,
                     "Failed to process action result",
-                    MediaTypeNames.Text.Plain,
-                    Map<OrdStringOrdinal, string, Set<OrdStringOrdinal, string>>.Empty
+                    MediaTypeNames.Text.Plain
                 )
         };
 }

@@ -130,7 +130,7 @@ public static class BddTests
     [Fact(DisplayName = "GET request can be made to a test server, with mixed data")]
     public static async Task Case13() =>
         await Given(() => (Req: Request.GET($"/hello-world"), SomeOtherData: "test"))
-            .WhenCalled(x => x.Req, SimpleResponse())
+            .WhenCalled(x => x.Req, _ => SimpleResponse())
             .Then(ctx => Assert.Equal(HttpStatusCode.OK, ctx.Response.Code));
 
     [Fact(DisplayName = "GET request can be made with mixed data")]

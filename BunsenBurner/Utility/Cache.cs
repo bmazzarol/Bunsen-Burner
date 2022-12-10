@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BunsenBurner.Utility;
 
@@ -10,6 +11,7 @@ public sealed class Cache<TValue> : IDisposable
 {
     private readonly ConcurrentDictionary<string, Lazy<TValue>> _concurrentDictionary;
 
+    [ExcludeFromCodeCoverage]
     internal Cache(bool cleanupOnProcessExit = true)
     {
         _concurrentDictionary = new ConcurrentDictionary<string, Lazy<TValue>>(

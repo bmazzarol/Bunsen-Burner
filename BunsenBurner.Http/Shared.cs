@@ -38,11 +38,16 @@ internal static class Shared
         TData,
         TRequest,
         TSyntax
-    >(this Scenario<TSyntax>.Arranged<TData> scenario, Func<TData, TRequest> fn, TestServer server)
+    >(
+        this Scenario<TSyntax>.Arranged<TData> scenario,
+        Func<TData, TRequest> fn,
+        Func<TData, TestServer> serverFn
+    )
         where TRequest : Request
         where TSyntax : struct, Syntax =>
         scenario.Act(async data =>
         {
+            var server = serverFn(data);
             var store = server.Host.Services.GetService<LogMessageStore>();
             var resp = await InternalCall(fn(data), server.CreateClient());
             return new ResponseContext(resp, store ?? LogMessageStore.New());
@@ -54,7 +59,7 @@ internal static class Shared
         TSyntax
     >(this Scenario<TSyntax>.Arranged<TRequest> scenario, TestServer server)
         where TRequest : Request
-        where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _, server);
+        where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _, _ => server);
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<TData, Response> ActAndCall<TData, TRequest, TSyntax>(

@@ -26,8 +26,8 @@ internal sealed class DummyHttpRequest : HttpRequest, IDisposable
         _content = request.Content();
         ContentType = request.ContentType();
         ContentLength = request.ContentLength();
-        foreach (var kv in request.Headers)
-            Headers.Add(kv.Key, new StringValues(kv.Value.OrderBy(_ => _).ToArray()));
+        foreach (var header in request.Headers)
+            Headers.Add(header.Name, new StringValues(header.ToArray()));
     }
 
     public override Task<IFormCollection> ReadFormAsync(

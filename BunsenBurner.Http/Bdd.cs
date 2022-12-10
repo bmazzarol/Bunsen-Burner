@@ -46,7 +46,7 @@ public static class Bdd
     public static BddScenario.Acted<TData, ResponseContext> WhenCalled<TData, TRequest>(
         this BddScenario.Arranged<TData> scenario,
         Func<TData, TRequest> fn,
-        TestServer server
+        Func<TData, TestServer> server
     ) where TRequest : Request => scenario.ActAndCall(fn, server);
 
     /// <summary>

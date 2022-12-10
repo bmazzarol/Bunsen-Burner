@@ -46,7 +46,7 @@ public static class Aaa
     public static AaaScenario.Acted<TData, ResponseContext> ActAndCall<TData, TRequest>(
         this AaaScenario.Arranged<TData> scenario,
         Func<TData, TRequest> fn,
-        TestServer server
+        Func<TData, TestServer> server
     ) where TRequest : Request => scenario.ActAndCall<TData, TRequest, Syntax.Aaa>(fn, server);
 
     /// <summary>

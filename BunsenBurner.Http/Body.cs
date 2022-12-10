@@ -1,8 +1,49 @@
-﻿namespace BunsenBurner.Http;
+﻿using System.Text.Json;
+
+namespace BunsenBurner.Http;
 
 /// <summary>
 /// Request body
 /// </summary>
-/// <param name="ContentType">content type</param>
-/// <param name="Data">data</param>
-public sealed record Body(string ContentType, string Data);
+public sealed record Body
+{
+    private const string TextContentType = "text/plain";
+    private const string JsonContentType = "application/json";
+
+    /// <summary>
+    /// Content type
+    /// </summary>
+    public string ContentType { get; init; }
+
+    /// <summary>
+    /// Data
+    /// </summary>
+    public string Data { get; init; }
+
+    private Body(string contentType, string data)
+    {
+        ContentType = contentType;
+        Data = data;
+    }
+
+    /// <summary>
+    /// Text body
+    /// </summary>
+    /// <param name="data">data</param>
+    /// <returns>text body</returns>
+    public static Body Text(string data) => new(TextContentType, data);
+
+    /// <summary>
+    /// Json body
+    /// </summary>
+    /// <param name="data">data</param>
+    /// <returns>json body</returns>
+    public static Body Json<T>(T data) => Json(JsonSerializer.Serialize(data));
+
+    /// <summary>
+    /// Json body
+    /// </summary>
+    /// <param name="data">data</param>
+    /// <returns>json body</returns>
+    public static Body Json(string data) => new(JsonContentType, data);
+}
