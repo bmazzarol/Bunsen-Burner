@@ -60,7 +60,7 @@ public static class AaaTests
     [Fact(DisplayName = "PATCH request can be made to a test server")]
     public static async Task Case5() =>
         await Request
-            .PATCH("/hello-world".SetQueryParam("a", 1), new { A = "1" })
+            .PATCH("/hello-world".SetQueryParam("a", 1), Body.Text("hello"))
             .WithHeader("b", 123, x => x.ToString())
             .ArrangeRequest()
             .ActAndCall(MirrorResponse())
@@ -71,11 +71,14 @@ public static class AaaTests
     public static async Task Case6() =>
         await Request
             .DELETE("/hello-world")
-            .WithHeader("A", "1")
-            .WithHeader("B", "2")
+            .WithHeaders(
+                Header.New("A", "1").WithValue("2"),
+                Header.New("B", "2").Clear().WithValue("3")
+            )
             .ArrangeRequest()
             .ActAndCall(SimpleResponse())
-            .IsOk();
+            .IsOk()
+            .And(r => r.Response.MediaType == null);
 
     [Fact(DisplayName = "OPTION request can be made to a test server")]
     public static async Task Case7() =>
@@ -137,7 +140,7 @@ public static class AaaTests
     [Fact(DisplayName = "GET request can be made to a test server, with mixed data")]
     public static async Task Case13() =>
         await Arrange(() => (Req: Request.GET($"/hello-world"), SomeOtherData: "test"))
-            .ActAndCall(x => x.Req, SimpleResponse())
+            .ActAndCall(x => x.Req, _ => SimpleResponse())
             .Assert(ctx => Assert.Equal(HttpStatusCode.OK, ctx.Response.Code));
 
     [Fact(DisplayName = "GET request can be made with mixed data")]
@@ -195,7 +198,7 @@ public static class AaaTests
                     Assert.Contains(
                         req.Headers,
                         h =>
-                            h.Key == "Authorization"
+                            h.Name == "Authorization"
                             && req.Headers.Get("Authorization") != string.Empty
                     );
                     var token = Token.FromRaw(req.Headers.Get("Authorization")!);
@@ -223,7 +226,7 @@ public static class AaaTests
                 {
                     Assert.Contains(
                         req.Headers,
-                        h => h.Key == "Authorization" && (string)h.Value.Case != string.Empty
+                        h => h.Name == "Authorization" && h.Value != string.Empty
                     );
                     Assert.NotNull(
                         Token.FromRaw(
