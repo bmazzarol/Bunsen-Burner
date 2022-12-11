@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace BunsenBurner.Http.Tests;
 
-internal sealed class TestStartupWithAuth   
+internal sealed class TestStartupWithAuth
 {
     public void ConfigureServices(IServiceCollection services)
     {
