@@ -1,7 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
+using BunsenBurner.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Xunit.Abstractions;
 
 namespace BunsenBurner.Background.Tests;
 
@@ -59,11 +61,15 @@ internal sealed class Startup
     }
 }
 
-public static class AaaTests
+public sealed class AaaTests
 {
+    private readonly ITestOutputHelper _testOutput;
+
+    public AaaTests(ITestOutputHelper testOutput) => _testOutput = testOutput;
+
     [Fact(DisplayName = "A background service can be started and run for a period")]
-    public static async Task Case1() =>
-        await ArrangeBackgroundService<Startup, Background>()
+    public async Task Case1() =>
+        await ArrangeBackgroundService<Startup, Background>(Sink.New(_testOutput.WriteLine))
             .ActAndRunFor(
                 5 * minutes,
                 context => context.Store.Any(x => x.Message == "Work complete")
@@ -77,9 +83,9 @@ public static class AaaTests
     [Fact(
         DisplayName = "A background service can be started and run for a period with a description"
     )]
-    public static async Task Case2() =>
+    public async Task Case2() =>
         await "Some description"
-            .ArrangeBackgroundService<Startup, Background>()
+            .ArrangeBackgroundService<Startup, Background>(Sink.New(_testOutput.WriteLine))
             .ActAndRunFor(
                 5 * minutes,
                 context => context.Store.Any(x => x.Message == "Work complete")
@@ -93,9 +99,9 @@ public static class AaaTests
     [Fact(
         DisplayName = "A background service can be started and run for a period with existing arranged data"
     )]
-    public static async Task Case3() =>
+    public async Task Case3() =>
         await Arrange(() => 1)
-            .AndABackgroundService<int, Startup, Background>()
+            .AndABackgroundService<int, Startup, Background>(Sink.New(_testOutput.WriteLine))
             .ActAndRunFor(
                 x => x.BackgroundServiceContext,
                 5 * minutes,
@@ -108,8 +114,8 @@ public static class AaaTests
             });
 
     [Fact(DisplayName = "A background service can be started and run against a schedule")]
-    public static async Task Case4() =>
-        await ArrangeBackgroundService<Startup, Background>()
+    public async Task Case4() =>
+        await ArrangeBackgroundService<Startup, Background>(Sink.New(_testOutput.WriteLine))
             .ActAndRunUntil(
                 Schedule.spaced(1 * ms) & Schedule.maxCumulativeDelay(5 * minutes),
                 context => context.Store.Any(x => x.Message == "Work complete")
@@ -123,9 +129,9 @@ public static class AaaTests
     [Fact(
         DisplayName = "A background service can be started and run against a schedule with a description"
     )]
-    public static async Task Case5() =>
+    public async Task Case5() =>
         await "Some description"
-            .ArrangeBackgroundService<Startup, Background>()
+            .ArrangeBackgroundService<Startup, Background>(Sink.New(_testOutput.WriteLine))
             .ActAndRunUntil(
                 Schedule.spaced(1 * ms) & Schedule.maxCumulativeDelay(5 * minutes),
                 context => context.Store.Any(x => x.Message == "Work complete")
@@ -139,9 +145,9 @@ public static class AaaTests
     [Fact(
         DisplayName = "A background service can be started and run against a schedule with existing arranged data"
     )]
-    public static async Task Case6() =>
+    public async Task Case6() =>
         await Arrange(() => 1)
-            .AndABackgroundService<int, Startup, Background>()
+            .AndABackgroundService<int, Startup, Background>(Sink.New(_testOutput.WriteLine))
             .ActAndRunUntil(
                 x => x.BackgroundServiceContext,
                 Schedule.spaced(1 * ms) & Schedule.maxCumulativeDelay(5 * minutes),
@@ -156,12 +162,13 @@ public static class AaaTests
     [Fact(
         DisplayName = "A background service can be started and run against a schedule with existing arranged data and no caching"
     )]
-    public static async Task Case7() =>
+    public async Task Case7() =>
         await Arrange(() => 99)
             .ActAndRunUntil(
                 i =>
                     BackgroundServiceBuilder.Create<Startup, Background>(
-                        collection => collection.AddSingleton<ITestService>(new TestService(i))
+                        collection => collection.AddSingleton<ITestService>(new TestService(i)),
+                        Sink.New(_testOutput.WriteLine)
                     ),
                 Schedule.spaced(1 * ms) & Schedule.maxCumulativeDelay(5 * minutes),
                 context => context.Store.Any(x => x.Message == "Work complete")

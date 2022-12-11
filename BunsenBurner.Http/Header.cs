@@ -68,6 +68,9 @@ public sealed record Header : IEnumerable<string>
     /// <returns>header with no values</returns>
     public Header Clear() => this with { Values = InternalHeader.Empty };
 
+    /// <inheritdoc />
+    public override string ToString() => $"{Name}: {string.Join(",", this)}";
+
     /// <summary>
     /// Ord type class for header
     /// </summary>

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using BunsenBurner.Logging;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
+using Xunit.Abstractions;
 
 namespace BunsenBurner.Http.Tests;
 
@@ -55,14 +57,25 @@ internal sealed class Startup
     }
 }
 
-public static class StartupTest
+public sealed class StartupTest
 {
+    private readonly ITestOutputHelper _outputHelper;
+
+    public StartupTest(ITestOutputHelper outputHelper) => _outputHelper = outputHelper;
+
     [Fact(DisplayName = "Using a startup class in the test service builder works")]
-    public static async Task Case1() =>
+    public async Task Case1() =>
         await Request
             .GET("/health")
+            .WithHeader("a", "1", "2", "3")
+            .WithHeader("b", "4")
             .ArrangeRequest()
-            .ActAndCall(TestServerBuilderOptions.New<Startup>().Build())
+            .ActAndCall(
+                TestServerBuilderOptions
+                    .New<Startup>()
+                    .WithLogMessageSink(Sink.New(_outputHelper.WriteLine))
+                    .Build()
+            )
             .IsOk()
             .And(ctx => Assert.Contains(ctx.Store, x => x.Message == "Health checked"))
             .And(ctx => Assert.Contains(ctx.Store, x => x.Message == "Result is 1"));
@@ -70,7 +83,7 @@ public static class StartupTest
     [Fact(
         DisplayName = "Using a startup class in the test service builder works with replacements"
     )]
-    public static async Task Case2() =>
+    public async Task Case2() =>
         await Request
             .GET("/health")
             .ArrangeRequest()
@@ -83,9 +96,24 @@ public static class StartupTest
                                 ServiceDescriptor.Scoped<ITestService>(_ => new TestService(2))
                             )
                     )
-                    .Build(false)
+                    .WithLogMessageSink(Sink.New(_outputHelper.WriteLine))
+                    .Build()
             )
             .IsOk()
             .And(ctx => Assert.Contains(ctx.Store, x => x.Message == "Health checked"))
             .And(ctx => Assert.Contains(ctx.Store, x => x.Message == "Result is 2"));
+
+    [Fact(DisplayName = "Test sending a body in the request to test server and logging it")]
+    public async Task Case3() =>
+        await Request
+            .POST("/health", new { A = 1 })
+            .ArrangeRequest()
+            .ActAndCall(
+                TestServerBuilderOptions
+                    .New<Startup>()
+                    .WithLogMessageSink(Sink.New(_outputHelper.WriteLine))
+                    .BuildAndCache()
+            )
+            .IsOk()
+            .And(ctx => Assert.Equal("Cache-Control: no-store, no-cache", ctx.Response.Headers.First().ToString()));
 }

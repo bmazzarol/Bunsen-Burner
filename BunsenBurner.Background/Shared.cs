@@ -12,28 +12,31 @@ internal static class Shared
     [Pure]
     internal static Scenario<TSyntax>.Arranged<
         BackgroundServiceContext<TBackgroundService>
-    > ArrangeBackgroundService<TStartup, TBackgroundService, TSyntax>()
+    > ArrangeBackgroundService<TStartup, TBackgroundService, TSyntax>(Sink? sink = default)
         where TStartup : new()
         where TBackgroundService : IHostedService
         where TSyntax : struct, Syntax =>
         Arrange<BackgroundServiceContext<TBackgroundService>, TSyntax>(
             () =>
                 Task.FromResult(
-                    BackgroundServiceBuilder.CreateAndCache<TStartup, TBackgroundService>()
+                    BackgroundServiceBuilder.CreateAndCache<TStartup, TBackgroundService>(sink)
                 )
         );
 
     [Pure]
     internal static Scenario<TSyntax>.Arranged<
         BackgroundServiceContext<TBackgroundService>
-    > ArrangeBackgroundService<TStartup, TBackgroundService, TSyntax>(this string name)
+    > ArrangeBackgroundService<TStartup, TBackgroundService, TSyntax>(
+        this string name,
+        Sink? sink = default
+    )
         where TStartup : new()
         where TBackgroundService : IHostedService
         where TSyntax : struct, Syntax =>
         name.Arrange<BackgroundServiceContext<TBackgroundService>, TSyntax>(
             () =>
                 Task.FromResult(
-                    BackgroundServiceBuilder.CreateAndCache<TStartup, TBackgroundService>()
+                    BackgroundServiceBuilder.CreateAndCache<TStartup, TBackgroundService>(sink)
                 )
         );
 
@@ -43,13 +46,13 @@ internal static class Shared
         TStartup,
         TBackgroundService,
         TSyntax
-    >(this Scenario<TSyntax>.Arranged<TData> scenario)
+    >(this Scenario<TSyntax>.Arranged<TData> scenario, Sink? sink = default)
         where TStartup : new()
         where TBackgroundService : IHostedService
         where TSyntax : struct, Syntax =>
         scenario.And(data =>
         {
-            var ctx = BackgroundServiceBuilder.CreateAndCache<TStartup, TBackgroundService>();
+            var ctx = BackgroundServiceBuilder.CreateAndCache<TStartup, TBackgroundService>(sink);
             return (Data: data, BackgroundServiceContext: ctx);
         });
 

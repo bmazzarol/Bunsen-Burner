@@ -52,4 +52,13 @@ public sealed class LoggerTests
         Assert.Contains(store, message => message.Message == "logger 1");
         Assert.Contains(store, message => message.Message == "logger 2");
     }
+
+    [Fact(DisplayName = "Test output helper can be converted to s sink")]
+    public void Case3()
+    {
+        var sink = _outputHelper.AsSink();
+        var logger = DummyLogger.New<object>(sink: sink);
+        logger.LogInformation("Some test message");
+        Assert.Contains(logger, message => message.Message == "Some test message");
+    }
 }
