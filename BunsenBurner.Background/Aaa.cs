@@ -13,36 +13,39 @@ public static class Aaa
     /// <summary>
     /// Arranges a background service context to run
     /// </summary>
+    /// <param name="sink">optional messages sink</param>
     /// <typeparam name="TStartup">startup class</typeparam>
     /// <typeparam name="TBackgroundService">background service class</typeparam>
     /// <returns>arranged scenario</returns>
     [Pure]
     public static AaaScenario.Arranged<
         BackgroundServiceContext<TBackgroundService>
-    > ArrangeBackgroundService<TStartup, TBackgroundService>()
+    > ArrangeBackgroundService<TStartup, TBackgroundService>(Sink? sink = default)
         where TStartup : new()
         where TBackgroundService : IHostedService =>
-        Shared.ArrangeBackgroundService<TStartup, TBackgroundService, Syntax.Aaa>();
+        Shared.ArrangeBackgroundService<TStartup, TBackgroundService, Syntax.Aaa>(sink);
 
     /// <summary>
     /// Arranges a background service context to run
     /// </summary>
     /// <param name="name">name/description</param>
+    /// <param name="sink">optional messages sink</param>
     /// <typeparam name="TStartup">startup class</typeparam>
     /// <typeparam name="TBackgroundService">background service class</typeparam>
     /// <returns>arranged scenario</returns>
     [Pure]
     public static AaaScenario.Arranged<
         BackgroundServiceContext<TBackgroundService>
-    > ArrangeBackgroundService<TStartup, TBackgroundService>(this string name)
+    > ArrangeBackgroundService<TStartup, TBackgroundService>(this string name, Sink? sink = default)
         where TStartup : new()
         where TBackgroundService : IHostedService =>
-        name.ArrangeBackgroundService<TStartup, TBackgroundService, Syntax.Aaa>();
+        name.ArrangeBackgroundService<TStartup, TBackgroundService, Syntax.Aaa>(sink);
 
     /// <summary>
     /// Arranges a background service context to run along with existing arranged data
     /// </summary>
     /// <param name="scenario">scenario</param>
+    /// <param name="sink">optional messages sink</param>
     /// <typeparam name="TData">current arranged data</typeparam>
     /// <typeparam name="TStartup">startup class</typeparam>
     /// <typeparam name="TBackgroundService">background service class</typeparam>
@@ -52,10 +55,10 @@ public static class Aaa
         TData,
         TStartup,
         TBackgroundService
-    >(this AaaScenario.Arranged<TData> scenario)
+    >(this AaaScenario.Arranged<TData> scenario, Sink? sink = default)
         where TStartup : new()
         where TBackgroundService : IHostedService =>
-        scenario.AndABackgroundService<TData, TStartup, TBackgroundService, Syntax.Aaa>();
+        scenario.AndABackgroundService<TData, TStartup, TBackgroundService, Syntax.Aaa>(sink);
 
     /// <summary>
     /// Runs the background service until the predicate returns true, or the schedule ends, returning any log messages

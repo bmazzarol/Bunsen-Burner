@@ -54,7 +54,8 @@ public static class TestServerBuilder
 
     private static IServiceCollection ConfigureTestLogging(
         this IServiceCollection services,
-        LogMessageStore store
+        LogMessageStore store,
+        Sink? sink
     ) =>
         services
             // remove any logger factories
@@ -62,7 +63,7 @@ public static class TestServerBuilder
             // use dummy logger
             .AddSingleton(store)
             .ClearLoggingProviders()
-            .AddDummyLogger(store);
+            .AddDummyLogger(store, sink);
 
     private static IConfigurationBuilder ConfigureTestSettings(
         this IConfigurationBuilder builder,
@@ -111,7 +112,7 @@ public static class TestServerBuilder
                 var store = LogMessageStore.New();
                 services
                     // setup test loggers
-                    .ConfigureTestLogging(store)
+                    .ConfigureTestLogging(store, options.Sink)
                     // remove hosted services
                     .RemoveAll(typeof(IHostedService))
                     // setup test auth
@@ -174,8 +175,26 @@ public static class TestServerBuilder
     /// </para>
     /// </remarks>
     /// <param name="options">options to use when building the test server</param>
-    /// <param name="cache">flag to indicate that the result should be cached against the configured name</param>
     /// <returns>test server</returns>
-    public static TestServer Build(this TestServerBuilderOptions options, bool cache = true) =>
-        cache ? CreateAndCache(options) : Create(options);
+    public static TestServer Build(this TestServerBuilderOptions options) => Create(options);
+
+    /// <summary>
+    /// Creates and caches a new test service instance
+    /// </summary>
+    /// <remarks>
+    /// <para>Does the following,</para>
+    /// <para>
+    /// * Sets the environment name
+    /// * Removes all background services
+    /// * Replaces all loggers with the dummy logger
+    /// * Replaces the JWT token configuration to allow for test tokens
+    /// * Enables both Synchronous IO and Preserve execution context
+    /// * Wires up an appsettings.{testing-env-name}.json files
+    /// * Runs all delegates and replacements
+    /// </para>
+    /// </remarks>
+    /// <param name="options">options to use when building the test server</param>
+    /// <returns>test server</returns>
+    public static TestServer BuildAndCache(this TestServerBuilderOptions options) =>
+        CreateAndCache(options);
 }

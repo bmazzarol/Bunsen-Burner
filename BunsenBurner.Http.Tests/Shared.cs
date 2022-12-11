@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using BunsenBurner.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -19,7 +20,7 @@ internal static class Shared
             }
         );
 
-    public static TestServer MirrorResponse() =>
+    public static TestServer MirrorResponse(Sink? sink = default) =>
         CreateTestServer(
             nameof(MirrorResponse),
             async ctx =>
@@ -27,12 +28,21 @@ internal static class Shared
                 ctx.Response.Headers.Add("custom", "123");
                 var reader = new StreamReader(ctx.Request.Body);
                 await ctx.Response.WriteAsync(await reader.ReadToEndAsync());
-            }
+            },
+            sink
         );
 
-    private static TestServer CreateTestServer(string name, RequestDelegate requestDelegate) =>
+    private static TestServer CreateTestServer(
+        string name,
+        RequestDelegate requestDelegate,
+        Sink? sink = default
+    ) =>
         TestServerBuilderOptions
-            .New(name, configureHost: builder => builder.Configure(x => x.Run(requestDelegate)))
+            .New(
+                name,
+                configureHost: builder => builder.Configure(x => x.Run(requestDelegate)),
+                sink: sink
+            )
             .Build();
 
     private static Scenario<TSyntax>.Asserted<TRequest, ResponseContext> AssertOnResponse<

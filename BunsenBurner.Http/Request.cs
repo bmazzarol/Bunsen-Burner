@@ -55,6 +55,16 @@ public abstract record Request
     /// <returns>content length</returns>
     public long? ContentLength() => Content()?.Length;
 
+    /// <inheritdoc />
+    public sealed override string ToString()
+    {
+        var headers = Headers.IsEmpty
+            ? string.Empty
+            : $" {string.Join(" ", Headers.Select(h => $@"-H ""{h.Name}: {h.Value}"""))}";
+        var body = Content() != null ? $" -d {Content()}" : string.Empty;
+        return $"Request: -X {Verb} {Url}{headers}{body}";
+    }
+
     /// <summary>
     /// Get request
     /// </summary>

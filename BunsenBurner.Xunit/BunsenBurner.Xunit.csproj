@@ -35,9 +35,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\"/>
-        <None Include="..\fire-icon.png" Pack="true" PackagePath="\"/>
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+        <None Include="README.md" Pack="true" PackagePath="\" />
+        <None Include="..\fire-icon.png" Pack="true" PackagePath="\" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
     </ItemGroup>
 
     <ItemGroup>
@@ -60,13 +60,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Meziantou.Xunit.ParallelTestFramework" Version="2.1.0"/>
-        <PackageReference Include="xunit.core" Version="2.4.2"/>
+        <PackageReference Include="Meziantou.Xunit.ParallelTestFramework" Version="2.1.0" />
+        <PackageReference Include="xunit.core" Version="2.4.2" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\BunsenBurner.Logging\BunsenBurner.Logging.csproj"/>
-        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj"/>
+        <ProjectReference Include="..\BunsenBurner.Logging\BunsenBurner.Logging.csproj" />
+        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj" />
     </ItemGroup>
 
 </Project>

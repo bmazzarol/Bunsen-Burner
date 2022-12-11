@@ -13,36 +13,39 @@ public static class Bdd
     /// <summary>
     /// Given a background service context to run
     /// </summary>
+    /// <param name="sink">optional messages sink</param>
     /// <typeparam name="TStartup">startup class</typeparam>
     /// <typeparam name="TBackgroundService">background service class</typeparam>
     /// <returns>given scenario</returns>
     [Pure]
     public static BddScenario.Arranged<
         BackgroundServiceContext<TBackgroundService>
-    > GivenABackgroundService<TStartup, TBackgroundService>()
+    > GivenABackgroundService<TStartup, TBackgroundService>(Sink? sink = default)
         where TStartup : new()
         where TBackgroundService : IHostedService =>
-        Shared.ArrangeBackgroundService<TStartup, TBackgroundService, Syntax.Bdd>();
+        Shared.ArrangeBackgroundService<TStartup, TBackgroundService, Syntax.Bdd>(sink);
 
     /// <summary>
     /// Given a background service context to run
     /// </summary>
     /// <param name="name">name/description</param>
+    /// <param name="sink">optional messages sink</param>
     /// <typeparam name="TStartup">startup class</typeparam>
     /// <typeparam name="TBackgroundService">background service class</typeparam>
     /// <returns>given scenario</returns>
     [Pure]
     public static BddScenario.Arranged<
         BackgroundServiceContext<TBackgroundService>
-    > GivenABackgroundService<TStartup, TBackgroundService>(this string name)
+    > GivenABackgroundService<TStartup, TBackgroundService>(this string name, Sink? sink = default)
         where TStartup : new()
         where TBackgroundService : IHostedService =>
-        name.ArrangeBackgroundService<TStartup, TBackgroundService, Syntax.Bdd>();
+        name.ArrangeBackgroundService<TStartup, TBackgroundService, Syntax.Bdd>(sink);
 
     /// <summary>
     /// Given a background service context to run along with existing given data
     /// </summary>
     /// <param name="scenario">scenario</param>
+    /// <param name="sink">optional messages sink</param>
     /// <typeparam name="TData">current arranged data</typeparam>
     /// <typeparam name="TStartup">startup class</typeparam>
     /// <typeparam name="TBackgroundService">background service class</typeparam>
@@ -52,10 +55,10 @@ public static class Bdd
         TData,
         TStartup,
         TBackgroundService
-    >(this BddScenario.Arranged<TData> scenario)
+    >(this BddScenario.Arranged<TData> scenario, Sink? sink = default)
         where TStartup : new()
         where TBackgroundService : IHostedService =>
-        scenario.AndABackgroundService<TData, TStartup, TBackgroundService, Syntax.Bdd>();
+        scenario.AndABackgroundService<TData, TStartup, TBackgroundService, Syntax.Bdd>(sink);
 
     /// <summary>
     /// Runs the background service until the predicate returns true, or the schedule ends, returning any log messages

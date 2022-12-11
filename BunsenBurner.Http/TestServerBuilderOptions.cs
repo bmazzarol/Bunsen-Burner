@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using BunsenBurner.Logging;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -196,6 +197,18 @@ public sealed record TestServerBuilderOptions
     /// <returns>options</returns>
     public TestServerBuilderOptions WithSigningKey(string key) => this with { SigningKey = key };
 
+    /// <summary>
+    /// Optional log messages sink
+    /// </summary>
+    public Sink? Sink { get; init; }
+
+    /// <summary>
+    /// Sets a custom log message sink for use with test server
+    /// </summary>
+    /// <param name="sink">sink</param>
+    /// <returns>options</returns>
+    public TestServerBuilderOptions WithLogMessageSink(Sink sink) => this with { Sink = sink };
+
     internal TestServerBuilderOptions(
         string name,
         Type? startupClass = default,
@@ -205,7 +218,8 @@ public sealed record TestServerBuilderOptions
         Action<IWebHostBuilder>? configureHost = default,
         IDictionary<string, string?>? appSettingsToOverride = default,
         string issuer = Constants.TestIssuer,
-        string signingKey = Constants.TestSigningKey
+        string signingKey = Constants.TestSigningKey,
+        Sink? sink = default
     )
     {
         Name = name;
@@ -217,6 +231,7 @@ public sealed record TestServerBuilderOptions
         AppSettingsToOverride = appSettingsToOverride;
         Issuer = issuer;
         SigningKey = signingKey;
+        Sink = sink;
     }
 
     /// <summary>
@@ -231,6 +246,7 @@ public sealed record TestServerBuilderOptions
     /// <param name="appSettingsToOverride">optional app settings to override</param>
     /// <param name="issuer">test issuer for the JWT tokens</param>
     /// <param name="signingKey">test signing key for the JWT tokens</param>
+    /// <param name="sink">optional log message sink</param>
     /// <returns>options</returns>
     public static TestServerBuilderOptions New(
         string? name = default,
@@ -241,7 +257,8 @@ public sealed record TestServerBuilderOptions
         Action<IWebHostBuilder>? configureHost = default,
         IDictionary<string, string?>? appSettingsToOverride = default,
         string issuer = Constants.TestIssuer,
-        string signingKey = Constants.TestSigningKey
+        string signingKey = Constants.TestSigningKey,
+        Sink? sink = default
     ) =>
         new(
             name ?? string.Empty,
@@ -252,7 +269,8 @@ public sealed record TestServerBuilderOptions
             configureHost,
             appSettingsToOverride,
             issuer,
-            signingKey
+            signingKey,
+            sink
         );
 
     /// <summary>
@@ -266,6 +284,7 @@ public sealed record TestServerBuilderOptions
     /// <param name="appSettingsToOverride">optional app settings to override</param>
     /// <param name="issuer">test issuer for the JWT tokens</param>
     /// <param name="signingKey">test signing key for the JWT tokens</param>
+    /// <param name="sink">optional log message sink</param>
     /// <returns>options</returns>
     public static TestServerBuilderOptions New<TStartup>(
         string? name = default,
@@ -275,7 +294,8 @@ public sealed record TestServerBuilderOptions
         Action<IWebHostBuilder>? configureHost = default,
         IDictionary<string, string?>? appSettingsToOverride = default,
         string issuer = Constants.TestIssuer,
-        string signingKey = Constants.TestSigningKey
+        string signingKey = Constants.TestSigningKey,
+        Sink? sink = default
     ) where TStartup : class
     {
         var type = typeof(TStartup);
@@ -288,7 +308,8 @@ public sealed record TestServerBuilderOptions
             configureHost,
             appSettingsToOverride,
             issuer,
-            signingKey
+            signingKey,
+            sink
         );
     }
 }

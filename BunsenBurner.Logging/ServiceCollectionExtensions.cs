@@ -13,11 +13,13 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="services">services</param>
     /// <param name="store">log messages store</param>
+    /// <param name="sink">custom sink</param>
     /// <returns>services</returns>
     public static IServiceCollection AddDummyLogger(
         this IServiceCollection services,
-        LogMessageStore store
-    ) => services.AddLogging(options => options.AddProvider(new DummyLoggerProvider(store)));
+        LogMessageStore store,
+        Sink? sink = default
+    ) => services.AddLogging(options => options.AddProvider(new DummyLoggerProvider(store, sink)));
 
     /// <summary>
     /// Clears existing logging providers

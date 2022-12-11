@@ -2,6 +2,7 @@
 using BunsenBurner.Logging;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using static BunsenBurner.Shared;
 
 namespace BunsenBurner.Http;
@@ -26,11 +27,17 @@ internal static class Shared
         where TRequest : Request
         where TSyntax : struct, Syntax => name.Arrange<TRequest, TSyntax>(request);
 
-    private static async Task<Response> InternalCall<TRequest>(TRequest request, HttpClient client)
-        where TRequest : Request
+    private static async Task<Response> InternalCall<TRequest>(
+        TRequest request,
+        HttpClient client,
+        ILogger? logger = null
+    ) where TRequest : Request
     {
+        logger?.LogInformation("{Request}", request.ToString());
         var httpResp = await client.SendAsync(request.HttpRequestMessage());
-        return await Response.New(httpResp);
+        var response = await Response.New(httpResp);
+        logger?.LogInformation("{Response}", response.ToString());
+        return response;
     }
 
     [Pure]
@@ -49,7 +56,8 @@ internal static class Shared
         {
             var server = serverFn(data);
             var store = server.Host.Services.GetService<LogMessageStore>();
-            var resp = await InternalCall(fn(data), server.CreateClient());
+            var logger = server.Host.Services.GetService<ILogger<object>>();
+            var resp = await InternalCall(fn(data), server.CreateClient(), logger);
             return new ResponseContext(resp, store ?? LogMessageStore.New());
         });
 

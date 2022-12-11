@@ -39,6 +39,16 @@ public sealed record Response
     /// </summary>
     public InternalHeaders Headers { get; init; }
 
+    /// <inheritdoc />
+    public override string ToString()
+    {
+        var headers = Headers.IsEmpty
+            ? string.Empty
+            : $" {string.Join(" ", Headers.Select(h => $@"-H ""{h.Name}: {h.Value}"""))}";
+        var body = Content != null ? $" {MediaType}:\n\n{Content}" : string.Empty;
+        return $"Response: {Code}({RawStatusCode}){headers}{body}";
+    }
+
     private Response(
         HttpStatusCode code,
         string? content,
