@@ -115,5 +115,11 @@ public sealed class StartupTest
                     .BuildAndCache()
             )
             .IsOk()
-            .And(ctx => Assert.Equal("Cache-Control: no-store, no-cache", ctx.Response.Headers.First().ToString()));
+            .And(
+                ctx =>
+                    Assert.Equal(
+                        "Cache-Control: no-store, no-cache",
+                        ctx.Response.Headers.First().ToString()
+                    )
+            );
 }
