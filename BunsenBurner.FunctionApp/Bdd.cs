@@ -15,9 +15,8 @@ public static class Bdd
     /// <returns>given scenario</returns>
     [Pure]
     public static BddScenario.Arranged<TFunction> GivenFunctionApp<TStartup, TFunction>()
-        where TFunction : class
-        where TStartup : FunctionsStartup, new() =>
-        Shared.ArrangeFunctionApp<TStartup, TFunction, Syntax.Bdd>();
+        where TStartup : FunctionsStartup, new()
+        where TFunction : class => Shared.ArrangeFunctionApp<TStartup, TFunction, Syntax.Bdd>();
 
     /// <summary>
     /// Given a function app
@@ -30,9 +29,8 @@ public static class Bdd
     public static BddScenario.Arranged<TFunction> GivenFunctionApp<TStartup, TFunction>(
         this string name
     )
-        where TFunction : class
-        where TStartup : FunctionsStartup, new() =>
-        name.ArrangeFunctionApp<TStartup, TFunction, Syntax.Bdd>();
+        where TStartup : FunctionsStartup, new()
+        where TFunction : class => name.ArrangeFunctionApp<TStartup, TFunction, Syntax.Bdd>();
 
     /// <summary>
     /// Given a function app
@@ -47,8 +45,8 @@ public static class Bdd
         TStartup,
         TFunction
     >(this BddScenario.Arranged<TData> scenario)
-        where TFunction : class
-        where TStartup : FunctionsStartup, new() =>
+        where TStartup : FunctionsStartup, new()
+        where TFunction : class =>
         scenario.AndFunctionApp<TData, TStartup, TFunction, Syntax.Bdd>();
 
     /// <summary>

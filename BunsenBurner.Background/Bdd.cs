@@ -20,8 +20,8 @@ public static class Bdd
     public static BddScenario.Arranged<
         BackgroundServiceContext<TBackgroundService>
     > GivenABackgroundService<TStartup, TBackgroundService>()
-        where TBackgroundService : IHostedService
-        where TStartup : new() =>
+        where TStartup : new()
+        where TBackgroundService : IHostedService =>
         Shared.ArrangeBackgroundService<TStartup, TBackgroundService, Syntax.Bdd>();
 
     /// <summary>
@@ -35,8 +35,8 @@ public static class Bdd
     public static BddScenario.Arranged<
         BackgroundServiceContext<TBackgroundService>
     > GivenABackgroundService<TStartup, TBackgroundService>(this string name)
-        where TBackgroundService : IHostedService
-        where TStartup : new() =>
+        where TStartup : new()
+        where TBackgroundService : IHostedService =>
         name.ArrangeBackgroundService<TStartup, TBackgroundService, Syntax.Bdd>();
 
     /// <summary>
@@ -53,8 +53,8 @@ public static class Bdd
         TStartup,
         TBackgroundService
     >(this BddScenario.Arranged<TData> scenario)
-        where TBackgroundService : IHostedService
-        where TStartup : new() =>
+        where TStartup : new()
+        where TBackgroundService : IHostedService =>
         scenario.AndABackgroundService<TData, TStartup, TBackgroundService, Syntax.Bdd>();
 
     /// <summary>

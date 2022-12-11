@@ -15,9 +15,8 @@ public static class Aaa
     /// <returns>arranged scenario</returns>
     [Pure]
     public static AaaScenario.Arranged<TFunction> ArrangeFunctionApp<TStartup, TFunction>()
-        where TFunction : class
-        where TStartup : FunctionsStartup, new() =>
-        Shared.ArrangeFunctionApp<TStartup, TFunction, Syntax.Aaa>();
+        where TStartup : FunctionsStartup, new()
+        where TFunction : class => Shared.ArrangeFunctionApp<TStartup, TFunction, Syntax.Aaa>();
 
     /// <summary>
     /// Arranges a function app
@@ -30,9 +29,8 @@ public static class Aaa
     public static AaaScenario.Arranged<TFunction> ArrangeFunctionApp<TStartup, TFunction>(
         this string name
     )
-        where TFunction : class
-        where TStartup : FunctionsStartup, new() =>
-        name.ArrangeFunctionApp<TStartup, TFunction, Syntax.Aaa>();
+        where TStartup : FunctionsStartup, new()
+        where TFunction : class => name.ArrangeFunctionApp<TStartup, TFunction, Syntax.Aaa>();
 
     /// <summary>
     /// Arranges a function app
@@ -47,8 +45,8 @@ public static class Aaa
         TStartup,
         TFunction
     >(this AaaScenario.Arranged<TData> scenario)
-        where TFunction : class
-        where TStartup : FunctionsStartup, new() =>
+        where TStartup : FunctionsStartup, new()
+        where TFunction : class =>
         scenario.AndFunctionApp<TData, TStartup, TFunction, Syntax.Aaa>();
 
     /// <summary>

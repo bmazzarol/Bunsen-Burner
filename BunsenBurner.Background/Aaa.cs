@@ -20,8 +20,8 @@ public static class Aaa
     public static AaaScenario.Arranged<
         BackgroundServiceContext<TBackgroundService>
     > ArrangeBackgroundService<TStartup, TBackgroundService>()
-        where TBackgroundService : IHostedService
-        where TStartup : new() =>
+        where TStartup : new()
+        where TBackgroundService : IHostedService =>
         Shared.ArrangeBackgroundService<TStartup, TBackgroundService, Syntax.Aaa>();
 
     /// <summary>
@@ -35,8 +35,8 @@ public static class Aaa
     public static AaaScenario.Arranged<
         BackgroundServiceContext<TBackgroundService>
     > ArrangeBackgroundService<TStartup, TBackgroundService>(this string name)
-        where TBackgroundService : IHostedService
-        where TStartup : new() =>
+        where TStartup : new()
+        where TBackgroundService : IHostedService =>
         name.ArrangeBackgroundService<TStartup, TBackgroundService, Syntax.Aaa>();
 
     /// <summary>
@@ -53,8 +53,8 @@ public static class Aaa
         TStartup,
         TBackgroundService
     >(this AaaScenario.Arranged<TData> scenario)
-        where TBackgroundService : IHostedService
-        where TStartup : new() =>
+        where TStartup : new()
+        where TBackgroundService : IHostedService =>
         scenario.AndABackgroundService<TData, TStartup, TBackgroundService, Syntax.Aaa>();
 
     /// <summary>

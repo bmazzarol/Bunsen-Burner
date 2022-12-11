@@ -31,7 +31,7 @@ public sealed record TestServerBuilderOptions
     /// </summary>
     /// <typeparam name="TStartup">startup class</typeparam>
     /// <returns>options</returns>
-    public TestServerBuilderOptions WithStartup<TStartup>() where TStartup : IStartup =>
+    public TestServerBuilderOptions WithStartup<TStartup>() where TStartup : class =>
         this with
         {
             StartupClass = typeof(TStartup)
@@ -67,27 +67,7 @@ public sealed record TestServerBuilderOptions
     /// <summary>
     /// Optional configuration for the services
     /// </summary>
-    public Action<WebHostBuilderContext, IServiceCollection>? ConfigureServices { get; init; }
-
-    /// <summary>
-    /// Configures services in the options
-    /// </summary>
-    /// <param name="config">action</param>
-    /// <param name="replace">flag indicates the config should be replaced, not extended</param>
-    /// <returns>options</returns>
-    public TestServerBuilderOptions WithServices(
-        Action<WebHostBuilderContext, IServiceCollection> config,
-        bool replace = false
-    ) =>
-        this with
-        {
-            ConfigureServices = (context, collection) =>
-            {
-                if (!replace)
-                    ConfigureServices?.Invoke(context, collection);
-                config(context, collection);
-            }
-        };
+    public Action<IServiceCollection>? ConfigureServices { get; init; }
 
     /// <summary>
     /// Configures services in the options
@@ -98,7 +78,16 @@ public sealed record TestServerBuilderOptions
     public TestServerBuilderOptions WithServices(
         Action<IServiceCollection> config,
         bool replace = false
-    ) => WithServices((_, collection) => config(collection), replace);
+    ) =>
+        this with
+        {
+            ConfigureServices = (collection) =>
+            {
+                if (!replace)
+                    ConfigureServices?.Invoke(collection);
+                config(collection);
+            }
+        };
 
     /// <summary>
     /// Optional configuration for the app configurations
@@ -211,7 +200,7 @@ public sealed record TestServerBuilderOptions
         string name,
         Type? startupClass = default,
         string environmentName = Constants.TestEnvironmentName,
-        Action<WebHostBuilderContext, IServiceCollection>? configureServices = default,
+        Action<IServiceCollection>? configureServices = default,
         Action<WebHostBuilderContext, IConfigurationBuilder>? configureAppConfiguration = default,
         Action<IWebHostBuilder>? configureHost = default,
         IDictionary<string, string?>? appSettingsToOverride = default,
@@ -247,7 +236,7 @@ public sealed record TestServerBuilderOptions
         string? name = default,
         Type? startupClass = default,
         string environmentName = Constants.TestEnvironmentName,
-        Action<WebHostBuilderContext, IServiceCollection>? configureServices = default,
+        Action<IServiceCollection>? configureServices = default,
         Action<WebHostBuilderContext, IConfigurationBuilder>? configureAppConfiguration = default,
         Action<IWebHostBuilder>? configureHost = default,
         IDictionary<string, string?>? appSettingsToOverride = default,
@@ -281,13 +270,13 @@ public sealed record TestServerBuilderOptions
     public static TestServerBuilderOptions New<TStartup>(
         string? name = default,
         string environmentName = Constants.TestEnvironmentName,
-        Action<WebHostBuilderContext, IServiceCollection>? configureServices = default,
+        Action<IServiceCollection>? configureServices = default,
         Action<WebHostBuilderContext, IConfigurationBuilder>? configureAppConfiguration = default,
         Action<IWebHostBuilder>? configureHost = default,
         IDictionary<string, string?>? appSettingsToOverride = default,
         string issuer = Constants.TestIssuer,
         string signingKey = Constants.TestSigningKey
-    ) where TStartup : IStartup
+    ) where TStartup : class
     {
         var type = typeof(TStartup);
         return New(

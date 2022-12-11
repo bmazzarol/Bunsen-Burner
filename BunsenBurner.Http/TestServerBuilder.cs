@@ -105,20 +105,18 @@ public static class TestServerBuilder
         if (options.StartupClass != default)
             builder.UseStartup(options.StartupClass);
         builder
-            .ConfigureServices(
-                (context, services) =>
-                {
-                    options.ConfigureServices?.Invoke(context, services);
-                    var store = LogMessageStore.New();
-                    services
-                        // setup test loggers
-                        .ConfigureTestLogging(store)
-                        // remove hosted services
-                        .RemoveAll(typeof(IHostedService))
-                        // setup test auth
-                        .ConfigureTestAuth(options.Issuer, options.SigningKey);
-                }
-            )
+            .ConfigureTestServices(services =>
+            {
+                options.ConfigureServices?.Invoke(services);
+                var store = LogMessageStore.New();
+                services
+                    // setup test loggers
+                    .ConfigureTestLogging(store)
+                    // remove hosted services
+                    .RemoveAll(typeof(IHostedService))
+                    // setup test auth
+                    .ConfigureTestAuth(options.Issuer, options.SigningKey);
+            })
             .ConfigureAppConfiguration(
                 (context, configBuilder) =>
                 {
