@@ -29,17 +29,40 @@ internal sealed class Startup : FunctionsStartup
         builder.Services.AddScoped<ISomeService, SomeService>();
 }
 
+internal interface ITestService
+{
+    int Result();
+}
+
+internal class TestService : ITestService
+{
+    private readonly int _result;
+
+    public TestService(int result) => _result = result;
+
+    public int Result() => _result;
+}
+
 internal sealed class Function
 {
     private readonly ISomeService _service;
+    private readonly IServiceProvider _provider;
 
-    public Function(ISomeService service) => _service = service;
+    public Function(ISomeService service, IServiceProvider provider)
+    {
+        _service = service;
+        _provider = provider;
+    }
 
     [FunctionName(nameof(SomeFunctionTrigger))]
     public async Task<IActionResult> SomeFunctionTrigger(
         [HttpTrigger(AuthorizationLevel.Anonymous)] HttpRequest req
     )
     {
+        var service = _provider.GetService<ITestService>();
+
+        if (service != null)
+            return new OkObjectResult(service.Result());
         if (req.Query.ContainsKey("empty"))
             return new EmptyResult();
         if (req.Query.ContainsKey("fail"))
@@ -58,7 +81,7 @@ public class AaaTests
             .ActAndExecute(async function =>
             {
                 var result = await function.SomeFunctionTrigger(
-                    Request.GET($"/some-path").AsHttpRequest()
+                    Request.GET("/some-path").AsHttpRequest()
                 );
                 return result.AsResponse();
             })
@@ -109,7 +132,7 @@ public class AaaTests
     public async Task Case4() =>
         await Arrange(() => 2)
             .ActAndExecute(
-                _ => FunctionAppBuilder.Create<Startup, Function>(),
+                _ => FunctionAppBuilder.CreateAndCache<Startup, Function>(),
                 async (i, function) =>
                 {
                     var result = await function.SomeFunctionTrigger(
@@ -126,7 +149,7 @@ public class AaaTests
     public async Task Case5() =>
         await Arrange(() => 2)
             .ActAndExecute(
-                _ => FunctionAppBuilder.Create<Startup, Function>(),
+                _ => FunctionAppBuilder.CreateAndCache<Startup, Function>(),
                 async (i, function) =>
                 {
                     var result = await function.SomeFunctionTrigger(
@@ -136,4 +159,26 @@ public class AaaTests
                 }
             )
             .Assert(resp => Assert.Equal(HttpStatusCode.InternalServerError, resp.Code));
+
+    [Fact(DisplayName = "Executing a http trigger function without caching it")]
+    public async Task Case6() =>
+        await Arrange(() => 99)
+            .ActAndExecute(
+                i =>
+                    FunctionAppBuilder.Create<Startup, Function>(
+                        collection => collection.AddSingleton<ITestService>(new TestService(i))
+                    ),
+                async (i, function) =>
+                {
+                    var result = await function.SomeFunctionTrigger(
+                        Request.GET($"/some-path/{i}".SetQueryParam("empty")).AsHttpRequest()
+                    );
+                    return result.AsResponse();
+                }
+            )
+            .Assert(resp =>
+            {
+                Assert.Equal(HttpStatusCode.OK, resp.Code);
+                Assert.Equal("99", resp.Content);
+            });
 }

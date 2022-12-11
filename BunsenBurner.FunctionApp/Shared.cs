@@ -16,7 +16,7 @@ internal static class Shared
         where TStartup : FunctionsStartup, new()
         where TFunction : class
         where TSyntax : struct, Syntax =>
-        Arrange<TFunction, TSyntax>(FunctionAppBuilder.Create<TStartup, TFunction>());
+        Arrange<TFunction, TSyntax>(FunctionAppBuilder.CreateAndCache<TStartup, TFunction>());
 
     [Pure]
     internal static Scenario<TSyntax>.Arranged<TFunction> ArrangeFunctionApp<
@@ -27,7 +27,7 @@ internal static class Shared
         where TStartup : FunctionsStartup, new()
         where TFunction : class
         where TSyntax : struct, Syntax =>
-        name.Arrange<TFunction, TSyntax>(FunctionAppBuilder.Create<TStartup, TFunction>());
+        name.Arrange<TFunction, TSyntax>(FunctionAppBuilder.CreateAndCache<TStartup, TFunction>());
 
     [Pure]
     internal static Scenario<TSyntax>.Arranged<(TData Data, TFunction FunctionApp)> AndFunctionApp<
@@ -41,7 +41,7 @@ internal static class Shared
         where TSyntax : struct, Syntax =>
         scenario.And(data =>
         {
-            var ctx = FunctionAppBuilder.Create<TStartup, TFunction>();
+            var ctx = FunctionAppBuilder.CreateAndCache<TStartup, TFunction>();
             return (Data: data, FunctionApp: ctx);
         });
 

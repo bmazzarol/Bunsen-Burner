@@ -15,9 +15,38 @@ public sealed record TestServerBuilderOptions
     public string Name { get; init; }
 
     /// <summary>
+    /// Sets the name to the options
+    /// </summary>
+    /// <param name="name">name to set</param>
+    /// <returns>options</returns>
+    public TestServerBuilderOptions WithName(string name) => this with { Name = name };
+
+    /// <summary>
     /// Optional startup class to use to build the test server
     /// </summary>
     public Type? StartupClass { get; init; }
+
+    /// <summary>
+    /// Sets the startup class to the options
+    /// </summary>
+    /// <typeparam name="TStartup">startup class</typeparam>
+    /// <returns>options</returns>
+    public TestServerBuilderOptions WithStartup<TStartup>() where TStartup : IStartup =>
+        this with
+        {
+            StartupClass = typeof(TStartup)
+        };
+
+    /// <summary>
+    /// Sets the startup class to the options
+    /// </summary>
+    /// <param name="startupType">startup class</param>
+    /// <returns>options</returns>
+    public TestServerBuilderOptions WithStartup(Type startupType) =>
+        this with
+        {
+            StartupClass = startupType
+        };
 
     /// <summary>
     /// Optional environment name to use with the test server
@@ -25,9 +54,51 @@ public sealed record TestServerBuilderOptions
     public string EnvironmentName { get; init; }
 
     /// <summary>
+    /// Sets the environment name to the options
+    /// </summary>
+    /// <param name="name">environment name</param>
+    /// <returns>options</returns>
+    public TestServerBuilderOptions WithEnvironmentName(string name) =>
+        this with
+        {
+            EnvironmentName = name
+        };
+
+    /// <summary>
     /// Optional configuration for the services
     /// </summary>
     public Action<WebHostBuilderContext, IServiceCollection>? ConfigureServices { get; init; }
+
+    /// <summary>
+    /// Configures services in the options
+    /// </summary>
+    /// <param name="config">action</param>
+    /// <param name="replace">flag indicates the config should be replaced, not extended</param>
+    /// <returns>options</returns>
+    public TestServerBuilderOptions WithServices(
+        Action<WebHostBuilderContext, IServiceCollection> config,
+        bool replace = false
+    ) =>
+        this with
+        {
+            ConfigureServices = (context, collection) =>
+            {
+                if (!replace)
+                    ConfigureServices?.Invoke(context, collection);
+                config(context, collection);
+            }
+        };
+
+    /// <summary>
+    /// Configures services in the options
+    /// </summary>
+    /// <param name="config">action</param>
+    /// <param name="replace">flag indicates the config should be replaced, not extended</param>
+    /// <returns>options</returns>
+    public TestServerBuilderOptions WithServices(
+        Action<IServiceCollection> config,
+        bool replace = false
+    ) => WithServices((_, collection) => config(collection), replace);
 
     /// <summary>
     /// Optional configuration for the app configurations
@@ -38,14 +109,79 @@ public sealed record TestServerBuilderOptions
     >? ConfigureAppConfiguration { get; init; }
 
     /// <summary>
+    /// Configures config in the options
+    /// </summary>
+    /// <param name="config">action</param>
+    /// <param name="replace">flag indicates the config should be replaced, not extended</param>
+    /// <returns>options</returns>
+    public TestServerBuilderOptions WithConfig(
+        Action<WebHostBuilderContext, IConfigurationBuilder> config,
+        bool replace = false
+    ) =>
+        this with
+        {
+            ConfigureAppConfiguration = (context, collection) =>
+            {
+                if (!replace)
+                    ConfigureAppConfiguration?.Invoke(context, collection);
+                config(context, collection);
+            }
+        };
+
+    /// <summary>
+    /// Configures config in the options
+    /// </summary>
+    /// <param name="config">action</param>
+    /// <param name="replace">flag indicates the config should be replaced, not extended</param>
+    /// <returns>options</returns>
+    public TestServerBuilderOptions WithConfig(
+        Action<IConfigurationBuilder> config,
+        bool replace = false
+    ) => WithConfig((_, builder) => config(builder), replace);
+
+    /// <summary>
     /// Optional configuration for the host
     /// </summary>
     public Action<IWebHostBuilder>? ConfigureHost { get; init; }
 
     /// <summary>
+    /// Configures host in the options
+    /// </summary>
+    /// <param name="config">action</param>
+    /// <param name="replace">flag indicates the config should be replaced, not extended</param>
+    /// <returns>options</returns>
+    public TestServerBuilderOptions WithHost(
+        Action<IWebHostBuilder> config,
+        bool replace = false
+    ) =>
+        this with
+        {
+            ConfigureHost = host =>
+            {
+                if (!replace)
+                    ConfigureHost?.Invoke(host);
+                config(host);
+            }
+        };
+
+    /// <summary>
     /// Optional overrides for app settings
     /// </summary>
-    public IDictionary<string, string>? AppSettingsToOverride { get; init; }
+    public IDictionary<string, string?>? AppSettingsToOverride { get; init; }
+
+    /// <summary>
+    /// Adds a setting to the options
+    /// </summary>
+    /// <param name="name">name</param>
+    /// <param name="value">value</param>
+    /// <returns>options</returns>
+    public TestServerBuilderOptions WithSetting(string name, string? value)
+    {
+        var settings =
+            AppSettingsToOverride ?? new Dictionary<string, string?>(StringComparer.Ordinal);
+        settings.Add(name, value);
+        return this with { AppSettingsToOverride = settings };
+    }
 
     /// <summary>
     /// Issuer for the test JWT tokens
@@ -53,9 +189,23 @@ public sealed record TestServerBuilderOptions
     public string Issuer { get; init; }
 
     /// <summary>
+    /// Sets the issuer in the options
+    /// </summary>
+    /// <param name="issuer">issuer</param>
+    /// <returns>options</returns>
+    public TestServerBuilderOptions WithIssuer(string issuer) => this with { Issuer = issuer };
+
+    /// <summary>
     /// Test signing key to use with test JWT tokens
     /// </summary>
     public string SigningKey { get; init; }
+
+    /// <summary>
+    /// Sets the signing key in the options
+    /// </summary>
+    /// <param name="key">key</param>
+    /// <returns>options</returns>
+    public TestServerBuilderOptions WithSigningKey(string key) => this with { SigningKey = key };
 
     internal TestServerBuilderOptions(
         string name,
@@ -64,7 +214,7 @@ public sealed record TestServerBuilderOptions
         Action<WebHostBuilderContext, IServiceCollection>? configureServices = default,
         Action<WebHostBuilderContext, IConfigurationBuilder>? configureAppConfiguration = default,
         Action<IWebHostBuilder>? configureHost = default,
-        IDictionary<string, string>? appSettingsToOverride = default,
+        IDictionary<string, string?>? appSettingsToOverride = default,
         string issuer = Constants.TestIssuer,
         string signingKey = Constants.TestSigningKey
     )
@@ -94,18 +244,18 @@ public sealed record TestServerBuilderOptions
     /// <param name="signingKey">test signing key for the JWT tokens</param>
     /// <returns>options</returns>
     public static TestServerBuilderOptions New(
-        string name,
+        string? name = default,
         Type? startupClass = default,
         string environmentName = Constants.TestEnvironmentName,
         Action<WebHostBuilderContext, IServiceCollection>? configureServices = default,
         Action<WebHostBuilderContext, IConfigurationBuilder>? configureAppConfiguration = default,
         Action<IWebHostBuilder>? configureHost = default,
-        IDictionary<string, string>? appSettingsToOverride = default,
+        IDictionary<string, string?>? appSettingsToOverride = default,
         string issuer = Constants.TestIssuer,
         string signingKey = Constants.TestSigningKey
     ) =>
         new(
-            name,
+            name ?? string.Empty,
             startupClass,
             environmentName,
             configureServices,
@@ -134,7 +284,7 @@ public sealed record TestServerBuilderOptions
         Action<WebHostBuilderContext, IServiceCollection>? configureServices = default,
         Action<WebHostBuilderContext, IConfigurationBuilder>? configureAppConfiguration = default,
         Action<IWebHostBuilder>? configureHost = default,
-        IDictionary<string, string>? appSettingsToOverride = default,
+        IDictionary<string, string?>? appSettingsToOverride = default,
         string issuer = Constants.TestIssuer,
         string signingKey = Constants.TestSigningKey
     ) where TStartup : IStartup

@@ -8,21 +8,43 @@ namespace BunsenBurner.Background.Tests;
 using static Aaa;
 using static BunsenBurner.Aaa;
 
+internal interface ITestService
+{
+    int Result();
+}
+
+internal class TestService : ITestService
+{
+    private readonly int _result;
+
+    public TestService(int result) => _result = result;
+
+    public int Result() => _result;
+}
+
 internal sealed class Background : BackgroundService
 {
     private readonly ILogger<Background> _logger;
+    private readonly IServiceProvider _provider;
 
-    public Background(ILogger<Background> logger) => _logger = logger;
+    public Background(ILogger<Background> logger, IServiceProvider provider)
+    {
+        _logger = logger;
+        _provider = provider;
+    }
 
     [ExcludeFromCodeCoverage]
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        var service = _provider.GetService<ITestService>();
         _logger.LogInformation("Starting work...");
         while (!stoppingToken.IsCancellationRequested)
         {
             var delay = 1 * ms;
             _logger.LogInformation("Doing work for {Delay} duration", delay);
             await Task.Delay(delay, stoppingToken);
+            if (service != null)
+                _logger.LogInformation("Value was {Result}", service.Result());
             _logger.LogInformation("Work complete");
         }
     }
@@ -130,4 +152,26 @@ public static class AaaTests
                 Assert.NotEmpty(store);
                 Assert.Contains(store, x => x.Message == "Work complete");
             });
+
+    [Fact(
+        DisplayName = "A background service can be started and run against a schedule with existing arranged data and no caching"
+    )]
+    public static async Task Case7() =>
+        await Arrange(() => 99)
+            .ActAndRunUntil(
+                i =>
+                    BackgroundServiceBuilder.Create<Startup, Background>(
+                        collection => collection.AddSingleton<ITestService>(new TestService(i))
+                    ),
+                Schedule.spaced(1 * ms) & Schedule.maxCumulativeDelay(5 * minutes),
+                context => context.Store.Any(x => x.Message == "Work complete")
+            )
+            .Assert(
+                (i, store) =>
+                {
+                    Assert.NotEmpty(store);
+                    Assert.Contains(store, x => x.Message == "Work complete");
+                    Assert.Contains(store, x => x.Message == $"Value was {i}");
+                }
+            );
 }

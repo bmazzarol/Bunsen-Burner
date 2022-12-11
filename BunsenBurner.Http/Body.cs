@@ -31,7 +31,7 @@ public sealed record Body
     /// </summary>
     /// <param name="data">data</param>
     /// <returns>text body</returns>
-    public static Body Text(string data) => new(TextContentType, data);
+    public static Body Text(string data) => New(TextContentType, data);
 
     /// <summary>
     /// Json body
@@ -45,5 +45,13 @@ public sealed record Body
     /// </summary>
     /// <param name="data">data</param>
     /// <returns>json body</returns>
-    public static Body Json(string data) => new(JsonContentType, data);
+    public static Body Json(string data) => New(JsonContentType, data);
+
+    /// <summary>
+    /// New body
+    /// </summary>
+    /// <param name="contentType">content type</param>
+    /// <param name="data">data</param>
+    /// <returns>json body</returns>
+    public static Body New(string contentType, string data) => new(contentType, data);
 }
