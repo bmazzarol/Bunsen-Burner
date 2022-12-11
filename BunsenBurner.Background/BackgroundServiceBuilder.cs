@@ -12,13 +12,50 @@ public static class BackgroundServiceBuilder
 {
     private static Cache<IServiceProvider> ServiceProviderCache => Cache.New<IServiceProvider>();
 
+    private static IServiceProvider BuildServiceProvider<TStartup>(
+        Action<IServiceCollection>? config = default
+    ) where TStartup : new()
+    {
+        var store = LogMessageStore.New();
+        var configureServicesMethod = typeof(TStartup).GetMethod("ConfigureServices");
+        var sc = new ServiceCollection();
+        var startup = new TStartup();
+        configureServicesMethod?.Invoke(startup, new object[] { sc });
+        config?.Invoke(sc);
+        sc.ClearLoggingProviders().AddDummyLogger(store).AddSingleton(store);
+        return sc.BuildServiceProvider();
+    }
+
+    /// <summary>
+    /// Creates a new instance of the background service and log message store from the provided startup class
+    /// </summary>
+    /// <param name="config">optional service collection configuration</param>
+    /// <typeparam name="TStartup">startup class</typeparam>
+    /// <typeparam name="TBackgroundService">background service</typeparam>
+    /// <returns>instance of the background service and log message store</returns>
+    public static BackgroundServiceContext<TBackgroundService> Create<TStartup, TBackgroundService>(
+        Action<IServiceCollection>? config = default
+    )
+        where TStartup : new()
+        where TBackgroundService : IHostedService
+    {
+        var sp = BuildServiceProvider<TStartup>(config);
+        var services = sp.GetRequiredService<IEnumerable<IHostedService>>();
+        var store = sp.GetRequiredService<LogMessageStore>();
+        store.Clear();
+        return new BackgroundServiceContext<TBackgroundService>(
+            services.OfType<TBackgroundService>().First(),
+            store
+        );
+    }
+
     /// <summary>
     /// Creates a new instance of the background service and log message store from the provided startup class
     /// </summary>
     /// <typeparam name="TStartup">startup class</typeparam>
     /// <typeparam name="TBackgroundService">background service</typeparam>
     /// <returns>instance of the background service and log message store</returns>
-    public static BackgroundServiceContext<TBackgroundService> Create<
+    public static BackgroundServiceContext<TBackgroundService> CreateAndCache<
         TStartup,
         TBackgroundService
     >()
@@ -28,16 +65,7 @@ public static class BackgroundServiceBuilder
         var startupType = typeof(TStartup);
         var sp = ServiceProviderCache.Get(
             startupType.FullName ?? startupType.Name,
-            static _ =>
-            {
-                var store = LogMessageStore.New();
-                var configureServicesMethod = typeof(TStartup).GetMethod("ConfigureServices");
-                var sc = new ServiceCollection();
-                var startup = new TStartup();
-                configureServicesMethod?.Invoke(startup, new object[] { sc });
-                sc.ClearLoggingProviders().AddDummyLogger(store).AddSingleton(store);
-                return sc.BuildServiceProvider();
-            }
+            static _ => BuildServiceProvider<TStartup>()
         );
         var services = sp.GetRequiredService<IEnumerable<IHostedService>>();
         var store = sp.GetRequiredService<LogMessageStore>();

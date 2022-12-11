@@ -17,7 +17,10 @@ internal static class Shared
         where TBackgroundService : IHostedService
         where TSyntax : struct, Syntax =>
         Arrange<BackgroundServiceContext<TBackgroundService>, TSyntax>(
-            () => Task.FromResult(BackgroundServiceBuilder.Create<TStartup, TBackgroundService>())
+            () =>
+                Task.FromResult(
+                    BackgroundServiceBuilder.CreateAndCache<TStartup, TBackgroundService>()
+                )
         );
 
     [Pure]
@@ -28,7 +31,10 @@ internal static class Shared
         where TBackgroundService : IHostedService
         where TSyntax : struct, Syntax =>
         name.Arrange<BackgroundServiceContext<TBackgroundService>, TSyntax>(
-            () => Task.FromResult(BackgroundServiceBuilder.Create<TStartup, TBackgroundService>())
+            () =>
+                Task.FromResult(
+                    BackgroundServiceBuilder.CreateAndCache<TStartup, TBackgroundService>()
+                )
         );
 
     [Pure]
@@ -43,7 +49,7 @@ internal static class Shared
         where TSyntax : struct, Syntax =>
         scenario.And(data =>
         {
-            var ctx = BackgroundServiceBuilder.Create<TStartup, TBackgroundService>();
+            var ctx = BackgroundServiceBuilder.CreateAndCache<TStartup, TBackgroundService>();
             return (Data: data, BackgroundServiceContext: ctx);
         });
 

@@ -67,7 +67,7 @@ public static class TestServerBuilder
     private static IConfigurationBuilder ConfigureTestSettings(
         this IConfigurationBuilder builder,
         string environmentName,
-        IDictionary<string, string>? appSettingsToOverride
+        IDictionary<string, string?>? appSettingsToOverride
     ) =>
         builder
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -77,18 +77,16 @@ public static class TestServerBuilder
                 reloadOnChange: false
             )
             .AddInMemoryCollection(
-                (
-                    appSettingsToOverride?.AsEnumerable()
-                    ?? System.Array.Empty<KeyValuePair<string, string>>()
-                ).OfType<KeyValuePair<string, string?>>()
+                appSettingsToOverride?.AsEnumerable()
+                    ?? System.Array.Empty<KeyValuePair<string, string?>>()
             );
 
     /// <summary>
     /// Creates a new test service instance
     /// </summary>
     /// <remarks>
-    /// Does the following,
-    ///
+    /// <para>Does the following,</para>
+    /// <para>
     /// * Sets the environment name
     /// * Removes all background services
     /// * Replaces all loggers with the dummy logger
@@ -96,61 +94,58 @@ public static class TestServerBuilder
     /// * Enables both Synchronous IO and Preserve execution context
     /// * Wires up an appsettings.{testing-env-name}.json files
     /// * Runs all delegates and replacements
+    /// </para>
     /// </remarks>
     /// <param name="options">options to use when building the test server</param>
     /// <returns>test server</returns>
-    public static TestServer Create(TestServerBuilderOptions options) =>
-        TestServerCache.Get(
-            options.Name,
-            _ =>
-            {
-                var builder = new WebHostBuilder();
-                builder.UseEnvironment(options.EnvironmentName);
-                if (options.StartupClass != default)
-                    builder.UseStartup(options.StartupClass);
-                builder
-                    .ConfigureServices(
-                        (context, services) =>
-                        {
-                            options.ConfigureServices?.Invoke(context, services);
-                            var store = LogMessageStore.New();
-                            services
-                                // setup test loggers
-                                .ConfigureTestLogging(store)
-                                // remove hosted services
-                                .RemoveAll(typeof(IHostedService))
-                                // setup test auth
-                                .ConfigureTestAuth(options.Issuer, options.SigningKey);
-                        }
-                    )
-                    .ConfigureAppConfiguration(
-                        (context, configBuilder) =>
-                        {
-                            options.ConfigureAppConfiguration?.Invoke(context, configBuilder);
-                            configBuilder.ConfigureTestSettings(
-                                options.EnvironmentName,
-                                options.AppSettingsToOverride
-                            );
-                        }
+    public static TestServer Create(TestServerBuilderOptions options)
+    {
+        var builder = new WebHostBuilder();
+        builder.UseEnvironment(options.EnvironmentName);
+        if (options.StartupClass != default)
+            builder.UseStartup(options.StartupClass);
+        builder
+            .ConfigureServices(
+                (context, services) =>
+                {
+                    options.ConfigureServices?.Invoke(context, services);
+                    var store = LogMessageStore.New();
+                    services
+                        // setup test loggers
+                        .ConfigureTestLogging(store)
+                        // remove hosted services
+                        .RemoveAll(typeof(IHostedService))
+                        // setup test auth
+                        .ConfigureTestAuth(options.Issuer, options.SigningKey);
+                }
+            )
+            .ConfigureAppConfiguration(
+                (context, configBuilder) =>
+                {
+                    options.ConfigureAppConfiguration?.Invoke(context, configBuilder);
+                    configBuilder.ConfigureTestSettings(
+                        options.EnvironmentName,
+                        options.AppSettingsToOverride
                     );
-                options.ConfigureHost?.Invoke(builder);
-                var server = new TestServer(builder);
+                }
+            );
+        options.ConfigureHost?.Invoke(builder);
+        var server = new TestServer(builder);
 #if NETCOREAPP3_1_OR_GREATER
-                // might be required, no harm enabling it for testing
-                server.AllowSynchronousIO = true;
-                // required for all thread local access, such flurl test client
-                server.PreserveExecutionContext = true;
+        // might be required, no harm enabling it for testing
+        server.AllowSynchronousIO = true;
+        // required for all thread local access, such flurl test client
+        server.PreserveExecutionContext = true;
 #endif
-                return server;
-            }
-        );
+        return server;
+    }
 
     /// <summary>
     /// Creates a new test service instance
     /// </summary>
     /// <remarks>
-    /// Does the following,
-    ///
+    /// <para>Does the following,</para>
+    /// <para>
     /// * Sets the environment name
     /// * Removes all background services
     /// * Replaces all loggers with the dummy logger
@@ -158,8 +153,31 @@ public static class TestServerBuilder
     /// * Enables both Synchronous IO and Preserve execution context
     /// * Wires up an appsettings.{testing-env-name}.json files
     /// * Runs all delegates and replacements
+    /// </para>
     /// </remarks>
     /// <param name="options">options to use when building the test server</param>
     /// <returns>test server</returns>
-    public static TestServer Build(this TestServerBuilderOptions options) => Create(options);
+    public static TestServer CreateAndCache(TestServerBuilderOptions options) =>
+        TestServerCache.Get(options.Name, _ => Create(options));
+
+    /// <summary>
+    /// Creates a new test service instance
+    /// </summary>
+    /// <remarks>
+    /// <para>Does the following,</para>
+    /// <para>
+    /// * Sets the environment name
+    /// * Removes all background services
+    /// * Replaces all loggers with the dummy logger
+    /// * Replaces the JWT token configuration to allow for test tokens
+    /// * Enables both Synchronous IO and Preserve execution context
+    /// * Wires up an appsettings.{testing-env-name}.json files
+    /// * Runs all delegates and replacements
+    /// </para>
+    /// </remarks>
+    /// <param name="options">options to use when building the test server</param>
+    /// <param name="cache">flag to indicate that the result should be cached against the configured name</param>
+    /// <returns>test server</returns>
+    public static TestServer Build(this TestServerBuilderOptions options, bool cache = true) =>
+        cache ? CreateAndCache(options) : Create(options);
 }
