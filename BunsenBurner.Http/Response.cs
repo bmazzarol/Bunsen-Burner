@@ -65,7 +65,7 @@ public sealed record Response
     }
 
     /// <summary>
-    /// Creates a new header
+    /// Creates a new response
     /// </summary>
     /// <param name="code">response code</param>
     /// <param name="content">response content</param>
@@ -79,7 +79,12 @@ public sealed record Response
         params Header[] headers
     ) => new(code, content, mediaType, InternalHeaders.Empty.TryAddRange(headers));
 
-    internal static async Task<Response> New(HttpResponseMessage httpResp)
+    /// <summary>
+    /// Creates a new response from a http response
+    /// </summary>
+    /// <param name="httpResp">http response</param>
+    /// <returns>response</returns>
+    public static async Task<Response> New(HttpResponseMessage httpResp)
     {
         var content = await httpResp.Content.ReadAsStringAsync();
         return new Response(

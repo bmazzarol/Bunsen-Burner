@@ -296,7 +296,7 @@ public abstract record Request
         new(url, AsInternal(headers));
 
     /// <summary>
-    /// Converts a request to a http request message to send.
+    /// Converts a request to a http request message to send
     /// </summary>
     /// <returns>http request message</returns>
     [Pure]
