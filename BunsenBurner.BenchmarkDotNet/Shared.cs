@@ -49,11 +49,13 @@ internal static class Shared
             ctx =>
                 Task.Run(
                     () =>
-                        BenchmarkRunner.Run(
-                            ctx.Benchmark,
-                            ctx.Config,
-                            ctx.Parameters.Any() ? ctx.Parameters.ToArray() : null
-                        )
+                        ctx.Parameters.Any()
+                            ? BenchmarkRunner.Run(
+                                ctx.Benchmark,
+                                ctx.Config,
+                                ctx.Parameters.ToArray()
+                            )
+                            : BenchmarkRunner.Run(ctx.Benchmark, ctx.Config)
                 )
         );
 }

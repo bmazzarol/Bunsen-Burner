@@ -36,7 +36,7 @@
     <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="\" />
         <None Include="..\fire-icon.png" Pack="true" PackagePath="\" />
-        <PackageReference Include="BenchmarkDotNet" Version="0.13.2" />
+        <PackageReference Include="BenchmarkDotNet" Version="0.13.3" />
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
     </ItemGroup>
 
