@@ -11,6 +11,7 @@ module.exports = {
                 "auto-fixture",
                 "background",
                 "bogus",
+                "dependency-injection",
                 "function-app",
                 "hedgehog",
                 "http",
