@@ -15,6 +15,7 @@ jobs:
           - BunsenBurner.AutoFixture
           - BunsenBurner.Background
           - BunsenBurner.Bogus
+          - BunsenBurner.DependencyInjection
           - BunsenBurner.FunctionApp
           - BunsenBurner.Hedgehog
           - BunsenBurner.Http

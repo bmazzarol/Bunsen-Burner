@@ -34,9 +34,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\" />
-        <None Include="..\fire-icon.png" Pack="true" PackagePath="\" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="..\fire-icon.png" Pack="true" PackagePath="\"/>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -59,8 +59,8 @@
     </ItemGroup>
 
     <Target Name="husky" BeforeTargets="Restore;CollectPackageReferences" Condition="'$(HUSKY)' != 0">
-        <Exec Command="dotnet tool restore" WorkingDirectory="../" />
-        <Exec Command="dotnet husky install" WorkingDirectory="../" />
+        <Exec Command="dotnet tool restore" WorkingDirectory="../"/>
+        <Exec Command="dotnet husky install" WorkingDirectory="../"/>
     </Target>
 
     <ItemGroup>
@@ -75,6 +75,9 @@
         </AssemblyAttribute>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>BunsenBurner.Bogus</_Parameter1>
+        </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>BunsenBurner.DependencyInjection</_Parameter1>
         </AssemblyAttribute>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>BunsenBurner.FunctionApp</_Parameter1>
