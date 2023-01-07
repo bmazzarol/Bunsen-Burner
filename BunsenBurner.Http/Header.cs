@@ -19,7 +19,8 @@ public sealed record Header : IEnumerable<string>
     private InternalHeader Values { get; init; }
 
     /// <inheritdoc />
-    public IEnumerator<string> GetEnumerator() => Values.OrderBy(_ => _).GetEnumerator();
+    public IEnumerator<string> GetEnumerator() =>
+        Values.OrderBy(_ => _, StringComparer.Ordinal).GetEnumerator();
 
     [ExcludeFromCodeCoverage]
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
