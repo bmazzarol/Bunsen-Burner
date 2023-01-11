@@ -49,7 +49,11 @@ public static class DITests
     public static async Task Case1() =>
         await new Startup()
             .ArrangeData()
-            .ActAndAssertServicesAreConfigured(typeof(Startup).Assembly);
+            .ActAndAssertServicesAreConfigured(
+                // convert the data to a service collection
+                startup => startup.ConfigureServices(new ServiceCollection()),
+                // now build anything found in the provided assemblies
+                typeof(Startup).Assembly);
 }
 ```
 

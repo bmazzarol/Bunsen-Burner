@@ -1,7 +1,6 @@
 ﻿using System.Net;
-using System.Net.Mime;
 using BunsenBurner.FunctionApp.Models;
-using BunsenBurner.Http;
+using HttpBuildR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -19,7 +18,11 @@ public static class HttpFunctionAppExtensions
     /// <param name="request">request</param>
     /// <returns>http request</returns>
     [Pure]
-    public static HttpRequest AsHttpRequest(this Request request) => new DummyHttpRequest(request);
+    public static async Task<HttpRequest> AsHttpRequest(this HttpRequestMessage request) =>
+        new DummyHttpRequest(
+            request,
+            request.Content != null ? await request.Content.ReadAsStringAsync() : string.Empty
+        );
 
     /// <summary>
     /// Convert object result to a response
@@ -27,26 +30,21 @@ public static class HttpFunctionAppExtensions
     /// <param name="actionResult">result</param>
     /// <returns>response</returns>
     [Pure]
-    public static Response AsResponse(this IActionResult actionResult) =>
+    public static HttpResponseMessage AsResponse(this IActionResult actionResult) =>
         actionResult switch
         {
             ObjectResult { Value: not null } objectResult
-                => Response.New(
-                    (HttpStatusCode)objectResult.StatusCode.GetValueOrDefault(),
-                    objectResult.Value.ToString(),
-                    objectResult.ContentTypes.FirstOrDefault()
-                ),
+                => ((HttpStatusCode)objectResult.StatusCode.GetValueOrDefault())
+                    .Result()
+                    .WithTextContent(
+                        objectResult.Value.ToString(),
+                        objectResult.ContentTypes.FirstOrDefault()
+                    ),
             IStatusCodeActionResult statusCodeResult
-                => Response.New(
-                    (HttpStatusCode)statusCodeResult.StatusCode.GetValueOrDefault(),
-                    string.Empty,
-                    string.Empty
-                ),
+                => ((HttpStatusCode)statusCodeResult.StatusCode.GetValueOrDefault()).Result(),
             _
-                => Response.New(
-                    HttpStatusCode.InternalServerError,
-                    "Failed to process action result",
-                    MediaTypeNames.Text.Plain
-                )
+                => HttpStatusCode.InternalServerError
+                    .Result()
+                    .WithTextContent("Failed to process action result")
         };
 }

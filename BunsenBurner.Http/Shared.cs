@@ -13,45 +13,35 @@ namespace BunsenBurner.Http;
 internal static class Shared
 {
     [Pure]
-    internal static Scenario<TSyntax>.Arranged<TRequest> ArrangeRequest<TRequest, TSyntax>(
-        this TRequest request
-    )
-        where TRequest : Request
-        where TSyntax : struct, Syntax => Arrange<TRequest, TSyntax>(request);
+    internal static Scenario<TSyntax>.Arranged<HttpRequestMessage> ArrangeRequest<TSyntax>(
+        this HttpRequestMessage request
+    ) where TSyntax : struct, Syntax => Arrange<HttpRequestMessage, TSyntax>(request);
 
     [Pure]
-    internal static Scenario<TSyntax>.Arranged<TRequest> ArrangeRequest<TRequest, TSyntax>(
+    internal static Scenario<TSyntax>.Arranged<HttpRequestMessage> ArrangeRequest<TSyntax>(
         this string name,
-        TRequest request
-    )
-        where TRequest : Request
-        where TSyntax : struct, Syntax => name.Arrange<TRequest, TSyntax>(request);
+        HttpRequestMessage request
+    ) where TSyntax : struct, Syntax => name.Arrange<HttpRequestMessage, TSyntax>(request);
 
-    private static async Task<Response> InternalCall<TRequest>(
-        TRequest request,
+    private static async Task<HttpResponseMessage> InternalCall(
+        HttpRequestMessage request,
         HttpClient client,
         ILogger? logger = null
-    ) where TRequest : Request
+    )
     {
-        logger?.LogInformation("{Request}", request.ToString());
-        var httpResp = await client.SendAsync(request.HttpRequestMessage());
-        var response = await Response.New(httpResp);
-        logger?.LogInformation("{Response}", response.ToString());
-        return response;
+        var requestToSend = await request.CloneRequest();
+        logger?.LogInformation("{Request}", await request.AsCurlString());
+        var httpResp = await client.SendAsync(requestToSend);
+        logger?.LogInformation("{Response}", await httpResp.AsCurlString());
+        return httpResp;
     }
 
     [Pure]
-    internal static Scenario<TSyntax>.Acted<TData, ResponseContext> ActAndCall<
-        TData,
-        TRequest,
-        TSyntax
-    >(
+    internal static Scenario<TSyntax>.Acted<TData, ResponseContext> ActAndCall<TData, TSyntax>(
         this Scenario<TSyntax>.Arranged<TData> scenario,
-        Func<TData, TRequest> fn,
+        Func<TData, HttpRequestMessage> fn,
         Func<TData, TestServer> serverFn
-    )
-        where TRequest : Request
-        where TSyntax : struct, Syntax =>
+    ) where TSyntax : struct, Syntax =>
         scenario.Act(async data =>
         {
             var server = serverFn(data);
@@ -62,45 +52,42 @@ internal static class Shared
         });
 
     [Pure]
-    internal static Scenario<TSyntax>.Acted<TRequest, ResponseContext> ActAndCall<
-        TRequest,
-        TSyntax
-    >(this Scenario<TSyntax>.Arranged<TRequest> scenario, TestServer server)
-        where TRequest : Request
-        where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _, _ => server);
+    internal static Scenario<TSyntax>.Acted<
+        HttpRequestMessage,
+        ResponseContext
+    > ActAndCall<TSyntax>(
+        this Scenario<TSyntax>.Arranged<HttpRequestMessage> scenario,
+        TestServer server
+    ) where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _, _ => server);
 
     [Pure]
-    internal static Scenario<TSyntax>.Acted<TData, Response> ActAndCall<TData, TRequest, TSyntax>(
+    internal static Scenario<TSyntax>.Acted<TData, HttpResponseMessage> ActAndCall<TData, TSyntax>(
         this Scenario<TSyntax>.Arranged<TData> scenario,
-        Func<TData, TRequest> fn,
+        Func<TData, HttpRequestMessage> fn,
         Func<HttpClient>? clientFactory = default
-    )
-        where TRequest : Request
-        where TSyntax : struct, Syntax =>
+    ) where TSyntax : struct, Syntax =>
         scenario.Act(data => InternalCall(fn(data), clientFactory?.Invoke() ?? new HttpClient()));
 
     [Pure]
-    internal static Scenario<TSyntax>.Acted<TRequest, Response> ActAndCall<TSyntax, TRequest>(
-        this Scenario<TSyntax>.Arranged<TRequest> scenario,
+    internal static Scenario<TSyntax>.Acted<
+        HttpRequestMessage,
+        HttpResponseMessage
+    > ActAndCall<TSyntax>(
+        this Scenario<TSyntax>.Arranged<HttpRequestMessage> scenario,
         Func<HttpClient>? clientFactory = default
-    )
-        where TSyntax : struct, Syntax
-        where TRequest : Request => scenario.ActAndCall(static _ => _, clientFactory);
+    ) where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _, clientFactory);
 
     [Pure]
-    internal static Scenario<TSyntax>.Acted<TData, Response> ActAndCallUntil<
+    internal static Scenario<TSyntax>.Acted<TData, HttpResponseMessage> ActAndCallUntil<
         TData,
-        TRequest,
         TSyntax
     >(
         this Scenario<TSyntax>.Arranged<TData> scenario,
-        Func<TData, TRequest> fn,
+        Func<TData, HttpRequestMessage> fn,
         Schedule schedule,
-        Expression<Func<Response, bool>> predicate,
+        Expression<Func<HttpResponseMessage, bool>> predicate,
         Func<HttpClient>? clientFactory = default
-    )
-        where TRequest : Request
-        where TSyntax : struct, Syntax =>
+    ) where TSyntax : struct, Syntax =>
         scenario.Act(async data =>
         {
             var compiledPred = predicate.Compile();
@@ -121,13 +108,14 @@ internal static class Shared
         });
 
     [Pure]
-    internal static Scenario<TSyntax>.Acted<TRequest, Response> ActAndCallUntil<TSyntax, TRequest>(
-        this Scenario<TSyntax>.Arranged<TRequest> scenario,
+    internal static Scenario<TSyntax>.Acted<
+        HttpRequestMessage,
+        HttpResponseMessage
+    > ActAndCallUntil<TSyntax>(
+        this Scenario<TSyntax>.Arranged<HttpRequestMessage> scenario,
         Schedule schedule,
-        Expression<Func<Response, bool>> predicate,
+        Expression<Func<HttpResponseMessage, bool>> predicate,
         Func<HttpClient>? clientFactory = default
-    )
-        where TSyntax : struct, Syntax
-        where TRequest : Request =>
+    ) where TSyntax : struct, Syntax =>
         scenario.ActAndCallUntil(static _ => _, schedule, predicate, clientFactory);
 }

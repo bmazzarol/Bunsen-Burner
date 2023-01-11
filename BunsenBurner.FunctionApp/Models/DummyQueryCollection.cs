@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using Flurl;
 using Microsoft.AspNetCore.Http;
@@ -41,7 +40,7 @@ internal sealed record DummyQueryCollection : IQueryCollection
 
     public int Count => Store.Count;
 
-    public ICollection<string> Keys => Store.Keys.ToImmutableList();
+    public ICollection<string> Keys => Store.Keys.ToStringValues();
 
     public bool ContainsKey(string key) => Store.ContainsKey(key);
 

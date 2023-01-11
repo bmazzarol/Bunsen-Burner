@@ -65,8 +65,8 @@ public sealed class StartupTest
 
     [Fact(DisplayName = "Using a startup class in the test service builder works")]
     public async Task Case1() =>
-        await Request
-            .GET("/health")
+        await Req.Get
+            .To("/health")
             .WithHeader("a", "1", "2", "3")
             .WithHeader("b", "4")
             .ArrangeRequest()
@@ -84,8 +84,8 @@ public sealed class StartupTest
         DisplayName = "Using a startup class in the test service builder works with replacements"
     )]
     public async Task Case2() =>
-        await Request
-            .GET("/health")
+        await Req.Get
+            .To("/health")
             .ArrangeRequest()
             .ActAndCall(
                 TestServerBuilderOptions
@@ -105,8 +105,9 @@ public sealed class StartupTest
 
     [Fact(DisplayName = "Test sending a body in the request to test server and logging it")]
     public async Task Case3() =>
-        await Request
-            .POST("/health", new { A = 1 })
+        await Req.Post
+            .To("/health")
+            .WithJsonContent(new { A = 1 })
             .ArrangeRequest()
             .ActAndCall(
                 TestServerBuilderOptions
@@ -118,8 +119,8 @@ public sealed class StartupTest
             .And(
                 ctx =>
                     Assert.Equal(
-                        "Cache-Control: no-store, no-cache",
-                        ctx.Response.Headers.First().ToString()
+                        "no-store, no-cache",
+                        ctx.Response.Headers.GetAsString("Cache-Control")
                     )
             );
 }

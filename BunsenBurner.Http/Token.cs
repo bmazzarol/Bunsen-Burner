@@ -84,7 +84,9 @@ public sealed record Token
                 .ToLower(CultureInfo.InvariantCulture)
                 .StartsWith("bearer ", StringComparison.Ordinal)
         )
+        {
             rawToken = rawToken.Split(' ').LastOrDefault() ?? string.Empty;
+        }
 
         var parts = rawToken.Split('.');
 

@@ -45,39 +45,33 @@ internal static class Shared
             )
             .Build();
 
-    private static Scenario<TSyntax>.Asserted<TRequest, ResponseContext> AssertOnResponse<
-        TRequest,
-        TSyntax
-    >(
-        this Scenario<TSyntax>.Acted<TRequest, ResponseContext> scenario,
-        Action<TRequest, Response> assert
-    )
-        where TRequest : Request
-        where TSyntax : struct, Syntax => scenario.Assert((req, ctx) => assert(req, ctx.Response));
-
-    internal static Scenario<TSyntax>.Asserted<TRequest, Response> IsOk<TRequest, TSyntax>(
-        this Scenario<TSyntax>.Acted<TRequest, Response> scenario
-    )
-        where TRequest : Request
-        where TSyntax : struct, Syntax =>
-        scenario.Assert((_, resp) => Assert.Equal(HttpStatusCode.OK, resp.Code));
-
-    internal static Scenario<TSyntax>.Asserted<TRequest, ResponseContext> IsOk<TRequest, TSyntax>(
-        this Scenario<TSyntax>.Acted<TRequest, ResponseContext> scenario
-    )
-        where TRequest : Request
-        where TSyntax : struct, Syntax =>
-        scenario.AssertOnResponse((_, resp) => Assert.Equal(HttpStatusCode.OK, resp.Code));
+    private static Scenario<TSyntax>.Asserted<
+        HttpRequestMessage,
+        ResponseContext
+    > AssertOnResponse<TSyntax>(
+        this Scenario<TSyntax>.Acted<HttpRequestMessage, ResponseContext> scenario,
+        Action<HttpRequestMessage, HttpResponseMessage> assert
+    ) where TSyntax : struct, Syntax => scenario.Assert((req, ctx) => assert(req, ctx.Response));
 
     internal static Scenario<TSyntax>.Asserted<
-        TRequest,
-        ResponseContext
-    > ResponseContentMatchesRequestBody<TRequest, TSyntax>(
-        this Scenario<TSyntax>.Asserted<TRequest, ResponseContext> scenario
-    )
-        where TRequest : Request
+        HttpRequestMessage,
+        HttpResponseMessage
+    > IsOk<TSyntax>(this Scenario<TSyntax>.Acted<HttpRequestMessage, HttpResponseMessage> scenario)
         where TSyntax : struct, Syntax =>
-        scenario.And((_, resp) => Assert.Equal(HttpStatusCode.OK, resp.Response.Code));
+        scenario.Assert((_, resp) => Assert.Equal(HttpStatusCode.OK, resp.StatusCode));
+
+    internal static Scenario<TSyntax>.Asserted<HttpRequestMessage, ResponseContext> IsOk<TSyntax>(
+        this Scenario<TSyntax>.Acted<HttpRequestMessage, ResponseContext> scenario
+    ) where TSyntax : struct, Syntax =>
+        scenario.AssertOnResponse((_, resp) => Assert.Equal(HttpStatusCode.OK, resp.StatusCode));
+
+    internal static Scenario<TSyntax>.Asserted<
+        HttpRequestMessage,
+        ResponseContext
+    > ResponseContentMatchesRequestBody<TSyntax>(
+        this Scenario<TSyntax>.Asserted<HttpRequestMessage, ResponseContext> scenario
+    ) where TSyntax : struct, Syntax =>
+        scenario.And((_, resp) => Assert.Equal(HttpStatusCode.OK, resp.Response.StatusCode));
 
     internal static WireMockServer WithHelloWorld(this WireMockServer server)
     {
