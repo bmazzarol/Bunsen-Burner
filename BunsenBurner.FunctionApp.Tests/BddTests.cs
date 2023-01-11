@@ -1,7 +1,5 @@
-using System.Net;
-using BunsenBurner.Http;
-
 namespace BunsenBurner.FunctionApp.Tests;
+
 using static BunsenBurner.Bdd;
 using static Bdd;
 
@@ -13,11 +11,11 @@ public class BddTests
             .WhenExecuted(async function =>
             {
                 var result = await function.SomeFunctionTrigger(
-                    Request.GET($"/some-path").AsHttpRequest()
+                    await Req.Get.To("/some-path").AsHttpRequest()
                 );
                 return result.AsResponse();
             })
-            .Then(resp => Assert.Equal(HttpStatusCode.OK, resp.Code));
+            .Then(resp => Assert.Equal(HttpStatusCode.OK, resp.StatusCode));
 
     [Fact(DisplayName = "Executing a http trigger function works with description")]
     public async Task Case2() =>
@@ -26,11 +24,11 @@ public class BddTests
             .WhenExecuted(async function =>
             {
                 var result = await function.SomeFunctionTrigger(
-                    Request.GET($"/some-path").AsHttpRequest()
+                    await Req.Get.To("/some-path").AsHttpRequest()
                 );
                 return result.AsResponse();
             })
-            .Then(resp => Assert.Equal(HttpStatusCode.OK, resp.Code));
+            .Then(resp => Assert.Equal(HttpStatusCode.OK, resp.StatusCode));
 
     [Fact(DisplayName = "Executing a http trigger function works")]
     public async Task Case3() =>
@@ -41,10 +39,10 @@ public class BddTests
                 async (i, function) =>
                 {
                     var result = await function.SomeFunctionTrigger(
-                        Request.GET($"/some-path/{i.Data}").AsHttpRequest()
+                        await Req.Get.To($"/some-path/{i.Data}").AsHttpRequest()
                     );
                     return result.AsResponse();
                 }
             )
-            .Then(resp => Assert.Equal(HttpStatusCode.OK, resp.Code));
+            .Then(resp => Assert.Equal(HttpStatusCode.OK, resp.StatusCode));
 }

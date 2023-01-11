@@ -1,7 +1,4 @@
-using System.Net;
 using System.Web.Http;
-using BunsenBurner.Http;
-using Flurl;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
@@ -10,6 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BunsenBurner.FunctionApp.Tests;
+
 using static BunsenBurner.Aaa;
 using static Aaa;
 
@@ -81,14 +79,14 @@ public class AaaTests
             .ActAndExecute(async function =>
             {
                 var result = await function.SomeFunctionTrigger(
-                    Request.GET("/some-path").AsHttpRequest()
+                    await Req.Get.To("/some-path").AsHttpRequest()
                 );
                 return result.AsResponse();
             })
-            .Assert(resp =>
+            .Assert(async resp =>
             {
-                Assert.Equal(HttpStatusCode.OK, resp.Code);
-                Assert.Equal("1", resp.Content);
+                Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
+                Assert.Equal("1", await resp.Content.ReadAsStringAsync());
             });
 
     [Fact(DisplayName = "Executing a http trigger function works with description")]
@@ -98,14 +96,14 @@ public class AaaTests
             .ActAndExecute(async function =>
             {
                 var result = await function.SomeFunctionTrigger(
-                    Request.GET($"/some-path").AsHttpRequest()
+                    await Req.Get.To("/some-path").AsHttpRequest()
                 );
                 return result.AsResponse();
             })
-            .Assert(resp =>
+            .Assert(async resp =>
             {
-                Assert.Equal(HttpStatusCode.OK, resp.Code);
-                Assert.Equal("1", resp.Content);
+                Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
+                Assert.Equal("1", await resp.Content.ReadAsStringAsync());
             });
 
     [Fact(DisplayName = "Executing a http trigger function works with no response body")]
@@ -117,15 +115,17 @@ public class AaaTests
                 async (i, function) =>
                 {
                     var result = await function.SomeFunctionTrigger(
-                        Request.GET($"/some-path/{i.Data}".SetQueryParam("noBody")).AsHttpRequest()
+                        await Req.Get
+                            .To($"/some-path/{i.Data}".SetQueryParam("noBody"))
+                            .AsHttpRequest()
                     );
                     return result.AsResponse();
                 }
             )
-            .Assert(resp =>
+            .Assert(async resp =>
             {
-                Assert.Equal(HttpStatusCode.OK, resp.Code);
-                Assert.Empty(resp.Content ?? string.Empty);
+                Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
+                Assert.Empty(await resp.Content.ReadAsStringAsync());
             });
 
     [Fact(DisplayName = "Executing a http trigger function can fail without issue")]
@@ -136,12 +136,12 @@ public class AaaTests
                 async (i, function) =>
                 {
                     var result = await function.SomeFunctionTrigger(
-                        Request.GET($"/some-path/{i}".SetQueryParam("fail")).AsHttpRequest()
+                        await Req.Get.To($"/some-path/{i}".SetQueryParam("fail")).AsHttpRequest()
                     );
                     return result.AsResponse();
                 }
             )
-            .Assert(resp => Assert.Equal(HttpStatusCode.InternalServerError, resp.Code));
+            .Assert(resp => Assert.Equal(HttpStatusCode.InternalServerError, resp.StatusCode));
 
     [Fact(
         DisplayName = "Executing a http trigger function can return a non http object result without issue"
@@ -153,12 +153,12 @@ public class AaaTests
                 async (i, function) =>
                 {
                     var result = await function.SomeFunctionTrigger(
-                        Request.GET($"/some-path/{i}".SetQueryParam("empty")).AsHttpRequest()
+                        await Req.Get.To($"/some-path/{i}".SetQueryParam("empty")).AsHttpRequest()
                     );
                     return result.AsResponse();
                 }
             )
-            .Assert(resp => Assert.Equal(HttpStatusCode.InternalServerError, resp.Code));
+            .Assert(resp => Assert.Equal(HttpStatusCode.InternalServerError, resp.StatusCode));
 
     [Fact(DisplayName = "Executing a http trigger function without caching it")]
     public async Task Case6() =>
@@ -171,14 +171,14 @@ public class AaaTests
                 async (i, function) =>
                 {
                     var result = await function.SomeFunctionTrigger(
-                        Request.GET($"/some-path/{i}".SetQueryParam("empty")).AsHttpRequest()
+                        await Req.Get.To($"/some-path/{i}".SetQueryParam("empty")).AsHttpRequest()
                     );
                     return result.AsResponse();
                 }
             )
-            .Assert(resp =>
+            .Assert(async resp =>
             {
-                Assert.Equal(HttpStatusCode.OK, resp.Code);
-                Assert.Equal("99", resp.Content);
+                Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
+                Assert.Equal("99", await resp.Content.ReadAsStringAsync());
             });
 }

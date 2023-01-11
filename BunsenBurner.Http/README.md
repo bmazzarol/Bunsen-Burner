@@ -16,6 +16,10 @@ that needs it:
 
 ```C#
 using BunsenBurner.Http;
+// allows for fluent building of requests and responses
+using HttpBuildR;
+using Req = System.Net.Http.HttpMethod;
+using Resp = System.Net.HttpStatusCode;
 ```
 
 ## What?
@@ -25,10 +29,15 @@ easy!
 
 Compose a request like so,
 
-``` c#
-var req = Request
+```c#
+using HttpBuildR;
+using Req = System.Net.Http.HttpMethod;
+...
+var req = 
+    // start with a HTTP method
+    Req.Get
     // flurl can be used for the URL composition
-    .GET("/hello-world".SetQueryParam("a", 1)) // all http verbs as covered
+    .To("/hello-world".SetQueryParam("a", 1)) // all http verbs as covered
     // the non-url based parts are covered by methods
     // including JWT based auth token construction
     .WithHeader("b", 123, x => x.ToString())
@@ -45,7 +54,37 @@ req.ArrangeRequest() // convert to a scenario
    .ActAndCall(TestServerBuilderOptions.New<Startup>().Build())
     // a response context contains the http response and all log messages produced
     // while handling the request
-   .Assert(ctx => ctx.Response.Code == HttpStatusCode.OK);
+   .Assert(ctx => ctx.Response.StatusCode == HttpStatusCode.OK);
+```
+
+And HttpClient can be mocked out via a HttpMessageStore
+
+```c#
+using HttpBuildR;
+using static BunsenBurner.Http.HttpMessageMatchers;
+using Req = System.Net.Http.HttpMethod;
+using Resp = System.Net.HttpStatusCode;
+
+var store = HttpMessageStore.New();
+store.Setup(
+    // for a given named client
+    "PersonService",
+    // matchers can be used and composed to match incomming requests
+    HasMethod(HttpMethod.Put).And(HasJsonContent((Person p) => p.Age > 19))),
+    // response builder can be provided
+    req => Resp.OK.Result(request: req)
+                  .WithJsonContent(new { LastUpdatedDate = DateTime.Now })
+...
+// now a store can be converted to a client, or passed to a DummyFactory
+var client = store.CreateClient("PersonService");
+// now call the client
+var result = await client.SendAsync(Req.Put.To("some-endpoint")
+                                           .WithBearerToken(...)
+                                           .WithJsonContent(new Person(25)));
+// the store records all requests and responses made against it
+Assert.True(store.Any(m => m.ClientName == "PersonService"
+                        && m.Request.Method == HttpMethod.Put
+                        && m.Response.StatusCode == Resp.OK))
 ```
 
 That's it! Just compose requests and assert against responses.

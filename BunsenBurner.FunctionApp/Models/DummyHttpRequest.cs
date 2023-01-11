@@ -2,7 +2,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using BunsenBurner.Http;
+using Flurl;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 
@@ -14,20 +14,22 @@ internal sealed class DummyHttpRequest : HttpRequest, IDisposable
     private readonly string? _content;
     private Stream? _stream;
 
-    public DummyHttpRequest(Request request)
+    internal DummyHttpRequest(HttpRequestMessage request, string content)
     {
-        Method = request.Verb;
-        Scheme = request.Url.Scheme;
-        Host = new HostString(request.Url.Authority);
-        Path = new PathString(request.Url.Path);
-        QueryString = new QueryString("?" + request.Url.Query);
-        Query = new DummyQueryCollection(request.Url);
+        Method = request.Method.ToString();
+        var url = new Url(request.RequestUri);
+        Scheme = url.Scheme;
+        Host = new HostString(url.Host);
+        Path = new PathString(url.Path);
+        QueryString = new QueryString("?" + url.Query);
+        Query = new DummyQueryCollection(url);
         HttpContext = new DummyHttpContext(this);
-        _content = request.Content();
-        ContentType = request.ContentType();
-        ContentLength = request.ContentLength();
+        _content = content;
+        ContentType =
+            request.Content != null ? request.Content.Headers.ContentType.MediaType : string.Empty;
+        ContentLength = _content.Length;
         foreach (var header in request.Headers)
-            Headers.Add(header.Name, new StringValues(header.ToArray()));
+            Headers.Add(header.Key, new StringValues(header.Value.ToArray()));
     }
 
     public override Task<IFormCollection> ReadFormAsync(

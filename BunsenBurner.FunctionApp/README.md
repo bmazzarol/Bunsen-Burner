@@ -26,7 +26,7 @@ easy!
 
 Arrange the required request data the function app accepts,
 
-``` c#
+```c#
 Arrange(() => 2) // some data required to call the function app
      // this builds the function app from the Startup class
     .AndFunctionApp<int, Startup, Function>()
@@ -38,17 +38,17 @@ Arrange(() => 2) // some data required to call the function app
         {
             // example HTTP trigger, the Bunsen Burner HTTP library can be used here
             var result = await function.SomeFunctionTrigger(
-                Request.GET($"/some-path/{i.Data}".SetQueryParam("noBody")).AsHttpRequest()
+                await Req.Get.To($"/some-path/{i.Data}".SetQueryParam("noBody")).AsHttpRequest()
             );
             // extension methed to get the ObjectResult back into a HTTP Response
             return result.AsResponse();
         }
     )
     // assertions as normal
-    .Assert(resp =>
+    .Assert(async resp =>
     {
-        Assert.Equal(HttpStatusCode.OK, resp.Code);
-        Assert.Empty(resp.Content ?? string.Empty);
+        Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
+        Assert.Empty(await resp.Content.ReadAsStringAsync());
     });
 ```
 

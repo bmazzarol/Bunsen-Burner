@@ -64,6 +64,8 @@
         <PackageReference Include="Flurl" Version="3.0.7" />
         <PackageReference Include="LanguageExt.Core" Version="4.4.0" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.25.1" />
+        <PackageReference Include="HttpBuildR.Request" Version="1.0.0" />
+        <PackageReference Include="HttpBuildR.Response" Version="1.0.0" />
     </ItemGroup>
 
     <!-- target framework versions -->
@@ -71,18 +73,22 @@
         <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
         <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="3.1.31" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.31" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.32" />
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
         <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
         <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
     </ItemGroup>
 
     <ItemGroup>
