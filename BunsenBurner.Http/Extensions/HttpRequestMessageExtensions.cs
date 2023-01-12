@@ -29,7 +29,7 @@ public static class HttpRequestMessageExtensions
     /// <param name="request">request</param>
     /// <returns>cloned request</returns>
     [Pure]
-    internal static async Task<HttpRequestMessage> CloneRequest(this HttpRequestMessage request)
+    public static async Task<HttpRequestMessage> CloneRequest(this HttpRequestMessage request)
     {
         static async Task<HttpContent?> CloneContent(HttpContent? content)
         {
