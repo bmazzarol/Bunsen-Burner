@@ -71,7 +71,7 @@ public static class HttpMessageMatchers
     /// <returns>matcher</returns>
     [Pure]
     public static Matcher HasRequestUri(Regex matcher) =>
-        HasRequestUri(x => matcher.IsMatch(x.IsAbsoluteUri ? x.AbsolutePath : x.OriginalString));
+        HasRequestUri(x => matcher.IsMatch(x.OriginalString));
 
     /// <summary>
     /// Matches requests with the given HTTP request uri
