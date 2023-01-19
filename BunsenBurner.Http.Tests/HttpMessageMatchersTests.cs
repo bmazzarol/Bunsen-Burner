@@ -72,8 +72,17 @@ public static class HttpMessageMatchersTests
     public static void Case10() =>
         HasRequestUri("some-*-path").Invoke(Req.Get.To("some-abcd-path")).Should().BeTrue();
 
-    [Fact(DisplayName = "HasContent can match on a provided request content")]
+    [Fact(
+        DisplayName = "HasRequestUri can match on a provided request uri including host and port"
+    )]
     public static void Case11() =>
+        HasRequestUri("https://some-*:123?/some-*-path")
+            .Invoke(Req.Get.To("https://some-host:1236/some-abcd-path"))
+            .Should()
+            .BeTrue();
+
+    [Fact(DisplayName = "HasContent can match on a provided request content")]
+    public static void Case12() =>
         HasContent("some ?ool ?ontent *")
             .Invoke(Req.Post.To("path").WithTextContent("some kool Content that is posted"))
             .Should()
@@ -86,14 +95,14 @@ public static class HttpMessageMatchersTests
     }
 
     [Fact(DisplayName = "HasJsonContent can match on a provided request content")]
-    public static void Case12() =>
+    public static void Case13() =>
         HasJsonContent((TestContent content) => content.Age > 50 && content.Name.Contains("en"))
             .Invoke(Req.Post.To("path").WithJsonContent(new TestContent { Name = "Jen", Age = 56 }))
             .Should()
             .BeTrue();
 
     [Fact(DisplayName = "HasJsonContent can not match on a provided request content")]
-    public static void Case13() =>
+    public static void Case14() =>
         HasJsonContent((TestContent content) => content.Age > 50 && content.Name.Contains("en"))
             .Invoke(Req.Post.To("path").WithJsonContent(new TestContent { Name = "Max", Age = 56 }))
             .Should()
@@ -102,7 +111,7 @@ public static class HttpMessageMatchersTests
     [Fact(
         DisplayName = "HasJsonContent can not match on a provided request content that is not valid json"
     )]
-    public static void Case14() =>
+    public static void Case15() =>
         HasJsonContent((TestContent content) => content.Age > 50 && content.Name.Contains("en"))
             .Invoke(Req.Post.To("path").WithTextContent("som cool stuff"))
             .Should()
@@ -111,21 +120,21 @@ public static class HttpMessageMatchersTests
     [Fact(
         DisplayName = "HasJsonContent can not match on a provided request content that is different valid json"
     )]
-    public static void Case15() =>
+    public static void Case16() =>
         HasJsonContent((TestContent content) => content.Age > 50 && content.Name.Contains("en"))
             .Invoke(Req.Post.To("path").WithJsonContent(new { Fish = 12345 }))
             .Should()
             .BeFalse();
 
     [Fact(DisplayName = "HasXmlContent can match on a provided request content")]
-    public static void Case16() =>
+    public static void Case17() =>
         HasXmlContent((TestContent content) => content.Age > 50 && content.Name.Contains("en"))
             .Invoke(Req.Post.To("path").WithXmlContent(new TestContent { Name = "Jen", Age = 56 }))
             .Should()
             .BeTrue();
 
     [Fact(DisplayName = "HasXmlContent can not match on a provided request content")]
-    public static void Case17() =>
+    public static void Case18() =>
         HasXmlContent((TestContent content) => content.Age > 50 && content.Name.Contains("en"))
             .Invoke(Req.Post.To("path").WithXmlContent(new TestContent { Name = "Max", Age = 56 }))
             .Should()
@@ -134,7 +143,7 @@ public static class HttpMessageMatchersTests
     [Fact(
         DisplayName = "HasXmlContent can not match on a provided request content that is not valid json"
     )]
-    public static void Case18() =>
+    public static void Case19() =>
         HasXmlContent((TestContent content) => content.Age > 50 && content.Name.Contains("en"))
             .Invoke(Req.Post.To("path").WithTextContent("som cool stuff"))
             .Should()
@@ -148,7 +157,7 @@ public static class HttpMessageMatchersTests
     [Fact(
         DisplayName = "HasXmlContent can not match on a provided request content that is different valid xml"
     )]
-    public static void Case19() =>
+    public static void Case20() =>
         HasXmlContent((TestContent content) => content.Age > 50 && content.Name.Contains("en"))
             .Invoke(Req.Post.To("path").WithXmlContent(new FishModel { Fish = 12345 }))
             .Should()
