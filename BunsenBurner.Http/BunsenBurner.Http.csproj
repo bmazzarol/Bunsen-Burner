@@ -63,7 +63,7 @@
         <PackageReference Include="JWT" Version="10.0.1" />
         <PackageReference Include="Flurl" Version="3.0.7" />
         <PackageReference Include="LanguageExt.Core" Version="4.4.0" />
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.25.1" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.26.0" />
         <PackageReference Include="HttpBuildR.Request" Version="1.0.0" />
         <PackageReference Include="HttpBuildR.Response" Version="1.0.0" />
     </ItemGroup>
