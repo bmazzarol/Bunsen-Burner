@@ -1,11 +1,9 @@
 ﻿<!-- markdownlint-disable MD033 MD041 -->
-<div style="text-align: center">
+<div align="center">
 
-<img src="fire-icon.png" alt="Bunsen Burner" style="max-width: 150px"/>
+<img src="fire-icon.png" alt="Bunsen Burner" width="150px"/>
 
 # Bunsen Burner
-
----
 
 [![Nuget](https://img.shields.io/nuget/v/BunsenBurner)](https://www.nuget.org/packages/BunsenBurner/)
 [![Coverage Status](https://coveralls.io/repos/github/bmazzarol/Bunsen-Burner/badge.svg?branch=main)](https://coveralls.io/github/bmazzarol/Bunsen-Burner?branch=main)
@@ -13,13 +11,12 @@
 [![Check Markdown](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/check-markdown.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/check-markdown.yml)
 [![CodeQL](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/codeql.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/codeql.yml)
 
-> Set :fire: to your old unit tests!
->
-> A better way to write tests :test_tube: in C#.
+Set :fire: to your old unit tests! 
+A better way to write tests :test_tube: in C#.
 
 </div>
 
----
+## Features
 
 * Test framework agnostic
 * Zero dependencies
