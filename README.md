@@ -1,24 +1,32 @@
-﻿<!-- markdownlint-disable MD033 -->
+﻿<!-- markdownlint-disable MD033 MD041 -->
+<div style="text-align: center">
 
-# <img height="50" src="fire-icon.png" width="50"/> Bunsen Burner
+<img src="fire-icon.png" alt="Bunsen Burner" style="max-width: 150px"/>
 
-<!-- markdownlint-enabled MD033 -->
+# Bunsen Burner
 
-[![Coverage Status](https://coveralls.io/repos/github/bmazzarol/Bunsen-Burner/badge.svg?branch=main)](https://coveralls.io/github/bmazzarol/Bunsen-Burner?branch=main)
-[![CodeQL](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/codeql.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/codeql.yml)
-[![CD Build](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/cd-build.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/cd-build.yml)
-[![Check Markdown](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/check-markdown.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/check-markdown.yml)
-[![Nuget](https://img.shields.io/nuget/v/BunsenBurner)](https://www.nuget.org/packages/BunsenBurner/)
-
-> Set :fire: to your old unit tests!
 ---
 
-A better way to write tests :test_tube: in C#.
+[![Nuget](https://img.shields.io/nuget/v/BunsenBurner)](https://www.nuget.org/packages/BunsenBurner/)
+[![Coverage Status](https://coveralls.io/repos/github/bmazzarol/Bunsen-Burner/badge.svg?branch=main)](https://coveralls.io/github/bmazzarol/Bunsen-Burner?branch=main)
+[![CD Build](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/cd-build.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/cd-build.yml)
+[![Check Markdown](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/check-markdown.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/check-markdown.yml)
+[![CodeQL](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/codeql.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/codeql.yml)
+
+> Set :fire: to your old unit tests!
+>
+> A better way to write tests :test_tube: in C#.
+
+</div>
+
+---
 
 * Test framework agnostic
 * Zero dependencies
 * Easy to use and extend
 * More maintainable
+* Integrations to your favourite test libraries
+* Unit, Integration, Property any sort of test!
 
 ```c#
 // Arrange act assert style
