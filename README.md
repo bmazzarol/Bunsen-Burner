@@ -11,7 +11,7 @@
 [![Check Markdown](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/check-markdown.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/check-markdown.yml)
 [![CodeQL](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/codeql.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/codeql.yml)
 
-Set :fire: to your old unit tests! 
+Set :fire: to your old unit tests!
 A better way to write tests :test_tube: in C#.
 
 </div>
