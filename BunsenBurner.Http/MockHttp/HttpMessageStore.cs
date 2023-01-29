@@ -12,7 +12,7 @@ public sealed class HttpMessageStore : IEnumerable<HttpMessageSetupMatch>
 {
     private sealed record HttpMessageSetup(
         string ClientName,
-        Func<HttpRequestMessage, bool> MatchPredicate,
+        HttpRequestPredicate MatchPredicate,
         Func<HttpRequestMessage, Option<HttpResponseMessage>> SetupResponses
     );
 
@@ -42,7 +42,7 @@ public sealed class HttpMessageStore : IEnumerable<HttpMessageSetupMatch>
             from handler in _setups.Filter(
                 x =>
                     x.ClientName.Equals(clientName, StringComparison.Ordinal)
-                    && x.MatchPredicate(request)
+                    && x.MatchPredicate.IsMatch(request)
             )
             from result in handler.SetupResponses(request)
             select result;
@@ -60,15 +60,15 @@ public sealed class HttpMessageStore : IEnumerable<HttpMessageSetupMatch>
     }
 
     /// <summary>
-    /// Setup a response matcher
+    /// Setup a request matcher
     /// </summary>
-    /// <param name="name">client name to link the response matcher against</param>
+    /// <param name="name">client name to link the request matcher against</param>
     /// <param name="matchPredicate">predicate to match against</param>
     /// <param name="responder">responder function</param>
     /// <returns>factory</returns>
     public HttpMessageStore Setup(
         string name,
-        Func<HttpRequestMessage, bool> matchPredicate,
+        HttpRequestPredicate matchPredicate,
         Func<HttpRequestMessage, Option<HttpResponseMessage>> responder
     )
     {
@@ -77,9 +77,22 @@ public sealed class HttpMessageStore : IEnumerable<HttpMessageSetupMatch>
     }
 
     /// <summary>
-    /// Setup a response matcher
+    /// Setup a request matcher
     /// </summary>
-    /// <param name="name">client name to link the response matcher against</param>
+    /// <param name="name">client name to link the request matcher against</param>
+    /// <param name="matchPredicate">predicate to match against</param>
+    /// <param name="responder">responder function</param>
+    /// <returns>factory</returns>
+    public HttpMessageStore Setup(
+        string name,
+        Func<HttpRequestMessage, bool> matchPredicate,
+        Func<HttpRequestMessage, Option<HttpResponseMessage>> responder
+    ) => Setup(name, HttpRequestPredicate.New(matchPredicate), responder);
+
+    /// <summary>
+    /// Setup a request matcher
+    /// </summary>
+    /// <param name="name">client name to link the request matcher against</param>
     /// <param name="matchPredicate">predicate to match against</param>
     /// <param name="responder">responder function</param>
     /// <returns>factory</returns>
@@ -90,9 +103,9 @@ public sealed class HttpMessageStore : IEnumerable<HttpMessageSetupMatch>
     ) => Setup(name, matchPredicate, req => Optional(responder(req)));
 
     /// <summary>
-    /// Setup a response matcher
+    /// Setup a request matcher
     /// </summary>
-    /// <param name="name">client name to link the response matcher against</param>
+    /// <param name="name">client name to link the request matcher against</param>
     /// <param name="matchPredicate">predicate to match against</param>
     /// <param name="response">response to use for all matching requests</param>
     /// <returns>factory</returns>
@@ -112,9 +125,9 @@ public sealed class HttpMessageStore : IEnumerable<HttpMessageSetupMatch>
         );
 
     /// <summary>
-    /// Setup a response matcher
+    /// Setup a request matcher
     /// </summary>
-    /// <param name="name">client name to link the response matcher against</param>
+    /// <param name="name">client name to link the request matcher against</param>
     /// <param name="matchPredicate">predicate to match against</param>
     /// <param name="responses">responses to use in order for matching requests that come in</param>
     /// <returns>factory</returns>
