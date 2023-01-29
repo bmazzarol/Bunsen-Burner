@@ -6,36 +6,20 @@ using System.Xml.Serialization;
 
 namespace BunsenBurner.Http;
 
-using Matcher = Func<HttpRequestMessage, bool>;
+using Matcher = HttpRequestPredicate;
 
 /// <summary>
 /// Pre built predicates for matching http requests
 /// </summary>
-public static class HttpMessageMatchers
+public static class HttpRequestMatchers
 {
-    /// <summary>
-    /// Combines 2 matchers with an And operator
-    /// </summary>
-    /// <param name="a">first matcher</param>
-    /// <param name="b">second matcher</param>
-    /// <returns>match that succeeds when a and b succeed</returns>
-    public static Matcher And(this Matcher a, Matcher b) => x => a(x) && b(x);
-
-    /// <summary>
-    /// Combines 2 matchers with an Or operator
-    /// </summary>
-    /// <param name="a">first matcher</param>
-    /// <param name="b">second matcher</param>
-    /// <returns>match that succeeds when a or b succeed</returns>
-    public static Matcher Or(this Matcher a, Matcher b) => x => a(x) || b(x);
-
     /// <summary>
     /// Matches requests with the given HTTP method
     /// </summary>
     /// <param name="method">method to match</param>
     /// <returns>matcher</returns>
     [Pure]
-    public static Matcher HasMethod(HttpMethod method) => x => x.Method == method;
+    public static Matcher HasMethod(HttpMethod method) => Matcher.New(x => x.Method == method);
 
     [Pure]
     private static Regex WildCardToRegular(string value) =>
@@ -62,7 +46,7 @@ public static class HttpMessageMatchers
     /// <returns>matcher</returns>
     [Pure]
     public static Matcher HasRequestUri(Func<Uri, bool> matcher) =>
-        x => x.RequestUri != null && matcher.Invoke(x.RequestUri);
+        Matcher.New(x => x.RequestUri != null && matcher.Invoke(x.RequestUri));
 
     /// <summary>
     /// Matches requests with the given HTTP request uri
@@ -89,7 +73,7 @@ public static class HttpMessageMatchers
     /// <returns>matcher</returns>
     [Pure]
     public static Matcher HasHeader(Func<HttpRequestHeaders, bool> matcher) =>
-        x => matcher(x.Headers);
+        Matcher.New(x => matcher(x.Headers));
 
     /// <summary>
     /// Matches requests with the given HTTP request header
@@ -135,7 +119,7 @@ public static class HttpMessageMatchers
     /// <returns>matcher</returns>
     [Pure]
     public static Matcher HasContent(Func<HttpContent, bool> matcher) =>
-        x => x.Content != null && matcher(x.Content);
+        Matcher.New(x => x.Content != null && matcher(x.Content));
 
     /// <summary>
     /// Matches requests with the given HTTP request content
