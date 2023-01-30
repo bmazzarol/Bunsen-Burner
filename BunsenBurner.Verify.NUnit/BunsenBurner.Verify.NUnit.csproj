@@ -59,7 +59,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Verify.NUnit" Version="19.7.1"/>
+        <PackageReference Include="Verify.NUnit" Version="19.8.0"/>
     </ItemGroup>
 
     <ItemGroup>
