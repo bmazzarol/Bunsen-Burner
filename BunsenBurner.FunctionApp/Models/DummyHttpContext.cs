@@ -21,9 +21,11 @@ internal sealed class DummyHttpContext : HttpContext
     public override ConnectionInfo? Connection => null;
     public override WebSocketManager? WebSockets => null;
 
+#pragma warning disable S1133
     [Obsolete(
         "This is obsolete and will be removed in a future version. The recommended alternative is to use Microsoft.AspNetCore.Authentication.AuthenticationHttpContextExtensions. See https://go.microsoft.com/fwlink/?linkid=845470."
     )]
+#pragma warning restore S1133
     public override AuthenticationManager? Authentication => null;
 
     public override ClaimsPrincipal? User { get; set; }
