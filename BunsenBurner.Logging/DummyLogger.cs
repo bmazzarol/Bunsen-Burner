@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 
@@ -13,7 +14,7 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>, IDisp
     private readonly string _ownerClassName;
     private readonly LogMessageStore _store;
     private readonly Sink? _sink;
-    private IEnumerable<Scope> _scopes = Enumerable.Empty<Scope>();
+    private readonly ConcurrentDictionary<Scope, byte> _scopes = new();
 
     internal DummyLogger(LogMessageStore store, string ownerClassName, Sink? sink)
     {
@@ -37,7 +38,7 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>, IDisp
             eventId,
             exception,
             formatter(state, exception),
-            _scopes.Select(x => x.State)
+            _scopes.Keys.Select(x => x.State)
         );
         _store.Log(message);
         _sink?.Write(message);
@@ -49,22 +50,15 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>, IDisp
     /// <inheritdoc />
     public IDisposable BeginScope<TState>(TState state) where TState : notnull
     {
-        lock (_scopes)
-        {
-            var scope = new Scope(state, this);
-            _scopes = _scopes.Append(scope);
-            return scope;
-        }
+        var scope = new Scope(state, this);
+        _scopes.AddOrUpdate(scope, _ => byte.MinValue, (_, b) => b);
+        return scope;
     }
 
     private sealed record Scope(object State, DummyLogger<T> Parent) : IDisposable
     {
         [ExcludeFromCodeCoverage]
-        public void Dispose()
-        {
-            lock (Parent._scopes)
-                Parent._scopes = Parent._scopes.Where(x => x != this);
-        }
+        public void Dispose() => Parent._scopes.TryRemove(this, out _);
     }
 
     /// <inheritdoc />
@@ -76,11 +70,9 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>, IDisp
     /// <inheritdoc />
     public void Dispose()
     {
-        foreach (var scope in _scopes)
-        {
+        foreach (var scope in _scopes.Keys)
             scope.Dispose();
-        }
-        _scopes = Enumerable.Empty<Scope>();
+        _scopes.Clear();
     }
 }
 
