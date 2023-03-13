@@ -64,7 +64,7 @@
         <PackageReference Include="Flurl" Version="3.0.7" />
         <PackageReference Include="LanguageExt.Core" Version="4.4.2" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.27.0" />
-        <PackageReference Include="HttpBuildR.Request" Version="1.1.0" />
+        <PackageReference Include="HttpBuildR.Request" Version="1.1.1" />
         <PackageReference Include="HttpBuildR.Response" Version="1.1.0" />
     </ItemGroup>
 
