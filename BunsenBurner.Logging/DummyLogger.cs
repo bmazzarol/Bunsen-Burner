@@ -48,7 +48,8 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>, IDisp
     public bool IsEnabled(LogLevel logLevel) => true;
 
     /// <inheritdoc />
-    public IDisposable BeginScope<TState>(TState state) where TState : notnull
+    public IDisposable BeginScope<TState>(TState state)
+        where TState : notnull
     {
         var scope = new Scope(state, this);
         _scopes.AddOrUpdate(scope, _ => byte.MinValue, (_, b) => b);

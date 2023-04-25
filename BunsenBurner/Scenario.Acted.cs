@@ -17,7 +17,8 @@ public abstract partial record Scenario<TSyntax>
             Func<Task<TData>> arrangeScenario,
             Func<TData, Task<TResult>> actOnScenario,
             HashSet<IDisposable> disposables
-        ) : base(name, disposables)
+        )
+            : base(name, disposables)
         {
             _arrangeScenario = arrangeScenario;
             _actOnScenario = actOnScenario;

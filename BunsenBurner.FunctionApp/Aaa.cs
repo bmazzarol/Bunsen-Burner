@@ -64,7 +64,8 @@ public static class Aaa
         this AaaScenario.Arranged<TData> scenario,
         Func<TData, TFunction> functionApp,
         Func<TData, TFunction, Task<TResult>> fn
-    ) where TFunction : class =>
+    )
+        where TFunction : class =>
         scenario.ActAndExecute<TData, TResult, TFunction, Syntax.Aaa>(functionApp, fn);
 
     /// <summary>
@@ -79,5 +80,6 @@ public static class Aaa
     public static AaaScenario.Acted<TFunction, TResult> ActAndExecute<TFunction, TResult>(
         this AaaScenario.Arranged<TFunction> scenario,
         Func<TFunction, Task<TResult>> fn
-    ) where TFunction : class => scenario.ActAndExecute<TFunction, TResult, Syntax.Aaa>(fn);
+    )
+        where TFunction : class => scenario.ActAndExecute<TFunction, TResult, Syntax.Aaa>(fn);
 }

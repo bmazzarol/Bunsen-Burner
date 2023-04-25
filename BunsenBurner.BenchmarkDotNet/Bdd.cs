@@ -22,7 +22,8 @@ public static class Bdd
         Func<ManualConfig, ManualConfig>? configure = default,
         Action<string>? logSink = default,
         params string[] runParameters
-    ) where TBenchmarks : class =>
+    )
+        where TBenchmarks : class =>
         Shared.ArrangeBenchmarks<Syntax.Bdd, TBenchmarks>(name, configure, logSink, runParameters);
 
     /// <summary>
@@ -38,7 +39,8 @@ public static class Bdd
         Func<ManualConfig, ManualConfig>? configure = default,
         Action<string>? logSink = default,
         params string[] runParameters
-    ) where TBenchmarks : class =>
+    )
+        where TBenchmarks : class =>
         Shared.ArrangeBenchmarks<Syntax.Bdd, TBenchmarks>(configure, logSink, runParameters);
 
     /// <summary>

@@ -112,7 +112,8 @@ public sealed record Token
             );
     }
 
-    private static string GetDescription<T>(T value) where T : struct, Enum
+    private static string GetDescription<T>(T value)
+        where T : struct, Enum
     {
         var valueString = value.ToString();
         return value

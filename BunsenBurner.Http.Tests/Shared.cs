@@ -51,7 +51,8 @@ internal static class Shared
     > AssertOnResponse<TSyntax>(
         this Scenario<TSyntax>.Acted<HttpRequestMessage, ResponseContext> scenario,
         Action<HttpRequestMessage, HttpResponseMessage> assert
-    ) where TSyntax : struct, Syntax => scenario.Assert((req, ctx) => assert(req, ctx.Response));
+    )
+        where TSyntax : struct, Syntax => scenario.Assert((req, ctx) => assert(req, ctx.Response));
 
     internal static Scenario<TSyntax>.Asserted<
         HttpRequestMessage,
@@ -62,7 +63,8 @@ internal static class Shared
 
     internal static Scenario<TSyntax>.Asserted<HttpRequestMessage, ResponseContext> IsOk<TSyntax>(
         this Scenario<TSyntax>.Acted<HttpRequestMessage, ResponseContext> scenario
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         scenario.AssertOnResponse((_, resp) => Assert.Equal(HttpStatusCode.OK, resp.StatusCode));
 
     internal static Scenario<TSyntax>.Asserted<
@@ -70,7 +72,8 @@ internal static class Shared
         ResponseContext
     > ResponseContentMatchesRequestBody<TSyntax>(
         this Scenario<TSyntax>.Asserted<HttpRequestMessage, ResponseContext> scenario
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         scenario.And((_, resp) => Assert.Equal(HttpStatusCode.OK, resp.Response.StatusCode));
 
     internal static WireMockServer WithHelloWorld(this WireMockServer server)

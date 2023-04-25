@@ -12,4 +12,5 @@ namespace BunsenBurner.Background;
 public sealed record BackgroundServiceContext<TBackgroundService>(
     TBackgroundService Service,
     LogMessageStore Store
-) where TBackgroundService : IHostedService;
+)
+    where TBackgroundService : IHostedService;

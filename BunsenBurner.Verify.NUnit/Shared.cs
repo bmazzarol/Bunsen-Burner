@@ -46,7 +46,8 @@ internal static class Shared
         [CallerFilePath] string sourceFilePath = "",
         Func<SettingsTask, SettingsTask>? matchConfiguration = null,
         bool scrubResults = false
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         scenario.Assert(async result =>
         {
             var settings = scrubResults
@@ -70,7 +71,8 @@ internal static class Shared
         [CallerFilePath] string sourceFilePath = "",
         Func<SettingsTask, SettingsTask>? matchConfiguration = null,
         bool scrubResults = false
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         scenario.AssertResultIsUnchanged(
             static _ => _,
             folder,

@@ -50,7 +50,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(
         this string name,
         Func<Task<TData>> fn
-    ) where TSyntax : struct, Syntax => new(name, fn, new HashSet<IDisposable>());
+    )
+        where TSyntax : struct, Syntax => new(name, fn, new HashSet<IDisposable>());
 
     /// <summary>
     /// Arranges a new scenario
@@ -64,7 +65,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(
         this string name,
         Func<TData> fn
-    ) where TSyntax : struct, Syntax => name.Arrange<TData, TSyntax>(() => Task.FromResult(fn()));
+    )
+        where TSyntax : struct, Syntax => name.Arrange<TData, TSyntax>(() => Task.FromResult(fn()));
 
     /// <summary>
     /// Arranges a new scenario
@@ -78,7 +80,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(
         this string name,
         TData data
-    ) where TSyntax : struct, Syntax => name.Arrange<TData, TSyntax>(() => Task.FromResult(data));
+    )
+        where TSyntax : struct, Syntax => name.Arrange<TData, TSyntax>(() => Task.FromResult(data));
 
     /// <summary>
     /// Rearranges a scenario
@@ -93,7 +96,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Arranged<TDataNext> And<TData, TDataNext, TSyntax>(
         this Scenario<TSyntax>.Arranged<TData> scenario,
         Func<TData, Task<TDataNext>> fn
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         new(
             scenario.Name,
             async () =>
@@ -118,5 +122,6 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Arranged<TDataNext> And<TData, TDataNext, TSyntax>(
         this Scenario<TSyntax>.Arranged<TData> scenario,
         Func<TData, TDataNext> fn
-    ) where TSyntax : struct, Syntax => scenario.And(x => Task.FromResult(fn(x)));
+    )
+        where TSyntax : struct, Syntax => scenario.And(x => Task.FromResult(fn(x)));
 }

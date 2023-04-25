@@ -15,13 +15,15 @@ internal static class Shared
     [Pure]
     internal static Scenario<TSyntax>.Arranged<HttpRequestMessage> ArrangeRequest<TSyntax>(
         this HttpRequestMessage request
-    ) where TSyntax : struct, Syntax => Arrange<HttpRequestMessage, TSyntax>(request);
+    )
+        where TSyntax : struct, Syntax => Arrange<HttpRequestMessage, TSyntax>(request);
 
     [Pure]
     internal static Scenario<TSyntax>.Arranged<HttpRequestMessage> ArrangeRequest<TSyntax>(
         this string name,
         HttpRequestMessage request
-    ) where TSyntax : struct, Syntax => name.Arrange<HttpRequestMessage, TSyntax>(request);
+    )
+        where TSyntax : struct, Syntax => name.Arrange<HttpRequestMessage, TSyntax>(request);
 
     private static async Task<HttpResponseMessage> InternalCall(
         HttpRequestMessage request,
@@ -41,7 +43,8 @@ internal static class Shared
         this Scenario<TSyntax>.Arranged<TData> scenario,
         Func<TData, HttpRequestMessage> fn,
         Func<TData, TestServer> serverFn
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         scenario.Act(async data =>
         {
             var server = serverFn(data);
@@ -58,14 +61,16 @@ internal static class Shared
     > ActAndCall<TSyntax>(
         this Scenario<TSyntax>.Arranged<HttpRequestMessage> scenario,
         TestServer server
-    ) where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _, _ => server);
+    )
+        where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _, _ => server);
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<TData, HttpResponseMessage> ActAndCall<TData, TSyntax>(
         this Scenario<TSyntax>.Arranged<TData> scenario,
         Func<TData, HttpRequestMessage> fn,
         Func<HttpClient>? clientFactory = default
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         scenario.Act(data => InternalCall(fn(data), clientFactory?.Invoke() ?? new HttpClient()));
 
     [Pure]
@@ -75,7 +80,8 @@ internal static class Shared
     > ActAndCall<TSyntax>(
         this Scenario<TSyntax>.Arranged<HttpRequestMessage> scenario,
         Func<HttpClient>? clientFactory = default
-    ) where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _, clientFactory);
+    )
+        where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _, clientFactory);
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<TData, HttpResponseMessage> ActAndCallUntil<
@@ -87,7 +93,8 @@ internal static class Shared
         Schedule schedule,
         Expression<Func<HttpResponseMessage, bool>> predicate,
         Func<HttpClient>? clientFactory = default
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         scenario.Act(async data =>
         {
             var compiledPred = predicate.Compile();
@@ -116,6 +123,7 @@ internal static class Shared
         Schedule schedule,
         Expression<Func<HttpResponseMessage, bool>> predicate,
         Func<HttpClient>? clientFactory = default
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         scenario.ActAndCallUntil(static _ => _, schedule, predicate, clientFactory);
 }

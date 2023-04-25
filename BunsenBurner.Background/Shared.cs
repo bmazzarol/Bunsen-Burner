@@ -41,12 +41,13 @@ internal static class Shared
         );
 
     [Pure]
-    internal static Scenario<TSyntax>.Arranged<(TData Data, BackgroundServiceContext<TBackgroundService> BackgroundServiceContext)> AndABackgroundService<
-        TData,
-        TStartup,
-        TBackgroundService,
-        TSyntax
-    >(this Scenario<TSyntax>.Arranged<TData> scenario, Sink? sink = default)
+    internal static Scenario<TSyntax>.Arranged<(
+        TData Data,
+        BackgroundServiceContext<TBackgroundService> BackgroundServiceContext
+    )> AndABackgroundService<TData, TStartup, TBackgroundService, TSyntax>(
+        this Scenario<TSyntax>.Arranged<TData> scenario,
+        Sink? sink = default
+    )
         where TStartup : new()
         where TBackgroundService : IHostedService
         where TSyntax : struct, Syntax =>

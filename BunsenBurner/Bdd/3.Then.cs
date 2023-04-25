@@ -106,7 +106,8 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
         this BddScenario.Acted<TData, TResult> scenario,
         Func<TData, TException, Task> fn
-    ) where TException : Exception => scenario.AssertFailsWith(fn);
+    )
+        where TException : Exception => scenario.AssertFailsWith(fn);
 
     /// <summary>
     /// Then verify the scenario fails
@@ -121,7 +122,8 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
         this BddScenario.Acted<TData, TResult> scenario,
         Func<TException, Task> fn
-    ) where TException : Exception => scenario.AssertFailsWith(fn);
+    )
+        where TException : Exception => scenario.AssertFailsWith(fn);
 
     /// <summary>
     /// Then verify the scenario fails
@@ -136,7 +138,8 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
         this BddScenario.Acted<TData, TResult> scenario,
         Action<TData, TException> fn
-    ) where TException : Exception => scenario.AssertFailsWith(fn);
+    )
+        where TException : Exception => scenario.AssertFailsWith(fn);
 
     /// <summary>
     /// Then verify the scenario fails
@@ -151,7 +154,8 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
         this BddScenario.Acted<TData, TResult> scenario,
         Action<TException> fn
-    ) where TException : Exception => scenario.AssertFailsWith(fn);
+    )
+        where TException : Exception => scenario.AssertFailsWith(fn);
 
     /// <summary>
     /// Then verify the scenario fails
@@ -166,7 +170,8 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
         this BddScenario.Acted<TData, TResult> scenario,
         Expression<Func<TData, TException, bool>> fn
-    ) where TException : Exception => scenario.AssertFailsWith(fn);
+    )
+        where TException : Exception => scenario.AssertFailsWith(fn);
 
     /// <summary>
     /// Then verify the scenario fails
@@ -181,7 +186,8 @@ public static partial class Bdd
     public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
         this BddScenario.Acted<TData, TResult> scenario,
         Expression<Func<TException, bool>> fn
-    ) where TException : Exception => scenario.AssertFailsWith(fn);
+    )
+        where TException : Exception => scenario.AssertFailsWith(fn);
 
     /// <summary>
     /// Then verify the scenario fails

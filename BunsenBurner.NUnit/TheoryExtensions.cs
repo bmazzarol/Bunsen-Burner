@@ -27,7 +27,8 @@ public static class TheoryExtensions
     /// <returns>theory data of scenario</returns>
     public static TheoryData<Scenario<TSyntax>.Arranged<TData>> TheoryData<TSyntax, TData>(
         params Scenario<TSyntax>.Arranged<TData>[] scenarios
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         scenarios.AsTheoryData<TSyntax, Scenario<TSyntax>.Arranged<TData>>();
 
     /// <summary>
@@ -42,7 +43,8 @@ public static class TheoryExtensions
         TSyntax,
         TData,
         TResult
-    >(params Scenario<TSyntax>.Acted<TData, TResult>[] scenarios) where TSyntax : struct, Syntax =>
+    >(params Scenario<TSyntax>.Acted<TData, TResult>[] scenarios)
+        where TSyntax : struct, Syntax =>
         scenarios.AsTheoryData<TSyntax, Scenario<TSyntax>.Acted<TData, TResult>>();
 
     /// <summary>

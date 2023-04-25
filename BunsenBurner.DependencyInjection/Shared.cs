@@ -13,7 +13,8 @@ internal static class Shared
         this Scenario<TSyntax>.Arranged<TData> scenario,
         Func<TData, IServiceCollection> servicesGetter,
         Func<ServiceDescriptor, bool> pred
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         scenario
             .Act(r =>
             {
@@ -57,7 +58,8 @@ internal static class Shared
         this Scenario<TSyntax>.Arranged<TData> scenario,
         Func<TData, IServiceCollection> servicesGetter,
         params Assembly[] assemblies
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         scenario.ActAndAssertServicesAreConfigured(
             servicesGetter,
             descriptor => assemblies.Contains(descriptor.ServiceType.Assembly)

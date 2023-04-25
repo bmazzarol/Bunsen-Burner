@@ -40,7 +40,8 @@ public static class Aaa
     public static AaaScenario.Arranged<TData> AutoArrange<TData>(
         this string name,
         Func<Faker<TData>, Task<TData>> fn
-    ) where TData : class => name.AutoArrange<TData, Syntax.Aaa>(fn);
+    )
+        where TData : class => name.AutoArrange<TData, Syntax.Aaa>(fn);
 
     /// <summary>
     /// Auto arrange the scenario using bogus
@@ -53,7 +54,8 @@ public static class Aaa
     public static AaaScenario.Arranged<TData> AutoArrange<TData>(
         this string name,
         Func<Faker<TData>, TData> fn
-    ) where TData : class => name.AutoArrange<TData, Syntax.Aaa>(fn);
+    )
+        where TData : class => name.AutoArrange<TData, Syntax.Aaa>(fn);
 
     /// <summary>
     /// Auto arrange the scenario using bogus

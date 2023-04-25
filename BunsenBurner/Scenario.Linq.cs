@@ -18,7 +18,8 @@ public static class Scenario
     public static Scenario<TSyntax>.Arranged<TB> Select<TSyntax, TA, TB>(
         this Scenario<TSyntax>.Arranged<TA> scenario,
         Func<TA, TB> fn
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         new(scenario.Name, async () => fn(await scenario.ArrangeScenario()), scenario.Disposables);
 
     /// <summary>
@@ -35,7 +36,8 @@ public static class Scenario
     public static Scenario<TSyntax>.Acted<TData, TB> Select<TSyntax, TData, TA, TB>(
         this Scenario<TSyntax>.Acted<TData, TA> scenario,
         Func<TA, TB> fn
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         new(
             scenario.Name,
             scenario.ArrangeScenario,
@@ -56,7 +58,8 @@ public static class Scenario
     public static Scenario<TSyntax>.Arranged<TB> SelectMany<TSyntax, TA, TB>(
         this Scenario<TSyntax>.Arranged<TA> scenario,
         Func<TA, Scenario<TSyntax>.Arranged<TB>> fn
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         new(
             scenario.Name,
             async () => await fn(await scenario.ArrangeScenario()).ArrangeScenario(),
@@ -79,7 +82,8 @@ public static class Scenario
         this Scenario<TSyntax>.Arranged<TA> scenario,
         Func<TA, Scenario<TSyntax>.Arranged<TB>> mapFn,
         Func<TA, TB, TC> projectFn
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         new(
             scenario.Name,
             async () =>
@@ -105,7 +109,8 @@ public static class Scenario
     public static Scenario<TSyntax>.Acted<TData, TB> SelectMany<TSyntax, TData, TA, TB>(
         this Scenario<TSyntax>.Acted<TData, TA> scenario,
         Func<TA, Scenario<TSyntax>.Acted<TData, TB>> fn
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         new(
             scenario.Name,
             scenario.ArrangeScenario,
@@ -130,7 +135,8 @@ public static class Scenario
         this Scenario<TSyntax>.Acted<TData, TA> scenario,
         Func<TA, Scenario<TSyntax>.Acted<TData, TB>> mapFn,
         Func<TA, TB, TC> projectFn
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         new(
             scenario.Name,
             scenario.ArrangeScenario,

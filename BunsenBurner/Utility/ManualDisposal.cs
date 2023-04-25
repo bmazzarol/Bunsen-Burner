@@ -5,7 +5,8 @@ namespace BunsenBurner.Utility;
 ///  <summary>
 ///  When you want Bunsen Burner to not dispose of an IDisposable, wrap it in this
 ///  </summary>
-public record ManualDisposal<T> : IDisposable where T : IDisposable
+public record ManualDisposal<T> : IDisposable
+    where T : IDisposable
 {
     internal ManualDisposal(T value) => Value = value;
 
@@ -37,5 +38,6 @@ public static class ManualDisposal
     /// <param name="value">some disposable type</param>
     /// <typeparam name="T">T</typeparam>
     /// <returns>manual disposal for T</returns>
-    public static ManualDisposal<T> New<T>(T value) where T : IDisposable => new(value);
+    public static ManualDisposal<T> New<T>(T value)
+        where T : IDisposable => new(value);
 }

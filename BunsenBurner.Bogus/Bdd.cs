@@ -40,7 +40,8 @@ public static class Bdd
     public static BddScenario.Arranged<TData> AutoGiven<TData>(
         this string name,
         Func<Faker<TData>, Task<TData>> fn
-    ) where TData : class => name.AutoArrange<TData, Syntax.Bdd>(fn);
+    )
+        where TData : class => name.AutoArrange<TData, Syntax.Bdd>(fn);
 
     /// <summary>
     /// Auto complete the given step in the scenario using bogus
@@ -53,7 +54,8 @@ public static class Bdd
     public static BddScenario.Arranged<TData> AutoGiven<TData>(
         this string name,
         Func<Faker<TData>, TData> fn
-    ) where TData : class => name.AutoArrange<TData, Syntax.Bdd>(fn);
+    )
+        where TData : class => name.AutoArrange<TData, Syntax.Bdd>(fn);
 
     /// <summary>
     /// Auto complete the given step in the scenario using bogus

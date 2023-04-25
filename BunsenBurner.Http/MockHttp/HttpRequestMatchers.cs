@@ -31,8 +31,7 @@ public static class HttpRequestMatchers
                     .Replace("\\?", ".", StringComparison.Ordinal)
                     .Replace("\\*", ".*", StringComparison.Ordinal)
 #else
-                    .Replace("\\?", ".")
-                    .Replace("\\*", ".*")
+                .Replace("\\?", ".").Replace("\\*", ".*")
 #endif
                 + "$",
             RegexOptions.None,
@@ -184,7 +183,8 @@ public static class HttpRequestMatchers
     public static Matcher HasXmlContent<T>(
         Func<T, bool> matcher,
         XmlSerializer? serializer = default
-    ) where T : class, new() =>
+    )
+        where T : class, new() =>
         HasContent(content =>
         {
             try

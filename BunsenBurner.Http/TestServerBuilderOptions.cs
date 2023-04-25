@@ -32,11 +32,8 @@ public sealed record TestServerBuilderOptions
     /// </summary>
     /// <typeparam name="TStartup">startup class</typeparam>
     /// <returns>options</returns>
-    public TestServerBuilderOptions WithStartup<TStartup>() where TStartup : class =>
-        this with
-        {
-            StartupClass = typeof(TStartup)
-        };
+    public TestServerBuilderOptions WithStartup<TStartup>()
+        where TStartup : class => this with { StartupClass = typeof(TStartup) };
 
     /// <summary>
     /// Sets the startup class to the options
@@ -296,7 +293,8 @@ public sealed record TestServerBuilderOptions
         string issuer = Constants.TestIssuer,
         string signingKey = Constants.TestSigningKey,
         Sink? sink = default
-    ) where TStartup : class
+    )
+        where TStartup : class
     {
         var type = typeof(TStartup);
         return New(

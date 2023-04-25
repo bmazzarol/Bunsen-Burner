@@ -10,13 +10,14 @@ namespace BunsenBurner;
 [ExcludeFromCodeCoverage]
 public sealed class NoFailureException : Exception
 {
-    internal NoFailureException() : base("Test was expected to fail, but completed without issue")
-    { }
+    internal NoFailureException()
+        : base("Test was expected to fail, but completed without issue") { }
 
     private NoFailureException(SerializationInfo info, StreamingContext context)
         : base(info, context) { }
 
-    internal NoFailureException(string message) : base(message) { }
+    internal NoFailureException(string message)
+        : base(message) { }
 
     internal NoFailureException(string message, Exception innerException)
         : base(message, innerException) { }

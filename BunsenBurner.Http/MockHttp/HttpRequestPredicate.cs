@@ -12,8 +12,8 @@ public abstract record HttpRequestPredicate
 
     private sealed record HttpRequestPredicateImpl : HttpRequestPredicate
     {
-        public HttpRequestPredicateImpl(Func<HttpRequestMessage, bool> predicate) : base(predicate)
-        { }
+        public HttpRequestPredicateImpl(Func<HttpRequestMessage, bool> predicate)
+            : base(predicate) { }
     }
 
     /// <summary>

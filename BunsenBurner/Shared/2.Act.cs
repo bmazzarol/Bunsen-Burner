@@ -18,7 +18,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Acted<TData, TResult> Act<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Arranged<TData> scenario,
         Func<TData, Task<TResult>> fn
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         new(scenario.Name, scenario.ArrangeScenario, fn, scenario.Disposables);
 
     /// <summary>
@@ -34,7 +35,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Acted<TData, TResult> Act<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Arranged<TData> scenario,
         Func<TData, TResult> fn
-    ) where TSyntax : struct, Syntax => scenario.Act(x => Task.FromResult(fn(x)));
+    )
+        where TSyntax : struct, Syntax => scenario.Act(x => Task.FromResult(fn(x)));
 
     /// <summary>
     /// Acts again on a scenario
@@ -55,7 +57,8 @@ internal static partial class Shared
     >(
         this Scenario<TSyntax>.Acted<TData, TResult> scenario,
         Func<TData, TResult, Task<TResultNext>> fn
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         new(
             scenario.Name,
             scenario.ArrangeScenario,
@@ -98,5 +101,6 @@ internal static partial class Shared
     [Pure]
     public static Scenario<TSyntax>.Arranged<TData> ResetToArranged<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Acted<TData, TResult> scenario
-    ) where TSyntax : struct, Syntax => Arrange<TData, TSyntax>(scenario.ArrangeScenario);
+    )
+        where TSyntax : struct, Syntax => Arrange<TData, TSyntax>(scenario.ArrangeScenario);
 }

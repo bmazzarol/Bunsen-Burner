@@ -29,7 +29,8 @@ public interface Syntax
 /// This construct can represent any single test, and provides the foundation for building tests as data.
 /// </summary>
 /// <typeparam name="TSyntax">Supported syntax</typeparam>
-public abstract partial record Scenario<TSyntax> where TSyntax : struct, Syntax
+public abstract partial record Scenario<TSyntax>
+    where TSyntax : struct, Syntax
 {
     /// <summary>
     /// Optional name for the scenario

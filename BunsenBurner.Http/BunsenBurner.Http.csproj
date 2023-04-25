@@ -45,7 +45,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Meziantou.Analyzer" Version="2.0.34">
+        <PackageReference Include="Meziantou.Analyzer" Version="2.0.37">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -53,7 +53,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="SonarAnalyzer.CSharp" Version="8.55.0.65544">
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="8.56.0.67649">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -63,8 +63,8 @@
         <PackageReference Include="JWT" Version="10.0.2" />
         <PackageReference Include="Flurl" Version="3.0.7" />
         <PackageReference Include="LanguageExt.Core" Version="4.4.3" />
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.28.1" />
-        <PackageReference Include="HttpBuildR.Request" Version="1.1.1" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.29.0" />
+        <PackageReference Include="HttpBuildR.Request" Version="1.1.2" />
         <PackageReference Include="HttpBuildR.Response" Version="1.1.1" />
     </ItemGroup>
 

@@ -41,7 +41,8 @@ public static class BackgroundServiceBuilder
         Func<TStartup> startupBuilder,
         Action<IServiceCollection>? config = default,
         Sink? sink = default
-    ) where TBackgroundService : IHostedService
+    )
+        where TBackgroundService : IHostedService
     {
         var sp = BuildServiceProvider(startupBuilder, config, sink);
         var services = sp.GetRequiredService<IEnumerable<IHostedService>>();
@@ -80,7 +81,8 @@ public static class BackgroundServiceBuilder
     public static BackgroundServiceContext<TBackgroundService> CreateAndCache<
         TStartup,
         TBackgroundService
-    >(Func<TStartup> startupBuilder, Sink? sink = default) where TBackgroundService : IHostedService
+    >(Func<TStartup> startupBuilder, Sink? sink = default)
+        where TBackgroundService : IHostedService
     {
         var startupType = typeof(TStartup);
         var sp = ServiceProviderCache.Get(

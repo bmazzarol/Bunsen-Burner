@@ -64,7 +64,8 @@ public static class Bdd
         this BddScenario.Arranged<TData> scenario,
         Func<TData, TFunction> functionApp,
         Func<TData, TFunction, Task<TResult>> fn
-    ) where TFunction : class => scenario.ActAndExecute(functionApp, fn);
+    )
+        where TFunction : class => scenario.ActAndExecute(functionApp, fn);
 
     /// <summary>
     /// Executes the function app
@@ -78,5 +79,6 @@ public static class Bdd
     public static BddScenario.Acted<TFunction, TResult> WhenExecuted<TFunction, TResult>(
         this BddScenario.Arranged<TFunction> scenario,
         Func<TFunction, Task<TResult>> fn
-    ) where TFunction : class => scenario.ActAndExecute(fn);
+    )
+        where TFunction : class => scenario.ActAndExecute(fn);
 }

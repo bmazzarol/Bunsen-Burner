@@ -44,7 +44,8 @@ internal static class Shared
     [Pure]
     internal static Scenario<TSyntax>.Acted<RunContext, Summary> ActAndExecuteBenchmarks<TSyntax>(
         this Scenario<TSyntax>.Arranged<RunContext> scenario
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         scenario.Act(
             ctx =>
                 Task.Run(

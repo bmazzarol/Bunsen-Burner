@@ -45,7 +45,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Acted<TData, TResult> scenario,
         Func<TData, TResult, Task> fn
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         new(
             scenario.Name,
             scenario.ArrangeScenario,
@@ -67,7 +68,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Acted<TData, TResult> scenario,
         Func<TResult, Task> fn
-    ) where TSyntax : struct, Syntax => scenario.Assert((_, r) => fn(r));
+    )
+        where TSyntax : struct, Syntax => scenario.Assert((_, r) => fn(r));
 
     /// <summary>
     /// Asserts on the result of acting on the test
@@ -82,7 +84,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Acted<TData, TResult> scenario,
         Action<TData, TResult> fn
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         scenario.Assert(
             (d, r) =>
             {
@@ -104,7 +107,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Acted<TData, TResult> scenario,
         Action<TResult> fn
-    ) where TSyntax : struct, Syntax => scenario.Assert((_, r) => fn(r));
+    )
+        where TSyntax : struct, Syntax => scenario.Assert((_, r) => fn(r));
 
     /// <summary>
     /// Asserts on the result of acting on the test
@@ -119,7 +123,9 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Acted<TData, TResult> scenario,
         Expression<Func<TResult, bool>> expression
-    ) where TSyntax : struct, Syntax => scenario.Assert(r => r.RunExpressionAssertion(expression));
+    )
+        where TSyntax : struct, Syntax =>
+        scenario.Assert(r => r.RunExpressionAssertion(expression));
 
     /// <summary>
     /// Asserts on the result of acting on the test
@@ -134,7 +140,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Acted<TData, TResult> scenario,
         Expression<Func<TData, TResult, bool>> expression
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         scenario.Assert((d, r) => RunExpressionAssertion(d, r, expression));
 
     /// <summary>
@@ -311,7 +318,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
         Func<TData, TResult, Task> fn
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         new(
             scenario.Name,
             scenario.ArrangeScenario,
@@ -337,7 +345,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
         Func<TResult, Task> fn
-    ) where TSyntax : struct, Syntax => scenario.And((_, r) => fn(r));
+    )
+        where TSyntax : struct, Syntax => scenario.And((_, r) => fn(r));
 
     /// <summary>
     /// Asserts again on the result of acting on the test
@@ -352,7 +361,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
         Action<TData, TResult> fn
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         scenario.And(
             (d, r) =>
             {
@@ -374,7 +384,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
         Action<TResult> fn
-    ) where TSyntax : struct, Syntax => scenario.And((_, r) => fn(r));
+    )
+        where TSyntax : struct, Syntax => scenario.And((_, r) => fn(r));
 
     /// <summary>
     /// Asserts again on the result of acting on the test
@@ -389,7 +400,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
         Expression<Func<TResult, bool>> expression
-    ) where TSyntax : struct, Syntax => scenario.And(r => r.RunExpressionAssertion(expression));
+    )
+        where TSyntax : struct, Syntax => scenario.And(r => r.RunExpressionAssertion(expression));
 
     /// <summary>
     /// Asserts again on the result of acting on the test
@@ -404,7 +416,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
         Expression<Func<TData, TResult, bool>> expression
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         scenario.And((d, r) => RunExpressionAssertion(d, r, expression));
 
     /// <summary>
@@ -418,7 +431,8 @@ internal static partial class Shared
     [Pure]
     public static Scenario<TSyntax>.Arranged<TData> ResetToArranged<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario
-    ) where TSyntax : struct, Syntax => Arrange<TData, TSyntax>(scenario.ArrangeScenario);
+    )
+        where TSyntax : struct, Syntax => Arrange<TData, TSyntax>(scenario.ArrangeScenario);
 
     /// <summary>
     /// Resets the asserted scenario back to acted, throwing away the information
@@ -431,7 +445,8 @@ internal static partial class Shared
     [Pure]
     public static Scenario<TSyntax>.Acted<TData, TResult> ResetToActed<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         Arrange<TData, TSyntax>(scenario.ArrangeScenario).Act(scenario.ActOnScenario);
 
     /// <summary>
@@ -447,7 +462,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Asserted<TData, TResult> ReplaceAct<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
         Func<TData, Task<TResult>> fn
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         Arrange<TData, TSyntax>(scenario.ArrangeScenario)
             .Act(fn)
             .Assert(scenario.AssertAgainstResult);
@@ -465,7 +481,8 @@ internal static partial class Shared
     public static Scenario<TSyntax>.Asserted<TData, TResult> ReplaceAct<TData, TResult, TSyntax>(
         this Scenario<TSyntax>.Asserted<TData, TResult> scenario,
         Func<TData, TResult> fn
-    ) where TSyntax : struct, Syntax =>
+    )
+        where TSyntax : struct, Syntax =>
         Arrange<TData, TSyntax>(scenario.ArrangeScenario)
             .Act(fn)
             .Assert(scenario.AssertAgainstResult);

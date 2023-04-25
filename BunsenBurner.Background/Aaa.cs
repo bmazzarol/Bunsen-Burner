@@ -51,11 +51,13 @@ public static class Aaa
     /// <typeparam name="TBackgroundService">background service class</typeparam>
     /// <returns>arranged scenario</returns>
     [Pure]
-    public static AaaScenario.Arranged<(TData Data, BackgroundServiceContext<TBackgroundService> BackgroundServiceContext)> AndABackgroundService<
-        TData,
-        TStartup,
-        TBackgroundService
-    >(this AaaScenario.Arranged<TData> scenario, Sink? sink = default)
+    public static AaaScenario.Arranged<(
+        TData Data,
+        BackgroundServiceContext<TBackgroundService> BackgroundServiceContext
+    )> AndABackgroundService<TData, TStartup, TBackgroundService>(
+        this AaaScenario.Arranged<TData> scenario,
+        Sink? sink = default
+    )
         where TStartup : new()
         where TBackgroundService : IHostedService =>
         scenario.AndABackgroundService<TData, TStartup, TBackgroundService, Syntax.Aaa>(sink);
@@ -79,7 +81,8 @@ public static class Aaa
         Func<TData, BackgroundServiceContext<TBackgroundService>> fn,
         Schedule schedule,
         Func<BackgroundServiceContext<TBackgroundService>, bool> pred
-    ) where TBackgroundService : IHostedService =>
+    )
+        where TBackgroundService : IHostedService =>
         Shared.ActAndRunUntil(scenario, fn, schedule, pred);
 
     /// <summary>
@@ -98,7 +101,9 @@ public static class Aaa
         this AaaScenario.Arranged<BackgroundServiceContext<TBackgroundService>> scenario,
         Schedule schedule,
         Func<BackgroundServiceContext<TBackgroundService>, bool> pred
-    ) where TBackgroundService : IHostedService => Shared.ActAndRunUntil(scenario, schedule, pred);
+    )
+        where TBackgroundService : IHostedService =>
+        Shared.ActAndRunUntil(scenario, schedule, pred);
 
     /// <summary>
     /// Runs the background service for the given time, returning any log messages
@@ -116,7 +121,8 @@ public static class Aaa
         Func<TData, BackgroundServiceContext<TBackgroundService>> fn,
         Duration maxCumulativeDelay,
         Func<BackgroundServiceContext<TBackgroundService>, bool> pred
-    ) where TBackgroundService : IHostedService =>
+    )
+        where TBackgroundService : IHostedService =>
         Shared.ActAndRunFor(scenario, fn, maxCumulativeDelay, pred);
 
     /// <summary>
@@ -135,6 +141,7 @@ public static class Aaa
         this AaaScenario.Arranged<BackgroundServiceContext<TBackgroundService>> scenario,
         Duration maxCumulativeDelay,
         Func<BackgroundServiceContext<TBackgroundService>, bool> pred
-    ) where TBackgroundService : IHostedService =>
+    )
+        where TBackgroundService : IHostedService =>
         Shared.ActAndRunFor(scenario, maxCumulativeDelay, pred);
 }
