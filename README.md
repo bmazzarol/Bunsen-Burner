@@ -5,8 +5,11 @@
 
 # Bunsen Burner
 
+[:running: **_Getting Started_**](https://bmazzarol.github.io/Bunsen-Burner/articles/getting-started.html)
+[:books: **_Documentation_**](https://bmazzarol.github.io/Bunsen-Burner)
+
 [![Nuget](https://img.shields.io/nuget/v/BunsenBurner)](https://www.nuget.org/packages/BunsenBurner/)
-[![Coverage Status](https://coveralls.io/repos/github/bmazzarol/Bunsen-Burner/badge.svg?branch=main)](https://coveralls.io/github/bmazzarol/Bunsen-Burner?branch=main)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=bmazzarol_Bunsen-Burner&metric=coverage)](https://sonarcloud.io/summary/new_code?id=bmazzarol_Bunsen-Burner)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=bmazzarol_Bunsen-Burner&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=bmazzarol_Bunsen-Burner)
 [![CD Build](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/cd-build.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/cd-build.yml)
 [![Check Markdown](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/check-markdown.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/check-markdown.yml)

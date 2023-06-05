@@ -9,10 +9,11 @@
         <Title>Bunsen Burner xUnit.net</Title>
         <Description>Integration with [xUnit.net](https://github.com/xunit/xunit) to easily consume Bunsen Burner</Description>
         <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests</PackageTags>
-        <PackageProjectUrl>https://github.com/bmazzarol/Bunsen-Burner</PackageProjectUrl>
+        <PackageProjectUrl>https://bmazzarol.github.io/Bunsen-Burner</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/bmazzarol/Bunsen-Burner</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
-        <ProjectGuid>8d91239f-7947-427e-81eb-3fa03b5fca52</ProjectGuid>
+        <ProjectGuid>7877ad44-99d0-401d-bd39-ac0e58aa4b79</ProjectGuid>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>

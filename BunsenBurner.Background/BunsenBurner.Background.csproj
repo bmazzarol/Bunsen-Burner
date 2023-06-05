@@ -9,10 +9,11 @@
         <Title>Bunsen Burner Background</Title>
         <Description>Extension methods for testing Background services</Description>
         <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests, Background service</PackageTags>
-        <PackageProjectUrl>https://github.com/bmazzarol/Bunsen-Burner</PackageProjectUrl>
+        <PackageProjectUrl>https://bmazzarol.github.io/Bunsen-Burner</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/bmazzarol/Bunsen-Burner</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
-        <ProjectGuid>2aafd9cc-f4a0-466e-adce-2c495447f59b</ProjectGuid>
+        <ProjectGuid>74024281-68b4-4468-8746-74e6162f7cbe</ProjectGuid>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>

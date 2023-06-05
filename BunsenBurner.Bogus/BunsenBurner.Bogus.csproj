@@ -9,10 +9,11 @@
         <Title>Bunsen Burner Bogus</Title>
         <Description>Integration with [Bogus](https://github.com/bchavez/Bogus) to simplify arrange steps</Description>
         <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests</PackageTags>
-        <PackageProjectUrl>https://github.com/bmazzarol/Bunsen-Burner</PackageProjectUrl>
+        <PackageProjectUrl>https://bmazzarol.github.io/Bunsen-Burner</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/bmazzarol/Bunsen-Burner</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
-        <ProjectGuid>d4e22a46-f7cd-400e-85bb-f849038bb67b</ProjectGuid>
+        <ProjectGuid>b9b56a1e-80e6-46e7-a63a-f76b4bba60c3</ProjectGuid>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>

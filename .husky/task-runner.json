@@ -14,7 +14,7 @@
             "args": [
                 "markdownlint-cli2",
                 "BunsenBurner*/**/*.md",
-                "Docs/**/*.md",
+                "BunsenBurner.Docs/**/*.md",
                 "*.md",
                 "!LICENSE.md"
             ]

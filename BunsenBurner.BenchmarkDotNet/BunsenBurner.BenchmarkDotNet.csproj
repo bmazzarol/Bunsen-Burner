@@ -9,10 +9,11 @@
         <Title>Bunsen Burner BenchmarkDotNet</Title>
         <Description>Integration with [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet) to write performance tests</Description>
         <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests, Performance Tests</PackageTags>
-        <PackageProjectUrl>https://github.com/bmazzarol/Bunsen-Burner</PackageProjectUrl>
+        <PackageProjectUrl>https://bmazzarol.github.io/Bunsen-Burner</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/bmazzarol/Bunsen-Burner</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
-        <ProjectGuid>8d91239f-7947-427e-81eb-4fa03b5fba51</ProjectGuid>
+        <ProjectGuid>5cf3457f-b2fb-4471-9a97-21b71a4e13a6</ProjectGuid>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>

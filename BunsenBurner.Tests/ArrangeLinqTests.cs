@@ -27,4 +27,13 @@ public static class ArrangeLinqTests
         )
             .Act(_ => _)
             .Assert(r => r.a == 1 && r.b.Ticks > r.a && r.c == "some string");
+
+    [Fact(DisplayName = "Scenarios can be combined with Sequence")]
+    public static async Task Case5() =>
+        await Enumerable
+            .Range(1, 10)
+            .Select(x => x.ArrangeData())
+            .Sequence()
+            .Act(x => x.Count())
+            .Assert(x => x == 10);
 }
