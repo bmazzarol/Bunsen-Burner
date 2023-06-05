@@ -45,15 +45,15 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Meziantou.Analyzer" Version="2.0.37">
+        <PackageReference Include="Meziantou.Analyzer" Version="2.0.54">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Roslynator.Analyzers" Version="4.2.0">
+        <PackageReference Include="Roslynator.Analyzers" Version="4.3.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="SonarAnalyzer.CSharp" Version="8.56.0.67649">
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="9.0.0.68202">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -68,7 +68,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
         <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
         <PackageReference Include="HttpBuildR.Request" Version="1.1.2" />
-        <PackageReference Include="HttpBuildR.Response" Version="1.1.1" />
+        <PackageReference Include="HttpBuildR.Response" Version="1.1.2" />
         <PackageReference Include="Flurl" Version="3.0.7" />
     </ItemGroup>
 
