@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <Target Name="BuildDocs" AfterTargets="AfterBuild">
+        <Exec Command="dotnet tool restore" />
+        <Delete Files="_site" />
+        <Delete Files="api" />
+        <Exec Command="dotnet docfx docfx.json" />
+    </Target>
+</Project>

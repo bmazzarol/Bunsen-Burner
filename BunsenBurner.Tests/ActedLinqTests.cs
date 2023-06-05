@@ -27,4 +27,12 @@ public static class ActedLinqTests
             from c in Aaa.Arrange(3).Act(_ => "some string")
             select a + b + c
         ).Assert(r => r.StartsWith("1") && r.EndsWith("some string"));
+
+    [Fact(DisplayName = "Scenarios can be combined with Sequence")]
+    public static async Task Case5() =>
+        await Enumerable
+            .Range(1, 10)
+            .Select(x => x.ArrangeData().Act(i => i).Assert(i => i <= 10))
+            .Sequence()
+            .And(x => x.Count() == 10);
 }

@@ -148,4 +148,49 @@ public static class Scenario
             },
             scenario.Disposables
         );
+
+    /// <summary>
+    /// Converts n number of arranged scenarios to a single scenario
+    /// </summary>
+    /// <param name="scenarios">n number of arranged scenarios</param>
+    /// <typeparam name="TSyntax">syntax</typeparam>
+    /// <typeparam name="TData">arranged data</typeparam>
+    /// <returns>single arranged scenario</returns>
+    public static Scenario<TSyntax>.Arranged<IEnumerable<TData>> Sequence<TSyntax, TData>(
+        this IEnumerable<Scenario<TSyntax>.Arranged<TData>> scenarios
+    )
+        where TSyntax : struct, Syntax =>
+        new(
+            name: null,
+            async () => await Task.WhenAll(scenarios.Select(x => x.ArrangeScenario())),
+            new HashSet<IDisposable>()
+        );
+
+    /// <summary>
+    /// Converts n number of scenarios to a single scenario
+    /// </summary>
+    /// <param name="scenarios">n number of scenarios</param>
+    /// <typeparam name="TSyntax">syntax</typeparam>
+    /// <typeparam name="TData">arranged data</typeparam>
+    /// <typeparam name="TResult">result of acting</typeparam>
+    /// <returns>single asserted scenario</returns>
+    public static Scenario<TSyntax>.Asserted<IEnumerable<TData>, IEnumerable<TResult>> Sequence<
+        TSyntax,
+        TData,
+        TResult
+    >(this IEnumerable<Scenario<TSyntax>.Asserted<TData, TResult>> scenarios)
+        where TSyntax : struct, Syntax =>
+        new(
+            name: null,
+            async () => await Task.WhenAll(scenarios.Select(x => x.ArrangeScenario())),
+            async data => await Task.WhenAll(scenarios.Zip(data, (s, d) => s.ActOnScenario(d))),
+            async (context, result) =>
+                await Task.WhenAll(
+                    scenarios.Zip(
+                        context.Zip(result, (d, r) => (d, r)),
+                        (s, t) => s.AssertAgainstResult(t.d, t.r)
+                    )
+                ),
+            new HashSet<IDisposable>()
+        );
 }

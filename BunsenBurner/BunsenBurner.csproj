@@ -9,7 +9,8 @@
         <Title>Bunsen Burner Core</Title>
         <Description>This provides the core dependency free test abstraction that Bunsen Burner is built on</Description>
         <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests</PackageTags>
-        <PackageProjectUrl>https://github.com/bmazzarol/Bunsen-Burner</PackageProjectUrl>
+        <PackageProjectUrl>https://bmazzarol.github.io/Bunsen-Burner</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/bmazzarol/Bunsen-Burner</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
         <ProjectGuid>7785ca26-4a1d-42cb-acb1-d8de50fa9666</ProjectGuid>

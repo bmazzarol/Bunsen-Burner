@@ -9,10 +9,11 @@
         <Title>Bunsen Burner Dependency Injection</Title>
         <Description>Extension methods for testing DI containers</Description>
         <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests, Http, Function App</PackageTags>
-        <PackageProjectUrl>https://github.com/bmazzarol/Bunsen-Burner</PackageProjectUrl>
+        <PackageProjectUrl>https://bmazzarol.github.io/Bunsen-Burner</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/bmazzarol/Bunsen-Burner</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
-        <ProjectGuid>a3d8f2b2-f7e8-44fd-8cd7-cc369c4079b1</ProjectGuid>
+        <ProjectGuid>6d74200b-456d-4608-a22f-5b66110814b9</ProjectGuid>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>

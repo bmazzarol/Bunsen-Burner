@@ -9,10 +9,11 @@
         <Title>Bunsen Burner AutoFixture</Title>
         <Description>Integration with [AutoFixture](https://github.com/AutoFixture) to simplify arrange steps</Description>
         <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests</PackageTags>
-        <PackageProjectUrl>https://github.com/bmazzarol/Bunsen-Burner</PackageProjectUrl>
+        <PackageProjectUrl>https://bmazzarol.github.io/Bunsen-Burner</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/bmazzarol/Bunsen-Burner</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
-        <ProjectGuid>eaeeb481-1da4-4bd5-9720-3204ad7a9ccb</ProjectGuid>
+        <ProjectGuid>4b69980d-7293-4726-994c-652c4de17efc</ProjectGuid>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>

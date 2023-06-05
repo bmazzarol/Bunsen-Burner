@@ -23,4 +23,4 @@ jobs:
       - name: Run Markdownlint
         run: |
           npm i
-          npx markdownlint-cli2 "BunsenBurner*/**/*.md" "Docs/**/*.md" "*.md" "!LICENSE.md"
+          npx markdownlint-cli2 "BunsenBurner*/**/*.md" "BunsenBurner.Docs/**/*.md" "*.md" "!LICENSE.md"

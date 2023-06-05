@@ -9,10 +9,11 @@
         <Title>Bunsen Burner Function App</Title>
         <Description>Extension methods for testing Function apps</Description>
         <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests, Http, Function App</PackageTags>
-        <PackageProjectUrl>https://github.com/bmazzarol/Bunsen-Burner</PackageProjectUrl>
+        <PackageProjectUrl>https://bmazzarol.github.io/Bunsen-Burner</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/bmazzarol/Bunsen-Burner</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
-        <ProjectGuid>a3d8f2b2-f7e8-44fd-8cd7-cc369c4079b1</ProjectGuid>
+        <ProjectGuid>4a465aa8-8398-4bb7-ad7f-1ce2a5a974c9</ProjectGuid>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>

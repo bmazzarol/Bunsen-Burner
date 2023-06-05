@@ -9,10 +9,11 @@
         <Title>Bunsen Burner Verify Xunit</Title>
         <Description>Integration with [Verify.Xunit](https://github.com/VerifyTests/Verify) to simplify assert steps</Description>
         <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests, Xunit</PackageTags>
-        <PackageProjectUrl>https://github.com/bmazzarol/Bunsen-Burner</PackageProjectUrl>
+        <PackageProjectUrl>https://bmazzarol.github.io/Bunsen-Burner</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/bmazzarol/Bunsen-Burner</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
-        <ProjectGuid>2df5525d-d70f-4994-84b5-7b5d9531004a</ProjectGuid>
+        <ProjectGuid>5a6e55e5-c202-4d7e-988d-d0d6e0af53cc</ProjectGuid>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
