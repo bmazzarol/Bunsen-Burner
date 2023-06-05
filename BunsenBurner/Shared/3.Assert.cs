@@ -14,9 +14,11 @@ internal static partial class Shared
     {
         var fn = expression.Compile();
         if (!fn(result))
+        {
             throw new InvalidOperationException(
                 $"{expression} is not true for the result {result}"
             );
+        }
     }
 
     private static void RunExpressionAssertion<TData, TResult>(
@@ -27,9 +29,11 @@ internal static partial class Shared
     {
         var fn = expression.Compile();
         if (!fn(data, result))
+        {
             throw new InvalidOperationException(
                 $"{expression} is not true for the result {result} and data {data}"
             );
+        }
     }
 
     /// <summary>

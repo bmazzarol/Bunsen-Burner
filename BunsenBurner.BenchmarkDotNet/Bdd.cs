@@ -24,7 +24,7 @@ public static class Bdd
         params string[] runParameters
     )
         where TBenchmarks : class =>
-        Shared.ArrangeBenchmarks<Syntax.Bdd, TBenchmarks>(name, configure, logSink, runParameters);
+        name.ArrangeBenchmarks<Syntax.Bdd, TBenchmarks>(configure, logSink, runParameters);
 
     /// <summary>
     /// Given a set of performance benchmarks to be run
@@ -51,5 +51,5 @@ public static class Bdd
     [Pure]
     public static BddScenario.Acted<RunContext, Summary> WhenBenchmarksExecuted(
         this BddScenario.Arranged<RunContext> scenario
-    ) => Shared.ActAndExecuteBenchmarks(scenario);
+    ) => scenario.ActAndExecuteBenchmarks();
 }

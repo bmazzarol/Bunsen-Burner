@@ -73,8 +73,8 @@ public static class Aaa
     /// </summary>
     /// <param name="scenario">arranged scenario</param>
     /// <param name="fn">execute the function app, returning a result</param>
-    /// <typeparam name="TResult">result of executing the function app</typeparam>
     /// <typeparam name="TFunction">function app to execute</typeparam>
+    /// <typeparam name="TResult">result of executing the function app</typeparam>
     /// <returns>acted scenario</returns>
     [Pure]
     public static AaaScenario.Acted<TFunction, TResult> ActAndExecute<TFunction, TResult>(

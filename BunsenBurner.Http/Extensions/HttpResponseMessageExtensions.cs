@@ -1,4 +1,6 @@
-﻿namespace BunsenBurner.Http;
+﻿using System.Globalization;
+
+namespace BunsenBurner.Http;
 
 /// <summary>
 /// Extension methods for working with HttpResponseMessages
@@ -17,7 +19,8 @@ public static class HttpResponseMessageExtensions
             ? string.Empty
             : $" {string.Join(" ", response.Headers.Select(h => $@"-H ""{h.Key}: {string.Join(", ", h.Value)}"""))}";
         var body = await response.AsContent();
-        return $"Response: {response.StatusCode}({(int)response.StatusCode}){headers}{body}";
+        var code = ((int)response.StatusCode).ToString(CultureInfo.InvariantCulture);
+        return $"Response: {response.StatusCode}({code}){headers}{body}";
     }
 
     /// <summary>

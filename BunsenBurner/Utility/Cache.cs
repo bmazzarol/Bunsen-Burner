@@ -37,8 +37,10 @@ public sealed class Cache<TValue> : IDisposable
     public void Dispose()
     {
         foreach (var v in _concurrentDictionary.Select(kvp => kvp.Value))
+        {
             if (v.IsValueCreated && v.Value is IDisposable d)
                 d.Dispose();
+        }
 
         _concurrentDictionary.Clear();
     }

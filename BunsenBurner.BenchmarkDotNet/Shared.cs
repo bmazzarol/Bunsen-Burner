@@ -1,5 +1,4 @@
 ﻿using BenchmarkDotNet.Exporters;
-using static BunsenBurner.Shared;
 
 namespace BunsenBurner.BenchmarkDotNet;
 
@@ -17,7 +16,7 @@ internal static class Shared
     )
         where TSyntax : struct, Syntax
         where TBenchmarks : class =>
-        Arrange<RunContext, TSyntax>(
+        name.Arrange<RunContext, TSyntax>(
             RunContext.New<TBenchmarks>(
                 (
                     configure?.Invoke(ManualConfig.CreateEmpty())

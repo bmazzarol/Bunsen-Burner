@@ -24,7 +24,7 @@ public static class Aaa
         params string[] runParameters
     )
         where TBenchmarks : class =>
-        Shared.ArrangeBenchmarks<Syntax.Aaa, TBenchmarks>(name, configure, logSink, runParameters);
+        name.ArrangeBenchmarks<Syntax.Aaa, TBenchmarks>(configure, logSink, runParameters);
 
     /// <summary>
     /// Arranges a set of performance benchmarks to be run

@@ -10,9 +10,9 @@ public static class Scenario
     /// </summary>
     /// <param name="scenario">arranged scenario of TA</param>
     /// <param name="fn">fn from TA to TB</param>
+    /// <typeparam name="TSyntax">syntax</typeparam>
     /// <typeparam name="TA">some TA</typeparam>
     /// <typeparam name="TB">some TB</typeparam>
-    /// <typeparam name="TSyntax">syntax</typeparam>
     /// <returns>arranged scenario of TB</returns>
     [Pure]
     public static Scenario<TSyntax>.Arranged<TB> Select<TSyntax, TA, TB>(
@@ -50,9 +50,9 @@ public static class Scenario
     /// </summary>
     /// <param name="scenario">arranged scenario of TA</param>
     /// <param name="fn">fn from TA to arranged scenario of TB</param>
+    /// <typeparam name="TSyntax">syntax</typeparam>
     /// <typeparam name="TA">some TA</typeparam>
     /// <typeparam name="TB">some TB</typeparam>
-    /// <typeparam name="TSyntax">syntax</typeparam>
     /// <returns>arranged scenario of TB</returns>
     [Pure]
     public static Scenario<TSyntax>.Arranged<TB> SelectMany<TSyntax, TA, TB>(
@@ -72,10 +72,10 @@ public static class Scenario
     /// <param name="scenario">arranged scenario of TA</param>
     /// <param name="mapFn">fn from TA to arranged scenario of TB</param>
     /// <param name="projectFn">projection function from TA, TB to TC</param>
+    /// <typeparam name="TSyntax">syntax</typeparam>
     /// <typeparam name="TA">some TA</typeparam>
     /// <typeparam name="TB">some TB</typeparam>
     /// <typeparam name="TC">some TC</typeparam>
-    /// <typeparam name="TSyntax">syntax</typeparam>
     /// <returns>arranged scenario of TC</returns>
     [Pure]
     public static Scenario<TSyntax>.Arranged<TC> SelectMany<TSyntax, TA, TB, TC>(

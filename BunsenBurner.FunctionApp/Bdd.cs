@@ -72,8 +72,8 @@ public static class Bdd
     /// </summary>
     /// <param name="scenario">given scenario</param>
     /// <param name="fn">execute the function app, returning a result</param>
-    /// <typeparam name="TResult">result of executing the function app</typeparam>
     /// <typeparam name="TFunction">function app to execute</typeparam>
+    /// <typeparam name="TResult">result of executing the function app</typeparam>
     /// <returns>scenario that is run</returns>
     [Pure]
     public static BddScenario.Acted<TFunction, TResult> WhenExecuted<TFunction, TResult>(
