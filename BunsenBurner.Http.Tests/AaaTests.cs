@@ -181,7 +181,7 @@ public static class AaaTests
             .To("/hello-world")
             .WithBearerToken(
                 Token
-                    .New()
+                    .New(lifetime: 2 * days)
                     .WithClaim(ClaimName.Subject, 1, 2, 3)
                     .WithHeader(HeaderName.KeyId, "1", "2", "3")
             )
