@@ -7,6 +7,7 @@ on:
     
 jobs:
   build:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     name: Build and analyze
     runs-on: ubuntu-latest
     steps:
