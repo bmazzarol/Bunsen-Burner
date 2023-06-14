@@ -1,3 +1,18 @@
 ﻿#logo {
     margin-right: 1em;
+    height: 2.5em;
+}
+
+.navbar {
+    background-color: var(--bs-border-color);
+}
+
+body > footer {
+    background-color: var(--bs-tertiary-bg);
+    height: auto;
+    padding: 0.5em;
+}
+
+body > footer.border-top {
+    border-top-color: var(--bs-tertiary-bg);
 }
