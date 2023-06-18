@@ -15,7 +15,7 @@
 [![CodeQL](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/codeql.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/codeql.yml)
 
 Set :fire: to your old unit tests!
-A better way to write tests :test_tube: in C#.
+A better way to write tests in C#.
 
 ---
 
