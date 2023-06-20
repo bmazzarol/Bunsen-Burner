@@ -27,11 +27,8 @@ public static class TestServerBuilder
     /// The minimum key size is 128 bytes therefore the provided string must be at least 16 characters.
     /// Smaller strings will be padded to the right with spaces.
     /// </summary>
-    private static SymmetricSecurityKey AsSymmetricSecurityKey(this string key)
-    {
-        const int minKeySize = 16;
-        return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key.PadRight(minKeySize)));
-    }
+    private static SymmetricSecurityKey AsSymmetricSecurityKey(this string key) =>
+        new(Encoding.ASCII.GetBytes(key.PadRight(totalWidth: 512 / 8, paddingChar: '\0')));
 
     private static IServiceCollection ConfigureTestAuth(
         this IServiceCollection services,

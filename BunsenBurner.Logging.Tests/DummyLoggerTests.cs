@@ -105,4 +105,25 @@ public static class DummyLoggerTests
                 Assert.Contains(t.store, message => message.Message == "logger 2");
                 t.store.Clear();
             });
+
+    [Fact(DisplayName = "Log message store can be converted to a logger factory")]
+    public static async Task Case5() =>
+        await LogMessageStore
+            .New()
+            .ArrangeData()
+            .Act(store =>
+            {
+                var lf = store.AsLoggerFactory();
+                var logger1 = lf.CreateLogger("test");
+                logger1.LogWarning("test 1");
+                var logger2 = lf.CreateLogger("test2");
+                logger2.LogWarning("test 2");
+                return store;
+            })
+            .Assert(store =>
+            {
+                Assert.Equal(2, store.Count());
+                Assert.Contains(store, message => message.Message == "test 1");
+                Assert.Contains(store, message => message.Message == "test 2");
+            });
 }

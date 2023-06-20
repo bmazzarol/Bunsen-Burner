@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace BunsenBurner.Logging;
 
@@ -32,4 +34,14 @@ public sealed record LogMessageStore : IEnumerable<LogMessage>
     /// Clears the log message store
     /// </summary>
     public void Clear() => _logMessages.Clear();
+
+    /// <summary>
+    /// Converts the log message store to a logger factory
+    /// </summary>
+    /// <returns>logger factory</returns>
+    public ILoggerFactory AsLoggerFactory() =>
+        new ServiceCollection()
+            .AddDummyLogger(this)
+            .BuildServiceProvider()
+            .GetRequiredService<ILoggerFactory>();
 }
