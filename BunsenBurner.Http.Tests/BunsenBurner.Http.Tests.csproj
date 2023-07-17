@@ -26,10 +26,10 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.18" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.9" />
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.7" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.9" />
     </ItemGroup>
 
     <ItemGroup>
