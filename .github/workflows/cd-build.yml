@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Release Version'
+        description: Release Version
         required: true
   release:
     types: [ published ]
-    
+
 env:
   PACKAGE_VERSION: ${{ github.event.inputs.version || github.event.release.tag_name }}
 
@@ -16,32 +16,8 @@ jobs:
   publish:
     name: Publish to Nuget
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project-name:
-          - BunsenBurner
-          - BunsenBurner.AutoFixture
-          - BunsenBurner.Background
-          - BunsenBurner.Bogus
-          - BunsenBurner.DependencyInjection
-          - BunsenBurner.FunctionApp
-          - BunsenBurner.Hedgehog
-          - BunsenBurner.Http
-          - BunsenBurner.Logging
-          - BunsenBurner.Verify.Xunit
-          - BunsenBurner.Verify.NUnit
-          - BunsenBurner.Xunit
-          - BunsenBurner.NUnit
-          - BunsenBurner.BenchmarkDotNet
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+      - uses: bmazzarol/bmazzarol/.github/actions/cd-build@main
         with:
-          dotnet-version: |
-            6.0.x
-            7.0.x
-      - name: Release Build
-        run: dotnet pack --configuration Release -p:ContinuousIntegrationBuild=true -p:PackageVersion=${{ env.PACKAGE_VERSION }} ${{ matrix.project-name }}/${{ matrix.project-name }}.csproj
-      - name: Push to Nuget
-        run: dotnet nuget push **\*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+          version: ${{ env.PACKAGE_VERSION }}
+          nugetKey: ${{ secrets.NUGET_API_KEY }}

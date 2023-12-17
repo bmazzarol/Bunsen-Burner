@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Common.Release.targets', '$(MSBuildThisFileDirectory)'))"/>
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <PackageId>BunsenBurner.DependencyInjection</PackageId>
+        <Title>Bunsen Burner Dependency Injection</Title>
+        <Description>Extension methods for testing DI containers</Description>
+        <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests, Http, Function App</PackageTags>
+        <ProjectGuid>6d74200b-456d-4608-a22f-5b66110814b9</ProjectGuid>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Core\BunsenBurner\BunsenBurner.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
+    </ItemGroup>
+
+</Project>

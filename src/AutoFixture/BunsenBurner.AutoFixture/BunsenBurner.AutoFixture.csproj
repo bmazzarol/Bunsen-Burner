@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Common.Release.targets', '$(MSBuildThisFileDirectory)'))"/>
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <PackageId>BunsenBurner.AutoFixture</PackageId>
+        <Title>Bunsen Burner AutoFixture</Title>
+        <Description>Integration with [AutoFixture](https://github.com/AutoFixture) to simplify arrange steps</Description>
+        <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests</PackageTags>
+        <ProjectGuid>4b69980d-7293-4726-994c-652c4de17efc</ProjectGuid>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Core\BunsenBurner\BunsenBurner.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoFixture" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Common.Release.targets', '$(MSBuildThisFileDirectory)'))"/>
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <PackageId>BunsenBurner.Hedgehog</PackageId>
+        <Title>Bunsen Burner Hedgehog</Title>
+        <Description>Integration with [Hedgehog](https://github.com/hedgehogqa/fsharp-hedgehog) to write property based tests</Description>
+        <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests</PackageTags>
+        <ProjectGuid>f4d001fc-c0f7-4ece-99a3-2e0d70fa86f3</ProjectGuid>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Hedgehog" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Core\BunsenBurner\BunsenBurner.csproj" />
+    </ItemGroup>
+
+</Project>

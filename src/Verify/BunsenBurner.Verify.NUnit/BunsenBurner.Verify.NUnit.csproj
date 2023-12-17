@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Common.Release.targets', '$(MSBuildThisFileDirectory)'))"/>
+
+    <PropertyGroup>
+        <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+        <PackageId>BunsenBurner.Verify.NUnit</PackageId>
+        <Title>Bunsen Burner Verify NUnit</Title>
+        <Description>Integration with [Verify.NUnit](https://github.com/VerifyTests/Verify) to simplify assert steps</Description>
+        <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests, NUnit</PackageTags>
+        <ProjectGuid>de817cbb-9718-484c-bf71-d7585efcfb14</ProjectGuid>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Verify.NUnit"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Core\BunsenBurner\BunsenBurner.csproj"/>
+    </ItemGroup>
+
+</Project>

@@ -1,9 +1,9 @@
-﻿name: "Test Reporter"
+﻿name: Test Reporter
 
 on:
   workflow_run:
-    workflows: [ 'CI Build' ]
-    types: [ 'completed' ]
+    workflows: [ CI Build ]
+    types: [ completed ]
 
 jobs:
   report:
@@ -11,7 +11,8 @@ jobs:
     steps:
       - uses: dorny/test-reporter@v1
         with:
-          artifact: '/test-results-(.*)/'
-          name: 'Test Results $1'
-          path: '**/*.trx'
+          artifact: test-results
+          name: Test Results
+          path: |
+            **/*.trx
           reporter: dotnet-trx

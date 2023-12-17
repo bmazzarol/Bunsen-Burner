@@ -2,35 +2,16 @@
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
-  build:
+  build-and-deploy-docs:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project-name:
-          - BunsenBurner
     permissions:
       pages: write
       id-token: write
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+      - uses: bmazzarol/bmazzarol/.github/actions/build-deploy-docs@main
         with:
-          dotnet-version: |
-            6.0.x
-            7.0.x
-      - name: Build
-        run: dotnet build --configuration Release ${{ matrix.project-name }}.Docs/${{ matrix.project-name }}.Docs.csproj
-      - name: Upload Site
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: ${{ matrix.project-name }}.Docs/_site
-      - name: Publish Site
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: ${{ matrix.project-name }}.Docs/_site
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v2
+          docsProjectPath: src/Docs/BunsenBurner.Docs
+          csProjFileName: BunsenBurner.Docs.csproj

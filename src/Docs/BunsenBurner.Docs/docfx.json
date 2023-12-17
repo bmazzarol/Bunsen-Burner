@@ -1,0 +1,77 @@
+{
+    "metadata": [
+        {
+            "src": [
+                {                 
+                    "files": [
+                        "Core/BunsenBurner/BunsenBurner.csproj",
+                        "AutoFixture/BunsenBurner.AutoFixture/BunsenBurner.AutoFixture.csproj",
+                        "Background/BunsenBurner.Background/BunsenBurner.Background.csproj",
+                        "Bogus/BunsenBurner.Bogus/BunsenBurner.Bogus.csproj",
+                        "DependencyInjection/BunsenBurner.DependencyInjection/BunsenBurner.DependencyInjection.csproj",
+                        "FunctionApp/BunsenBurner.FunctionApp/BunsenBurner.FunctionApp.csproj",
+                        "Hedgehog/BunsenBurner.Hedgehog/BunsenBurner.Hedgehog.csproj",
+                        "Http/BunsenBurner.Http/BunsenBurner.Http.csproj",
+                        "Logging/BunsenBurner.Logging/BunsenBurner.Logging.csproj",
+                        "Verify/BunsenBurner.Verify.Xunit/BunsenBurner.Verify.Xunit.csproj",
+                        "Verify/BunsenBurner.Verify.NUnit/BunsenBurner.Verify.NUnit.csproj",
+                        "Xunit/BunsenBurner.Xunit/BunsenBurner.Xunit.csproj",
+                        "NUnit/BunsenBurner.NUnit/BunsenBurner.NUnit.csproj",
+                        "BenchmarkDotNet/BunsenBurner.BenchmarkDotNet/BunsenBurner.BenchmarkDotNet.csproj"
+                    ],
+                    "src": "../../"
+                }
+            ],
+            "dest": "api",
+            "memberLayout": "separatePages",
+            "namespaceLayout": "nested"
+        }
+    ],
+    "build": {
+        "content": [
+            {
+                "files": [
+                    "api/**.yml",
+                    "api/index.md"
+                ]
+            },
+            {
+                "files": [
+                    "articles/**.md",
+                    "articles/**/toc.yml",
+                    "toc.yml",
+                    "*.md"
+                ]
+            }
+        ],
+        "resource": [
+            {
+                "files": [
+                    "images/**"
+                ]
+            }
+        ],
+        "postProcessors": [
+            "ExtractSearchIndex"
+        ],
+        "overwrite": [
+            {
+                "files": [
+                    "src/**"
+                ]
+            }
+        ],
+        "template": [
+            "default",
+            "modern",
+            "template"
+        ],
+        "output": "_site",
+        "globalMetadata": {
+            "_appName": "Bunsen Burner",
+            "_appLogoPath": "images/fire-icon.png",
+            "_appFaviconPath": "images/favicon.ico",
+            "_appFooter": "Created By <a href='https://github.com/bmazzarol' target='blank'>Ben Mazzarol</a>"
+        }
+    }
+}

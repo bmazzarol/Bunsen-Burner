@@ -1,15 +1,12 @@
-﻿name: "Check Commit Message"
+﻿name: Check Commit Message
 
 on:
   pull_request:
-    branches: [ 'main' ]
+    branches: [ main ]
 
 jobs:
   commitlint:
     if: ${{ github.actor != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: wagoid/commitlint-github-action@v5
+      - uses: bmazzarol/bmazzarol/.github/actions/check-commit-message@main

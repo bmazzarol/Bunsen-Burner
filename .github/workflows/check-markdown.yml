@@ -1,13 +1,13 @@
-﻿name: "Check Markdown"
+﻿name: Check Markdown
 
 on:
   push:
-    branches: [ 'main' ]
+    branches: [ main ]
     paths:
       - "**/*.md"
-      - ".github/workflows/check-markdown.yml"
+      - .github/workflows/check-markdown.yml
   pull_request:
-    branches: [ 'main' ]
+    branches: [ main ]
 
 jobs:
   lint:
@@ -15,12 +15,7 @@ jobs:
     permissions:
       statuses: write
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js
-        uses: actions/setup-node@v3
+      - uses: bmazzarol/bmazzarol/.github/actions/check-markdown@main
         with:
-          node-version: 16.x
-      - name: Run Markdownlint
-        run: |
-          npm i
-          npx markdownlint-cli2 "BunsenBurner*/**/*.md" "BunsenBurner.Docs/**/*.md" "*.md" "!LICENSE.md"
+          targetMdFiles: |
+            "BunsenBurner*/**/*.md" "BunsenBurner.Docs/**/*.md" "*.md" "!LICENSE.md"
