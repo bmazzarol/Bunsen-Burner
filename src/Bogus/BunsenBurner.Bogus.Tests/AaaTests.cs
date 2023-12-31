@@ -5,7 +5,7 @@ namespace BunsenBurner.Bogus.Tests;
 using static Aaa;
 
 [ExcludeFromCodeCoverage]
-internal class Person
+internal sealed class Person
 {
     public string? Name { get; set; }
     public int? Age { get; set; }
@@ -17,12 +17,12 @@ public class AaaTests
     [Fact(DisplayName = "async auto arrange works")]
     public async Task Case1() =>
         await AutoArrange(f => Task.FromResult(f.Random.String()))
-            .Act(_ => _)
+            .Act(s => s)
             .Assert(Assert.NotEmpty);
 
     [Fact(DisplayName = "sync auto arrange works")]
     public async Task Case2() =>
-        await AutoArrange(f => f.Random.String()).Act(_ => _).Assert(Assert.NotEmpty);
+        await AutoArrange(f => f.Random.String()).Act(s => s).Assert(Assert.NotEmpty);
 
     [Fact(DisplayName = "async auto arrange with builder works")]
     public async Task Case3() =>
@@ -31,11 +31,11 @@ public class AaaTests
                     Task.FromResult(
                         f.RuleFor(x => x.Name, x => x.Name.FirstName())
                             .RuleFor(x => x.Age, x => x.Random.Int(20, 50))
-                            .RuleFor(x => x.Dob, x => x.Person.DateOfBirth)
+                            .RuleFor(x => x.Dob, x => new DateTimeOffset(x.Person.DateOfBirth))
                             .Generate()
                     )
             )
-            .Act(_ => _)
+            .Act(p => p)
             .Assert(Assert.NotNull);
 
     [Fact(DisplayName = "sync auto arrange with builder works")]
@@ -44,24 +44,24 @@ public class AaaTests
                 f =>
                     f.RuleFor(x => x.Name, x => x.Name.FirstName())
                         .RuleFor(x => x.Age, x => x.Random.Int(20, 50))
-                        .RuleFor(x => x.Dob, x => x.Person.DateOfBirth)
+                        .RuleFor(x => x.Dob, x => new DateTimeOffset(x.Person.DateOfBirth))
                         .Generate()
             )
-            .Act(_ => _)
+            .Act(p => p)
             .Assert(Assert.NotNull);
 
     [Fact(DisplayName = "async auto arrange works with description")]
     public async Task Case5() =>
         await "some description"
             .AutoArrange(f => Task.FromResult(f.Random.String()))
-            .Act(_ => _)
+            .Act(s => s)
             .Assert(Assert.NotEmpty);
 
     [Fact(DisplayName = "sync auto arrange works with description")]
     public async Task Case6() =>
         await "some description"
             .AutoArrange(f => f.Random.String())
-            .Act(_ => _)
+            .Act(s => s)
             .Assert(Assert.NotEmpty);
 
     [Fact(DisplayName = "async auto arrange with builder works with description")]
@@ -72,11 +72,11 @@ public class AaaTests
                     Task.FromResult(
                         f.RuleFor(x => x.Name, x => x.Name.FirstName())
                             .RuleFor(x => x.Age, x => x.Random.Int(20, 50))
-                            .RuleFor(x => x.Dob, x => x.Person.DateOfBirth)
+                            .RuleFor(x => x.Dob, x => new DateTimeOffset(x.Person.DateOfBirth))
                             .Generate()
                     )
             )
-            .Act(_ => _)
+            .Act(p => p)
             .Assert(Assert.NotNull);
 
     [Fact(DisplayName = "sync auto arrange with builder works with description")]
@@ -86,8 +86,8 @@ public class AaaTests
                 f =>
                     f.RuleFor(x => x.Name, x => x.Name.FirstName())
                         .RuleFor(x => x.Age, x => x.Random.Int(20, 50))
-                        .RuleFor(x => x.Dob, x => x.Person.DateOfBirth)
+                        .RuleFor(x => x.Dob, x => new DateTimeOffset(x.Person.DateOfBirth))
             )
-            .Act(_ => _)
+            .Act(p => p)
             .Assert(Assert.NotNull);
 }

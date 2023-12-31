@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BunsenBurner.DependencyInjection.Tests;
 
+[SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions")]
 public static class BddTests
 {
     [Fact(DisplayName = "Service providers can be validated")]

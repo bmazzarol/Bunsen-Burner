@@ -1,8 +1,11 @@
-﻿namespace BunsenBurner.BenchmarkDotNet.Tests;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace BunsenBurner.BenchmarkDotNet.Tests;
 
 using static Bdd;
 
 [Collection(nameof(NoOpBenchmarks))]
+[SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions")]
 public static class BddTests
 {
     [Fact(DisplayName = "Benchmarks without config can be run and asserted against")]

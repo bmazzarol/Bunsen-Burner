@@ -1,13 +1,16 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace BunsenBurner.Tests;
 
 using static Bdd;
 
+[SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions")]
 public class BddTests
 {
     [Fact(DisplayName = "Async methods operate correctly")]
     public async Task Case1() =>
         await Given(() => Task.FromResult(1))
-            .And(x => Task.FromResult(x.ToString()))
+            .And(x => Task.FromResult(x.ToString(InvariantCulture)))
             .When(x => Task.FromResult(x.Length))
             .And((_, r) => Task.FromResult(r + 1))
             .Then(
@@ -21,7 +24,7 @@ public class BddTests
     [Fact(DisplayName = "Sync methods operate correctly")]
     public async Task Case2() =>
         await Given(() => 1)
-            .And(x => x.ToString())
+            .And(x => x.ToString(InvariantCulture))
             .When(x => x.Length)
             .And((_, r) => r + 1)
             .Then((_, r) => Assert.Equal(2, r));
@@ -30,14 +33,14 @@ public class BddTests
     public async Task Case3() =>
         await "Some description"
             .Given(2)
-            .When(x => Task.FromResult(x.ToString()))
+            .When(x => Task.FromResult(x.ToString(InvariantCulture)))
             .Then(r => Assert.Equal("2", r));
 
     [Fact(DisplayName = "Mixing sync and async methods operate correctly")]
     public async Task Case4() =>
         await "Some other description"
             .Given(() => Task.FromResult(2))
-            .When(x => x.ToString())
+            .When(x => x.ToString(InvariantCulture))
             .Then(r =>
             {
                 Assert.Equal("2", r);
@@ -71,7 +74,8 @@ public class BddTests
             .And((d, r) => Assert.NotEqual(d.a, r.Length))
             .And(r => Assert.NotEqual(1, r.Length));
 
-    private static Task<int> SomeAsyncFunction(int i) => throw new Exception("Some failure");
+    private static Task<int> SomeAsyncFunction(int i) =>
+        throw new InvalidOperationException("Some failure");
 
     [Fact(DisplayName = "Failure assertions work on async functions")]
     public async Task Case6() =>
@@ -96,7 +100,7 @@ public class BddTests
                 return Task.CompletedTask;
             });
 
-    private static int SomeFunction(int i) => throw new Exception("Some failure");
+    private static int SomeFunction(int i) => throw new InvalidOperationException("Some failure");
 
     [Fact(DisplayName = "Failure assertions work on sync functions")]
     public async Task Case9() =>

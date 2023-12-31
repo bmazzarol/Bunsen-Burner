@@ -25,8 +25,14 @@ public sealed class LoggerTests
         logger1.LogInformation("logger 1");
         logger2.LogInformation("logger 2");
         Assert.Equal(2, store.Count());
-        Assert.Contains(store, message => message.Message == "logger 1");
-        Assert.Contains(store, message => message.Message == "logger 2");
+        Assert.Contains(
+            store,
+            message => string.Equals(message.Message, "logger 1", StringComparison.Ordinal)
+        );
+        Assert.Contains(
+            store,
+            message => string.Equals(message.Message, "logger 2", StringComparison.Ordinal)
+        );
     }
 
     [Fact(
@@ -49,8 +55,14 @@ public sealed class LoggerTests
         logger1.LogInformation("logger 1");
         logger2.LogInformation("logger 2");
         Assert.Equal(2, store.Count());
-        Assert.Contains(store, message => message.Message == "logger 1");
-        Assert.Contains(store, message => message.Message == "logger 2");
+        Assert.Contains(
+            store,
+            message => string.Equals(message.Message, "logger 1", StringComparison.Ordinal)
+        );
+        Assert.Contains(
+            store,
+            message => string.Equals(message.Message, "logger 2", StringComparison.Ordinal)
+        );
     }
 
     [Fact(DisplayName = "Test output helper can be converted to s sink")]
@@ -59,6 +71,9 @@ public sealed class LoggerTests
         var sink = _outputHelper.AsSink();
         var logger = DummyLogger.New<object>(sink: sink);
         logger.LogInformation("Some test message");
-        Assert.Contains(logger, message => message.Message == "Some test message");
+        Assert.Contains(
+            logger,
+            message => string.Equals(message.Message, "Some test message", StringComparison.Ordinal)
+        );
     }
 }

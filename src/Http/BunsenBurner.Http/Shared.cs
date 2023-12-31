@@ -62,7 +62,7 @@ internal static class Shared
         this Scenario<TSyntax>.Arranged<HttpRequestMessage> scenario,
         TestServer server
     )
-        where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _, _ => server);
+        where TSyntax : struct, Syntax => scenario.ActAndCall(static m => m, _ => server);
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<TData, HttpResponseMessage> ActAndCall<TData, TSyntax>(
@@ -81,7 +81,7 @@ internal static class Shared
         this Scenario<TSyntax>.Arranged<HttpRequestMessage> scenario,
         Func<HttpClient>? clientFactory = default
     )
-        where TSyntax : struct, Syntax => scenario.ActAndCall(static _ => _, clientFactory);
+        where TSyntax : struct, Syntax => scenario.ActAndCall(static m => m, clientFactory);
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<TData, HttpResponseMessage> ActAndCallUntil<
@@ -125,5 +125,5 @@ internal static class Shared
         Func<HttpClient>? clientFactory = default
     )
         where TSyntax : struct, Syntax =>
-        scenario.ActAndCallUntil(static _ => _, schedule, predicate, clientFactory);
+        scenario.ActAndCallUntil(static m => m, schedule, predicate, clientFactory);
 }

@@ -1,5 +1,4 @@
-﻿using System.Net;
-using BunsenBurner.Logging;
+﻿using BunsenBurner.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -15,8 +14,8 @@ internal static class Shared
             nameof(SimpleResponse),
             async ctx =>
             {
-                ctx.Response.Headers.Add("custom", "123");
-                await ctx.Response.WriteAsync("test");
+                ctx.Response.Headers["custom"] = "123";
+                await ctx.Response.WriteAsync("test", cancellationToken: ctx.RequestAborted);
             }
         );
 
@@ -25,9 +24,12 @@ internal static class Shared
             nameof(MirrorResponse),
             async ctx =>
             {
-                ctx.Response.Headers.Add("custom", "123");
+                ctx.Response.Headers["custom"] = "123";
                 var reader = new StreamReader(ctx.Request.Body);
-                await ctx.Response.WriteAsync(await reader.ReadToEndAsync());
+                await ctx.Response.WriteAsync(
+                    await reader.ReadToEndAsync(),
+                    cancellationToken: ctx.RequestAborted
+                );
             },
             sink
         );
@@ -45,42 +47,31 @@ internal static class Shared
             )
             .Build();
 
-    private static Scenario<TSyntax>.Asserted<
-        HttpRequestMessage,
-        ResponseContext
-    > AssertOnResponse<TSyntax>(
-        this Scenario<TSyntax>.Acted<HttpRequestMessage, ResponseContext> scenario,
-        Action<HttpRequestMessage, HttpResponseMessage> assert
-    )
-        where TSyntax : struct, Syntax => scenario.Assert((req, ctx) => assert(req, ctx.Response));
-
-    internal static Scenario<TSyntax>.Asserted<
-        HttpRequestMessage,
-        HttpResponseMessage
-    > IsOk<TSyntax>(this Scenario<TSyntax>.Acted<HttpRequestMessage, HttpResponseMessage> scenario)
-        where TSyntax : struct, Syntax =>
-        scenario.Assert((_, resp) => Assert.Equal(HttpStatusCode.OK, resp.StatusCode));
-
-    internal static Scenario<TSyntax>.Asserted<HttpRequestMessage, ResponseContext> IsOk<TSyntax>(
-        this Scenario<TSyntax>.Acted<HttpRequestMessage, ResponseContext> scenario
-    )
-        where TSyntax : struct, Syntax =>
-        scenario.AssertOnResponse((_, resp) => Assert.Equal(HttpStatusCode.OK, resp.StatusCode));
-
-    internal static Scenario<TSyntax>.Asserted<
-        HttpRequestMessage,
-        ResponseContext
-    > ResponseContentMatchesRequestBody<TSyntax>(
-        this Scenario<TSyntax>.Asserted<HttpRequestMessage, ResponseContext> scenario
-    )
-        where TSyntax : struct, Syntax =>
-        scenario.And((_, resp) => Assert.Equal(HttpStatusCode.OK, resp.Response.StatusCode));
-
     internal static WireMockServer WithHelloWorld(this WireMockServer server)
     {
         server
             .Given(WireMock.RequestBuilders.Request.Create().WithPath("/hello-world").UsingGet())
             .RespondWith(WireMock.ResponseBuilders.Response.Create().WithSuccess());
         return server;
+    }
+
+    internal static void ResponseCodeIsOk(ResponseContext context)
+    {
+        ResponseCodeIsOk(context.Response);
+    }
+
+    internal static void ResponseCodeIsOk(HttpResponseMessage response)
+    {
+        response.StatusCode.Should().Be(Resp.OK);
+    }
+
+    internal static async Task ResponseContentMatchesRequestBody(
+        HttpRequestMessage requestMessage,
+        ResponseContext responseContext
+    )
+    {
+        var body = await requestMessage.Content!.ReadAsStringAsync();
+        var content = await responseContext.Response.Content.ReadAsStringAsync();
+        body.Should().Be(content);
     }
 }

@@ -1,12 +1,12 @@
-﻿using BunsenBurner.Utility;
+﻿using System.Diagnostics.CodeAnalysis;
+using BunsenBurner.Utility;
 
 namespace BunsenBurner.Tests;
 
-class TestDisposable : IDisposable
+[SuppressMessage("Major Code Smell", "S3881:\"IDisposable\" should be implemented correctly")]
+sealed class TestDisposable : IDisposable
 {
     public bool IsDisposed;
-
-    public TestDisposable() => IsDisposed = false;
 
     public void Dispose()
     {
@@ -20,7 +20,7 @@ public static class ManualDisposalTests
     public static async Task Case1()
     {
         var disposable = new TestDisposable();
-        await disposable.ArrangeData().Act(_ => _).Assert(r => !r.IsDisposed);
+        await disposable.ArrangeData().Act(t => t).Assert(r => !r.IsDisposed);
         Assert.True(disposable.IsDisposed);
     }
 
@@ -31,7 +31,7 @@ public static class ManualDisposalTests
         await ManualDisposal
             .New(disposable)
             .ArrangeData()
-            .Act(_ => _)
+            .Act(d => d)
             .Assert(r => !((TestDisposable)r).IsDisposed);
         Assert.False(disposable.IsDisposed);
     }

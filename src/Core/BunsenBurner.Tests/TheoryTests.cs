@@ -1,4 +1,6 @@
-﻿namespace BunsenBurner.Tests;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace BunsenBurner.Tests;
 
 using static Aaa;
 using Scenario = Scenario<Syntax.Aaa>.Asserted<int, string>;
@@ -11,7 +13,7 @@ public static class TheoryTests
             i =>
                 $"{i} can be converted to a string"
                     .Arrange(() => i)
-                    .Act(x => x.ToString())
+                    .Act(x => x.ToString(InvariantCulture))
                     .Assert(r => Assert.Equal($"{i}", r))
         )
         .Aggregate(
@@ -25,5 +27,6 @@ public static class TheoryTests
 
     [Theory(DisplayName = "Scenarios work well in theories")]
     [MemberData(nameof(TestCases))]
+    [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions")]
     public static async Task Case1(Scenario scenario) => await scenario;
 }

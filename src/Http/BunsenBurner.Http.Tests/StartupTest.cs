@@ -1,10 +1,13 @@
-﻿using BunsenBurner.Logging;
+﻿using System.Diagnostics.CodeAnalysis;
+using BunsenBurner.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Xunit.Abstractions;
+using static BunsenBurner.Http.Tests.Shared;
+using static System.StringComparison;
 
 namespace BunsenBurner.Http.Tests;
 
@@ -15,7 +18,7 @@ internal interface ITestService
     int Result();
 }
 
-internal class TestService : ITestService
+internal sealed class TestService : ITestService
 {
     private readonly int _result;
 
@@ -46,6 +49,7 @@ internal sealed class MyHealthCheck : IHealthCheck
     }
 }
 
+[SuppressMessage("Performance", "CA1822:Mark members as static")]
 internal sealed class Startup
 {
     public void Configure(IApplicationBuilder app) => app.UseHealthChecks("/health");
@@ -76,9 +80,21 @@ public sealed class StartupTest
                     .WithLogMessageSink(Sink.New(_outputHelper.WriteLine))
                     .Build()
             )
-            .IsOk()
-            .And(ctx => Assert.Contains(ctx.Store, x => x.Message == "Health checked"))
-            .And(ctx => Assert.Contains(ctx.Store, x => x.Message == "Result is 1"));
+            .Assert(ResponseCodeIsOk)
+            .And(
+                ctx =>
+                    Assert.Contains(
+                        ctx.Store,
+                        x => string.Equals(x.Message, "Health checked", Ordinal)
+                    )
+            )
+            .And(
+                ctx =>
+                    Assert.Contains(
+                        ctx.Store,
+                        x => string.Equals(x.Message, "Result is 1", Ordinal)
+                    )
+            );
 
     [Fact(
         DisplayName = "Using a startup class in the test service builder works with replacements"
@@ -99,9 +115,21 @@ public sealed class StartupTest
                     .WithLogMessageSink(Sink.New(_outputHelper.WriteLine))
                     .Build()
             )
-            .IsOk()
-            .And(ctx => Assert.Contains(ctx.Store, x => x.Message == "Health checked"))
-            .And(ctx => Assert.Contains(ctx.Store, x => x.Message == "Result is 2"));
+            .Assert(ResponseCodeIsOk)
+            .And(
+                ctx =>
+                    Assert.Contains(
+                        ctx.Store,
+                        x => string.Equals(x.Message, "Health checked", Ordinal)
+                    )
+            )
+            .And(
+                ctx =>
+                    Assert.Contains(
+                        ctx.Store,
+                        x => string.Equals(x.Message, "Result is 2", Ordinal)
+                    )
+            );
 
     [Fact(DisplayName = "Test sending a body in the request to test server and logging it")]
     public async Task Case3() =>
@@ -115,7 +143,7 @@ public sealed class StartupTest
                     .WithLogMessageSink(Sink.New(_outputHelper.WriteLine))
                     .BuildAndCache()
             )
-            .IsOk()
+            .Assert(ResponseCodeIsOk)
             .And(
                 ctx =>
                     Assert.Equal(

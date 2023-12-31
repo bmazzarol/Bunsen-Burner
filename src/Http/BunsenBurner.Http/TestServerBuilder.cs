@@ -76,7 +76,7 @@ public static class TestServerBuilder
             )
             .AddInMemoryCollection(
                 appSettingsToOverride?.AsEnumerable()
-                    ?? System.Array.Empty<KeyValuePair<string, string?>>()
+                    ?? Array.Empty<KeyValuePair<string, string?>>()
             );
 
     /// <summary>

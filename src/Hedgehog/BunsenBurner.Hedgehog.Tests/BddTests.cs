@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace BunsenBurner.Hedgehog.Tests;
 
+[SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions")]
 public static class BddTests
 {
     [Fact(DisplayName = "Property test can be run")]

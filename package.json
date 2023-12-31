@@ -4,6 +4,6 @@
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
-    "markdownlint-cli2": "^0.5.1"
+    "markdownlint-cli2": "^0.11.0"
   }
 }

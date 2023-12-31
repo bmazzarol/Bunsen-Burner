@@ -16,7 +16,7 @@ internal interface ISomeService
     Task<int> SomeMethod();
 }
 
-internal class SomeService : ISomeService
+internal sealed class SomeService : ISomeService
 {
     public Task<int> SomeMethod() => Task.FromResult(1);
 }
@@ -32,42 +32,29 @@ internal interface ITestService
     int Result();
 }
 
-internal class TestService : ITestService
+internal sealed class TestService(int result) : ITestService
 {
-    private readonly int _result;
-
-    public TestService(int result) => _result = result;
-
-    public int Result() => _result;
+    public int Result() => result;
 }
 
-internal sealed class Function
+internal sealed class Function(ISomeService service, IServiceProvider provider)
 {
-    private readonly ISomeService _service;
-    private readonly IServiceProvider _provider;
-
-    public Function(ISomeService service, IServiceProvider provider)
-    {
-        _service = service;
-        _provider = provider;
-    }
-
     [FunctionName(nameof(SomeFunctionTrigger))]
     public async Task<IActionResult> SomeFunctionTrigger(
         [HttpTrigger(AuthorizationLevel.Anonymous)] HttpRequest req
     )
     {
-        var service = _provider.GetService<ITestService>();
+        var service1 = provider.GetService<ITestService>();
 
-        if (service != null)
-            return new OkObjectResult(service.Result());
+        if (service1 != null)
+            return new OkObjectResult(service1.Result());
         if (req.Query.ContainsKey("empty"))
             return new EmptyResult();
         if (req.Query.ContainsKey("fail"))
             return new InternalServerErrorResult();
         if (req.Query.ContainsKey("noBody"))
             return new OkResult();
-        return new OkObjectResult(await _service.SomeMethod());
+        return new OkObjectResult(await service.SomeMethod());
     }
 }
 

@@ -1,5 +1,3 @@
-using AutoFixture;
-
 namespace BunsenBurner.AutoFixture.Tests;
 
 using static Bdd;
@@ -15,7 +13,7 @@ public class BddTests
     [Fact(DisplayName = "auto arrange with builder works")]
     public async Task Case2() =>
         await AutoGiven(f => new Person(f.Create<string>(), 30, f.Create<DateTimeOffset>()))
-            .When(_ => _)
+            .When(p => p)
             .Then(r => Assert.Equal(30, r.Age));
 
     [Fact(DisplayName = "async auto arrange works")]
@@ -29,6 +27,6 @@ public class BddTests
     public async Task Case4() =>
         await "some description"
             .AutoGiven(f => new Person(f.Create<string>(), 30, f.Create<DateTimeOffset>()))
-            .When(_ => _)
+            .When(p => p)
             .Then(r => Assert.Equal(30, r.Age));
 }

@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography;
 using BenchmarkDotNet.Attributes;
 
 namespace BunsenBurner.BenchmarkDotNet.Tests;
@@ -9,6 +10,8 @@ public class TestBenchmarks
     private readonly byte[] _data;
 
     private readonly SHA256 _sha256 = SHA256.Create();
+
+    [SuppressMessage("Security", "CA5351:Do Not Use Broken Cryptographic Algorithms")]
     private readonly MD5 _md5 = MD5.Create();
 
     public TestBenchmarks()

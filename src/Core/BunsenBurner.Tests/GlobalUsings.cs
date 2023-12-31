@@ -1,1 +1,2 @@
-﻿global using Xunit;
+﻿global using static System.Globalization.CultureInfo;
+global using Xunit;

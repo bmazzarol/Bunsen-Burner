@@ -1,10 +1,12 @@
-﻿using BunsenBurner.Utility;
+﻿using System.Diagnostics.CodeAnalysis;
+using BunsenBurner.Utility;
 
 namespace BunsenBurner.Tests;
 
 using static Aaa;
 
-internal class TestDisposableType : IDisposable
+[SuppressMessage("Major Code Smell", "S3881:\"IDisposable\" should be implemented correctly")]
+internal sealed class TestDisposableType : IDisposable
 {
     private int _state = 1;
 

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿#pragma warning disable CA1822
+
 using JWT.Builder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using static BunsenBurner.Http.Tests.Shared;
 
 namespace BunsenBurner.Http.Tests;
 
@@ -52,7 +54,7 @@ public static class AuthServerTests
             .WithBearerToken(Token.New().WithClaim(ClaimName.Issuer, Constants.TestIssuer))
             .ArrangeRequest()
             .ActAndCall(TestServerBuilderOptions.New<TestStartupWithAuth>().Build())
-            .Assert(r => r.Response.StatusCode == HttpStatusCode.OK);
+            .Assert(ResponseCodeIsOk);
 
     [Fact(DisplayName = "An authorized endpoint can be called without a token and is unauthorized")]
     public static async Task Case2() =>
@@ -60,5 +62,5 @@ public static class AuthServerTests
             .To("/api/test")
             .ArrangeRequest()
             .ActAndCall(TestServerBuilderOptions.New<TestStartupWithAuth>().Build())
-            .Assert(r => r.Response.StatusCode == HttpStatusCode.Unauthorized);
+            .Assert(r => r.Response.StatusCode == Resp.Unauthorized);
 }

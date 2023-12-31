@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using static System.StringComparison;
 
 namespace BunsenBurner.Background.Tests;
 
@@ -12,7 +13,8 @@ public static class BddTests
         await GivenABackgroundService<Startup, Background>()
             .WhenRunFor(
                 TimeSpan.FromMinutes(5),
-                context => context.Store.Any(x => x.Message == "Work complete")
+                context =>
+                    context.Store.Any(x => string.Equals(x.Message, "Work complete", Ordinal))
             )
             .Then(store =>
             {
@@ -20,9 +22,9 @@ public static class BddTests
                 Assert.Contains(
                     store,
                     x =>
-                        x.Message == "Work complete"
+                        string.Equals(x.Message, "Work complete", Ordinal)
                         && x.Level == LogLevel.Information
-                        && x.ClassType == typeof(Background).FullName
+                        && string.Equals(x.ClassType, typeof(Background).FullName, Ordinal)
                         && x.Exception == null
                         && x.EventId.Id == 0
                 );
@@ -36,12 +38,13 @@ public static class BddTests
             .GivenABackgroundService<Startup, Background>()
             .WhenRunFor(
                 TimeSpan.FromMinutes(5),
-                context => context.Store.Any(x => x.Message == "Work complete")
+                context =>
+                    context.Store.Any(x => string.Equals(x.Message, "Work complete", Ordinal))
             )
             .Then(store =>
             {
                 Assert.NotEmpty(store);
-                Assert.Contains(store, x => x.Message == "Work complete");
+                Assert.Contains(store, x => string.Equals(x.Message, "Work complete", Ordinal));
             });
 
     [Fact(
@@ -53,12 +56,13 @@ public static class BddTests
             .WhenRunFor(
                 x => x.BackgroundServiceContext,
                 TimeSpan.FromMinutes(5),
-                context => context.Store.Any(x => x.Message == "Work complete")
+                context =>
+                    context.Store.Any(x => string.Equals(x.Message, "Work complete", Ordinal))
             )
             .Then(store =>
             {
                 Assert.NotEmpty(store);
-                Assert.Contains(store, x => x.Message == "Work complete");
+                Assert.Contains(store, x => string.Equals(x.Message, "Work complete", Ordinal));
             });
 
     [Fact(DisplayName = "A background service can be started and run against a schedule")]
@@ -67,12 +71,13 @@ public static class BddTests
             .WhenRunUntil(
                 Schedule.Spaced(TimeSpan.FromMilliseconds(1))
                     & Schedule.MaxCumulativeDelay(TimeSpan.FromMinutes(5)),
-                context => context.Store.Any(x => x.Message == "Work complete")
+                context =>
+                    context.Store.Any(x => string.Equals(x.Message, "Work complete", Ordinal))
             )
             .Then(store =>
             {
                 Assert.NotEmpty(store);
-                Assert.Contains(store, x => x.Message == "Work complete");
+                Assert.Contains(store, x => string.Equals(x.Message, "Work complete", Ordinal));
             });
 
     [Fact(
@@ -84,12 +89,13 @@ public static class BddTests
             .WhenRunUntil(
                 Schedule.Spaced(TimeSpan.FromMilliseconds(1))
                     & Schedule.MaxCumulativeDelay(TimeSpan.FromMinutes(5)),
-                context => context.Store.Any(x => x.Message == "Work complete")
+                context =>
+                    context.Store.Any(x => string.Equals(x.Message, "Work complete", Ordinal))
             )
             .Then(store =>
             {
                 Assert.NotEmpty(store);
-                Assert.Contains(store, x => x.Message == "Work complete");
+                Assert.Contains(store, x => string.Equals(x.Message, "Work complete", Ordinal));
             });
 
     [Fact(
@@ -102,11 +108,12 @@ public static class BddTests
                 x => x.BackgroundServiceContext,
                 Schedule.Spaced(TimeSpan.FromMilliseconds(1))
                     & Schedule.MaxCumulativeDelay(TimeSpan.FromMinutes(5)),
-                context => context.Store.Any(x => x.Message == "Work complete")
+                context =>
+                    context.Store.Any(x => string.Equals(x.Message, "Work complete", Ordinal))
             )
             .Then(store =>
             {
                 Assert.NotEmpty(store);
-                Assert.Contains(store, x => x.Message == "Work complete");
+                Assert.Contains(store, x => string.Equals(x.Message, "Work complete", Ordinal));
             });
 }

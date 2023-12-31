@@ -75,7 +75,7 @@ internal static class Shared
     )
         where TSyntax : struct, Syntax =>
         scenario.AssertResultIsUnchanged(
-            static _ => _,
+            static r => r,
             folder,
             sourceFilePath,
             matchConfiguration,

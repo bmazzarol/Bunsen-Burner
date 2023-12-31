@@ -19,6 +19,7 @@ public sealed class LoggerTests
         var logger2 = sp.GetRequiredService<ILogger<string>>();
         logger1.LogInformation("logger 1");
         logger2.LogInformation("logger 2");
+        Assert.That(store.Any());
     }
 
     [Test(
@@ -36,5 +37,6 @@ public sealed class LoggerTests
         var logger2 = sp.GetRequiredService<ILogger<string>>();
         logger1.LogInformation("logger 1");
         logger2.LogInformation("logger 2");
+        Assert.That(store.Any());
     }
 }

@@ -3,6 +3,7 @@ using BunsenBurner.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using static System.StringComparison;
 
 namespace BunsenBurner.Background.Tests;
 
@@ -14,45 +15,34 @@ internal interface ITestService
     int Result();
 }
 
-internal class TestService : ITestService
+internal sealed class TestService(int result) : ITestService
 {
-    private readonly int _result;
-
-    public TestService(int result) => _result = result;
-
-    public int Result() => _result;
+    public int Result() => result;
 }
 
-internal sealed class Background : BackgroundService
+internal sealed class Background(ILogger<Background> logger, IServiceProvider provider)
+    : BackgroundService
 {
-    private readonly ILogger<Background> _logger;
-    private readonly IServiceProvider _provider;
-
-    public Background(ILogger<Background> logger, IServiceProvider provider)
-    {
-        _logger = logger;
-        _provider = provider;
-    }
-
     [ExcludeFromCodeCoverage]
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var service = _provider.GetService<ITestService>();
-        _logger.LogInformation("Starting work...");
+        var service = provider.GetService<ITestService>();
+        logger.LogInformation("Starting work...");
         while (!stoppingToken.IsCancellationRequested)
         {
             var delay = TimeSpan.FromMilliseconds(1);
-            _logger.LogInformation("Doing work for {Delay} duration", delay);
+            logger.LogInformation("Doing work for {Delay} duration", delay);
             await Task.Delay(delay, stoppingToken);
             if (service != null)
-                _logger.LogInformation("Value was {Result}", service.Result());
-            _logger.LogInformation("Work complete");
+                logger.LogInformation("Value was {Result}", service.Result());
+            logger.LogInformation("Work complete");
         }
     }
 }
 
 internal sealed class Startup
 {
+    [SuppressMessage("Performance", "CA1822:Mark members as static")]
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddLogging();
@@ -60,23 +50,20 @@ internal sealed class Startup
     }
 }
 
-public sealed class AaaTests
+public sealed class AaaTests(ITestOutputHelper testOutput)
 {
-    private readonly ITestOutputHelper _testOutput;
-
-    public AaaTests(ITestOutputHelper testOutput) => _testOutput = testOutput;
-
     [Fact(DisplayName = "A background service can be started and run for a period")]
     public async Task Case1() =>
-        await ArrangeBackgroundService<Startup, Background>(Sink.New(_testOutput.WriteLine))
+        await ArrangeBackgroundService<Startup, Background>(Sink.New(testOutput.WriteLine))
             .ActAndRunFor(
                 TimeSpan.FromMinutes(5),
-                context => context.Store.Any(x => x.Message == "Work complete")
+                context =>
+                    context.Store.Any(x => string.Equals(x.Message, "Work complete", Ordinal))
             )
             .Assert(store =>
             {
                 Assert.NotEmpty(store);
-                Assert.Contains(store, x => x.Message == "Work complete");
+                Assert.Contains(store, x => string.Equals(x.Message, "Work complete", Ordinal));
             });
 
     [Fact(
@@ -84,15 +71,16 @@ public sealed class AaaTests
     )]
     public async Task Case2() =>
         await "Some description"
-            .ArrangeBackgroundService<Startup, Background>(Sink.New(_testOutput.WriteLine))
+            .ArrangeBackgroundService<Startup, Background>(Sink.New(testOutput.WriteLine))
             .ActAndRunFor(
                 TimeSpan.FromMinutes(5),
-                context => context.Store.Any(x => x.Message == "Work complete")
+                context =>
+                    context.Store.Any(x => string.Equals(x.Message, "Work complete", Ordinal))
             )
             .Assert(store =>
             {
                 Assert.NotEmpty(store);
-                Assert.Contains(store, x => x.Message == "Work complete");
+                Assert.Contains(store, x => string.Equals(x.Message, "Work complete", Ordinal));
             });
 
     [Fact(
@@ -100,30 +88,32 @@ public sealed class AaaTests
     )]
     public async Task Case3() =>
         await Arrange(() => 1)
-            .AndABackgroundService<int, Startup, Background>(Sink.New(_testOutput.WriteLine))
+            .AndABackgroundService<int, Startup, Background>(Sink.New(testOutput.WriteLine))
             .ActAndRunFor(
                 x => x.BackgroundServiceContext,
                 TimeSpan.FromMinutes(5),
-                context => context.Store.Any(x => x.Message == "Work complete")
+                context =>
+                    context.Store.Any(x => string.Equals(x.Message, "Work complete", Ordinal))
             )
             .Assert(store =>
             {
                 Assert.NotEmpty(store);
-                Assert.Contains(store, x => x.Message == "Work complete");
+                Assert.Contains(store, x => string.Equals(x.Message, "Work complete", Ordinal));
             });
 
     [Fact(DisplayName = "A background service can be started and run against a schedule")]
     public async Task Case4() =>
-        await ArrangeBackgroundService<Startup, Background>(Sink.New(_testOutput.WriteLine))
+        await ArrangeBackgroundService<Startup, Background>(Sink.New(testOutput.WriteLine))
             .ActAndRunUntil(
                 Schedule.Spaced(TimeSpan.FromMilliseconds(1))
                     & Schedule.MaxCumulativeDelay(TimeSpan.FromMinutes(5)),
-                context => context.Store.Any(x => x.Message == "Work complete")
+                context =>
+                    context.Store.Any(x => string.Equals(x.Message, "Work complete", Ordinal))
             )
             .Assert(store =>
             {
                 Assert.NotEmpty(store);
-                Assert.Contains(store, x => x.Message == "Work complete");
+                Assert.Contains(store, x => string.Equals(x.Message, "Work complete", Ordinal));
             });
 
     [Fact(
@@ -131,16 +121,17 @@ public sealed class AaaTests
     )]
     public async Task Case5() =>
         await "Some description"
-            .ArrangeBackgroundService<Startup, Background>(Sink.New(_testOutput.WriteLine))
+            .ArrangeBackgroundService<Startup, Background>(Sink.New(testOutput.WriteLine))
             .ActAndRunUntil(
                 Schedule.Spaced(TimeSpan.FromMilliseconds(1))
                     & Schedule.MaxCumulativeDelay(TimeSpan.FromMinutes(5)),
-                context => context.Store.Any(x => x.Message == "Work complete")
+                context =>
+                    context.Store.Any(x => string.Equals(x.Message, "Work complete", Ordinal))
             )
             .Assert(store =>
             {
                 Assert.NotEmpty(store);
-                Assert.Contains(store, x => x.Message == "Work complete");
+                Assert.Contains(store, x => string.Equals(x.Message, "Work complete", Ordinal));
             });
 
     [Fact(
@@ -148,17 +139,18 @@ public sealed class AaaTests
     )]
     public async Task Case6() =>
         await Arrange(() => 1)
-            .AndABackgroundService<int, Startup, Background>(Sink.New(_testOutput.WriteLine))
+            .AndABackgroundService<int, Startup, Background>(Sink.New(testOutput.WriteLine))
             .ActAndRunUntil(
                 x => x.BackgroundServiceContext,
                 Schedule.Spaced(TimeSpan.FromMilliseconds(1))
                     & Schedule.MaxCumulativeDelay(TimeSpan.FromMinutes(5)),
-                context => context.Store.Any(x => x.Message == "Work complete")
+                context =>
+                    context.Store.Any(x => string.Equals(x.Message, "Work complete", Ordinal))
             )
             .Assert(store =>
             {
                 Assert.NotEmpty(store);
-                Assert.Contains(store, x => x.Message == "Work complete");
+                Assert.Contains(store, x => string.Equals(x.Message, "Work complete", Ordinal));
             });
 
     [Fact(
@@ -170,18 +162,22 @@ public sealed class AaaTests
                 i =>
                     BackgroundServiceBuilder.Create<Startup, Background>(
                         collection => collection.AddSingleton<ITestService>(new TestService(i)),
-                        Sink.New(_testOutput.WriteLine)
+                        Sink.New(testOutput.WriteLine)
                     ),
                 Schedule.Spaced(TimeSpan.FromMilliseconds(1))
                     & Schedule.MaxCumulativeDelay(TimeSpan.FromMinutes(5)),
-                context => context.Store.Any(x => x.Message == "Work complete")
+                context =>
+                    context.Store.Any(x => string.Equals(x.Message, "Work complete", Ordinal))
             )
             .Assert(
                 (i, store) =>
                 {
                     Assert.NotEmpty(store);
-                    Assert.Contains(store, x => x.Message == "Work complete");
-                    Assert.Contains(store, x => x.Message == $"Value was {i}");
+                    Assert.Contains(store, x => string.Equals(x.Message, "Work complete", Ordinal));
+                    Assert.Contains(
+                        store,
+                        x => string.Equals(x.Message, $"Value was {i}", Ordinal)
+                    );
                 }
             );
 }

@@ -25,10 +25,15 @@ public static class DummyLoggerTests
             .Assert(logger =>
             {
                 Assert.Equal(6, logger.Count());
-                Assert.Contains(logger, message => message.Message == "warning");
                 Assert.Contains(
                     logger,
-                    message => message.Message == "trace" && message.Scopes.Contains("test")
+                    message => string.Equals(message.Message, "warning", StringComparison.Ordinal)
+                );
+                Assert.Contains(
+                    logger,
+                    message =>
+                        string.Equals(message.Message, "trace", StringComparison.Ordinal)
+                        && message.Scopes.Contains("test")
                 );
             });
 
@@ -53,18 +58,21 @@ public static class DummyLoggerTests
             .Assert(logger =>
             {
                 Assert.Equal(6, logger.Count());
-                Assert.Contains(logger, message => message.Message == "warning");
+                Assert.Contains(
+                    logger,
+                    message => string.Equals(message.Message, "warning", StringComparison.Ordinal)
+                );
                 Assert.Contains(
                     logger,
                     message =>
-                        message.Message == "debug"
+                        string.Equals(message.Message, "debug", StringComparison.Ordinal)
                         && message.Scopes.Contains("test")
                         && !message.Scopes.Contains("test2")
                 );
                 Assert.Contains(
                     logger,
                     message =>
-                        message.Message == "trace"
+                        string.Equals(message.Message, "trace", StringComparison.Ordinal)
                         && message.Scopes.Contains("test")
                         && message.Scopes.Contains("test2")
                 );
@@ -101,8 +109,14 @@ public static class DummyLoggerTests
             .Assert(t =>
             {
                 Assert.Equal(2, t.store.Count());
-                Assert.Contains(t.store, message => message.Message == "logger 1");
-                Assert.Contains(t.store, message => message.Message == "logger 2");
+                Assert.Contains(
+                    t.store,
+                    message => string.Equals(message.Message, "logger 1", StringComparison.Ordinal)
+                );
+                Assert.Contains(
+                    t.store,
+                    message => string.Equals(message.Message, "logger 2", StringComparison.Ordinal)
+                );
                 t.store.Clear();
             });
 
@@ -123,7 +137,13 @@ public static class DummyLoggerTests
             .Assert(store =>
             {
                 Assert.Equal(2, store.Count());
-                Assert.Contains(store, message => message.Message == "test 1");
-                Assert.Contains(store, message => message.Message == "test 2");
+                Assert.Contains(
+                    store,
+                    message => string.Equals(message.Message, "test 1", StringComparison.Ordinal)
+                );
+                Assert.Contains(
+                    store,
+                    message => string.Equals(message.Message, "test 2", StringComparison.Ordinal)
+                );
             });
 }

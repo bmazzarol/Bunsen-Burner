@@ -9,7 +9,7 @@ public static class TestServerBuilderOptionsTests
         await TestServerBuilderOptions
             .New()
             .WithName("Test")
-            .WithIssuer("http://test.com")
+            .WithIssuer("https://test.com")
             .WithEnvironmentName("localhost")
             .WithSigningKey("test")
             .WithSetting("a", "1")
@@ -27,7 +27,7 @@ public static class TestServerBuilderOptionsTests
             .Assert(
                 r =>
                     r.Name == "Test"
-                    && r.Issuer == "http://test.com"
+                    && r.Issuer == "https://test.com"
                     && r.EnvironmentName == "localhost"
                     && r.SigningKey == "test"
                     && r.AppSettingsToOverride!.ContainsKey("a")

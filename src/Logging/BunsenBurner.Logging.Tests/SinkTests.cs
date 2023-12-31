@@ -19,5 +19,5 @@ public sealed class SinkTests
                 logger.LogInformation("Some test message");
                 return true;
             })
-            .Assert(_ => _);
+            .Assert(b => b);
 }

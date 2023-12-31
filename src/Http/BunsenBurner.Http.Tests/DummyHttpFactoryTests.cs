@@ -29,7 +29,7 @@ public static class DummyHttpFactoryTests
                     ctx.Store.Any(
                         m =>
                             m.ClientName == nameof(Case1)
-                            && m.Request.Method == HttpMethod.Get
+                            && m.Request.Method == Req.Get
                             && m.Response.StatusCode == Resp.Accepted
                     )
             );

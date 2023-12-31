@@ -9,7 +9,7 @@ public class AaaTests
     [Fact(DisplayName = "Async methods operate correctly")]
     public async Task Case1() =>
         await Arrange(() => Task.FromResult(1))
-            .And(x => Task.FromResult(x.ToString()))
+            .And(x => Task.FromResult(x.ToString(InvariantCulture)))
             .Act(x => Task.FromResult(x.Length))
             .And((_, r) => Task.FromResult(r + 1))
             .Assert(
@@ -23,7 +23,7 @@ public class AaaTests
     [Fact(DisplayName = "Sync methods operate correctly")]
     public async Task Case2() =>
         await Arrange(() => 1)
-            .And(x => x.ToString())
+            .And(x => x.ToString(InvariantCulture))
             .Act(x => x.Length)
             .And((_, r) => r + 1)
             .Assert((_, r) => Assert.Equal(2, r));
@@ -32,14 +32,14 @@ public class AaaTests
     public async Task Case3() =>
         await "Some description"
             .Arrange(2)
-            .Act(x => Task.FromResult(x.ToString()))
+            .Act(x => Task.FromResult(x.ToString(InvariantCulture)))
             .Assert(r => Assert.Equal("2", r));
 
     [Fact(DisplayName = "Mixing sync and async methods operate correctly")]
     public async Task Case4() =>
         await "Some other description"
             .Arrange(() => Task.FromResult(2))
-            .Act(x => x.ToString())
+            .Act(x => x.ToString(InvariantCulture))
             .Assert(r =>
             {
                 Assert.Equal("2", r);
@@ -73,7 +73,8 @@ public class AaaTests
             .And((d, r) => Assert.NotEqual(d.a, r.Length))
             .And(r => Assert.NotEqual(1, r.Length));
 
-    private static Task<int> SomeAsyncFunction(int i) => throw new Exception("Some failure");
+    private static Task<int> SomeAsyncFunction(int i) =>
+        throw new InvalidOperationException("Some failure");
 
     [Fact(DisplayName = "Failure assertions work on async functions")]
     public async Task Case6() =>
@@ -99,8 +100,8 @@ public class AaaTests
             });
 
     [Fact(DisplayName = "Failure assertions throw on successful async functions")]
-    public async Task Case8() =>
-        await Assert.ThrowsAsync<NoFailureException>(
+    public Task Case8() =>
+        Assert.ThrowsAsync<NoFailureException>(
             async () =>
                 await Arrange(() => 1)
                     .Act(Task.FromResult)
@@ -115,7 +116,7 @@ public class AaaTests
                     )
         );
 
-    private static int SomeFunction(int i) => throw new Exception("Some failure");
+    private static int SomeFunction(int i) => throw new InvalidOperationException("Some failure");
 
     [Fact(DisplayName = "Failure assertions work on sync functions")]
     public async Task Case9() =>
