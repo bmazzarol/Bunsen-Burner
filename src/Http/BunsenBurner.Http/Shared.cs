@@ -92,13 +92,17 @@ internal static class Shared
         Func<TData, HttpRequestMessage> fn,
         Schedule schedule,
         Expression<Func<HttpResponseMessage, bool>> predicate,
-        Func<HttpClient>? clientFactory = default
+        Func<HttpClient>? clientFactory = default,
+        TimeSpan? maxRunDuration = default
     )
         where TSyntax : struct, Syntax =>
         scenario.Act(async data =>
         {
             var compiledPred = predicate.Compile();
-            foreach (var duration in schedule)
+            foreach (
+                var duration in schedule
+                    & Schedule.MaxCumulativeDelay(maxRunDuration ?? TimeSpan.FromMinutes(1))
+            )
             {
                 var resp = await InternalCall(
                     fn(data),
@@ -122,8 +126,9 @@ internal static class Shared
         this Scenario<TSyntax>.Arranged<HttpRequestMessage> scenario,
         Schedule schedule,
         Expression<Func<HttpResponseMessage, bool>> predicate,
-        Func<HttpClient>? clientFactory = default
+        Func<HttpClient>? clientFactory = default,
+        TimeSpan? maxRunDuration = default
     )
         where TSyntax : struct, Syntax =>
-        scenario.ActAndCallUntil(static m => m, schedule, predicate, clientFactory);
+        scenario.ActAndCallUntil(static m => m, schedule, predicate, clientFactory, maxRunDuration);
 }

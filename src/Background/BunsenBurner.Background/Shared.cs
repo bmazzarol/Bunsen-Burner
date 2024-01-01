@@ -66,7 +66,8 @@ internal static class Shared
         this Scenario<TSyntax>.Arranged<TData> scenario,
         Func<TData, BackgroundServiceContext<TBackgroundService>> selector,
         Schedule schedule,
-        Func<BackgroundServiceContext<TBackgroundService>, bool> pred
+        Func<BackgroundServiceContext<TBackgroundService>, bool> pred,
+        TimeSpan? maxRunDuration = default
     )
         where TBackgroundService : IHostedService
         where TSyntax : struct, Syntax =>
@@ -75,7 +76,10 @@ internal static class Shared
             var (service, store) = selector(data);
             var ctx = new BackgroundServiceContext<TBackgroundService>(service, store);
             await service.StartAsync(CancellationToken.None);
-            foreach (var duration in schedule)
+            foreach (
+                var duration in schedule
+                    & Schedule.MaxCumulativeDelay(maxRunDuration ?? TimeSpan.FromMinutes(1))
+            )
             {
                 if (pred(ctx))
                 {
@@ -94,10 +98,12 @@ internal static class Shared
     > ActAndRunUntil<TBackgroundService, TSyntax>(
         this Scenario<TSyntax>.Arranged<BackgroundServiceContext<TBackgroundService>> scenario,
         Schedule schedule,
-        Func<BackgroundServiceContext<TBackgroundService>, bool> pred
+        Func<BackgroundServiceContext<TBackgroundService>, bool> pred,
+        TimeSpan? maxRunDuration = default
     )
         where TBackgroundService : IHostedService
-        where TSyntax : struct, Syntax => scenario.ActAndRunUntil(c => c, schedule, pred);
+        where TSyntax : struct, Syntax =>
+        scenario.ActAndRunUntil(c => c, schedule, pred, maxRunDuration);
 
     [Pure]
     internal static Scenario<TSyntax>.Acted<TData, LogMessageStore> ActAndRunFor<

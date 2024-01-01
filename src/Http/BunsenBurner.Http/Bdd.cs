@@ -94,6 +94,7 @@ public static class Bdd
     /// <param name="schedule">provided schedule, can be used to determine the number and duration of waits between each call</param>
     /// <param name="predicate">predicate against the responses returned, when true the response is returned</param>
     /// <param name="clientFactory">optional http client factory, can be used to customize the client</param>
+    /// <param name="maxRunDuration">maximum time the operation will run for before failing; defaults to 1 minute</param>
     /// <exception cref="InvalidOperationException">if the schedule completes before the provided predicate returns true</exception>
     /// <typeparam name="TData">given data</typeparam>
     /// <returns>scenario that is run</returns>
@@ -103,8 +104,9 @@ public static class Bdd
         Func<TData, HttpRequestMessage> fn,
         Schedule schedule,
         Expression<Func<HttpResponseMessage, bool>> predicate,
-        Func<HttpClient>? clientFactory = default
-    ) => scenario.ActAndCallUntil(fn, schedule, predicate, clientFactory);
+        Func<HttpClient>? clientFactory = default,
+        TimeSpan? maxRunDuration = default
+    ) => scenario.ActAndCallUntil(fn, schedule, predicate, clientFactory, maxRunDuration);
 
     /// <summary>
     /// Makes a call repeatedly to the real server, stops once the predicate is true or the schedule completes
@@ -113,6 +115,7 @@ public static class Bdd
     /// <param name="schedule">provided schedule, can be used to determine the number and duration of waits between each call</param>
     /// <param name="predicate">predicate against the responses returned, when true the response is returned</param>
     /// <param name="clientFactory">optional http client factory, can be used to customize the client</param>
+    /// <param name="maxRunDuration">maximum time the operation will run for before failing; defaults to 1 minute</param>
     /// <exception cref="InvalidOperationException">if the schedule completes before the provided predicate returns true</exception>
     /// <returns>scenario that is run</returns>
     [Pure]
@@ -120,6 +123,7 @@ public static class Bdd
         this BddScenario.Arranged<HttpRequestMessage> scenario,
         Schedule schedule,
         Expression<Func<HttpResponseMessage, bool>> predicate,
-        Func<HttpClient>? clientFactory = default
-    ) => scenario.ActAndCallUntil(schedule, predicate, clientFactory);
+        Func<HttpClient>? clientFactory = default,
+        TimeSpan? maxRunDuration = default
+    ) => scenario.ActAndCallUntil(schedule, predicate, clientFactory, maxRunDuration);
 }

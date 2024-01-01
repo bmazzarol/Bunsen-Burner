@@ -69,6 +69,7 @@ public static class Aaa
     /// <param name="fn">function to setup and return the background service and store</param>
     /// <param name="schedule">custom schedule to supply waits</param>
     /// <param name="pred">predicate that indicates the job is complete, if this returns false, delay will be applied based on the schedule</param>
+    /// <param name="maxRunDuration">maximum time the operation will run for before failing; defaults to 1 minute</param>
     /// <typeparam name="TData">arranged data</typeparam>
     /// <typeparam name="TBackgroundService">background service to test</typeparam>
     /// <returns>acted scenario</returns>
@@ -80,10 +81,11 @@ public static class Aaa
         this AaaScenario.Arranged<TData> scenario,
         Func<TData, BackgroundServiceContext<TBackgroundService>> fn,
         Schedule schedule,
-        Func<BackgroundServiceContext<TBackgroundService>, bool> pred
+        Func<BackgroundServiceContext<TBackgroundService>, bool> pred,
+        TimeSpan? maxRunDuration = default
     )
         where TBackgroundService : IHostedService =>
-        Shared.ActAndRunUntil(scenario, fn, schedule, pred);
+        Shared.ActAndRunUntil(scenario, fn, schedule, pred, maxRunDuration);
 
     /// <summary>
     /// Runs the background service until the predicate returns true, or the schedule ends, returning any log messages
@@ -91,6 +93,7 @@ public static class Aaa
     /// <param name="scenario">arranged scenario</param>
     /// <param name="schedule">custom schedule to supply waits</param>
     /// <param name="pred">predicate that indicates the job is complete, if this returns false, delay will be applied based on the schedule</param>
+    /// <param name="maxRunDuration">maximum time the operation will run for before failing; defaults to 1 minute</param>
     /// <typeparam name="TBackgroundService">background service to test</typeparam>
     /// <returns>acted scenario</returns>
     [Pure]
@@ -100,10 +103,11 @@ public static class Aaa
     > ActAndRunUntil<TBackgroundService>(
         this AaaScenario.Arranged<BackgroundServiceContext<TBackgroundService>> scenario,
         Schedule schedule,
-        Func<BackgroundServiceContext<TBackgroundService>, bool> pred
+        Func<BackgroundServiceContext<TBackgroundService>, bool> pred,
+        TimeSpan? maxRunDuration = default
     )
         where TBackgroundService : IHostedService =>
-        Shared.ActAndRunUntil(scenario, schedule, pred);
+        Shared.ActAndRunUntil(scenario, schedule, pred, maxRunDuration);
 
     /// <summary>
     /// Runs the background service for the given time, returning any log messages

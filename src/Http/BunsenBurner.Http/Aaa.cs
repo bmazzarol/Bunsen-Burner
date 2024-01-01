@@ -94,6 +94,7 @@ public static class Aaa
     /// <param name="schedule">provided schedule, can be used to determine the number and duration of waits between each call</param>
     /// <param name="predicate">predicate against the responses returned, when true the response is returned</param>
     /// <param name="clientFactory">optional http client factory, can be used to customize the client</param>
+    /// <param name="maxRunDuration">maximum time the operation will run for before failing; defaults to 1 minute</param>
     /// <exception cref="InvalidOperationException">if the schedule completes before the provided predicate returns true</exception>
     /// <typeparam name="TData">arranged data</typeparam>
     /// <returns>acted scenario</returns>
@@ -103,8 +104,16 @@ public static class Aaa
         Func<TData, HttpRequestMessage> fn,
         Schedule schedule,
         Expression<Func<HttpResponseMessage, bool>> predicate,
-        Func<HttpClient>? clientFactory = default
-    ) => scenario.ActAndCallUntil<TData, Syntax.Aaa>(fn, schedule, predicate, clientFactory);
+        Func<HttpClient>? clientFactory = default,
+        TimeSpan? maxRunDuration = default
+    ) =>
+        scenario.ActAndCallUntil<TData, Syntax.Aaa>(
+            fn,
+            schedule,
+            predicate,
+            clientFactory,
+            maxRunDuration
+        );
 
     /// <summary>
     /// Makes a call repeatedly to the real server, stops once the predicate is true or the schedule completes
@@ -113,6 +122,7 @@ public static class Aaa
     /// <param name="schedule">provided schedule, can be used to determine the number and duration of waits between each call</param>
     /// <param name="predicate">predicate against the responses returned, when true the response is returned</param>
     /// <param name="clientFactory">optional http client factory, can be used to customize the client</param>
+    /// <param name="maxRunDuration">maximum time the operation will run for before failing; defaults to 1 minute</param>
     /// <exception cref="InvalidOperationException">if the schedule completes before the provided predicate returns true</exception>
     /// <returns>acted scenario</returns>
     [Pure]
@@ -120,6 +130,7 @@ public static class Aaa
         this AaaScenario.Arranged<HttpRequestMessage> scenario,
         Schedule schedule,
         Expression<Func<HttpResponseMessage, bool>> predicate,
-        Func<HttpClient>? clientFactory = default
-    ) => scenario.ActAndCallUntil<Syntax.Aaa>(schedule, predicate, clientFactory);
+        Func<HttpClient>? clientFactory = default,
+        TimeSpan? maxRunDuration = default
+    ) => scenario.ActAndCallUntil<Syntax.Aaa>(schedule, predicate, clientFactory, maxRunDuration);
 }
