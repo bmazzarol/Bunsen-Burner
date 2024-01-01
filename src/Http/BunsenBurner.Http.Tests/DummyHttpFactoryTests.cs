@@ -98,13 +98,12 @@ public static class DummyHttpFactoryTests
             .ArrangeData()
             .And(
                 x =>
-                    x.Store
-                        .Setup(
-                            nameof(Case4),
-                            message => message.RequestUri?.AbsolutePath.Contains("match/") ?? false,
-                            Resp.Unauthorized.Result().WithTextContent("no-way"),
-                            Resp.OK.Result().WithTextContent("matched")
-                        )
+                    x.Store.Setup(
+                        nameof(Case4),
+                        message => message.RequestUri?.AbsolutePath.Contains("match/") ?? false,
+                        Resp.Unauthorized.Result().WithTextContent("no-way"),
+                        Resp.OK.Result().WithTextContent("matched")
+                    )
                         .Setup(
                             nameof(Case4),
                             message => message.RequestUri?.AbsolutePath.Contains("match/") ?? false,

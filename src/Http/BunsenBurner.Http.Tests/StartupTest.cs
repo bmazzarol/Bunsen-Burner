@@ -69,8 +69,7 @@ public sealed class StartupTest
 
     [Fact(DisplayName = "Using a startup class in the test service builder works")]
     public async Task Case1() =>
-        await Req.Get
-            .To("/health")
+        await Req.Get.To("/health")
             .WithHeader("a", "1", "2", "3")
             .WithHeader("b", "4")
             .ArrangeRequest()
@@ -100,8 +99,7 @@ public sealed class StartupTest
         DisplayName = "Using a startup class in the test service builder works with replacements"
     )]
     public async Task Case2() =>
-        await Req.Get
-            .To("/health")
+        await Req.Get.To("/health")
             .ArrangeRequest()
             .ActAndCall(
                 TestServerBuilderOptions
@@ -133,8 +131,7 @@ public sealed class StartupTest
 
     [Fact(DisplayName = "Test sending a body in the request to test server and logging it")]
     public async Task Case3() =>
-        await Req.Post
-            .To("/health")
+        await Req.Post.To("/health")
             .WithJsonContent(new { A = 1 })
             .ArrangeRequest()
             .ActAndCall(

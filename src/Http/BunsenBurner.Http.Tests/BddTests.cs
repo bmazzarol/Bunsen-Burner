@@ -11,8 +11,7 @@ public static class BddTests
 {
     [Fact(DisplayName = "GET request can be made to a test server")]
     public static async Task Case1() =>
-        await Req.Get
-            .To("/hello-world".SetQueryParam("a", 1))
+        await Req.Get.To("/hello-world".SetQueryParam("a", 1))
             .WithHeader("b", 123, x => x.ToString(InvariantCulture))
             .GivenRequest()
             .WhenCalled(SimpleResponse())
@@ -27,8 +26,7 @@ public static class BddTests
     public static async Task Case2() =>
         await "Some description"
             .GivenRequest(
-                Req.Get
-                    .To("/hello-world".SetQueryParam("a", 1))
+                Req.Get.To("/hello-world".SetQueryParam("a", 1))
                     .WithHeader("b", 123, x => x.ToString(InvariantCulture))
             )
             .WhenCalled(SimpleResponse())
@@ -36,8 +34,7 @@ public static class BddTests
 
     [Fact(DisplayName = "POST request can be made to a test server")]
     public static async Task Case3() =>
-        await Req.Post
-            .To("/hello-world".SetQueryParam("a", 1))
+        await Req.Post.To("/hello-world".SetQueryParam("a", 1))
             .WithHeader("b", 123, x => x.ToString(InvariantCulture))
             .WithJsonContent(new { A = "1" })
             .GivenRequest()
@@ -47,8 +44,7 @@ public static class BddTests
 
     [Fact(DisplayName = "PUT request can be made to a test server")]
     public static async Task Case4() =>
-        await Req.Put
-            .To("/hello-world".SetQueryParam("a", 1))
+        await Req.Put.To("/hello-world".SetQueryParam("a", 1))
             .WithHeader("b", 123, x => x.ToString(InvariantCulture))
             .WithJsonContent(new { A = "1" })
             .GivenRequest()
@@ -58,8 +54,7 @@ public static class BddTests
 
     [Fact(DisplayName = "PATCH request can be made to a test server")]
     public static async Task Case5() =>
-        await Req.Patch
-            .To("/hello-world".SetQueryParam("a", 1))
+        await Req.Patch.To("/hello-world".SetQueryParam("a", 1))
             .WithHeader("b", 123, x => x.ToString(InvariantCulture))
             .WithJsonContent(new { A = "1" })
             .GivenRequest()
@@ -69,8 +64,7 @@ public static class BddTests
 
     [Fact(DisplayName = "DELETE request can be made to a test server")]
     public static async Task Case6() =>
-        await Req.Delete
-            .To("/hello-world")
+        await Req.Delete.To("/hello-world")
             .WithHeader("A", "1")
             .WithHeader("B", "2")
             .GivenRequest()
@@ -79,24 +73,21 @@ public static class BddTests
 
     [Fact(DisplayName = "OPTION request can be made to a test server")]
     public static async Task Case7() =>
-        await Req.Options
-            .To("/hello-world")
+        await Req.Options.To("/hello-world")
             .GivenRequest()
             .WhenCalled(SimpleResponse())
             .Assert(ResponseCodeIsOk);
 
     [Fact(DisplayName = "HEAD request can be made to a test server")]
     public static async Task Case8() =>
-        await Req.Head
-            .To("/hello-world")
+        await Req.Head.To("/hello-world")
             .GivenRequest()
             .WhenCalled(SimpleResponse())
             .Assert(ResponseCodeIsOk);
 
     [Fact(DisplayName = "TRACE request can be made to a test server")]
     public static async Task Case9() =>
-        await Req.Trace
-            .To("/hello-world")
+        await Req.Trace.To("/hello-world")
             .GivenRequest()
             .WhenCalled(SimpleResponse())
             .Assert(ResponseCodeIsOk);
@@ -154,9 +145,7 @@ public static class BddTests
             .And(server =>
             {
                 var req = WireMock
-                    .RequestBuilders
-                    .Request
-                    .Create()
+                    .RequestBuilders.Request.Create()
                     .WithPath("/hello-world")
                     .UsingGet();
                 server
@@ -165,9 +154,7 @@ public static class BddTests
                     .WillSetStateTo(1)
                     .RespondWith(
                         WireMock
-                            .ResponseBuilders
-                            .Response
-                            .Create()
+                            .ResponseBuilders.Response.Create()
                             .WithStatusCode(Resp.InternalServerError)
                     );
                 server
@@ -177,9 +164,7 @@ public static class BddTests
                     .WillSetStateTo(2)
                     .RespondWith(
                         WireMock
-                            .ResponseBuilders
-                            .Response
-                            .Create()
+                            .ResponseBuilders.Response.Create()
                             .WithStatusCode(Resp.InternalServerError)
                     );
                 server
@@ -205,9 +190,7 @@ public static class BddTests
             .And(server =>
             {
                 var req = WireMock
-                    .RequestBuilders
-                    .Request
-                    .Create()
+                    .RequestBuilders.Request.Create()
                     .WithPath("/hello-world")
                     .UsingGet();
                 server
@@ -216,9 +199,7 @@ public static class BddTests
                     .WillSetStateTo(1)
                     .RespondWith(
                         WireMock
-                            .ResponseBuilders
-                            .Response
-                            .Create()
+                            .ResponseBuilders.Response.Create()
                             .WithStatusCode(Resp.InternalServerError)
                     );
                 server
@@ -228,9 +209,7 @@ public static class BddTests
                     .WillSetStateTo(2)
                     .RespondWith(
                         WireMock
-                            .ResponseBuilders
-                            .Response
-                            .Create()
+                            .ResponseBuilders.Response.Create()
                             .WithStatusCode(Resp.InternalServerError)
                     );
                 server

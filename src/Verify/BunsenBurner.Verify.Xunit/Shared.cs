@@ -16,8 +16,7 @@ internal static class Shared
         [CallerFilePath] string sourceFilePath = ""
     ) =>
         VerifyXunit
-            .Verifier
-            .Verify(
+            .Verifier.Verify(
                 resultToSnap != null ? resultToSnap(value) as object : value,
                 sourceFile: sourceFilePath
             )

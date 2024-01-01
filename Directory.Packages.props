@@ -20,7 +20,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </GlobalPackageReference>
-    <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="9.15.0.81779">
+    <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="9.16.0.82469">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </GlobalPackageReference>
@@ -33,7 +33,7 @@
   <ItemGroup>
     <PackageVersion Include="AutoFixture" Version="4.18.1" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.13.11" />
-    <PackageVersion Include="Bogus" Version="35.0.1" />
+    <PackageVersion Include="Bogus" Version="35.2.0" />
     <PackageVersion Include="Eon" Version="1.1.0" />
     <PackageVersion Include="Flurl" Version="4.0.0" />
     <PackageVersion Include="Hedgehog" Version="0.13.0" />

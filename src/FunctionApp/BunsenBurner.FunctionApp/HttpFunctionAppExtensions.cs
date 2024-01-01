@@ -44,8 +44,7 @@ public static class HttpFunctionAppExtensions
                 => ((HttpStatusCode)statusCodeResult.StatusCode.GetValueOrDefault()).Result(),
             _
                 => HttpStatusCode
-                    .InternalServerError
-                    .Result()
+                    .InternalServerError.Result()
                     .WithTextContent("Failed to process action result")
         };
 }

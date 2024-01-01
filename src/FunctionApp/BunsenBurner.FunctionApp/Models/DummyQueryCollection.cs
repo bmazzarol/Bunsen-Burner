@@ -32,8 +32,7 @@ internal sealed record DummyQueryCollection : IQueryCollection
     private IReadOnlyDictionary<string, StringValues> Store { get; }
 
     public DummyQueryCollection(Url url) =>
-        Store = url.QueryParams
-            .GroupBy(x => x.Name, StringComparer.Ordinal)
+        Store = url.QueryParams.GroupBy(x => x.Name, StringComparer.Ordinal)
             .Select(x => (x.Key, Value: x.Select(y => y.Value).ToArray().ToStringValues()))
             .ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
 

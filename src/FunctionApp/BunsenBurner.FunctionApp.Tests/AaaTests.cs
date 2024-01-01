@@ -102,8 +102,7 @@ public class AaaTests
                 async (i, function) =>
                 {
                     var result = await function.SomeFunctionTrigger(
-                        await Req.Get
-                            .To($"/some-path/{i.Data}".SetQueryParam("noBody"))
+                        await Req.Get.To($"/some-path/{i.Data}".SetQueryParam("noBody"))
                             .AsHttpRequest()
                     );
                     return result.AsResponse();

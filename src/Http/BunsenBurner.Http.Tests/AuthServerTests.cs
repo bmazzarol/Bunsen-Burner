@@ -49,8 +49,7 @@ public static class AuthServerTests
 {
     [Fact(DisplayName = "An authorized endpoint can be called with a test token")]
     public static async Task Case1() =>
-        await Req.Get
-            .To("/api/test")
+        await Req.Get.To("/api/test")
             .WithBearerToken(Token.New().WithClaim(ClaimName.Issuer, Constants.TestIssuer))
             .ArrangeRequest()
             .ActAndCall(TestServerBuilderOptions.New<TestStartupWithAuth>().Build())
@@ -58,8 +57,7 @@ public static class AuthServerTests
 
     [Fact(DisplayName = "An authorized endpoint can be called without a token and is unauthorized")]
     public static async Task Case2() =>
-        await Req.Get
-            .To("/api/test")
+        await Req.Get.To("/api/test")
             .ArrangeRequest()
             .ActAndCall(TestServerBuilderOptions.New<TestStartupWithAuth>().Build())
             .Assert(r => r.Response.StatusCode == Resp.Unauthorized);

@@ -42,8 +42,7 @@ public static class FunctionAppBuilder
         where TStartup : FunctionsStartup
         where TFunction : class =>
         BuildHost<TStartup, TFunction>(startupBuilder, config)
-            .Services
-            .GetRequiredService<TFunction>();
+            .Services.GetRequiredService<TFunction>();
 
     /// <summary>
     /// Creates a new instance of the function app from the provided startup class
@@ -76,8 +75,7 @@ public static class FunctionAppBuilder
                 $"{startupType.FullName ?? startupType.Name}_{functionType.FullName ?? functionType.Name}",
                 _ => BuildHost<TStartup, TFunction>(startupBuilder)
             )
-            .Services
-            .GetRequiredService<TFunction>();
+            .Services.GetRequiredService<TFunction>();
     }
 
     /// <summary>
