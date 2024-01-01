@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Common.Test.NUnit.targets', '$(MSBuildThisFileDirectory)'))"/>
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="..\BunsenBurner.NUnit\BunsenBurner.NUnit.csproj" />
+    </ItemGroup>
+</Project>

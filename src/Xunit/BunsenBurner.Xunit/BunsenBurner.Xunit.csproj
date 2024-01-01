@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Common.Release.targets', '$(MSBuildThisFileDirectory)'))"/>
+  
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <PackageId>BunsenBurner.Xunit</PackageId>
+        <Title>Bunsen Burner xUnit.net</Title>
+        <Description>Integration with [xUnit.net](https://github.com/xunit/xunit) to easily consume Bunsen Burner</Description>
+        <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests</PackageTags>
+        <ProjectGuid>7877ad44-99d0-401d-bd39-ac0e58aa4b79</ProjectGuid>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="xunit.extensibility.core" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Logging\BunsenBurner.Logging\BunsenBurner.Logging.csproj" />
+        <ProjectReference Include="..\..\Core\BunsenBurner\BunsenBurner.csproj" />
+    </ItemGroup>
+
+</Project>

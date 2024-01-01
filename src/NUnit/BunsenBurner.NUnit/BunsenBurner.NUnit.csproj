@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Common.Release.targets', '$(MSBuildThisFileDirectory)'))"/>
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <PackageId>BunsenBurner.NUnit</PackageId>
+        <Title>Bunsen Burner NUnit</Title>
+        <Description>Integration with [NUnit](https://github.com/nunit/nunit) to easily consume Bunsen Burner</Description>
+        <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests</PackageTags>
+        <ProjectGuid>75cdb436-009f-4fac-9b57-17575aea1af2</ProjectGuid>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Logging\BunsenBurner.Logging\BunsenBurner.Logging.csproj" />
+        <ProjectReference Include="..\..\Core\BunsenBurner\BunsenBurner.csproj" />
+    </ItemGroup>
+
+</Project>

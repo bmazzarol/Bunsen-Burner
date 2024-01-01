@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Common.Release.targets', '$(MSBuildThisFileDirectory)'))"/>
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <PackageId>BunsenBurner.Background</PackageId>
+        <Title>Bunsen Burner Background</Title>
+        <Description>Extension methods for testing Background services</Description>
+        <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests, Background service</PackageTags>
+        <ProjectGuid>74024281-68b4-4468-8746-74e6162f7cbe</ProjectGuid>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Logging\BunsenBurner.Logging\BunsenBurner.Logging.csproj"/>
+        <ProjectReference Include="..\..\Core\BunsenBurner\BunsenBurner.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Eon" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions"/>
+    </ItemGroup>
+
+</Project>

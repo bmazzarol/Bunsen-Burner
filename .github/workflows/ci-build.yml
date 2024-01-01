@@ -1,46 +1,22 @@
-name: "CI Build"
+name: CI Build
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ main ]
   pull_request:
-    branches: [ 'main' ]
+    branches: [ main ]
 
 jobs:
   build:
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    name: Build and analyze
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project-name:
-          - BunsenBurner
-          - BunsenBurner.AutoFixture
-          - BunsenBurner.Background
-          - BunsenBurner.Bogus
-          - BunsenBurner.DependencyInjection
-          - BunsenBurner.FunctionApp
-          - BunsenBurner.Hedgehog
-          - BunsenBurner.Http
-          - BunsenBurner.Logging
-          - BunsenBurner.Verify.Xunit
-          - BunsenBurner.Verify.NUnit
-          - BunsenBurner.Xunit
-          - BunsenBurner.NUnit
-          - BunsenBurner.BenchmarkDotNet
+    permissions:
+      checks: write
+      pull-requests: write
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+      - uses: bmazzarol/bmazzarol/.github/actions/ci-build@main
         with:
-          dotnet-version: |
-            6.0.x
-            7.0.x
-      - name: Install dependencies
-        run: dotnet restore ${{ matrix.project-name }}.Tests/${{ matrix.project-name }}.Tests.csproj
-      - name: Build
-        run: dotnet build --configuration Release --no-restore ${{ matrix.project-name }}.Tests/${{ matrix.project-name }}.Tests.csproj
-      - name: Test
-        run: dotnet test --no-restore --verbosity normal --logger "trx;LogFileName=test-results.trx" ${{ matrix.project-name }}.Tests/${{ matrix.project-name }}.Tests.csproj
-      - uses: actions/upload-artifact@v2
-        if: success() || failure()
-        with:
-          name: test-results-${{ matrix.project-name }}
-          path: '**/test-results.trx'
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          sonarToken: ${{ secrets.SONAR_TOKEN }}
+          sonarProjectKey: bmazzarol_Bunsen-Burner
