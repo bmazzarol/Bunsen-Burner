@@ -24,7 +24,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </GlobalPackageReference>
-    <GlobalPackageReference Include="FluentAssertions.Analyzers" Version="0.27.0">
+    <GlobalPackageReference Include="FluentAssertions.Analyzers" Version="0.28.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </GlobalPackageReference>
