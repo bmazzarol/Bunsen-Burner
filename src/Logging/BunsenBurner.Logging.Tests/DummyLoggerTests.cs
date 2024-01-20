@@ -127,7 +127,7 @@ public static class DummyLoggerTests
             .ArrangeData()
             .Act(store =>
             {
-                var lf = store.AsLoggerFactory();
+                var lf = store.ToLoggerFactory();
                 var logger1 = lf.CreateLogger("test");
                 logger1.LogWarning("test 1");
                 var logger2 = lf.CreateLogger("test2");

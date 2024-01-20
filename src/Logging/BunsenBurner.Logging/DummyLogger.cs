@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 namespace BunsenBurner.Logging;
 
 /// <summary>
-/// Dummy logger that can be used to create assertions against
+/// <see cref="ILogger{TCategoryName}"/> which logs to a in memory <see cref="LogMessageStore"/>
 /// </summary>
 /// <typeparam name="T">Some T</typeparam>
 public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>, IDisposable
@@ -72,18 +72,23 @@ public sealed record DummyLogger<T> : ILogger<T>, IEnumerable<LogMessage>, IDisp
     public void Dispose()
     {
         foreach (var scope in _scopes.Keys)
-            scope.Dispose();
+        {
+            if (_scopes.TryRemove(scope, out _))
+            {
+                scope.Dispose();
+            }
+        }
         _scopes.Clear();
     }
 }
 
 /// <summary>
-/// Dummy logger constructors
+/// Static companion object for <see cref="DummyLogger{T}"/>
 /// </summary>
 public static class DummyLogger
 {
     /// <summary>
-    /// Creates a new typed dummy logger
+    /// Creates a new <see cref="DummyLogger{T}"/>
     /// </summary>
     /// <param name="store">log message store</param>
     /// <param name="sink">optional message sink to log through to</param>
@@ -94,16 +99,16 @@ public static class DummyLogger
         new(store ?? LogMessageStore.New(), typeof(T).FullName ?? string.Empty, sink);
 
     /// <summary>
-    /// Creates a new un-typed dummy logger
+    /// Creates a new un-typed <see cref="DummyLogger{T}"/>
     /// </summary>
-    /// <param name="ownerClassName">some parent class name</param>
+    /// <param name="category">some category name</param>
     /// <param name="store">log message store</param>
     /// <param name="sink">optional message sink to log through to</param>
     /// <returns>dummy logger</returns>
     [Pure]
     public static DummyLogger<object> New(
-        string ownerClassName,
+        string category,
         LogMessageStore? store = default,
         Sink? sink = default
-    ) => new(store ?? LogMessageStore.New(), ownerClassName, sink);
+    ) => new(store ?? LogMessageStore.New(), category, sink);
 }

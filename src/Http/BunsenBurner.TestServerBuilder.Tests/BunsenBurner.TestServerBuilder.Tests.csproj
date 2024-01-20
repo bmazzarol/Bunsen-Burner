@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Common.Test.Xunit.targets', '$(MSBuildThisFileDirectory)'))"/>
+
+    <PropertyGroup>
+        <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+        <RootNamespace>BunsenBurner.Tests</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\BunsenBurner.TestServerBuilder\BunsenBurner.TestServerBuilder.csproj"/>
+    </ItemGroup>
+</Project>

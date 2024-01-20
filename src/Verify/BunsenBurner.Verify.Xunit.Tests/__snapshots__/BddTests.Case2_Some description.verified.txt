@@ -1,4 +1,0 @@
-﻿{
-  A: 1,
-  C: DateTimeOffset_1
-}

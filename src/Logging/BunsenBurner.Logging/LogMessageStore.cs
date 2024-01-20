@@ -1,28 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace BunsenBurner.Logging;
 
 /// <summary>
-/// Store of log messages, can be shared between DummyLogger instances
+/// Store of <see cref="LogMessage"/>, can be shared between <see cref="DummyLogger{T}"/> instances
 /// </summary>
 public sealed record LogMessageStore : IEnumerable<LogMessage>
 {
-    private readonly ConcurrentStack<LogMessage> _logMessages;
+    private ConcurrentQueue<LogMessage> _logMessages;
 
-    private LogMessageStore() => _logMessages = new ConcurrentStack<LogMessage>();
+    private LogMessageStore() => _logMessages = new ConcurrentQueue<LogMessage>();
 
     /// <summary>
-    /// Creates a new log messages store
+    /// Creates a new <see cref="LogMessageStore"/>
     /// </summary>
     /// <returns>log message store</returns>
     [Pure]
     public static LogMessageStore New() => new();
 
-    internal void Log(LogMessage message) => _logMessages.Push(message);
+    internal void Log(LogMessage message) => _logMessages.Enqueue(message);
 
     /// <inheritdoc />
     public IEnumerator<LogMessage> GetEnumerator() => _logMessages.GetEnumerator();
@@ -30,19 +29,24 @@ public sealed record LogMessageStore : IEnumerable<LogMessage>
     [ExcludeFromCodeCoverage]
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-    /// <summary>
-    /// Clears the log message store
-    /// </summary>
-    public void Clear() => _logMessages.Clear();
+    private readonly object _lock = new();
 
     /// <summary>
-    /// Converts the log message store to a logger factory
+    /// Clears the <see cref="LogMessageStore"/>
     /// </summary>
-    /// <param name="sink">optional sink to use for the logger factory</param>
-    /// <returns>logger factory</returns>
-    public ILoggerFactory AsLoggerFactory(Sink? sink = default) =>
-        new ServiceCollection()
-            .AddDummyLogger(this, sink)
-            .BuildServiceProvider()
-            .GetRequiredService<ILoggerFactory>();
+    public void Clear()
+    {
+        lock (_lock)
+        {
+            _logMessages = new ConcurrentQueue<LogMessage>();
+        }
+    }
+
+    /// <summary>
+    /// Converts the <see cref="LogMessageStore"/> to a <see cref="ILoggerFactory"/>
+    /// </summary>
+    /// <param name="sink">optional sink to use for the <see cref="ILoggerFactory"/></param>
+    /// <returns><see cref="ILoggerFactory"/></returns>
+    public ILoggerFactory ToLoggerFactory(Sink? sink = default) =>
+        new LoggerFactory(new[] { new DummyLoggerProvider(store: this, sink) });
 }

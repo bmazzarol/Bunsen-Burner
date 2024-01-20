@@ -1,12 +1,12 @@
 ﻿namespace BunsenBurner;
 
 /// <summary>
-/// Adds linq support to the arrange part of a scenario
+/// Adds linq support to <see cref="Scenario{T}"/>
 /// </summary>
 public static class Scenario
 {
     /// <summary>
-    /// Select (Map) for Scenario.Arrange
+    /// Select (Map) for <see cref="Scenario{TSyntax}.Arranged{TData}"/>
     /// </summary>
     /// <param name="scenario">arranged scenario of TA</param>
     /// <param name="fn">fn from TA to TB</param>
@@ -23,7 +23,7 @@ public static class Scenario
         new(scenario.Name, async () => fn(await scenario.ArrangeScenario()), scenario.Disposables);
 
     /// <summary>
-    /// Select (Map) for Scenario.Act
+    /// Select (Map) for <see cref="Scenario{TSyntax}.Acted{TData,TResult}"/>
     /// </summary>
     /// <param name="scenario">acted scenario of TA</param>
     /// <param name="fn">fn from TA to TB</param>
@@ -46,7 +46,7 @@ public static class Scenario
         );
 
     /// <summary>
-    /// SelectMany (Bind) for Scenario.Arrange
+    /// SelectMany (Bind) for <see cref="Scenario{TSyntax}.Arranged{TData}"/>
     /// </summary>
     /// <param name="scenario">arranged scenario of TA</param>
     /// <param name="fn">fn from TA to arranged scenario of TB</param>
@@ -67,7 +67,7 @@ public static class Scenario
         );
 
     /// <summary>
-    /// SelectMany (Bind) for Scenario.Arrange
+    /// SelectMany (Bind) for <see cref="Scenario{TSyntax}.Arranged{TData}"/>
     /// </summary>
     /// <param name="scenario">arranged scenario of TA</param>
     /// <param name="mapFn">fn from TA to arranged scenario of TB</param>
@@ -96,7 +96,7 @@ public static class Scenario
         );
 
     /// <summary>
-    /// SelectMany (Bind) for Scenario.Acted
+    /// SelectMany (Bind) for <see cref="Scenario{TSyntax}.Acted{TData,TResult}"/>
     /// </summary>
     /// <param name="scenario">acted scenario of TA</param>
     /// <param name="fn">fn from TA to arranged scenario of TB</param>
@@ -119,7 +119,7 @@ public static class Scenario
         );
 
     /// <summary>
-    /// SelectMany (Bind) for Scenario.Acted
+    /// SelectMany (Bind) for <see cref="Scenario{TSyntax}.Acted{TData,TResult}"/>
     /// </summary>
     /// <param name="scenario">acted scenario of TA</param>
     /// <param name="mapFn">fn from TA to arranged scenario of TB</param>
@@ -150,7 +150,7 @@ public static class Scenario
         );
 
     /// <summary>
-    /// Converts n number of arranged scenarios to a single scenario
+    /// Converts n number of <see cref="Scenario{TSyntax}.Arranged{TData}"/> to a single <see cref="Scenario{TSyntax}.Arranged{TData}"/>
     /// </summary>
     /// <param name="scenarios">n number of arranged scenarios</param>
     /// <typeparam name="TSyntax">syntax</typeparam>
@@ -163,11 +163,11 @@ public static class Scenario
         new(
             name: null,
             async () => await Task.WhenAll(scenarios.Select(x => x.ArrangeScenario())),
-            new HashSet<IDisposable>()
+            new HashSet<object>()
         );
 
     /// <summary>
-    /// Converts n number of scenarios to a single scenario
+    /// Converts n number of <see cref="Scenario{TSyntax}.Asserted{TData,TResult}"/> to a single <see cref="Scenario{TSyntax}.Asserted{TData,TResult}"/>
     /// </summary>
     /// <param name="scenarios">n number of scenarios</param>
     /// <typeparam name="TSyntax">syntax</typeparam>
@@ -191,6 +191,6 @@ public static class Scenario
                         (s, t) => s.AssertAgainstResult(t.d, t.r)
                     )
                 ),
-            new HashSet<IDisposable>()
+            new HashSet<object>()
         );
 }

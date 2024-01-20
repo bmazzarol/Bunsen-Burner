@@ -3,9 +3,9 @@
 public abstract partial record Scenario<TSyntax>
 {
     /// <summary>
-    /// A scenario that has been arranged and acted on
+    /// A <see cref="Scenario{T}"/> that has been arranged and acted on
     /// </summary>
-    /// <typeparam name="TData">type of data required to act on the scenario</typeparam>
+    /// <typeparam name="TData">type of data required to act on the <see cref="Scenario{T}"/></typeparam>
     /// <typeparam name="TResult">type of data returned from the result of acting</typeparam>
     public sealed record Acted<TData, TResult> : Scenario<TSyntax>
     {
@@ -16,7 +16,7 @@ public abstract partial record Scenario<TSyntax>
             string? name,
             Func<Task<TData>> arrangeScenario,
             Func<TData, Task<TResult>> actOnScenario,
-            HashSet<IDisposable> disposables
+            HashSet<object> disposables
         )
             : base(name, disposables)
         {
@@ -33,9 +33,9 @@ public abstract partial record Scenario<TSyntax>
             };
 
         internal Func<TData, Task<TResult>> ActOnScenario =>
-            async x =>
+            async data =>
             {
-                var result = await _actOnScenario(x);
+                var result = await _actOnScenario(data);
                 TrackPotentialDisposal(result);
                 return result;
             };

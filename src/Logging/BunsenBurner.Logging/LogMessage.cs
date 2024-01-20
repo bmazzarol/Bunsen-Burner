@@ -8,9 +8,9 @@ namespace BunsenBurner.Logging;
 public sealed record LogMessage
 {
     /// <summary>
-    /// Parent class name
+    /// Category name
     /// </summary>
-    public string ClassType { get; }
+    public string Category { get; }
 
     /// <summary>
     /// Log level
@@ -38,7 +38,7 @@ public sealed record LogMessage
     public IEnumerable<object> Scopes { get; }
 
     private LogMessage(
-        string classType,
+        string category,
         LogLevel level,
         EventId eventId,
         Exception? exception,
@@ -46,7 +46,7 @@ public sealed record LogMessage
         IEnumerable<object> scopes
     )
     {
-        ClassType = classType;
+        Category = category;
         Level = level;
         EventId = eventId;
         Exception = exception;
@@ -55,11 +55,11 @@ public sealed record LogMessage
     }
 
     internal static LogMessage New(
-        string classType,
+        string category,
         LogLevel level,
         EventId eventId,
         Exception? exception,
         string message,
         IEnumerable<object> scopes
-    ) => new(classType, level, eventId, exception, message, scopes);
+    ) => new(category, level, eventId, exception, message, scopes);
 }

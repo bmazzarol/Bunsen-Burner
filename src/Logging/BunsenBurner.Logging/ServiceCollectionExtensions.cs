@@ -4,12 +4,12 @@ using Microsoft.Extensions.Logging;
 namespace BunsenBurner.Logging;
 
 /// <summary>
-/// Extension methods for working with DI and the dummy logger
+/// Extension methods for working with <see cref="IServiceCollection"/> and the <see cref="DummyLogger{T}"/>
 /// </summary>
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Adds the dummy logger to the list of log providers
+    /// Adds the <see cref="DummyLoggerProvider"/> to the list of <see cref="ILoggerProvider"/>
     /// </summary>
     /// <param name="services">services</param>
     /// <param name="store">log messages store</param>
@@ -22,7 +22,7 @@ public static class ServiceCollectionExtensions
     ) => services.AddLogging(options => options.AddProvider(new DummyLoggerProvider(store, sink)));
 
     /// <summary>
-    /// Clears existing logging providers
+    /// Clears existing <see cref="ILoggerProvider"/> registrations
     /// </summary>
     /// <param name="services">services</param>
     /// <returns>services</returns>

@@ -7,7 +7,8 @@ namespace BunsenBurner.Logging;
 using LoggerCache = ConcurrentDictionary<string, Lazy<DummyLogger<object>>>;
 
 /// <summary>
-/// Provides and dummy logger provider which can use a shared backing store for messages
+/// Provides and <see cref="DummyLogger{T}"/> provider which can use a shared
+/// <see cref="LogMessageStore"/> for messages
 /// </summary>
 [ExcludeFromCodeCoverage]
 internal sealed record DummyLoggerProvider : ILoggerProvider
@@ -27,20 +28,24 @@ internal sealed record DummyLoggerProvider : ILoggerProvider
         _loggers
             .GetOrAdd(
                 categoryName,
-                ownerClassName =>
-                    new Lazy<DummyLogger<object>>(
-                        () => DummyLogger.New(ownerClassName, _store, _sink)
-                    )
+                category =>
+                    new Lazy<DummyLogger<object>>(() => DummyLogger.New(category, _store, _sink))
             )
             .Value;
 
     public void Dispose()
     {
-        foreach (
-            var logger in _loggers.Where(x => x.Value.IsValueCreated).Select(x => x.Value.Value)
-        )
+        foreach (var kvp in _loggers)
         {
-            logger.Dispose();
+            if (
+                _loggers.TryRemove(kvp.Key, out var logger)
+                && logger is { IsValueCreated: true, Value: { } dl }
+            )
+            {
+#pragma warning disable S3966
+                dl.Dispose();
+#pragma warning restore S3966
+            }
         }
 
         _loggers.Clear();

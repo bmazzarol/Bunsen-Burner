@@ -5,19 +5,8 @@
                 {                 
                     "files": [
                         "Core/BunsenBurner/BunsenBurner.csproj",
-                        "AutoFixture/BunsenBurner.AutoFixture/BunsenBurner.AutoFixture.csproj",
-                        "Background/BunsenBurner.Background/BunsenBurner.Background.csproj",
-                        "Bogus/BunsenBurner.Bogus/BunsenBurner.Bogus.csproj",
-                        "DependencyInjection/BunsenBurner.DependencyInjection/BunsenBurner.DependencyInjection.csproj",
-                        "FunctionApp/BunsenBurner.FunctionApp/BunsenBurner.FunctionApp.csproj",
-                        "Hedgehog/BunsenBurner.Hedgehog/BunsenBurner.Hedgehog.csproj",
-                        "Http/BunsenBurner.Http/BunsenBurner.Http.csproj",
                         "Logging/BunsenBurner.Logging/BunsenBurner.Logging.csproj",
-                        "Verify/BunsenBurner.Verify.Xunit/BunsenBurner.Verify.Xunit.csproj",
-                        "Verify/BunsenBurner.Verify.NUnit/BunsenBurner.Verify.NUnit.csproj",
-                        "Xunit/BunsenBurner.Xunit/BunsenBurner.Xunit.csproj",
-                        "NUnit/BunsenBurner.NUnit/BunsenBurner.NUnit.csproj",
-                        "BenchmarkDotNet/BunsenBurner.BenchmarkDotNet/BunsenBurner.BenchmarkDotNet.csproj"
+                        "Http/BunsenBurner.TestServerBuilder/BunsenBurner.TestServerBuilder.csproj"
                     ],
                     "src": "../../"
                 }

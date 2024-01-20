@@ -8,43 +8,10 @@
         <Title>Bunsen Burner Core</Title>
         <Description>This provides the core dependency free test abstraction that Bunsen Burner is built on</Description>
         <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests</PackageTags>
-        <ProjectGuid>7785ca26-4a1d-42cb-acb1-d8de50fa9666</ProjectGuid>
+        <ProjectGuid>6333cef0-c4fc-4eca-8b1f-d7c442b07f66</ProjectGuid>
     </PropertyGroup>
 
     <ItemGroup>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>BunsenBurner.AutoFixture</_Parameter1>
-        </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>BunsenBurner.Background</_Parameter1>
-        </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>BunsenBurner.BenchmarkDotNet</_Parameter1>
-        </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>BunsenBurner.Bogus</_Parameter1>
-        </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>BunsenBurner.DependencyInjection</_Parameter1>
-        </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>BunsenBurner.FunctionApp</_Parameter1>
-        </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>BunsenBurner.Hedgehog</_Parameter1>
-        </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>BunsenBurner.Http</_Parameter1>
-        </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>BunsenBurner.Http.Tests</_Parameter1>
-        </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>BunsenBurner.Verify.NUnit</_Parameter1>
-        </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>BunsenBurner.Verify.Xunit</_Parameter1>
-        </AssemblyAttribute>
+        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces"/>
     </ItemGroup>
-
 </Project>

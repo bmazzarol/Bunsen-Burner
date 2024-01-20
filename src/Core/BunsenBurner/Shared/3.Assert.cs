@@ -425,7 +425,7 @@ internal static partial class Shared
         scenario.And((d, r) => RunExpressionAssertion(d, r, expression));
 
     /// <summary>
-    /// Resets the asserted scenario back to arranged, throwing away the act and assert information
+    /// Resets the asserted <see cref="Scenario{TSyntax}"/> back to arranged, throwing away the act and assert information
     /// </summary>
     /// <param name="scenario">scenario</param>
     /// <typeparam name="TData">test data</typeparam>
@@ -439,7 +439,7 @@ internal static partial class Shared
         where TSyntax : struct, Syntax => Arrange<TData, TSyntax>(scenario.ArrangeScenario);
 
     /// <summary>
-    /// Resets the asserted scenario back to acted, throwing away the information
+    /// Resets the asserted <see cref="Scenario{TSyntax}"/> back to acted, throwing away the information
     /// </summary>
     /// <param name="scenario">scenario</param>
     /// <typeparam name="TData">test data</typeparam>
@@ -454,7 +454,7 @@ internal static partial class Shared
         Arrange<TData, TSyntax>(scenario.ArrangeScenario).Act(scenario.ActOnScenario);
 
     /// <summary>
-    /// Replaces the act in the scenario keeping the assertions
+    /// Replaces the act in the <see cref="Scenario{TSyntax}"/> keeping the assertions
     /// </summary>
     /// <param name="scenario">scenario</param>
     /// <param name="fn">new act to perform</param>
@@ -473,7 +473,7 @@ internal static partial class Shared
             .Assert(scenario.AssertAgainstResult);
 
     /// <summary>
-    /// Replaces the act in the scenario keeping the assertions
+    /// Replaces the act in the <see cref="Scenario{TSyntax}"/> keeping the assertions
     /// </summary>
     /// <param name="scenario">scenario</param>
     /// <param name="fn">new act to perform</param>

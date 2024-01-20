@@ -10,16 +10,16 @@ public interface Syntax
     /// <summary>
     /// Arrange, act, assert
     /// </summary>
-    public readonly struct Aaa : Syntax { }
+    public readonly struct Aaa : Syntax;
 
     /// <summary>
     /// Given, when, then
     /// </summary>
-    public readonly struct Bdd : Syntax { }
+    public readonly struct Bdd : Syntax;
 }
 
 /// <summary>
-/// <para>A scenario defines a blueprint for an executable test.</para>
+/// <para>A <see cref="Scenario{T}"/> defines a blueprint for an executable test.</para>
 /// <para>When complete, can have up to 2 generic parameters,</para>
 /// <para>
 /// 1. Data - the data required before acting
@@ -32,7 +32,7 @@ public abstract partial record Scenario<TSyntax>
     where TSyntax : struct, Syntax
 {
     /// <summary>
-    /// Optional name for the scenario
+    /// Optional name for the <see cref="Scenario{T}"/>
     /// </summary>
     public string Name { get; }
 
@@ -40,17 +40,19 @@ public abstract partial record Scenario<TSyntax>
     public sealed override string ToString() => Name;
 
     /// <summary>
-    /// Stores any disposables for cleanup after the scenario is run
+    /// Stores any disposables for cleanup after the <see cref="Scenario{T}"/> is run
     /// </summary>
-    internal HashSet<IDisposable> Disposables { get; } = new();
+    internal HashSet<object> Disposables { get; }
 
     private void TrackPotentialDisposal<T>(T potentialDisposable)
     {
-        if (potentialDisposable is IDisposable d)
-            Disposables.Add(d);
+        if (potentialDisposable is IDisposable or IAsyncDisposable)
+        {
+            Disposables.Add(potentialDisposable);
+        }
     }
 
-    private Scenario(string? name, HashSet<IDisposable> disposables)
+    private Scenario(string? name, HashSet<object> disposables)
     {
         Name = name ?? string.Empty;
         Disposables = disposables;

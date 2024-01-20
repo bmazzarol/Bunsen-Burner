@@ -5,7 +5,7 @@ namespace BunsenBurner.Logging;
 using LogFormatter = Func<LogMessage, string>;
 
 /// <summary>
-/// Provides a simple sink for rendered log message strings
+/// Provides a simple sink for rendered <see cref="LogMessage"/> strings
 /// </summary>
 public readonly struct Sink
 {

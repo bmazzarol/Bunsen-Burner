@@ -6,7 +6,7 @@
 internal static partial class Shared
 {
     /// <summary>
-    /// Acts on a scenario
+    /// Acts on a <see cref="Scenario{TSyntax}"/>
     /// </summary>
     /// <param name="scenario">scenario</param>
     /// <param name="fn">act function</param>
@@ -23,7 +23,7 @@ internal static partial class Shared
         new(scenario.Name, scenario.ArrangeScenario, fn, scenario.Disposables);
 
     /// <summary>
-    /// Acts on a scenario
+    /// Acts on a <see cref="Scenario{TSyntax}"/>
     /// </summary>
     /// <param name="scenario">scenario</param>
     /// <param name="fn">act function</param>
@@ -39,7 +39,7 @@ internal static partial class Shared
         where TSyntax : struct, Syntax => scenario.Act(x => Task.FromResult(fn(x)));
 
     /// <summary>
-    /// Acts again on a scenario
+    /// Acts again on a <see cref="Scenario{TSyntax}"/>
     /// </summary>
     /// <param name="scenario">scenario</param>
     /// <param name="fn">act function</param>
@@ -72,7 +72,7 @@ internal static partial class Shared
         );
 
     /// <summary>
-    /// Acts again on a scenario
+    /// Acts again on a <see cref="Scenario{TSyntax}"/>
     /// </summary>
     /// <param name="scenario">scenario</param>
     /// <param name="fn">act function</param>
@@ -91,7 +91,7 @@ internal static partial class Shared
         where TSyntax : struct, Syntax => scenario.And((d, r) => Task.FromResult(fn(d, r)));
 
     /// <summary>
-    /// Resets the acted scenario back to arranged, throwing away the act information
+    /// Resets the acted <see cref="Scenario{TSyntax}"/> back to arranged, throwing away the act information
     /// </summary>
     /// <param name="scenario">scenario</param>
     /// <typeparam name="TData">test data</typeparam>
