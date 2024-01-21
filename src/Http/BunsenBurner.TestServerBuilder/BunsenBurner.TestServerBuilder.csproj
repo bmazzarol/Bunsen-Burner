@@ -14,8 +14,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="JWT"/>
-        <PackageReference Include="Microsoft.IdentityModel.Tokens"/>
         <PackageReference Include="Microsoft.AspNetCore.TestHost"/>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"/>
         <PackageReference Include="Microsoft.Extensions.Http"/>

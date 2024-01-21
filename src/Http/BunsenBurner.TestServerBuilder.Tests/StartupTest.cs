@@ -1,8 +1,14 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using BunsenBurner.Extensions;
+using BunsenBurner.Logging;
+using HttpBuildR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
+using Xunit;
+using Xunit.Abstractions;
+using Req = System.Net.Http.HttpMethod;
 
 namespace BunsenBurner.Tests;
 
@@ -52,4 +58,37 @@ internal sealed class Startup
         services.AddHealthChecks().AddCheck<MyHealthCheck>("test");
         services.AddScoped<ITestService>(_ => new TestService(1));
     }
+}
+
+public sealed class StartupTest
+{
+    private readonly ITestOutputHelper _outputHelper;
+
+    public StartupTest(ITestOutputHelper outputHelper) => _outputHelper = outputHelper;
+
+    [Fact(DisplayName = "Using a startup class in the test service builder works")]
+    public async Task Case1() =>
+        await Req.Get.To("/health")
+            .ArrangeData()
+            .Act(
+                new TestServerBuilder.Options
+                {
+                    Startup = typeof(Startup),
+                    Sink = Sink.New(_outputHelper.WriteLine)
+                }
+                    .Build()
+                    .CallTestServer()
+            )
+            .Assert(ctx => ctx.Response.IsSuccessStatusCode)
+            .And(ctx =>
+            {
+                Assert.Contains(
+                    ctx.Store,
+                    x => string.Equals(x.Message, "Result is 1", StringComparison.Ordinal)
+                );
+                Assert.Contains(
+                    ctx.Store,
+                    x => string.Equals(x.Message, "Health checked", StringComparison.Ordinal)
+                );
+            });
 }

@@ -1,5 +1,8 @@
 ﻿using BunsenBurner.Logging;
+using BunsenBurner.Utility;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
@@ -20,41 +23,44 @@ public class TestServerBuilderOptionsTests
     {
         #region Example1
 
-        TestServerBuilderOptions options = TestServerBuilderOptions
-            .New()
+        // create an options instance to configure
+        var options = new TestServerBuilder.Options
+        {
             // issuer for all JWT tokens sent to the test server
-            .WithIssuer(
-                // defaults to `https://localhost/dev/`
-                TestServerConstants.Issuer
-            )
+            // defaults to `https://localhost/dev/`
+            Issuer = TestServerConstants.Issuer,
             // name of the environment
-            .WithEnvironmentName(
-                // defaults to `testing`
-                TestServerConstants.EnvironmentName
-            )
+            // defaults to `testing`
+            Environment = TestServerConstants.EnvironmentName,
             // provided signing key
-            .WithSigningKey(
-                // defaults to `SECRET_SIGNING_KEY`
-                TestServerConstants.SigningKey
-            )
+            // defaults to `SECRET_SIGNING_KEY`
+            SigningKey = TestServerConstants.SigningKey,
             // some logging sink, such as ITestOutputHelper
-            .WithLogMessageSink(Sink.New(_testOutputHelper.WriteLine))
-            // some ad-hoc setting
-            .WithSetting("MySetting", "1")
-            // a start up can be added using generics
-            .WithStartup<Startup>()
-            // or provided Type
-            .WithStartup(typeof(Startup))
-            // customize the configuration builder
+            Sink = Sink.New(_testOutputHelper.WriteLine),
+            // start-up class to use
+            Startup = typeof(Startup),
+            // configure the configuration used
             // it will automatically include a `appsettings.{environment}.json` file
-            .WithConfig(c => c.Properties.Add("b", 2))
-            // services can be added and replaced here
-            .WithServices(collection => collection.AddSingleton(string.Empty))
-            // any host settings that you have can be set here
-            .WithHost(c =>
+            ConfigureConfiguration = (
+                WebHostBuilderContext context,
+                IConfigurationBuilder builder
+            ) =>
             {
+                builder.Properties.Add("b", 2);
+                builder.AddInMemoryCollection(
+                    new[] { KeyValuePair.Create<string, string?>("MySetting", "1") }
+                );
+            },
+            // services can be added and replaced here
+            ConfigureServices = (IServiceCollection services) =>
+            {
+                services.AddSingleton(string.Empty);
+            },
+            // any host settings that you have can be set here
+            ConfigureHost = (IWebHostBuilder builder) => {
                 // something to do on a IWebHostBuilder
-            });
+            }
+        };
         // build the options into a test server
         TestServer testServer = options.Build();
         // or pass the options to the builder
@@ -65,4 +71,54 @@ public class TestServerBuilderOptionsTests
         Assert.NotNull(testServer);
         Assert.NotNull(testServer2);
     }
+
+    #region Example2
+
+    // shared instance of the test server can be stored in the once type
+    private readonly Once<TestServer> _sharedTestServer = Once.New(
+        () => new TestServerBuilder.Options { Startup = typeof(Startup) }.Build()
+    );
+
+    [Fact(DisplayName = "Once can be used to create a test server once and share it")]
+    public async Task Case2()
+    {
+        // get the server, we create it only once the first time
+        TestServer server = await _sharedTestServer;
+        // second call gets the same instance
+        TestServer server2 = await _sharedTestServer;
+        Assert.Same(server, server2);
+    }
+
+    #endregion
+
+    #region Example3
+
+    // shared named instances of the test server can be stored in the cache type
+    private readonly Cache<TestServer> _sharedTestServerCache = Cache.New<TestServer>();
+
+    [Fact(DisplayName = "Cache can be used to create a named test server once and share it")]
+    public void Case3()
+    {
+        // get the server, we create it only once the first time with a given name
+        TestServer server = _sharedTestServerCache.Get(
+            nameof(server),
+            _ => new TestServerBuilder.Options { Startup = typeof(Startup) }.Build()
+        );
+        // second call gets the same instance
+        TestServer server2 = _sharedTestServerCache.Get(
+            nameof(server),
+            _ => new TestServerBuilder.Options { Startup = typeof(Startup) }.Build()
+        );
+        Assert.Same(server, server2);
+        // but another call with a new key gets a new instance
+        // second call gets the same instance
+        TestServer server3 = _sharedTestServerCache.Get(
+            nameof(server3),
+            _ => new TestServerBuilder.Options { Startup = typeof(Startup) }.Build()
+        );
+        Assert.NotSame(server, server3);
+        Assert.NotSame(server2, server3);
+    }
+
+    #endregion
 }

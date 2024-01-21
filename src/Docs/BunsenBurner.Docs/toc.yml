@@ -21,6 +21,8 @@ items:
         href: articles/auto-disposal.md
       - name: Test Logger
         href: articles/test-logger.md
+      - name: TestServer Builder
+        href: articles/test-server-builder.md
     expanded: true
   - name: .NET API Docs
     href: api/toc.yml

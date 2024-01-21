@@ -26,42 +26,43 @@ Its harder than you think to get a working TestServer; this takes the pain
 out of it and lets you get back to writing tests.
 
 ```c#
-TestServerBuilderOptions options = 
-    TestServerBuilderOptions
-    .New()
+var options = new TestServerBuilder.Options
+{
     // issuer for all JWT tokens sent to the test server
-    .WithIssuer(
-        // defaults to `https://localhost/dev/`
-        TestServerConstants.Issuer
-    )
+    // defaults to `https://localhost/dev/`
+    Issuer = TestServerConstants.Issuer,
     // name of the environment
-    .WithEnvironmentName(
-        // defaults to `testing`
-        TestServerConstants.EnvironmentName
-    )
+    // defaults to `testing`
+    Environment = TestServerConstants.EnvironmentName,
     // provided signing key
-    .WithSigningKey(
-        // defaults to `SECRET_SIGNING_KEY`
-        TestServerConstants.SigningKey
-    )
+    // defaults to `SECRET_SIGNING_KEY`
+    SigningKey = TestServerConstants.SigningKey,
     // some logging sink, such as ITestOutputHelper
-    .WithLogMessageSink(Sink.New(_testOutputHelper.WriteLine))
-    // some ad-hoc setting
-    .WithSetting("MySetting", "1")
-    // a start up can be added using generics
-    .WithStartup<Startup>()
-    // or provided Type
-    .WithStartup(typeof(Startup))
-    // customize the configuration builder
+    Sink = Sink.New(_testOutputHelper.WriteLine),
+    // start-up class to use
+    Startup = typeof(Startup),
+    // configure the configuration used
     // it will automatically include a `appsettings.{environment}.json` file
-    .WithConfig(c => c.Properties.Add("b", 2))
-    // services can be added and replaced here
-    .WithServices(collection => collection.AddSingleton(string.Empty))
-    // any host settings that you have can be set here
-    .WithHost(c =>
+    ConfigureConfiguration = (
+        WebHostBuilderContext context,
+        IConfigurationBuilder builder
+    ) =>
     {
+        builder.Properties.Add("b", 2);
+        builder.AddInMemoryCollection(
+            new[] { KeyValuePair.Create<string, string?>("MySetting", "1") }
+        );
+    },
+    // services can be added and replaced here
+    ConfigureServices = (IServiceCollection services) =>
+    {
+        services.AddSingleton(string.Empty);
+    },
+    // any host settings that you have can be set here
+    ConfigureHost = (IWebHostBuilder builder) => {
         // something to do on a IWebHostBuilder
-    });
+    }
+};
 // build the options into a test server
 TestServer testServer = options.Build();
 // or pass the options to the builder

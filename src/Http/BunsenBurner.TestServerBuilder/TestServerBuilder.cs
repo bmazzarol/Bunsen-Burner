@@ -17,7 +17,7 @@ namespace BunsenBurner;
 /// <summary>
 /// Provides a opinionated builder for <see cref="TestServer"/> instances
 /// </summary>
-public static class TestServerBuilder
+public static partial class TestServerBuilder
 {
     /// <summary>
     /// Creates a <see cref="SymmetricSecurityKey"/> from a given string.
@@ -80,17 +80,14 @@ public static class TestServerBuilder
             .AddDummyLogger(store, sink);
 
     /// <summary>
-    /// Configures test settings via a `appsettings.{environmentName}.json` file and
-    /// optional `inMemoryOverrides`
+    /// Configures test settings via a `appsettings.{environmentName}.json` file
     /// </summary>
     /// <param name="builder">configuration builder</param>
     /// <param name="environmentName">environment name</param>
-    /// <param name="inMemoryOverrides">optional override settings</param>
     /// <returns>builder</returns>
     public static IConfigurationBuilder ConfigureTestSettings(
         this IConfigurationBuilder builder,
-        string environmentName,
-        IEnumerable<KeyValuePair<string, string?>>? inMemoryOverrides
+        string environmentName
     ) =>
         builder
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -98,13 +95,10 @@ public static class TestServerBuilder
                 $"appsettings.{environmentName}.json",
                 optional: true,
                 reloadOnChange: false
-            )
-            .AddInMemoryCollection(
-                inMemoryOverrides ?? Array.Empty<KeyValuePair<string, string?>>()
             );
 
     /// <summary>
-    /// Creates a new <see cref="TestServer"/> instance from the provided <see cref="TestServerBuilderOptions"/>
+    /// Creates a new <see cref="TestServer"/> instance from the provided <see cref="TestServerBuilder.Options"/>
     /// </summary>
     /// <remarks>
     /// <para>Does the following,</para>
@@ -118,22 +112,21 @@ public static class TestServerBuilder
     /// * Runs all delegates and replacements
     /// </para>
     /// </remarks>
-    /// <param name="options">options to use when building the test server</param>
+    /// <param name="options">options to use when building the <see cref="TestServer"/></param>
     /// <returns><see cref="TestServer"/></returns>
-    public static TestServer Create(TestServerBuilderOptions options)
+    public static TestServer Create(Options options)
     {
         var builder = new WebHostBuilder();
-        builder.UseEnvironment(options.EnvironmentName);
-        if (options.StartupClass != default)
-            builder.UseStartup(options.StartupClass);
+        builder.UseEnvironment(options.Environment);
+        if (options.Startup != null)
+            builder.UseStartup(options.Startup);
         builder
             .ConfigureTestServices(services =>
             {
                 options.ConfigureServices?.Invoke(services);
-                var store = LogMessageStore.New();
                 services
                     // setup test loggers
-                    .ConfigureTestLogging(store, options.Sink)
+                    .ConfigureTestLogging(options.LogMessageStore, options.Sink)
                     // remove hosted services
                     .RemoveAll(typeof(IHostedService))
                     // setup test auth
@@ -142,11 +135,8 @@ public static class TestServerBuilder
             .ConfigureAppConfiguration(
                 (context, configBuilder) =>
                 {
-                    options.ConfigureAppConfiguration?.Invoke(context, configBuilder);
-                    configBuilder.ConfigureTestSettings(
-                        options.EnvironmentName,
-                        options.AppSettingsToOverride
-                    );
+                    options.ConfigureConfiguration?.Invoke(context, configBuilder);
+                    configBuilder.ConfigureTestSettings(options.Environment);
                 }
             );
         options.ConfigureHost?.Invoke(builder);
