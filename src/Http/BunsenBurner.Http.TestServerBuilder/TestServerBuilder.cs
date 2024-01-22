@@ -12,7 +12,7 @@ using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 
-namespace BunsenBurner;
+namespace BunsenBurner.Http;
 
 /// <summary>
 /// Provides a opinionated builder for <see cref="TestServer"/> instances

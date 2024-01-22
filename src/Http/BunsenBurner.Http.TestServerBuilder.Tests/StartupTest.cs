@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using BunsenBurner.Extensions;
+using BunsenBurner.Http.Extensions;
 using BunsenBurner.Logging;
 using HttpBuildR;
 using Microsoft.AspNetCore.Builder;
@@ -10,7 +10,7 @@ using Xunit;
 using Xunit.Abstractions;
 using Req = System.Net.Http.HttpMethod;
 
-namespace BunsenBurner.Tests;
+namespace BunsenBurner.Http.Tests;
 
 internal interface ITestService
 {

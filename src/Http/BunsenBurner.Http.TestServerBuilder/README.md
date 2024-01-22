@@ -4,17 +4,17 @@
 
 <!-- markdownlint-enable MD013 -->
 
-[![Nuget](https://img.shields.io/nuget/v/BunsenBurner.TestServerBuilder)](https://www.nuget.org/packages/BunsenBurner.TestServerBuilder/)
+[![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Http.TestServerBuilder)](https://www.nuget.org/packages/BunsenBurner.Http.TestServerBuilder/)
 
 ## Getting Started
 
-To use this library, simply include `BunsenBurner.TestServerBuilder.dll` in your
+To use this library, simply include `BunsenBurner.Http.TestServerBuilder.dll` in your
 project or grab it
-from [NuGet](https://www.nuget.org/packages/BunsenBurner.TestServerBuilder/),
+from [NuGet](https://www.nuget.org/packages/BunsenBurner.Http.TestServerBuilder/),
 and add this to the top of each test `.cs` file that needs it:
 
 ```C#
-using BunsenBurner;
+using BunsenBurner.Http;
 ```
 
 ## What?

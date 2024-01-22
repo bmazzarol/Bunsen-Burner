@@ -4,12 +4,11 @@
 
     <PropertyGroup>
         <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
-        <RootNamespace>BunsenBurner.Tests</RootNamespace>
+        <RootNamespace>BunsenBurner.Http.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\BunsenBurner.Jwt\BunsenBurner.Jwt.csproj" />
-        <ProjectReference Include="..\BunsenBurner.TestServerBuilder\BunsenBurner.TestServerBuilder.csproj"/>
+        <ProjectReference Include="..\BunsenBurner.Http.TestServerBuilder\BunsenBurner.Http.TestServerBuilder.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

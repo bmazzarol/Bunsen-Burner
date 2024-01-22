@@ -1,4 +1,4 @@
-﻿namespace BunsenBurner;
+﻿namespace BunsenBurner.Http;
 
 /// <summary>
 /// Shared constants

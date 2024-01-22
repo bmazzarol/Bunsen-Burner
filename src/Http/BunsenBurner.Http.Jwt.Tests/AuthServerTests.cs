@@ -2,8 +2,8 @@
 
 using System.Net;
 using System.Net.Mime;
-using BunsenBurner.Extensions;
-using BunsenBurner.Jwt.Extensions;
+using BunsenBurner.Http.Extensions;
+using BunsenBurner.Http.Jwt.Extensions;
 using HttpBuildR;
 using JWT.Builder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,10 +13,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Xunit;
-using static BunsenBurner.TestServerConstants;
+using static BunsenBurner.Http.TestServerConstants;
 using Req = System.Net.Http.HttpMethod;
 
-namespace BunsenBurner.Jwt.Tests;
+namespace BunsenBurner.Http.Jwt.Tests;
 
 internal sealed class TestStartupWithAuth
 {

@@ -6,7 +6,7 @@ using JWT.Algorithms;
 using JWT.Builder;
 using Microsoft.IdentityModel.Tokens;
 
-namespace BunsenBurner.Jwt;
+namespace BunsenBurner.Http.Jwt;
 
 using TokenPartValues = Dictionary<string, TokenPartValue>;
 

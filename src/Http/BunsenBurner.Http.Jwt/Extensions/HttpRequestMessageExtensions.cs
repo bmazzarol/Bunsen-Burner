@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 
-namespace BunsenBurner.Jwt.Extensions;
+namespace BunsenBurner.Http.Jwt.Extensions;
 
 /// <summary>
 /// Extension methods for working with <see cref="HttpRequestMessage"/>

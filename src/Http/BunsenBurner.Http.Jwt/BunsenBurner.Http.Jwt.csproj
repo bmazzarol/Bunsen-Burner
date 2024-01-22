@@ -4,7 +4,7 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <PackageId>BunsenBurner.Jwt</PackageId>
+        <PackageId>BunsenBurner.Http.Jwt</PackageId>
         <Title>Bunsen Burner Jwt</Title>
         <Description>Build test JWT tokens for use in unit testing APIs</Description>
         <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests, Http, Test Server, JWT</PackageTags>

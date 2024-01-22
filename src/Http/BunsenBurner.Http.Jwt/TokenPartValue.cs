@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
-namespace BunsenBurner.Jwt;
+namespace BunsenBurner.Http.Jwt;
 
 /// <summary>
 /// Models a JWT token part.

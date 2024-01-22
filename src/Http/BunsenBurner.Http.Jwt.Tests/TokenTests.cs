@@ -1,7 +1,7 @@
 using JWT.Builder;
 using Xunit;
 
-namespace BunsenBurner.Jwt.Tests;
+namespace BunsenBurner.Http.Jwt.Tests;
 
 public static class TokenTests
 {

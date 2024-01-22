@@ -4,17 +4,17 @@
 
 <!-- markdownlint-enable MD013 -->
 
-[![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Jwt)](https://www.nuget.org/packages/BunsenBurner.Jwt/)
+[![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Http.Jwt)](https://www.nuget.org/packages/BunsenBurner.Http.Jwt/)
 
 ## Getting Started
 
-To use this library, simply include `BunsenBurner.Jwt.dll` in your
+To use this library, simply include `BunsenBurner.Http.Jwt.dll` in your
 project or grab it
-from [NuGet](https://www.nuget.org/packages/BunsenBurner.Jwt/),
+from [NuGet](https://www.nuget.org/packages/BunsenBurner.Http.Jwt/),
 and add this to the top of each test `.cs` file that needs it:
 
 ```C#
-using BunsenBurner.Jwt;
+using BunsenBurner.Http.Jwt;
 ```
 
 ## What?

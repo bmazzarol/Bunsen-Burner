@@ -2,7 +2,7 @@ using BunsenBurner.Logging;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BunsenBurner.Extensions;
+namespace BunsenBurner.Http.Extensions;
 
 using TestServerResult = Task<(HttpResponseMessage Response, LogMessageStore Store)>;
 

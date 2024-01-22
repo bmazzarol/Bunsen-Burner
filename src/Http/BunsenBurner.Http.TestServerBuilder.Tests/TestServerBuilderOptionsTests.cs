@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace BunsenBurner.Tests;
+namespace BunsenBurner.Http.Tests;
 
 public class TestServerBuilderOptionsTests
 {

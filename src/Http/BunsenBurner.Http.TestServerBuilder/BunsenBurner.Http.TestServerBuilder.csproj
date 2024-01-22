@@ -10,7 +10,7 @@
         <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests, Http, Test Server</PackageTags>
         <ProjectGuid>77d6d889-4351-4cf3-b5d8-0ab58fd2e18b</ProjectGuid>
         <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
-        <RootNamespace>BunsenBurner</RootNamespace>
+        <RootNamespace>BunsenBurner.Http</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

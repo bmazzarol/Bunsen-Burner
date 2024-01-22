@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\BunsenBurner.Jwt\BunsenBurner.Jwt.csproj" />
-        <ProjectReference Include="..\BunsenBurner.TestServerBuilder\BunsenBurner.TestServerBuilder.csproj" />
+        <ProjectReference Include="..\BunsenBurner.Http.Jwt\BunsenBurner.Http.Jwt.csproj" />
+        <ProjectReference Include="..\BunsenBurner.Http.TestServerBuilder\BunsenBurner.Http.TestServerBuilder.csproj" />
     </ItemGroup>
 
     <ItemGroup>

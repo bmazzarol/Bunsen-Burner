@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BunsenBurner;
+namespace BunsenBurner.Http;
 
 public static partial class TestServerBuilder
 {
