@@ -36,7 +36,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.Http.Client", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.Http.Core", "src\Http\BunsenBurner.Http.Core\BunsenBurner.Http.Core.csproj", "{69274DB5-4E50-4A90-AAD0-D8B291A76E1D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Request", "Request", "{7B7555ED-2312-471B-A07E-547A614F4657}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{7B7555ED-2312-471B-A07E-547A614F4657}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunsenBurner.Http.Client.Tests", "src\Http\BunsenBurner.Http.Client.Tests\BunsenBurner.Http.Client.Tests.csproj", "{53972CDA-54E5-4085-81B1-1CCF84F63B93}"
 EndProject
