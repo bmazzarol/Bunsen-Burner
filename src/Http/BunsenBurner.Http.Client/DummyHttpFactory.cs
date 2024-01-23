@@ -1,18 +1,16 @@
 ﻿namespace BunsenBurner.Http;
 
 /// <summary>
-/// Dummy Http Factory that can be used to mock http clients for unit testing HTTP.
+/// Dummy <see cref="IHttpClientFactory"/> that can be used to mock <see cref="HttpClient"/> for unit testing HTTP.
 /// </summary>
 public sealed class DummyHttpFactory : IHttpClientFactory
 {
-    private readonly HttpMessageStore _store;
-
-    private DummyHttpFactory(HttpMessageStore store) => _store = store;
+    private DummyHttpFactory(HttpMessageStore store) => Store = store;
 
     /// <summary>
     /// Access to the underlying HTTP message store
     /// </summary>
-    public HttpMessageStore Store => _store;
+    public HttpMessageStore Store { get; }
 
     /// <summary>
     /// Creates a new instance of the factory to start setting up

@@ -1,5 +1,4 @@
 ﻿using static BunsenBurner.Http.HttpRequestMatchers;
-using static System.StringComparison;
 
 namespace BunsenBurner.Http.Tests;
 

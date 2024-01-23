@@ -3,7 +3,7 @@
 /// <summary>
 /// Defines a successful match against a HTTP messages store setup.
 /// </summary>
-public sealed record HttpMessageSetupMatch
+public readonly record struct HttpMessageSetupMatch
 {
     /// <summary>
     /// HTTP client name

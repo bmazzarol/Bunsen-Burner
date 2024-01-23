@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Diagnostics.Contracts;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -24,16 +25,7 @@ public static class HttpRequestMatchers
     [Pure]
     private static Regex WildCardToRegular(string value) =>
         new(
-            "^"
-                + Regex
-                    .Escape(value)
-#if NETCOREAPP3_1_OR_GREATER
-                    .Replace("\\?", ".", StringComparison.Ordinal)
-                    .Replace("\\*", ".*", StringComparison.Ordinal)
-#else
-                .Replace("\\?", ".").Replace("\\*", ".*")
-#endif
-                + "$",
+            $"^{Regex.Escape(value).Replace("\\?", ".").Replace("\\*", ".*")}$",
             RegexOptions.None,
             TimeSpan.FromMinutes(1)
         );
@@ -84,7 +76,9 @@ public static class HttpRequestMatchers
     public static Matcher HasHeader(string name, Regex value) =>
         HasHeader(h =>
         {
-            var headerValue = h.GetAsString(name);
+            var headerValue = h.TryGetValues(name, out var values)
+                ? string.Join(",", values)
+                : string.Empty;
             return !string.IsNullOrWhiteSpace(headerValue) && value.IsMatch(headerValue);
         });
 

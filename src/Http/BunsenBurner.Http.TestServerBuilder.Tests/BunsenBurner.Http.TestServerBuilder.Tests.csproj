@@ -10,8 +10,4 @@
     <ItemGroup>
         <ProjectReference Include="..\BunsenBurner.Http.TestServerBuilder\BunsenBurner.Http.TestServerBuilder.csproj"/>
     </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="HttpBuildR.Request" />
-    </ItemGroup>
 </Project>

@@ -13,18 +13,18 @@ That just works is not so easy.
 So Bunsen Burner provides a utility package to help via
 @BunsenBurner.TestServerBuilder so that you can focus on testing.
 
-To use this library, simply include `BunsenBurner.TestServerBuilder.dll` in your
+To use this library, simply include `BunsenBurner.Http.TestServerBuilder.dll` in your
 project or grab it
-from [NuGet](https://www.nuget.org/packages/BunsenBurner.TestServerBuilder/),
+from [NuGet](https://www.nuget.org/packages/BunsenBurner.Http.TestServerBuilder/),
 and add this to the top of each test `.cs` file that needs it:
 
 ```C#
-using BunsenBurner;
+using BunsenBurner.Http;
 ```
 
 To use it do the following,
 
-[!code-csharp[Example1](../../../Http/BunsenBurner.TestServerBuilder.Tests/TestServerBuilderOptionsTests.cs#Example1)]
+[!code-csharp[Example1](../../../Http/BunsenBurner.Http.TestServerBuilder.Tests/TestServerBuilderOptionsTests.cs#Example1)]
 
 ## Sharing TestServer Instances
 
@@ -33,8 +33,8 @@ across test runs that is independent from the test framework,
 
 1. @BunsenBurner.Utility.Once`1 - provides a thread safe at most once factory
 
-   [!code-csharp[Example2](../../../Http/BunsenBurner.TestServerBuilder.Tests/TestServerBuilderOptionsTests.cs#Example2)]
+   [!code-csharp[Example2](../../../Http/BunsenBurner.Http.TestServerBuilder.Tests/TestServerBuilderOptionsTests.cs#Example2)]
 
 2. @BunsenBurner.Utility.Cache`1 - provides named at most once factory methods
 
-   [!code-csharp[Example3](../../../Http/BunsenBurner.TestServerBuilder.Tests/TestServerBuilderOptionsTests.cs#Example3)]
+   [!code-csharp[Example3](../../../Http/BunsenBurner.Http.TestServerBuilder.Tests/TestServerBuilderOptionsTests.cs#Example3)]

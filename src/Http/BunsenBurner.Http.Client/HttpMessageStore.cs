@@ -38,26 +38,20 @@ public sealed class HttpMessageStore : IEnumerable<HttpMessageSetupMatch>
         HttpRequestMessage request
     )
     {
-        HttpResponseMessage? response = null;
-        foreach (
-            var setup in _setups.Where(
-                x =>
-                    x.ClientName.Equals(clientName, StringComparison.Ordinal)
-                    && x.MatchPredicate.IsMatch(request)
+        var response = _setups
+            .Where(
+                setup =>
+                    setup.ClientName.Equals(clientName, StringComparison.Ordinal)
+                    && setup.MatchPredicate.IsMatch(request)
             )
-        )
-        {
-            response = setup.SetupResponses(request);
-            if (response is not null)
-            {
-                break;
-            }
-        }
+            .Select(setup => setup.SetupResponses(request))
+            .OfType<HttpResponseMessage>()
+            .FirstOrDefault();
 
         if (response is null)
         {
             throw new HttpRequestException(
-                $"No setup matches/generates a response for request: {await request.AsCurlString()}"
+                $"No setup matches/generates a response for request: {await request.ToCurlString()}"
             );
         }
 
@@ -156,7 +150,16 @@ public sealed class HttpMessageStore : IEnumerable<HttpMessageSetupMatch>
     }
 
     /// <inheritdoc />
-    public IEnumerator<HttpMessageSetupMatch> GetEnumerator() => _matches.GetEnumerator();
+    public IEnumerator<HttpMessageSetupMatch> GetEnumerator()
+    {
+        lock (_lock)
+        {
+            foreach (var match in _matches)
+            {
+                yield return match;
+            }
+        }
+    }
 
     [ExcludeFromCodeCoverage]
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -168,20 +171,12 @@ public sealed class HttpMessageStore : IEnumerable<HttpMessageSetupMatch>
     /// <returns>http client</returns>
     public HttpClient CreateClient(string name) => new(new DummyHttpMessageHandler(name, this));
 
-    private sealed class DummyHttpMessageHandler : HttpMessageHandler
+    private sealed class DummyHttpMessageHandler(string clientName, HttpMessageStore store)
+        : HttpMessageHandler
     {
-        private readonly string _clientName;
-        private readonly HttpMessageStore _store;
-
-        public DummyHttpMessageHandler(string clientName, HttpMessageStore store)
-        {
-            _clientName = clientName;
-            _store = store;
-        }
-
         protected override Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request,
             CancellationToken cancellationToken
-        ) => _store.MatchOrThrow(_clientName, request);
+        ) => store.MatchOrThrow(clientName, request);
     }
 }

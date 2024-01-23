@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Mime;
 using BunsenBurner.Http.Extensions;
 using BunsenBurner.Http.Jwt.Extensions;
+using BunsenBurner.Logging;
 using HttpBuildR;
 using JWT.Builder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Xunit;
+using Xunit.Abstractions;
 using static BunsenBurner.Http.TestServerConstants;
 using Req = System.Net.Http.HttpMethod;
 
@@ -52,12 +54,19 @@ public sealed class TestController : ControllerBase
         new[] { "value1", "value2", "value3", "value4", "value5" };
 }
 
-public static class AuthServerTests
+public sealed class AuthServerTests
 {
+    private readonly ITestOutputHelper _outputHelper;
+
+    public AuthServerTests(ITestOutputHelper outputHelper)
+    {
+        _outputHelper = outputHelper;
+    }
+
     #region Example1
 
     [Fact(DisplayName = "An authorized endpoint can be called with a test token")]
-    public static async Task Case1() =>
+    public async Task Case1() =>
         await
         // create a request
         // using HTTP-BuildR https://github.com/bmazzarol/Http-BuildR)
@@ -77,7 +86,8 @@ public static class AuthServerTests
                 {
                     Startup = typeof(TestStartupWithAuth),
                     SigningKey = SigningKey,
-                    Issuer = Issuer
+                    Issuer = Issuer,
+                    Sink = Sink.New(_outputHelper.WriteLine)
                 }
                     .Build()
                     .CallTestServer()
@@ -87,12 +97,16 @@ public static class AuthServerTests
     #endregion
 
     [Fact(DisplayName = "An authorized endpoint can be called without a token and is unauthorized")]
-    public static async Task Case2() =>
+    public async Task Case2() =>
         await Req.Get.To("/api/test")
             .ArrangeData()
             .Act(
                 async req =>
-                    await new TestServerBuilder.Options { Startup = typeof(TestStartupWithAuth) }
+                    await new TestServerBuilder.Options
+                    {
+                        Startup = typeof(TestStartupWithAuth),
+                        Sink = Sink.New(_outputHelper.WriteLine)
+                    }
                         .Build()
                         .CallTestServer(req)
             )
