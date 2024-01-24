@@ -5,7 +5,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <PackageId>BunsenBurner.Http.Client</PackageId>
-        <Title>Bunsen Burner Client</Title>
+        <Title>Bunsen Burner Http Client</Title>
         <Description>Testable HttpClients</Description>
         <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, HttpClient</PackageTags>
         <ProjectGuid>9bbcea51-7097-4d37-b41c-ab7b5d09ca8b</ProjectGuid>

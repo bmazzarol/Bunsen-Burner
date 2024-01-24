@@ -7,9 +7,9 @@
         <PackageId>BunsenBurner.Http.Core</PackageId>
         <Title>Bunsen Burner Http Core</Title>
         <Description>Support extensions for testing Http</Description>
-        <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, HttpRequestMessage</PackageTags>
+        <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, HttpRequestMessage, HttpResponseMessage</PackageTags>
         <ProjectGuid>6ecb006d-21e8-4089-85dc-cb2ce4ce16ce</ProjectGuid>
-        <RootNamespace>BunsenBurner.Http.Request</RootNamespace>
+        <RootNamespace>BunsenBurner.Http</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

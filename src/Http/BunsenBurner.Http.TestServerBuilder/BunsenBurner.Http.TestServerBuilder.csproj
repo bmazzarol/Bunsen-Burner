@@ -4,8 +4,8 @@
 
     <PropertyGroup>
         <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
-        <PackageId>BunsenBurner.TestServerBuilder</PackageId>
-        <Title>Bunsen Burner TestServer Builder</Title>
+        <PackageId>BunsenBurner.Http.TestServerBuilder</PackageId>
+        <Title>Bunsen Burner Http TestServer Builder</Title>
         <Description>Extension methods for building in memory test server instances</Description>
         <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests, Http, Test Server</PackageTags>
         <ProjectGuid>77d6d889-4351-4cf3-b5d8-0ab58fd2e18b</ProjectGuid>
