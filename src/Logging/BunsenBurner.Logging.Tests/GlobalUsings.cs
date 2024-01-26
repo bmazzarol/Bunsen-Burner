@@ -1,2 +1,2 @@
-global using static BunsenBurner.Aaa;
+global using static BunsenBurner.AaaSyntax;
 global using Xunit;

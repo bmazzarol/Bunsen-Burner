@@ -5,7 +5,7 @@ namespace BunsenBurner.Tests.Examples;
 
 #region Example1
 
-using static BunsenBurner.Aaa;
+using static BunsenBurner.AaaSyntax;
 
 public class AaaExample
 {

@@ -3,7 +3,7 @@ using BunsenBurner.Utility;
 
 namespace BunsenBurner.Tests;
 
-using static Aaa;
+using static AaaSyntax;
 
 [SuppressMessage("Major Code Smell", "S3881:\"IDisposable\" should be implemented correctly")]
 internal sealed class TestDisposableType : IDisposable

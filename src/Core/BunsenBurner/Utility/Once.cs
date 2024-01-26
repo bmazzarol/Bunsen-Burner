@@ -4,7 +4,7 @@
 /// Simple async lazy that allows a test to pin data to a shared memory location and
 /// ensure it only executes once.
 /// </summary>
-/// <remarks>This is not for production code, its a simple type that has enough features for test scenarios</remarks>
+/// <remarks>This is not for production code, its a simple type that has enough features for tests</remarks>
 /// <typeparam name="T">some T</typeparam>
 public sealed class Once<T> : Lazy<Task<T>>
 {

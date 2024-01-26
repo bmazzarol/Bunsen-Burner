@@ -1,5 +1,5 @@
 using BunsenBurner.Utility;
-using static BunsenBurner.Aaa;
+using static BunsenBurner.AaaSyntax;
 
 namespace BunsenBurner.Tests.Examples;
 

@@ -1,127 +1,63 @@
 ﻿namespace BunsenBurner;
 
-/// <summary>
-/// Shared builder function implementations for arrange steps
-/// </summary>
 internal static partial class Shared
 {
-    /// <summary>
-    /// Arranges a new <see cref="Scenario{TSyntax}"/>
-    /// </summary>
-    /// <param name="fn">function to provide the arranged data</param>
-    /// <typeparam name="TData">data</typeparam>
-    /// <typeparam name="TSyntax">supported syntax</typeparam>
-    /// <returns>scenario</returns>
     [Pure]
-    public static Scenario<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(Func<Task<TData>> fn)
+    internal static TestBuilder<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(
+        Func<Task<TData>> fn
+    )
         where TSyntax : struct, Syntax => new(default, fn, new HashSet<object>());
 
-    /// <summary>
-    /// Arranges a new <see cref="Scenario{TSyntax}"/>
-    /// </summary>
-    /// <param name="fn">function to provide the arranged data</param>
-    /// <typeparam name="TData">data</typeparam>
-    /// <typeparam name="TSyntax">supported syntax</typeparam>
-    /// <returns>scenario</returns>
     [Pure]
-    public static Scenario<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(Func<TData> fn)
+    internal static TestBuilder<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(Func<TData> fn)
         where TSyntax : struct, Syntax => Arrange<TData, TSyntax>(() => Task.FromResult(fn()));
 
-    /// <summary>
-    /// Arranges a new <see cref="Scenario{TSyntax}"/>
-    /// </summary>
-    /// <param name="data">data to arrange</param>
-    /// <typeparam name="TData">data</typeparam>
-    /// <typeparam name="TSyntax">supported syntax</typeparam>
-    /// <returns>scenario</returns>
     [Pure]
-    public static Scenario<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(TData data)
+    internal static TestBuilder<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(TData data)
         where TSyntax : struct, Syntax => Arrange<TData, TSyntax>(() => Task.FromResult(data));
 
-    /// <summary>
-    /// Arranges a new <see cref="Scenario{TSyntax}"/>
-    /// </summary>
-    /// <param name="name">name/description</param>
-    /// <param name="fn">function to provide the arranged data</param>
-    /// <typeparam name="TData">data</typeparam>
-    /// <typeparam name="TSyntax">supported syntax</typeparam>
-    /// <returns>scenario</returns>
     [Pure]
-    public static Scenario<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(
+    internal static TestBuilder<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(
         this string name,
         Func<Task<TData>> fn
     )
         where TSyntax : struct, Syntax => new(name, fn, new HashSet<object>());
 
-    /// <summary>
-    /// Arranges a new <see cref="Scenario{TSyntax}"/>
-    /// </summary>
-    /// <param name="name">name/description</param>
-    /// <param name="fn">function to provide the arranged data</param>
-    /// <typeparam name="TData">data</typeparam>
-    /// <typeparam name="TSyntax">supported syntax</typeparam>
-    /// <returns>scenario</returns>
     [Pure]
-    public static Scenario<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(
+    internal static TestBuilder<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(
         this string name,
         Func<TData> fn
     )
         where TSyntax : struct, Syntax => name.Arrange<TData, TSyntax>(() => Task.FromResult(fn()));
 
-    /// <summary>
-    /// Arranges a new <see cref="Scenario{TSyntax}"/>
-    /// </summary>
-    /// <param name="name">name/description</param>
-    /// <param name="data">data to arrange</param>
-    /// <typeparam name="TData">data</typeparam>
-    /// <typeparam name="TSyntax">supported syntax</typeparam>
-    /// <returns>scenario</returns>
     [Pure]
-    public static Scenario<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(
+    internal static TestBuilder<TSyntax>.Arranged<TData> Arrange<TData, TSyntax>(
         this string name,
         TData data
     )
         where TSyntax : struct, Syntax => name.Arrange<TData, TSyntax>(() => Task.FromResult(data));
 
-    /// <summary>
-    /// Rearranges a <see cref="Scenario{TSyntax}"/>
-    /// </summary>
-    /// <param name="scenario">scenario</param>
-    /// <param name="fn">function from data to next data</param>
-    /// <typeparam name="TData">current data</typeparam>
-    /// <typeparam name="TDataNext">next data</typeparam>
-    /// <typeparam name="TSyntax">supported syntax</typeparam>
-    /// <returns>re arranged scenario</returns>
     [Pure]
-    public static Scenario<TSyntax>.Arranged<TDataNext> And<TData, TDataNext, TSyntax>(
-        this Scenario<TSyntax>.Arranged<TData> scenario,
+    internal static TestBuilder<TSyntax>.Arranged<TDataNext> And<TData, TDataNext, TSyntax>(
+        this TestBuilder<TSyntax>.Arranged<TData> test,
         Func<TData, Task<TDataNext>> fn
     )
         where TSyntax : struct, Syntax =>
         new(
-            scenario.Name,
+            test.Name,
             async () =>
             {
-                var result = await scenario.ArrangeScenario();
+                var result = await test.ArrangeStep();
                 var nextResult = await fn(result);
                 return nextResult;
             },
-            scenario.Disposables
+            test.Disposables
         );
 
-    /// <summary>
-    /// Rearranges a <see cref="Scenario{TSyntax}"/>
-    /// </summary>
-    /// <param name="scenario">scenario</param>
-    /// <param name="fn">function from data to next data</param>
-    /// <typeparam name="TData">current data</typeparam>
-    /// <typeparam name="TDataNext">next data</typeparam>
-    /// <typeparam name="TSyntax">supported syntax</typeparam>
-    /// <returns>re arranged scenario</returns>
     [Pure]
-    public static Scenario<TSyntax>.Arranged<TDataNext> And<TData, TDataNext, TSyntax>(
-        this Scenario<TSyntax>.Arranged<TData> scenario,
+    internal static TestBuilder<TSyntax>.Arranged<TDataNext> And<TData, TDataNext, TSyntax>(
+        this TestBuilder<TSyntax>.Arranged<TData> test,
         Func<TData, TDataNext> fn
     )
-        where TSyntax : struct, Syntax => scenario.And(x => Task.FromResult(fn(x)));
+        where TSyntax : struct, Syntax => test.And(x => Task.FromResult(fn(x)));
 }

@@ -2,12 +2,7 @@
 
 namespace BunsenBurner;
 
-using BddScenario = Scenario<Syntax.Bdd>;
-
-/// <summary>
-/// DSL for building tests using a given, when, then syntax
-/// </summary>
-public static partial class Bdd
+public static partial class BddSyntax
 {
     /// <summary>
     /// Then verify the scenario
@@ -18,8 +13,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TResult> Then<TData, TResult>(
-        this BddScenario.Acted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, TResult> Then<TData, TResult>(
+        this ScenarioBuilder.Acted<TData, TResult> scenario,
         Func<TData, TResult, Task> fn
     ) => scenario.Assert(fn);
 
@@ -32,8 +27,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TResult> Then<TData, TResult>(
-        this BddScenario.Acted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, TResult> Then<TData, TResult>(
+        this ScenarioBuilder.Acted<TData, TResult> scenario,
         Func<TResult, Task> fn
     ) => scenario.Assert(fn);
 
@@ -46,8 +41,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TResult> Then<TData, TResult>(
-        this BddScenario.Acted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, TResult> Then<TData, TResult>(
+        this ScenarioBuilder.Acted<TData, TResult> scenario,
         Action<TData, TResult> fn
     ) => scenario.Assert(fn);
 
@@ -60,8 +55,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TResult> Then<TData, TResult>(
-        this BddScenario.Acted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, TResult> Then<TData, TResult>(
+        this ScenarioBuilder.Acted<TData, TResult> scenario,
         Action<TResult> fn
     ) => scenario.Assert(fn);
 
@@ -74,8 +69,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TResult> Then<TData, TResult>(
-        this BddScenario.Acted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, TResult> Then<TData, TResult>(
+        this ScenarioBuilder.Acted<TData, TResult> scenario,
         Expression<Func<TResult, bool>> expression
     ) => scenario.Assert(expression);
 
@@ -88,8 +83,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TResult> Then<TData, TResult>(
-        this BddScenario.Acted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, TResult> Then<TData, TResult>(
+        this ScenarioBuilder.Acted<TData, TResult> scenario,
         Expression<Func<TData, TResult, bool>> expression
     ) => scenario.Assert(expression);
 
@@ -103,10 +98,11 @@ public static partial class Bdd
     /// <typeparam name="TException">exception type</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
-        this BddScenario.Acted<TData, TResult> scenario,
-        Func<TData, TException, Task> fn
-    )
+    public static ScenarioBuilder.Asserted<TData, TException> ThenFailsWith<
+        TData,
+        TResult,
+        TException
+    >(this ScenarioBuilder.Acted<TData, TResult> scenario, Func<TData, TException, Task> fn)
         where TException : Exception => scenario.AssertFailsWith(fn);
 
     /// <summary>
@@ -119,10 +115,11 @@ public static partial class Bdd
     /// <typeparam name="TException">exception type</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
-        this BddScenario.Acted<TData, TResult> scenario,
-        Func<TException, Task> fn
-    )
+    public static ScenarioBuilder.Asserted<TData, TException> ThenFailsWith<
+        TData,
+        TResult,
+        TException
+    >(this ScenarioBuilder.Acted<TData, TResult> scenario, Func<TException, Task> fn)
         where TException : Exception => scenario.AssertFailsWith(fn);
 
     /// <summary>
@@ -135,10 +132,11 @@ public static partial class Bdd
     /// <typeparam name="TException">exception type</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
-        this BddScenario.Acted<TData, TResult> scenario,
-        Action<TData, TException> fn
-    )
+    public static ScenarioBuilder.Asserted<TData, TException> ThenFailsWith<
+        TData,
+        TResult,
+        TException
+    >(this ScenarioBuilder.Acted<TData, TResult> scenario, Action<TData, TException> fn)
         where TException : Exception => scenario.AssertFailsWith(fn);
 
     /// <summary>
@@ -151,10 +149,11 @@ public static partial class Bdd
     /// <typeparam name="TException">exception type</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
-        this BddScenario.Acted<TData, TResult> scenario,
-        Action<TException> fn
-    )
+    public static ScenarioBuilder.Asserted<TData, TException> ThenFailsWith<
+        TData,
+        TResult,
+        TException
+    >(this ScenarioBuilder.Acted<TData, TResult> scenario, Action<TException> fn)
         where TException : Exception => scenario.AssertFailsWith(fn);
 
     /// <summary>
@@ -167,8 +166,12 @@ public static partial class Bdd
     /// <typeparam name="TException">exception type</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
-        this BddScenario.Acted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, TException> ThenFailsWith<
+        TData,
+        TResult,
+        TException
+    >(
+        this ScenarioBuilder.Acted<TData, TResult> scenario,
         Expression<Func<TData, TException, bool>> fn
     )
         where TException : Exception => scenario.AssertFailsWith(fn);
@@ -183,10 +186,11 @@ public static partial class Bdd
     /// <typeparam name="TException">exception type</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TException> ThenFailsWith<TData, TResult, TException>(
-        this BddScenario.Acted<TData, TResult> scenario,
-        Expression<Func<TException, bool>> fn
-    )
+    public static ScenarioBuilder.Asserted<TData, TException> ThenFailsWith<
+        TData,
+        TResult,
+        TException
+    >(this ScenarioBuilder.Acted<TData, TResult> scenario, Expression<Func<TException, bool>> fn)
         where TException : Exception => scenario.AssertFailsWith(fn);
 
     /// <summary>
@@ -198,8 +202,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
-        this BddScenario.Acted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
+        this ScenarioBuilder.Acted<TData, TResult> scenario,
         Func<TData, Exception, Task> fn
     ) => ThenFailsWith<TData, TResult, Exception>(scenario, fn);
 
@@ -212,8 +216,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
-        this BddScenario.Acted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
+        this ScenarioBuilder.Acted<TData, TResult> scenario,
         Func<Exception, Task> fn
     ) => ThenFailsWith<TData, TResult, Exception>(scenario, fn);
 
@@ -226,8 +230,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
-        this BddScenario.Acted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
+        this ScenarioBuilder.Acted<TData, TResult> scenario,
         Action<TData, Exception> fn
     ) => ThenFailsWith<TData, TResult, Exception>(scenario, fn);
 
@@ -240,8 +244,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
-        this BddScenario.Acted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
+        this ScenarioBuilder.Acted<TData, TResult> scenario,
         Action<Exception> fn
     ) => ThenFailsWith<TData, TResult, Exception>(scenario, fn);
 
@@ -254,8 +258,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
-        this BddScenario.Acted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
+        this ScenarioBuilder.Acted<TData, TResult> scenario,
         Expression<Func<TData, Exception, bool>> fn
     ) => ThenFailsWith<TData, TResult, Exception>(scenario, fn);
 
@@ -268,8 +272,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
-        this BddScenario.Acted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, Exception> ThenFailsWith<TData, TResult>(
+        this ScenarioBuilder.Acted<TData, TResult> scenario,
         Expression<Func<Exception, bool>> fn
     ) => ThenFailsWith<TData, TResult, Exception>(scenario, fn);
 
@@ -282,8 +286,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TResult> And<TData, TResult>(
-        this BddScenario.Asserted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, TResult> And<TData, TResult>(
+        this ScenarioBuilder.Asserted<TData, TResult> scenario,
         Func<TData, TResult, Task> fn
     ) => Shared.And(scenario, fn);
 
@@ -296,8 +300,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TResult> And<TData, TResult>(
-        this BddScenario.Asserted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, TResult> And<TData, TResult>(
+        this ScenarioBuilder.Asserted<TData, TResult> scenario,
         Func<TResult, Task> fn
     ) => Shared.And(scenario, fn);
 
@@ -310,8 +314,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TResult> And<TData, TResult>(
-        this BddScenario.Asserted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, TResult> And<TData, TResult>(
+        this ScenarioBuilder.Asserted<TData, TResult> scenario,
         Action<TData, TResult> fn
     ) => Shared.And(scenario, fn);
 
@@ -324,8 +328,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TResult> And<TData, TResult>(
-        this BddScenario.Asserted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, TResult> And<TData, TResult>(
+        this ScenarioBuilder.Asserted<TData, TResult> scenario,
         Action<TResult> fn
     ) => Shared.And(scenario, fn);
 
@@ -338,8 +342,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TResult> And<TData, TResult>(
-        this BddScenario.Asserted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, TResult> And<TData, TResult>(
+        this ScenarioBuilder.Asserted<TData, TResult> scenario,
         Expression<Func<TResult, bool>> expression
     ) => scenario.And<TData, TResult, Syntax.Bdd>(expression);
 
@@ -352,8 +356,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TResult> And<TData, TResult>(
-        this BddScenario.Asserted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, TResult> And<TData, TResult>(
+        this ScenarioBuilder.Asserted<TData, TResult> scenario,
         Expression<Func<TData, TResult, bool>> expression
     ) => scenario.And<TData, TResult, Syntax.Bdd>(expression);
 
@@ -365,7 +369,7 @@ public static partial class Bdd
     /// <typeparam name="TResult">result</typeparam>
     /// <returns>awaiter</returns>
     public static TaskAwaiter GetAwaiter<TData, TResult>(
-        this BddScenario.Asserted<TData, TResult> scenario
+        this ScenarioBuilder.Asserted<TData, TResult> scenario
     ) => scenario.Run().GetAwaiter();
 
     /// <summary>
@@ -376,8 +380,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>given scenario</returns>
     [Pure]
-    public static BddScenario.Arranged<TData> ResetToGiven<TData, TResult>(
-        this BddScenario.Asserted<TData, TResult> scenario
+    public static ScenarioBuilder.Arranged<TData> ResetToGiven<TData, TResult>(
+        this ScenarioBuilder.Asserted<TData, TResult> scenario
     ) => scenario.ResetToArranged();
 
     /// <summary>
@@ -388,8 +392,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>scenario that is run</returns>
     [Pure]
-    public static BddScenario.Acted<TData, TResult> ResetToWhen<TData, TResult>(
-        this BddScenario.Asserted<TData, TResult> scenario
+    public static ScenarioBuilder.Acted<TData, TResult> ResetToWhen<TData, TResult>(
+        this ScenarioBuilder.Asserted<TData, TResult> scenario
     ) => scenario.ResetToActed();
 
     /// <summary>
@@ -401,8 +405,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TResult> ReplaceWhen<TData, TResult>(
-        this BddScenario.Asserted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, TResult> ReplaceWhen<TData, TResult>(
+        this ScenarioBuilder.Asserted<TData, TResult> scenario,
         Func<TData, Task<TResult>> fn
     ) => scenario.ReplaceAct(fn);
 
@@ -415,8 +419,8 @@ public static partial class Bdd
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>completed scenario</returns>
     [Pure]
-    public static BddScenario.Asserted<TData, TResult> ReplaceWhen<TData, TResult>(
-        this BddScenario.Asserted<TData, TResult> scenario,
+    public static ScenarioBuilder.Asserted<TData, TResult> ReplaceWhen<TData, TResult>(
+        this ScenarioBuilder.Asserted<TData, TResult> scenario,
         Func<TData, TResult> fn
     ) => scenario.ReplaceAct(fn);
 }

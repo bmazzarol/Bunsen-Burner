@@ -2,12 +2,12 @@
 
 namespace BunsenBurner.Tests;
 
-using static Aaa;
-using Scenario = Scenario<Syntax.Aaa>.Asserted<int, string>;
+using static AaaSyntax;
+using Test = TestBuilder<Syntax.Aaa>.Asserted<int, string>;
 
 public static class TheoryTests
 {
-    public static readonly TheoryData<Scenario> TestCases = Enumerable
+    public static readonly TheoryData<Test> TestCases = Enumerable
         .Range(1, 10)
         .Select(
             i =>
@@ -17,7 +17,7 @@ public static class TheoryTests
                     .Assert(r => Assert.Equal($"{i}", r))
         )
         .Aggregate(
-            new TheoryData<Scenario>(),
+            new TheoryData<Test>(),
             (td, s) =>
             {
                 td.Add(s);
@@ -25,8 +25,8 @@ public static class TheoryTests
             }
         );
 
-    [Theory(DisplayName = "Scenarios work well in theories")]
+    [Theory(DisplayName = "Tests work well in theories")]
     [MemberData(nameof(TestCases))]
     [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions")]
-    public static async Task Case1(Scenario scenario) => await scenario;
+    public static async Task Case1(Test scenario) => await scenario;
 }

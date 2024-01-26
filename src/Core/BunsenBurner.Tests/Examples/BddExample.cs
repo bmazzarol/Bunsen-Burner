@@ -5,7 +5,7 @@ namespace BunsenBurner.Tests.Examples;
 
 #region Example1
 
-using static BunsenBurner.Bdd;
+using static BunsenBurner.BddSyntax;
 
 public class BddExample
 {

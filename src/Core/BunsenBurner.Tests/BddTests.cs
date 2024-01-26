@@ -2,10 +2,10 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace BunsenBurner.Tests;
 
-using static Bdd;
+using static BddSyntax;
 
 [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions")]
-public class BddTests
+public class BddSyntaxTests
 {
     [Fact(DisplayName = "Async methods operate correctly")]
     public async Task Case1() =>

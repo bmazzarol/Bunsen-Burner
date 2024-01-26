@@ -2,7 +2,7 @@
 
 namespace BunsenBurner.Tests;
 
-using static Aaa;
+using static AaaSyntax;
 
 public static class OnceTests
 {
