@@ -6,7 +6,10 @@
                     "files": [
                         "Core/BunsenBurner/BunsenBurner.csproj",
                         "Logging/BunsenBurner.Logging/BunsenBurner.Logging.csproj",
-                        "Http/BunsenBurner.TestServerBuilder/BunsenBurner.TestServerBuilder.csproj"
+                        "Http/BunsenBurner.Http.Core/BunsenBurner.Http.Core.csproj",
+                        "Http/BunsenBurner.Http.Client/BunsenBurner.Http.Client.csproj",
+                        "Http/BunsenBurner.Http.Jwt/BunsenBurner.Http.Jwt.csproj",
+                        "Http/BunsenBurner.Http.TestServerBuilder/BunsenBurner.Http.TestServerBuilder.csproj",
                     ],
                     "src": "../../"
                 }

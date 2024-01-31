@@ -16,10 +16,10 @@ that needs it:
 using BunsenBurner.Logging;
 ```
 
-A @BunsenBurner.Logging.LogMessageStore provides the core storage for instances
-of @BunsenBurner.Logging.DummyLogger`1
+A <xref:BunsenBurner.Logging.LogMessageStore> provides the core storage for instances
+of <xref:BunsenBurner.Logging.DummyLogger`1>
 
-It is expected that you create one @BunsenBurner.Logging.LogMessageStore and as
-many @BunsenBurner.Logging.DummyLogger`1 as required.
+It is expected that you create one <xref:BunsenBurner.Logging.LogMessageStore> and as
+many <xref:BunsenBurner.Logging.DummyLogger`1> as required.
 
 [!code-csharp[Example1](../../../Logging/BunsenBurner.Logging.Tests/Examples/LoggingExample.cs#Example1)]

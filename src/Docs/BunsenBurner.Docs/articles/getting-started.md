@@ -19,7 +19,7 @@ Take an existing test,
 
 [!code-csharp[Example1a](../../../Core/BunsenBurner.Tests/Examples/GettingStarted.cs#Example1a)]
 
-This can be converted to use the arrange act assert builder like so,
+This can be converted to use the [test builder (DSL)](<xref:BunsenBurner.TestBuilder`1>) like so,
 
 [!code-csharp[Example1b](../../../Core/BunsenBurner.Tests/Examples/GettingStarted.cs#Example1b)]
 

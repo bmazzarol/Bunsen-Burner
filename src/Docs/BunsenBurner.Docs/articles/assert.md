@@ -1,13 +1,14 @@
 # Assert
 
-An assert step must follow at least on act step.
+An [assert](xref:BunsenBurner.TestBuilder`1.Asserted`2) step must follow at least on 
+[act](xref:BunsenBurner.TestBuilder`1.Acted`2) step.
 
-Both sync and async is supported as well as additional `And` steps.
+Both sync and async is supported as well as additional <xref:BunsenBurner.AaaSyntax.And*> steps.
 
 [!code-csharp[Example5](../../../Core/BunsenBurner.Tests/Examples/ArrangeActAssert.cs#Example5)]
 
-The standard assert step is a simple Action and succeeds as long as nothing
-throws.
+The standard [assert](xref:BunsenBurner.TestBuilder`1.Asserted`2) step is a simple Action and 
+succeeds as long as nothing throws.
 
 ## Expression Based Asserts
 
@@ -17,9 +18,9 @@ Another style of assertion is using expressions.
 
 ## Failure Based Asserts
 
-On the unhappy path the `AssertFailsWith` can be used to assert that act will
+On the unhappy path the <xref:BunsenBurner.AaaSyntax.AssertFailsWith*> can be used to assert that act will
 fail with some exception,
 
 [!code-csharp[Example7](../../../Core/BunsenBurner.Tests/Examples/ArrangeActAssert.cs#Example7)]
 
-If the act step does not fail the test will fail.
+If the [act](xref:BunsenBurner.TestBuilder`1.Acted`2) step does not fail the test will fail.

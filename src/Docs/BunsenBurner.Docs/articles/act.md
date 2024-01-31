@@ -1,10 +1,12 @@
 # Act
 
-An act step must follow at least one arrange step.
+An [act](xref:BunsenBurner.TestBuilder`1.Acted`2) step must follow at least one 
+[arrange](xref:BunsenBurner.TestBuilder`1.Arranged`1) step.
 
-Both sync and async is supported as well as additional `And` steps.
+Both sync and async is supported as well as additional <xref:BunsenBurner.AaaSyntax.And*> steps.
 
 [!code-csharp[Example4](../../../Core/BunsenBurner.Tests/Examples/ArrangeActAssert.cs#Example4)]
 
-`And` steps get passed the arranged data and result of the last `Act`
+<xref:BunsenBurner.AaaSyntax.And*> steps get passed the arranged data and result of the last
+[act](xref:BunsenBurner.TestBuilder`1.Acted`2) step
 and transform that to a new result.
