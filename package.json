@@ -2,8 +2,8 @@
   "name": "bunsen-burner",
   "version": "1.0.0",
   "devDependencies": {
-    "@commitlint/cli": "^17.1.2",
-    "@commitlint/config-conventional": "^17.1.0",
-    "markdownlint-cli2": "^0.11.0"
+    "@commitlint/cli": "^18.6.0",
+    "@commitlint/config-conventional": "^18.6.0",
+    "markdownlint-cli2": "^0.12.1"
   }
 }
