@@ -15,11 +15,16 @@ public static class HttpRequestMessageExtensions
     [Pure]
     public static async Task<string> ToCurlString(this HttpRequestMessage request)
     {
-        var headers = request.Headers.Any()
-            ? $" {string.Join(" ", request.Headers.Select(h => $@"-H ""{h.Key}: {string.Join(", ", h.Value)}"""))}"
-            : string.Empty;
-        var body =
+        return $"Request: -X {Method()} {request.RequestUri}{Headers()}{await Body()}";
+
+        string Method() => request.Method.ToString().ToUpperInvariant();
+
+        string Headers() =>
+            request.Headers.Any()
+                ? $" {string.Join(" ", request.Headers.Select(h => $@"-H ""{h.Key}: {string.Join(", ", h.Value)}"""))}"
+                : string.Empty;
+
+        async Task<string> Body() =>
             request.Content != null ? await request.Content.ReadAsStringAsync() : string.Empty;
-        return $"Request: -X {request.Method.ToString().ToUpperInvariant()} {request.RequestUri}{headers}{body}";
     }
 }

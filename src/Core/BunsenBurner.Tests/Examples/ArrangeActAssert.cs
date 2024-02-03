@@ -119,21 +119,19 @@ public class ArrangeActAssert
             // standard action where any assertions can be made
             .Assert(Assert.NotEmpty)
             // many and steps are supported
-            .And(
-                json =>
-                    Assert.Contains(
-                        expectedSubstring: "Widget1",
-                        actualString: json,
-                        StringComparison.Ordinal
-                    )
+            .And(json =>
+                Assert.Contains(
+                    expectedSubstring: "Widget1",
+                    actualString: json,
+                    StringComparison.Ordinal
+                )
             )
-            .And(
-                json =>
-                    Assert.Contains(
-                        expectedSubstring: "12.5",
-                        actualString: json,
-                        StringComparison.Ordinal
-                    )
+            .And(json =>
+                Assert.Contains(
+                    expectedSubstring: "12.5",
+                    actualString: json,
+                    StringComparison.Ordinal
+                )
             );
 
     #endregion

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 
 namespace BunsenBurner.Http;
@@ -17,12 +18,12 @@ public sealed class HttpMessageStore : IEnumerable<HttpMessageSetupMatch>
     );
 
     private readonly List<HttpMessageSetup> _setups;
-    private readonly List<HttpMessageSetupMatch> _matches;
+    private readonly ConcurrentQueue<HttpMessageSetupMatch> _matches;
 
     private HttpMessageStore()
     {
         _setups = new List<HttpMessageSetup>();
-        _matches = new List<HttpMessageSetupMatch>();
+        _matches = new ConcurrentQueue<HttpMessageSetupMatch>();
     }
 
     /// <summary>
@@ -31,18 +32,15 @@ public sealed class HttpMessageStore : IEnumerable<HttpMessageSetupMatch>
     /// <returns>dummy factory</returns>
     public static HttpMessageStore New() => new();
 
-    private readonly object _lock = new();
-
     private async Task<HttpResponseMessage> MatchOrThrow(
         string clientName,
         HttpRequestMessage request
     )
     {
         var response = _setups
-            .Where(
-                setup =>
-                    setup.ClientName.Equals(clientName, StringComparison.Ordinal)
-                    && setup.MatchPredicate.IsMatch(request)
+            .Where(setup =>
+                setup.ClientName.Equals(clientName, StringComparison.Ordinal)
+                && setup.MatchPredicate.IsMatch(request)
             )
             .Select(setup => setup.SetupResponses(request))
             .OfType<HttpResponseMessage>()
@@ -55,10 +53,7 @@ public sealed class HttpMessageStore : IEnumerable<HttpMessageSetupMatch>
             );
         }
 
-        lock (_lock)
-        {
-            _matches.Add(new HttpMessageSetupMatch(clientName, request, response));
-        }
+        _matches.Enqueue(new HttpMessageSetupMatch(clientName, request, response));
 
         return response;
     }
@@ -150,16 +145,7 @@ public sealed class HttpMessageStore : IEnumerable<HttpMessageSetupMatch>
     }
 
     /// <inheritdoc />
-    public IEnumerator<HttpMessageSetupMatch> GetEnumerator()
-    {
-        lock (_lock)
-        {
-            foreach (var match in _matches)
-            {
-                yield return match;
-            }
-        }
-    }
+    public IEnumerator<HttpMessageSetupMatch> GetEnumerator() => _matches.GetEnumerator();
 
     [ExcludeFromCodeCoverage]
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

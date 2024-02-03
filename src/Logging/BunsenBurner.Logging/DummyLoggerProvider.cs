@@ -28,8 +28,9 @@ internal sealed record DummyLoggerProvider : ILoggerProvider
         _loggers
             .GetOrAdd(
                 categoryName,
-                category =>
-                    new Lazy<DummyLogger<object>>(() => DummyLogger.New(category, _store, _sink))
+                category => new Lazy<DummyLogger<object>>(
+                    () => DummyLogger.New(category, _store, _sink)
+                )
             )
             .Value;
 

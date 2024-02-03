@@ -70,7 +70,8 @@ public sealed class AuthServerTests
         await
         // create a request
         // using HTTP-BuildR https://github.com/bmazzarol/Http-BuildR)
-        Req.Get.To("/api/test")
+        Req
+            .Get.To("/api/test")
             // now add the test token
             .WithTestBearerToken(
                 // pass it a shared signing key, some shared string
@@ -98,17 +99,17 @@ public sealed class AuthServerTests
 
     [Fact(DisplayName = "An authorized endpoint can be called without a token and is unauthorized")]
     public async Task Case2() =>
-        await Req.Get.To("/api/test")
+        await Req
+            .Get.To("/api/test")
             .ArrangeData()
-            .Act(
-                async req =>
-                    await new TestServerBuilder.Options
-                    {
-                        Startup = typeof(TestStartupWithAuth),
-                        Sink = Sink.New(_outputHelper.WriteLine)
-                    }
-                        .Build()
-                        .CallTestServer(req)
+            .Act(async req =>
+                await new TestServerBuilder.Options
+                {
+                    Startup = typeof(TestStartupWithAuth),
+                    Sink = Sink.New(_outputHelper.WriteLine)
+                }
+                    .Build()
+                    .CallTestServer(req)
             )
             .Assert(r => r.StatusCode == HttpStatusCode.Unauthorized);
 }

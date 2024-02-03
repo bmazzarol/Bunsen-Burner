@@ -16,11 +16,15 @@ public static class HttpResponseMessageExtensions
     [Pure]
     public static async Task<string> ToCurlString(this HttpResponseMessage response)
     {
-        var headers = response.Headers.Any()
-            ? $" {string.Join(" ", response.Headers.Select(h => $@"-H ""{h.Key}: {string.Join(", ", h.Value)}"""))}"
-            : string.Empty;
-        var body = await response.Content.ReadAsStringAsync();
-        var code = ((int)response.StatusCode).ToString(CultureInfo.InvariantCulture);
-        return $"Response: {response.StatusCode}({code}){headers}{body}";
+        return $"Response: {response.StatusCode}({Code()}){Headers()}{await Body()}";
+
+        string Code() => ((int)response.StatusCode).ToString(CultureInfo.InvariantCulture);
+
+        string Headers() =>
+            response.Headers.Any()
+                ? $" {string.Join(" ", response.Headers.Select(h => $@"-H ""{h.Key}: {string.Join(", ", h.Value)}"""))}"
+                : string.Empty;
+
+        async Task<string> Body() => await response.Content.ReadAsStringAsync();
     }
 }

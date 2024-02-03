@@ -99,10 +99,9 @@ public static class HttpRequestMatchers
     /// <returns>matcher</returns>
     [Pure]
     public static Matcher HasBearerToken(string token) =>
-        HasHeader(
-            h =>
-                h.Authorization is { Scheme: "Bearer", Parameter: { } } value
-                && value.Parameter.Equals(token, StringComparison.Ordinal)
+        HasHeader(h =>
+            h.Authorization is { Scheme: "Bearer", Parameter: { } } value
+            && value.Parameter.Equals(token, StringComparison.Ordinal)
         );
 
     /// <summary>

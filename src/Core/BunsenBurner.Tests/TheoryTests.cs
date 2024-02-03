@@ -9,12 +9,11 @@ public static class TheoryTests
 {
     public static readonly TheoryData<Test> TestCases = Enumerable
         .Range(1, 10)
-        .Select(
-            i =>
-                $"{i} can be converted to a string"
-                    .Arrange(() => i)
-                    .Act(x => x.ToString(InvariantCulture))
-                    .Assert(r => Assert.Equal($"{i}", r))
+        .Select(i =>
+            $"{i} can be converted to a string"
+                .Arrange(() => i)
+                .Act(x => x.ToString(InvariantCulture))
+                .Assert(r => Assert.Equal($"{i}", r))
         )
         .Aggregate(
             new TheoryData<Test>(),

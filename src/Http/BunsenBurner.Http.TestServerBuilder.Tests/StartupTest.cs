@@ -68,7 +68,8 @@ public sealed class StartupTest
 
     [Fact(DisplayName = "Using a startup class in the test service builder works")]
     public async Task Case1() =>
-        await Req.Get.To("/health")
+        await Req
+            .Get.To("/health")
             .ArrangeData()
             .Act(
                 new TestServerBuilder.Options

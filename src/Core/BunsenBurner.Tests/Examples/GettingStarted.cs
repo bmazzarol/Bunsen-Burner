@@ -42,9 +42,8 @@ public class GettingStarted
                 await JsonSerializer.SerializeAsync(data.ms, data.widget);
                 return Encoding.UTF8.GetString(data.ms.ToArray());
             })
-            .Assert(
-                result =>
-                    Assert.Equal(expected: "{\"Name\":\"Widget1\",\"Cost\":12.5}", actual: result)
+            .Assert(result =>
+                Assert.Equal(expected: "{\"Name\":\"Widget1\",\"Cost\":12.5}", actual: result)
             );
 
     #endregion
@@ -61,9 +60,8 @@ public class GettingStarted
             })
             // pull out the shared test code
             .Act(CallSerializeAsync)
-            .Assert(
-                result =>
-                    Assert.Equal(expected: "{\"Name\":\"Widget1\",\"Cost\":12.5}", actual: result)
+            .Assert(result =>
+                Assert.Equal(expected: "{\"Name\":\"Widget1\",\"Cost\":12.5}", actual: result)
             );
 
     // this is now a shared stage and can be used in many tests
