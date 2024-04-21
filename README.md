@@ -6,6 +6,7 @@
 # Bunsen Burner
 
 [:running: **_Getting Started_**](https://bmazzarol.github.io/Bunsen-Burner/articles/getting-started.html)
+|
 [:books: **_Documentation_**](https://bmazzarol.github.io/Bunsen-Burner)
 
 [![Nuget](https://img.shields.io/nuget/v/BunsenBurner)](https://www.nuget.org/packages/BunsenBurner/)
