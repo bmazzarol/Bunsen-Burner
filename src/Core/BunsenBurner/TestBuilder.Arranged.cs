@@ -10,10 +10,13 @@ public abstract partial record TestBuilder<TSyntax>
     {
         private readonly Func<Task<TData>> _arrangeStep;
 
-        internal Arranged(string? name, Func<Task<TData>> arrangeStep, HashSet<object> disposables)
-            : base(name, disposables) => _arrangeStep = arrangeStep;
+        internal Arranged(Func<Task<TData>> arrangeStep, HashSet<object> disposables)
+            : base(disposables) => _arrangeStep = arrangeStep;
 
-        internal Func<Task<TData>> ArrangeStep =>
+        /// <summary>
+        /// Arrange step
+        /// </summary>
+        public Func<Task<TData>> ArrangeStep =>
             async () =>
             {
                 var data = await _arrangeStep();

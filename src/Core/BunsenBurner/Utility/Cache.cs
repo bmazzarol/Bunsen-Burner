@@ -37,9 +37,9 @@ public sealed class Cache<TValue> : IDisposable
     [ExcludeFromCodeCoverage]
     public void Dispose()
     {
-        foreach (var kvp in _concurrentDictionary)
+        foreach (var (key, _) in _concurrentDictionary)
         {
-            if (!_concurrentDictionary.TryRemove(kvp.Key, out var v))
+            if (!_concurrentDictionary.TryRemove(key, out var v))
             {
                 continue;
             }

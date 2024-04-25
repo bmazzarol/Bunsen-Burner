@@ -29,24 +29,6 @@ public class BddSyntaxTests
             .And((_, r) => r + 1)
             .Then((_, r) => Assert.Equal(2, r));
 
-    [Fact(DisplayName = "Mixing sync and async methods operate correctly")]
-    public async Task Case3() =>
-        await "Some description"
-            .Given(2)
-            .When(x => Task.FromResult(x.ToString(InvariantCulture)))
-            .Then(r => Assert.Equal("2", r));
-
-    [Fact(DisplayName = "Mixing sync and async methods operate correctly")]
-    public async Task Case4() =>
-        await "Some other description"
-            .Given(() => Task.FromResult(2))
-            .When(x => x.ToString(InvariantCulture))
-            .Then(r =>
-            {
-                Assert.Equal("2", r);
-                return Task.CompletedTask;
-            });
-
     [Fact(DisplayName = "Additional And assertions work")]
     public async Task Case5() =>
         await Given(() => (a: 1, b: "c"))
@@ -77,24 +59,12 @@ public class BddSyntaxTests
     private static Task<int> SomeAsyncFunction(int i) =>
         throw new InvalidOperationException("Some failure");
 
-    [Fact(DisplayName = "Failure assertions work on async functions")]
-    public async Task Case6() =>
-        await "Some description"
-            .Given(() => 1)
-            .When(SomeAsyncFunction)
-            .ThenFailsWith(
-                (_, e) =>
-                {
-                    Assert.Equal("Some failure", e.Message);
-                    return Task.CompletedTask;
-                }
-            );
-
     [Fact(DisplayName = "Failure assertions work on async functions with initial data")]
     public async Task Case7() =>
         await Given(() => 1)
             .When(SomeAsyncFunction)
-            .ThenFailsWith(e =>
+            .Throw()
+            .Then(e =>
             {
                 Assert.Equal("Some failure", e.Message);
                 return Task.CompletedTask;
@@ -106,13 +76,15 @@ public class BddSyntaxTests
     public async Task Case9() =>
         await Given(() => 1)
             .When(SomeFunction)
-            .ThenFailsWith(e => Assert.Equal("Some failure", e.Message));
+            .Throw()
+            .Then(e => Assert.Equal("Some failure", e.Message));
 
     [Fact(DisplayName = "Failure assertions work on sync functions and initial data")]
     public async Task Case10() =>
         await Given(() => 1)
             .When(SomeFunction)
-            .ThenFailsWith(
+            .Throw()
+            .Then(
                 (data, e) =>
                 {
                     Assert.Equal(1, data);
@@ -160,7 +132,8 @@ public class BddSyntaxTests
         await 1
             .GivenData()
             .When(x => x / 0)
-            .ThenFailsWith(e => e.Message == "Attempted to divide by zero.");
+            .Throw()
+            .Then(e => e.Message == "Attempted to divide by zero.");
 
     [Fact(DisplayName = "Expression based assertions on failures with data work")]
     public async Task Case16() =>
@@ -168,7 +141,8 @@ public class BddSyntaxTests
         await 1
             .GivenData()
             .When(x => x / 0)
-            .ThenFailsWith((r, e) => r == 1 && e.Message == "Attempted to divide by zero.");
+            .Throw()
+            .Then((r, e) => r == 1 && e.Message == "Attempted to divide by zero.");
 
     [Fact(DisplayName = "Expression based assertions on typed failures work")]
     public async Task Case17() =>
@@ -176,43 +150,6 @@ public class BddSyntaxTests
         await 1
             .GivenData()
             .When(x => x / 0)
-            .ThenFailsWith(
-                (int r, DivideByZeroException e) =>
-                    r == 1 && e.Message == "Attempted to divide by zero."
-            );
-
-    [Fact(DisplayName = "Scenario can be reset back to arranged from asserted")]
-    public async Task Case18()
-    {
-        int WhenFn(int x) => x + 1;
-        void ThenFn(int x) => Assert.Equal(2, x);
-        await 1.GivenData().When(WhenFn).Then(ThenFn).ResetToGiven().When(WhenFn).Then(ThenFn);
-    }
-
-    [Fact(DisplayName = "Scenario can be reset back to arranged from acted")]
-    public async Task Case19()
-    {
-        int WhenFn(int x) => x + 1;
-        void ThenFn(int x) => Assert.Equal(2, x);
-        await 1.GivenData().When(WhenFn).ResetToGiven().When(WhenFn).Then(ThenFn);
-    }
-
-    [Fact(DisplayName = "Scenario can be reset back to acted")]
-    public async Task Case20()
-    {
-        void ThenFn(int x) => Assert.Equal(2, x);
-        await 1.GivenData().When(x => x + 1).Then(ThenFn).ResetToWhen().Then(ThenFn);
-    }
-
-    [Fact(DisplayName = "Scenario can have act redefined")]
-    public async Task Case21() =>
-        await 1.GivenData().When(x => x + 1).Then(x => x == 3).ReplaceWhen(x => x + 2);
-
-    [Fact(DisplayName = "Scenario can have an async act redefined")]
-    public async Task Case22() =>
-        await 1
-            .GivenData()
-            .When(x => Task.FromResult(x + 1))
-            .Then(x => x == 3)
-            .ReplaceWhen(x => Task.FromResult(x + 2));
+            .Throw<DivideByZeroException>()
+            .Then((r, e) => r == 1 && e.Message == "Attempted to divide by zero.");
 }

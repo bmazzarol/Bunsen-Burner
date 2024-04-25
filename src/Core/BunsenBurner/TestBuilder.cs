@@ -20,10 +20,10 @@ public abstract partial record TestBuilder<TSyntax>
     /// <summary>
     /// Optional name for the test
     /// </summary>
-    public string Name { get; }
+    public string? Name { get; init; }
 
     /// <inheritdoc/>
-    public sealed override string ToString() => Name;
+    public sealed override string ToString() => Name ?? base.ToString();
 
     /// <summary>
     /// Stores any disposables for cleanup after the <see cref="TestBuilder{TSyntax}"/> is run
@@ -38,9 +38,44 @@ public abstract partial record TestBuilder<TSyntax>
         }
     }
 
-    private TestBuilder(string? name, HashSet<object> disposables)
+    private TestBuilder(HashSet<object> disposables)
     {
-        Name = name ?? string.Empty;
         Disposables = disposables;
     }
+
+    /// <summary>
+    /// Builds a new <see cref="Arranged{TData}"/>
+    /// </summary>
+    /// <param name="fn">arrange function</param>
+    /// <typeparam name="TData">data required to act on the <see cref="TestBuilder{TSyntax}"/></typeparam>
+    /// <returns>arranged test</returns>
+    public static Arranged<TData> BuildArranged<TData>(Func<Task<TData>> fn) => new(fn, new());
+
+    /// <summary>
+    /// Builds a new <see cref="Arranged{TData}"/>
+    /// </summary>
+    /// <param name="arrangeStep">arrange step</param>
+    /// <param name="actStep">act step</param>
+    /// <typeparam name="TData">data required to act on the <see cref="TestBuilder{TSyntax}"/></typeparam>
+    /// <typeparam name="TResult">result of acting</typeparam>
+    /// <returns>acted test</returns>
+    public static Acted<TData, TResult> BuildActed<TData, TResult>(
+        Func<Task<TData>> arrangeStep,
+        Func<TData, Task<TResult>> actStep
+    ) => new(arrangeStep, actStep, new());
+
+    /// <summary>
+    /// Builds a new <see cref="Asserted{TData, TResult}"/>
+    /// </summary>
+    /// <param name="arrangeStep">arrange step</param>
+    /// <param name="actStep">act step</param>
+    /// <param name="assertStep">assert step</param>
+    /// <typeparam name="TData">data required to act on the <see cref="TestBuilder{TSyntax}"/></typeparam>
+    /// <typeparam name="TResult">result of acting</typeparam>
+    /// <returns>asserted test</returns>
+    public static Asserted<TData, TResult> BuildAsserted<TData, TResult>(
+        Func<Task<TData>> arrangeStep,
+        Func<TData, Task<TResult>> actStep,
+        Func<TData, TResult, Task> assertStep
+    ) => new(arrangeStep, actStep, assertStep, new());
 }

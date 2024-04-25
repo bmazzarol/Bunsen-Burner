@@ -157,11 +157,9 @@ public class ArrangeActAssert
         await (dividend: 3, divisor: 0)
             .ArrangeData()
             .Act(parts => parts.dividend / parts.divisor)
-            // errors can be assert against as well
-            .AssertFailsWith(
-                // if you provide a type hint it reduces down to just that exception, otherwise its just `Exception`
-                (DivideByZeroException e) => e.Message == "Attempted to divide by zero."
-            );
+            // errors can be asserted against as well
+            .Throw<DivideByZeroException>()
+            .Assert(e => e.Message == "Attempted to divide by zero.");
 
     #endregion
 }

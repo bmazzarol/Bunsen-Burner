@@ -13,18 +13,20 @@ public abstract partial record TestBuilder<TSyntax>
         private readonly Func<TData, Task<TResult>> _actStep;
 
         internal Acted(
-            string? name,
             Func<Task<TData>> arrangeStep,
             Func<TData, Task<TResult>> actStep,
             HashSet<object> disposables
         )
-            : base(name, disposables)
+            : base(disposables)
         {
             _arrangeStep = arrangeStep;
             _actStep = actStep;
         }
 
-        internal Func<Task<TData>> ArrangeStep =>
+        /// <summary>
+        /// Arrange step
+        /// </summary>
+        public Func<Task<TData>> ArrangeStep =>
             async () =>
             {
                 var result = await _arrangeStep();
@@ -32,12 +34,49 @@ public abstract partial record TestBuilder<TSyntax>
                 return result;
             };
 
-        internal Func<TData, Task<TResult>> ActStep =>
+        /// <summary>
+        /// Act step
+        /// </summary>
+        public Func<TData, Task<TResult>> ActStep =>
             async data =>
             {
                 var result = await _actStep(data);
                 TrackPotentialDisposal(result);
                 return result;
             };
+
+        /// <summary>
+        /// Flips the result of the act step to the error side
+        /// </summary>
+        /// <typeparam name="TException">exception type to expect</typeparam>
+        /// <returns>an acted test</returns>
+        /// <exception cref="NoFailureException">thrown when the act step does not throw an exception</exception>
+        [Pure]
+        public Acted<TData, TException> Throw<TException>()
+            where TException : Exception =>
+            new(
+                ArrangeStep,
+                async data =>
+                {
+                    try
+                    {
+                        await ActStep(data);
+                        throw new NoFailureException();
+                    }
+                    catch (TException e) when (e is not NoFailureException)
+                    {
+                        return e;
+                    }
+                },
+                Disposables
+            );
+
+        /// <summary>
+        /// Flips the result of the act step to the error side
+        /// </summary>
+        /// <returns>an acted test</returns>
+        /// <exception cref="NoFailureException">thrown when the act step does not throw an exception</exception>
+        [Pure]
+        public Acted<TData, Exception> Throw() => Throw<Exception>();
     }
 }

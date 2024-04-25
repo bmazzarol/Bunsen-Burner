@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace BunsenBurner;
 
 /// <summary>
-/// Thrown when a <see cref="TestBuilder{TSyntax}"/> is expected to fail and it succeeds
+/// Thrown when an <see cref="TestBuilder{TSyntax}"/> is expected to fail and it succeeds
 /// </summary>
 [Serializable]
 [ExcludeFromCodeCoverage]

@@ -38,8 +38,7 @@ internal static partial class Shared
         this TestBuilder<TSyntax>.Acted<TData, TResult> test,
         Func<TData, TResult, Task> fn
     )
-        where TSyntax : struct, Syntax =>
-        new(test.Name, test.ArrangeStep, test.ActStep, fn, test.Disposables);
+        where TSyntax : struct, Syntax => new(test.ArrangeStep, test.ActStep, fn, test.Disposables);
 
     [Pure]
     internal static TestBuilder<TSyntax>.Asserted<TData, TResult> Assert<TData, TResult, TSyntax>(
@@ -85,114 +84,12 @@ internal static partial class Shared
         test.Assert((d, r) => RunExpressionAssertion(d, r, expression));
 
     [Pure]
-    internal static TestBuilder<TSyntax>.Asserted<TData, TException> AssertFailsWith<
-        TData,
-        TResult,
-        TException,
-        TSyntax
-    >(this TestBuilder<TSyntax>.Acted<TData, TResult> test, Func<TData, TException, Task> fn)
-        where TException : Exception
-        where TSyntax : struct, Syntax =>
-        new(
-            test.Name,
-            test.ArrangeStep,
-            async data =>
-            {
-                try
-                {
-                    await test.ActStep(data);
-                    throw new NoFailureException();
-                }
-                // ReSharper disable once RedundantCatchClause
-                catch (NoFailureException)
-                {
-                    throw;
-                }
-                catch (TException e)
-                {
-                    return e;
-                }
-            },
-            fn,
-            test.Disposables
-        );
-
-    [Pure]
-    internal static TestBuilder<TSyntax>.Asserted<TData, TException> AssertFailsWith<
-        TData,
-        TResult,
-        TException,
-        TSyntax
-    >(this TestBuilder<TSyntax>.Acted<TData, TResult> test, Func<TException, Task> fn)
-        where TException : Exception
-        where TSyntax : struct, Syntax =>
-        test.AssertFailsWith<TData, TResult, TException, TSyntax>((_, e) => fn(e));
-
-    [Pure]
-    internal static TestBuilder<TSyntax>.Asserted<TData, TException> AssertFailsWith<
-        TData,
-        TResult,
-        TException,
-        TSyntax
-    >(this TestBuilder<TSyntax>.Acted<TData, TResult> test, Action<TData, TException> fn)
-        where TException : Exception
-        where TSyntax : struct, Syntax =>
-        test.AssertFailsWith<TData, TResult, TException, TSyntax>(
-            (d, e) =>
-            {
-                fn(d, e);
-                return Task.CompletedTask;
-            }
-        );
-
-    [Pure]
-    internal static TestBuilder<TSyntax>.Asserted<TData, TException> AssertFailsWith<
-        TData,
-        TResult,
-        TException,
-        TSyntax
-    >(this TestBuilder<TSyntax>.Acted<TData, TResult> test, Action<TException> fn)
-        where TException : Exception
-        where TSyntax : struct, Syntax =>
-        test.AssertFailsWith<TData, TResult, TException, TSyntax>((_, e) => fn(e));
-
-    [Pure]
-    internal static TestBuilder<TSyntax>.Asserted<TData, TException> AssertFailsWith<
-        TData,
-        TResult,
-        TException,
-        TSyntax
-    >(
-        this TestBuilder<TSyntax>.Acted<TData, TResult> test,
-        Expression<Func<TData, TException, bool>> fn
-    )
-        where TException : Exception
-        where TSyntax : struct, Syntax =>
-        test.AssertFailsWith<TData, TResult, TException, TSyntax>(
-            (d, e) => RunExpressionAssertion(d, e, fn)
-        );
-
-    [Pure]
-    internal static TestBuilder<TSyntax>.Asserted<TData, TException> AssertFailsWith<
-        TData,
-        TResult,
-        TException,
-        TSyntax
-    >(this TestBuilder<TSyntax>.Acted<TData, TResult> test, Expression<Func<TException, bool>> fn)
-        where TException : Exception
-        where TSyntax : struct, Syntax =>
-        test.AssertFailsWith<TData, TResult, TException, TSyntax>(
-            (_, e) => RunExpressionAssertion(e, fn)
-        );
-
-    [Pure]
     internal static TestBuilder<TSyntax>.Asserted<TData, TResult> And<TData, TResult, TSyntax>(
         this TestBuilder<TSyntax>.Asserted<TData, TResult> test,
         Func<TData, TResult, Task> fn
     )
         where TSyntax : struct, Syntax =>
         new(
-            test.Name,
             test.ArrangeStep,
             test.ActStep,
             async (data, result) =>
@@ -245,37 +142,4 @@ internal static partial class Shared
     )
         where TSyntax : struct, Syntax =>
         test.And((d, r) => RunExpressionAssertion(d, r, expression));
-
-    [Pure]
-    internal static TestBuilder<TSyntax>.Arranged<TData> ResetToArranged<TData, TResult, TSyntax>(
-        this TestBuilder<TSyntax>.Asserted<TData, TResult> test
-    )
-        where TSyntax : struct, Syntax => Arrange<TData, TSyntax>(test.ArrangeStep);
-
-    [Pure]
-    internal static TestBuilder<TSyntax>.Acted<TData, TResult> ResetToActed<
-        TData,
-        TResult,
-        TSyntax
-    >(this TestBuilder<TSyntax>.Asserted<TData, TResult> test)
-        where TSyntax : struct, Syntax =>
-        Arrange<TData, TSyntax>(test.ArrangeStep).Act(test.ActStep);
-
-    [Pure]
-    internal static TestBuilder<TSyntax>.Asserted<TData, TResult> ReplaceAct<
-        TData,
-        TResult,
-        TSyntax
-    >(this TestBuilder<TSyntax>.Asserted<TData, TResult> test, Func<TData, Task<TResult>> fn)
-        where TSyntax : struct, Syntax =>
-        Arrange<TData, TSyntax>(test.ArrangeStep).Act(fn).Assert(test.AssertStep);
-
-    [Pure]
-    internal static TestBuilder<TSyntax>.Asserted<TData, TResult> ReplaceAct<
-        TData,
-        TResult,
-        TSyntax
-    >(this TestBuilder<TSyntax>.Asserted<TData, TResult> test, Func<TData, TResult> fn)
-        where TSyntax : struct, Syntax =>
-        Arrange<TData, TSyntax>(test.ArrangeStep).Act(fn).Assert(test.AssertStep);
 }

@@ -28,24 +28,6 @@ public class AaaSyntaxTests
             .And((_, r) => r + 1)
             .Assert((_, r) => Assert.Equal(2, r));
 
-    [Fact(DisplayName = "Mixing sync and async methods operate correctly")]
-    public async Task Case3() =>
-        await "Some description"
-            .Arrange(2)
-            .Act(x => Task.FromResult(x.ToString(InvariantCulture)))
-            .Assert(r => Assert.Equal("2", r));
-
-    [Fact(DisplayName = "Mixing sync and async methods operate correctly")]
-    public async Task Case4() =>
-        await "Some other description"
-            .Arrange(() => Task.FromResult(2))
-            .Act(x => x.ToString(InvariantCulture))
-            .Assert(r =>
-            {
-                Assert.Equal("2", r);
-                return Task.CompletedTask;
-            });
-
     [Fact(DisplayName = "Additional And assertions work")]
     public async Task Case5() =>
         await Arrange(() => (a: 1, b: "c"))
@@ -76,24 +58,12 @@ public class AaaSyntaxTests
     private static Task<int> SomeAsyncFunction(int i) =>
         throw new InvalidOperationException("Some failure");
 
-    [Fact(DisplayName = "Failure assertions work on async functions")]
-    public async Task Case6() =>
-        await "Some description"
-            .Arrange(() => 1)
-            .Act(SomeAsyncFunction)
-            .AssertFailsWith(
-                (_, e) =>
-                {
-                    Assert.Equal("Some failure", e.Message);
-                    return Task.CompletedTask;
-                }
-            );
-
     [Fact(DisplayName = "Failure assertions work on async functions with initial data")]
     public async Task Case7() =>
         await Arrange(() => 1)
             .Act(SomeAsyncFunction)
-            .AssertFailsWith(e =>
+            .Throw()
+            .Assert(e =>
             {
                 Assert.Equal("Some failure", e.Message);
                 return Task.CompletedTask;
@@ -105,7 +75,8 @@ public class AaaSyntaxTests
             async () =>
                 await Arrange(() => 1)
                     .Act(Task.FromResult)
-                    .AssertFailsWith(
+                    .Throw()
+                    .Assert(
                         [ExcludeFromCodeCoverage]
                         (data, e) =>
                         {
@@ -122,13 +93,15 @@ public class AaaSyntaxTests
     public async Task Case9() =>
         await Arrange(() => 1)
             .Act(SomeFunction)
-            .AssertFailsWith(e => Assert.Equal("Some failure", e.Message));
+            .Throw()
+            .Assert(e => Assert.Equal("Some failure", e.Message));
 
     [Fact(DisplayName = "Failure assertions work on sync functions and initial data")]
     public async Task Case10() =>
         await Arrange(() => 1)
             .Act(SomeFunction)
-            .AssertFailsWith(
+            .Throw()
+            .Assert(
                 (data, e) =>
                 {
                     Assert.Equal(1, data);
@@ -178,7 +151,8 @@ public class AaaSyntaxTests
         await 1
             .ArrangeData()
             .Act(x => x / 0)
-            .AssertFailsWith(e => e.Message == "Attempted to divide by zero.");
+            .Throw<DivideByZeroException>()
+            .Assert(e => e.Message == "Attempted to divide by zero.");
 
     [Fact(DisplayName = "Expression based assertions on failures with data work")]
     public async Task Case16() =>
@@ -186,7 +160,8 @@ public class AaaSyntaxTests
         await 1
             .ArrangeData()
             .Act(x => x / 0)
-            .AssertFailsWith((r, e) => r == 1 && e.Message == "Attempted to divide by zero.");
+            .Throw()
+            .Assert((r, e) => r == 1 && e.Message == "Attempted to divide by zero.");
 
     [Fact(DisplayName = "Expression based assertions on typed failures work")]
     public async Task Case17() =>
@@ -194,49 +169,6 @@ public class AaaSyntaxTests
         await 1
             .ArrangeData()
             .Act(x => x / 0)
-            .AssertFailsWith(
-                (int r, DivideByZeroException e) =>
-                    r == 1 && e.Message == "Attempted to divide by zero."
-            );
-
-    [Fact(DisplayName = "Tests can be reset back to arranged from asserted")]
-    public async Task Case18()
-    {
-        int ActFn(int x) => x + 1;
-        void AssertFn(int x) => Assert.Equal(2, x);
-        await 1
-            .ArrangeData()
-            .Act(ActFn)
-            .Assert(AssertFn)
-            .ResetToArranged()
-            .Act(ActFn)
-            .Assert(AssertFn);
-    }
-
-    [Fact(DisplayName = "Tests can be reset back to arranged from acted")]
-    public async Task Case19()
-    {
-        int ActFn(int x) => x + 1;
-        void AssertFn(int x) => Assert.Equal(2, x);
-        await 1.ArrangeData().Act(ActFn).ResetToArranged().Act(ActFn).Assert(AssertFn);
-    }
-
-    [Fact(DisplayName = "Tests can be reset back to acted")]
-    public async Task Case20()
-    {
-        void AssertFn(int x) => Assert.Equal(2, x);
-        await 1.ArrangeData().Act(x => x + 1).Assert(AssertFn).ResetToActed().Assert(AssertFn);
-    }
-
-    [Fact(DisplayName = "Tests can have act redefined")]
-    public async Task Case21() =>
-        await 1.ArrangeData().Act(x => x + 1).Assert(x => x == 3).ReplaceAct(x => x + 2);
-
-    [Fact(DisplayName = "Tests can have an async act redefined")]
-    public async Task Case22() =>
-        await 1
-            .ArrangeData()
-            .Act(x => Task.FromResult(x + 1))
-            .Assert(x => x == 3)
-            .ReplaceAct(x => Task.FromResult(x + 2));
+            .Throw<DivideByZeroException>()
+            .Assert((r, e) => r == 1 && e.Message == "Attempted to divide by zero.");
 }

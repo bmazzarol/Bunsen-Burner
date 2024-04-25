@@ -38,41 +38,6 @@ public static partial class AaaSyntax
     /// <summary>
     /// Arranges the test data
     /// </summary>
-    /// <param name="name">name/description for the test</param>
-    /// <param name="fn">async function returning test data</param>
-    /// <typeparam name="TData">data required to act on the test</typeparam>
-    /// <returns>arranged test</returns>
-    [Pure]
-    public static AaaBuilder.Arranged<TData> Arrange<TData>(
-        this string name,
-        Func<Task<TData>> fn
-    ) => name.Arrange<TData, Syntax.Aaa>(fn);
-
-    /// <summary>
-    /// Arranges the test data
-    /// </summary>
-    /// <param name="name">name/description for the test</param>
-    /// <param name="fn">function returning test data</param>
-    /// <typeparam name="TData">data required to act on the test</typeparam>
-    /// <returns>arranged test</returns>
-    [Pure]
-    public static AaaBuilder.Arranged<TData> Arrange<TData>(this string name, Func<TData> fn) =>
-        name.Arrange<TData, Syntax.Aaa>(fn);
-
-    /// <summary>
-    /// Arranges the test data
-    /// </summary>
-    /// <param name="name">name/description for the test</param>
-    /// <param name="data">test data</param>
-    /// <typeparam name="TData">data required to act on the test</typeparam>
-    /// <returns>arranged test</returns>
-    [Pure]
-    public static AaaBuilder.Arranged<TData> Arrange<TData>(this string name, TData data) =>
-        name.Arrange<TData, Syntax.Aaa>(data);
-
-    /// <summary>
-    /// Arranges the test data
-    /// </summary>
     /// <param name="data">test data</param>
     /// <typeparam name="TData">data required to act on the test</typeparam>
     /// <returns>arranged test</returns>

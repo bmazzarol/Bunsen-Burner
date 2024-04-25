@@ -59,16 +59,4 @@ public static partial class AaaSyntax
         this AaaBuilder.Acted<TData, TResult> test,
         Func<TData, TResult, TResultNext> fn
     ) => Shared.And(test, fn);
-
-    /// <summary>
-    /// Resets the acted test back to arranged, throwing away the act information
-    /// </summary>
-    /// <param name="test">test</param>
-    /// <typeparam name="TData">test data</typeparam>
-    /// <typeparam name="TResult">test result</typeparam>
-    /// <returns>arranged test</returns>
-    [Pure]
-    public static AaaBuilder.Arranged<TData> ResetToArranged<TData, TResult>(
-        this AaaBuilder.Acted<TData, TResult> test
-    ) => Shared.ResetToArranged(test);
 }

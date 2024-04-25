@@ -38,41 +38,6 @@ public static partial class BddSyntax
     /// <summary>
     /// Given the scenario data
     /// </summary>
-    /// <param name="name">name/description for the scenario</param>
-    /// <param name="fn">async function returning scenario data</param>
-    /// <typeparam name="TData">data required to when the scenario is run</typeparam>
-    /// <returns>scenario with the given data</returns>
-    [Pure]
-    public static ScenarioBuilder.Arranged<TData> Given<TData>(
-        this string name,
-        Func<Task<TData>> fn
-    ) => name.Arrange<TData, Syntax.Bdd>(fn);
-
-    /// <summary>
-    /// Given the scenario data
-    /// </summary>
-    /// <param name="name">name/description for the scenario</param>
-    /// <param name="fn">async function returning scenario data</param>
-    /// <typeparam name="TData">data required to when the scenario is run</typeparam>
-    /// <returns>scenario with the given data</returns>
-    [Pure]
-    public static ScenarioBuilder.Arranged<TData> Given<TData>(this string name, Func<TData> fn) =>
-        name.Arrange<TData, Syntax.Bdd>(fn);
-
-    /// <summary>
-    /// Given the scenario data
-    /// </summary>
-    /// <param name="name">name/description for the scenario</param>
-    /// <param name="data">scenario data</param>
-    /// <typeparam name="TData">data required to when the scenario is run</typeparam>
-    /// <returns>scenario with the given data</returns>
-    [Pure]
-    public static ScenarioBuilder.Arranged<TData> Given<TData>(this string name, TData data) =>
-        name.Arrange<TData, Syntax.Bdd>(data);
-
-    /// <summary>
-    /// Given the scenario data
-    /// </summary>
     /// <param name="data">scenario data</param>
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>

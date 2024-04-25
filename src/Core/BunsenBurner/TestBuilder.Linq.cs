@@ -20,7 +20,7 @@ public static class TestBuilder
         Func<TA, TB> fn
     )
         where TSyntax : struct, Syntax =>
-        new(test.Name, async () => fn(await test.ArrangeStep()), test.Disposables);
+        new(async () => fn(await test.ArrangeStep()), test.Disposables);
 
     /// <summary>
     /// Select (Map) for <see cref="TestBuilder{TSyntax}.Acted{TData,TResult}"/>
@@ -38,7 +38,7 @@ public static class TestBuilder
         Func<TA, TB> fn
     )
         where TSyntax : struct, Syntax =>
-        new(test.Name, test.ArrangeStep, async x => fn(await test.ActStep(x)), test.Disposables);
+        new(test.ArrangeStep, async x => fn(await test.ActStep(x)), test.Disposables);
 
     /// <summary>
     /// SelectMany (Bind) for <see cref="TestBuilder{TSyntax}.Arranged{TData}"/>
@@ -55,11 +55,7 @@ public static class TestBuilder
         Func<TA, TestBuilder<TSyntax>.Arranged<TB>> fn
     )
         where TSyntax : struct, Syntax =>
-        new(
-            test.Name,
-            async () => await fn(await test.ArrangeStep()).ArrangeStep(),
-            test.Disposables
-        );
+        new(async () => await fn(await test.ArrangeStep()).ArrangeStep(), test.Disposables);
 
     /// <summary>
     /// SelectMany (Bind) for <see cref="TestBuilder{TSyntax}.Arranged{TData}"/>
@@ -80,7 +76,6 @@ public static class TestBuilder
     )
         where TSyntax : struct, Syntax =>
         new(
-            test.Name,
             async () =>
             {
                 var ta = await test.ArrangeStep();
@@ -107,7 +102,6 @@ public static class TestBuilder
     )
         where TSyntax : struct, Syntax =>
         new(
-            test.Name,
             test.ArrangeStep,
             async x => await fn(await test.ActStep(x)).ActStep(x),
             test.Disposables
@@ -133,7 +127,6 @@ public static class TestBuilder
     )
         where TSyntax : struct, Syntax =>
         new(
-            test.Name,
             test.ArrangeStep,
             async x =>
             {
@@ -158,7 +151,6 @@ public static class TestBuilder
     {
         var testsToCombine = tests.ToArray();
         return new TestBuilder<TSyntax>.Arranged<IEnumerable<TData>>(
-            name: null,
             async () => await Task.WhenAll(testsToCombine.Select(x => x.ArrangeStep())),
             testsToCombine.SelectMany(test => test.Disposables).ToHashSet()
         );
@@ -181,7 +173,6 @@ public static class TestBuilder
     {
         var testsToCombine = tests.ToArray();
         return new TestBuilder<TSyntax>.Asserted<IEnumerable<TData>, IEnumerable<TResult>>(
-            name: null,
             async () => await Task.WhenAll(testsToCombine.Select(x => x.ArrangeStep())),
             async data => await Task.WhenAll(testsToCombine.Zip(data, (s, d) => s.ActStep(d))),
             async (context, result) =>

@@ -14,20 +14,22 @@ public abstract partial record TestBuilder<TSyntax>
         private readonly Func<TData, Task<TResult>> _actStep;
 
         internal Asserted(
-            string? name,
             Func<Task<TData>> arrangeStep,
             Func<TData, Task<TResult>> actStep,
             Func<TData, TResult, Task> assertStep,
             HashSet<object> disposables
         )
-            : base(name, disposables)
+            : base(disposables)
         {
             _arrangeStep = arrangeStep;
             _actStep = actStep;
             AssertStep = assertStep;
         }
 
-        internal Func<Task<TData>> ArrangeStep =>
+        /// <summary>
+        /// Arrange step
+        /// </summary>
+        public Func<Task<TData>> ArrangeStep =>
             async () =>
             {
                 var result = await _arrangeStep();
@@ -35,7 +37,10 @@ public abstract partial record TestBuilder<TSyntax>
                 return result;
             };
 
-        internal Func<TData, Task<TResult>> ActStep =>
+        /// <summary>
+        /// Act step
+        /// </summary>
+        public Func<TData, Task<TResult>> ActStep =>
             async x =>
             {
                 var result = await _actStep(x);
@@ -43,7 +48,10 @@ public abstract partial record TestBuilder<TSyntax>
                 return result;
             };
 
-        internal Func<TData, TResult, Task> AssertStep { get; }
+        /// <summary>
+        /// Assert step
+        /// </summary>
+        public Func<TData, TResult, Task> AssertStep { get; }
 
         /// <summary>
         /// Runs the <see cref="TestBuilder{TSyntax}"/> definition of a test
@@ -76,5 +84,11 @@ public abstract partial record TestBuilder<TSyntax>
                 }
             }
         }
+
+        /// <summary>
+        /// Awaiter for a test so it can be run
+        /// </summary>
+        /// <returns>awaiter</returns>
+        public TaskAwaiter GetAwaiter() => Run().GetAwaiter();
     }
 }

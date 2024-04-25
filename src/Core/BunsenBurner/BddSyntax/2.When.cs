@@ -59,16 +59,4 @@ public static partial class BddSyntax
         this ScenarioBuilder.Acted<TData, TResult> scenario,
         Func<TData, TResult, TResultNext> fn
     ) => Shared.And(scenario, fn);
-
-    /// <summary>
-    /// Resets the completed scenario back to given, throwing away the when information
-    /// </summary>
-    /// <param name="scenario">scenario</param>
-    /// <typeparam name="TData">test data</typeparam>
-    /// <typeparam name="TResult">test result</typeparam>
-    /// <returns>scenario with the given data</returns>
-    [Pure]
-    public static ScenarioBuilder.Arranged<TData> ResetToGiven<TData, TResult>(
-        this ScenarioBuilder.Acted<TData, TResult> scenario
-    ) => scenario.ResetToArranged();
 }

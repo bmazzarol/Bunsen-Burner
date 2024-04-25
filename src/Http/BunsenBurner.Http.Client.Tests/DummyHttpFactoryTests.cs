@@ -56,7 +56,8 @@ public static class DummyHttpFactoryTests
                 x.CreateClient(nameof(Case1))
                     .SendAsync(Req.Get.To("http://localhost/something/else"))
             )
-            .AssertFailsWith(e =>
+            .Throw()
+            .Assert(e =>
                 e.Message
                 == "No setup matches/generates a response for request: Request: -X GET http://localhost/something/else"
             );
@@ -113,7 +114,7 @@ public static class DummyHttpFactoryTests
                     .SendAsync(Req.Get.To("http://localhost/match/me-default"));
                 return (resp1, resp2, resp3);
             })
-            .Assert(x => Assert.NotSame(x.resp1, x.resp2))
+            .Assert(x => x.resp2.Should().NotBeSameAs(x.resp1))
             .And(x =>
                 !x.resp1.IsSuccessStatusCode
                 && x.resp2.IsSuccessStatusCode

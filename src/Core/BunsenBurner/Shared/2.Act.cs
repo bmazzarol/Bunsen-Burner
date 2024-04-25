@@ -7,7 +7,7 @@ internal static partial class Shared
         this TestBuilder<TSyntax>.Arranged<TData> test,
         Func<TData, Task<TResult>> fn
     )
-        where TSyntax : struct, Syntax => new(test.Name, test.ArrangeStep, fn, test.Disposables);
+        where TSyntax : struct, Syntax => new(test.ArrangeStep, fn, test.Disposables);
 
     [Pure]
     internal static TestBuilder<TSyntax>.Acted<TData, TResult> Act<TData, TResult, TSyntax>(
@@ -28,7 +28,6 @@ internal static partial class Shared
     )
         where TSyntax : struct, Syntax =>
         new(
-            test.Name,
             test.ArrangeStep,
             async data =>
             {
@@ -47,10 +46,4 @@ internal static partial class Shared
         TSyntax
     >(this TestBuilder<TSyntax>.Acted<TData, TResult> test, Func<TData, TResult, TResultNext> fn)
         where TSyntax : struct, Syntax => test.And((d, r) => Task.FromResult(fn(d, r)));
-
-    [Pure]
-    internal static TestBuilder<TSyntax>.Arranged<TData> ResetToArranged<TData, TResult, TSyntax>(
-        this TestBuilder<TSyntax>.Acted<TData, TResult> test
-    )
-        where TSyntax : struct, Syntax => Arrange<TData, TSyntax>(test.ArrangeStep);
 }

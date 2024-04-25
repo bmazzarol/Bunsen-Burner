@@ -10,10 +10,12 @@ public static class TheoryTests
     public static readonly TheoryData<Test> TestCases = Enumerable
         .Range(1, 10)
         .Select(i =>
-            $"{i} can be converted to a string"
-                .Arrange(() => i)
+            Arrange(() => i)
                 .Act(x => x.ToString(InvariantCulture))
-                .Assert(r => Assert.Equal($"{i}", r))
+                .Assert(r => Assert.Equal($"{i}", r)) with
+            {
+                Name = $"{i} can be converted to a string"
+            }
         )
         .Aggregate(
             new TheoryData<Test>(),
