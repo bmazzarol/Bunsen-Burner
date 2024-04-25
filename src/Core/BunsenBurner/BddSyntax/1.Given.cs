@@ -32,17 +32,7 @@ public static partial class BddSyntax
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
     [Pure]
-    public static ScenarioBuilder.Arranged<TData> Given<TData>(TData data) =>
-        Shared.Arrange<TData, Syntax.Bdd>(data);
-
-    /// <summary>
-    /// Given the scenario data
-    /// </summary>
-    /// <param name="data">scenario data</param>
-    /// <typeparam name="TData">data required to when the scenario is run</typeparam>
-    /// <returns>scenario with the given data</returns>
-    [Pure]
-    public static ScenarioBuilder.Arranged<TData> GivenData<TData>(this TData data) =>
+    public static ScenarioBuilder.Arranged<TData> Given<TData>(this TData data) =>
         Shared.Arrange<TData, Syntax.Bdd>(data);
 
     /// <summary>

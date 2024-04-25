@@ -6,8 +6,8 @@ public static class ActedLinqTests
 {
     [Fact(DisplayName = "Acted Aaa Tests can be selected")]
     public static async Task Case1() =>
-        await AaaSyntax
-            .Arrange(1)
+        await 1
+            .Arrange()
             .Act(i => i)
             .Select(x => x.ToString(InvariantCulture))
             .Assert(r => r == "1");
@@ -42,7 +42,7 @@ public static class ActedLinqTests
     public static async Task Case5() =>
         await Enumerable
             .Range(1, 10)
-            .Select(x => x.ArrangeData().Act(i => i).Assert(i => i <= 10))
+            .Select(x => x.Arrange().Act(i => i).Assert(i => i <= 10))
             .Combine()
             .And(x => x.Take(11).Count() == 10);
 }

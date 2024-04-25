@@ -9,7 +9,7 @@ public static class DummyLoggerTests
     public static async Task Case1() =>
         await DummyLogger
             .New<object>()
-            .ArrangeData()
+            .Arrange()
             .Act(logger =>
             {
                 logger.LogInformation("information");
@@ -41,7 +41,7 @@ public static class DummyLoggerTests
     public static async Task Case2() =>
         await DummyLogger
             .New<object>()
-            .ArrangeData()
+            .Arrange()
             .Act(logger =>
             {
                 logger.LogInformation("information");
@@ -124,7 +124,7 @@ public static class DummyLoggerTests
     public static async Task Case5() =>
         await LogMessageStore
             .New()
-            .ArrangeData()
+            .Arrange()
             .Act(store =>
             {
                 var lf = store.ToLoggerFactory();

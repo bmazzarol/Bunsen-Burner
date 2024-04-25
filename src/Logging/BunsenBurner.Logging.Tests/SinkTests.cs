@@ -13,7 +13,7 @@ public sealed class SinkTests
     public async Task Case1() =>
         await DummyLogger
             .New<SinkTests>(sink: Sink.New(_outputHelper.WriteLine))
-            .ArrangeData()
+            .Arrange()
             .Act(logger =>
             {
                 logger.LogInformation("Some test message");

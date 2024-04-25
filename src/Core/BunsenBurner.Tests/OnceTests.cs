@@ -8,7 +8,8 @@ public static class OnceTests
 {
     [Fact(DisplayName = "Once of T on ever runs once")]
     public static async Task Case1() =>
-        await Arrange(Once.New(() => DateTime.Now))
+        await Once.New(() => DateTime.Now)
+            .Arrange()
             .Act(async o =>
             {
                 var d1 = await o;
@@ -20,13 +21,12 @@ public static class OnceTests
 
     [Fact(DisplayName = "Once of T on ever runs once for an async function")]
     public static async Task Case2() =>
-        await Arrange(
-                Once.New(async () =>
-                {
-                    await Task.Delay(TimeSpan.FromMilliseconds(10));
-                    return DateTime.Now;
-                })
-            )
+        await Once.New(async () =>
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(10));
+                return DateTime.Now;
+            })
+            .Arrange()
             .Act(async o =>
             {
                 var d1 = await o;
@@ -38,13 +38,12 @@ public static class OnceTests
 
     [Fact(DisplayName = "Once of T can be accessed in parallel without issue")]
     public static async Task Case3() =>
-        await Arrange(
-                Once.New(async () =>
-                {
-                    await Task.Delay(TimeSpan.FromMilliseconds(10));
-                    return DateTime.Now;
-                })
-            )
+        await Once.New(async () =>
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(10));
+                return DateTime.Now;
+            })
+            .Arrange()
             .Act(async o =>
             {
                 var result = Enumerable.Range(1, 1000).Select(async _ => await o);
@@ -54,18 +53,20 @@ public static class OnceTests
 
     [Fact(DisplayName = "Once's can be mapped")]
     public static async Task Case4() =>
-        await Arrange(Once.New(() => DateTime.Now))
+        await Once.New(() => DateTime.Now)
+            .Arrange()
             .Act(async o => await o.Select(x => x.ToFileTime()))
             .Assert(r => r != 0);
 
     [Fact(DisplayName = "Once's can be combined")]
     public static async Task Case5() =>
-        await Arrange(
-                from o1 in Once.New(() => DateTime.Now)
-                from o2 in Once.New(() => DateTime.Now)
-                from o3 in Once.New(() => DateTime.Now)
-                select (o1, o2, o3)
-            )
+        await (
+            from o1 in Once.New(() => DateTime.Now)
+            from o2 in Once.New(() => DateTime.Now)
+            from o3 in Once.New(() => DateTime.Now)
+            select (o1, o2, o3)
+        )
+            .Arrange()
             .Act(async o =>
             {
                 var result = Enumerable.Range(1, 1000).Select(async _ => await o);
@@ -75,7 +76,9 @@ public static class OnceTests
 
     [Fact(DisplayName = "Once's can be combined once")]
     public static async Task Case6() =>
-        await Arrange(Once.New(() => DateTime.Now).SelectMany(x => Once.New(() => (x, 1))))
+        await Once.New(() => DateTime.Now)
+            .SelectMany(x => Once.New(() => (x, 1)))
+            .Arrange()
             .Act(async o =>
             {
                 var result = Enumerable.Range(1, 1000).Select(async _ => await o);

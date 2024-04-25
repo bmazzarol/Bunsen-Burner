@@ -109,7 +109,7 @@ public class BddSyntaxTests
     [Fact(DisplayName = "Expression based assertions with data work")]
     public async Task Case13() =>
         await 1
-            .GivenData()
+            .Given()
             .When(x => x + 2)
             .Then((r, x) => r == 1 && x > 0 && x < 4)
             .And((r, x) => x % r == 0);
@@ -118,7 +118,7 @@ public class BddSyntaxTests
     public async Task Case14()
     {
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await Given(1).When(x => x + 2).Then((r, x) => r == 2 && x > 4 && x < 6)
+            async () => await 1.Given().When(x => x + 2).Then((r, x) => r == 2 && x > 4 && x < 6)
         );
         Assert.Equal(
             "(r, x) => (((r == 2) AndAlso (x > 4)) AndAlso (x < 6)) is not true for the result 3 and data 1",
@@ -130,7 +130,7 @@ public class BddSyntaxTests
     public async Task Case15() =>
         // ReSharper disable once IntDivisionByZero
         await 1
-            .GivenData()
+            .Given()
             .When(x => x / 0)
             .Throw()
             .Then(e => e.Message == "Attempted to divide by zero.");
@@ -139,7 +139,7 @@ public class BddSyntaxTests
     public async Task Case16() =>
         // ReSharper disable once IntDivisionByZero
         await 1
-            .GivenData()
+            .Given()
             .When(x => x / 0)
             .Throw()
             .Then((r, e) => r == 1 && e.Message == "Attempted to divide by zero.");
@@ -148,7 +148,7 @@ public class BddSyntaxTests
     public async Task Case17() =>
         // ReSharper disable once IntDivisionByZero
         await 1
-            .GivenData()
+            .Given()
             .When(x => x / 0)
             .Throw<DivideByZeroException>()
             .Then((r, e) => r == 1 && e.Message == "Attempted to divide by zero.");

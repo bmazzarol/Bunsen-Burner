@@ -70,7 +70,7 @@ public sealed class StartupTest
     public async Task Case1() =>
         await Req
             .Get.To("/health")
-            .ArrangeData()
+            .Arrange()
             .Act(
                 new TestServerBuilder.Options
                 {

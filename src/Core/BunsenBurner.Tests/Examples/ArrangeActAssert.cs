@@ -68,7 +68,7 @@ public class ArrangeActAssert
         // existing objects can also be lifted into the DSL
         new { Name = "Widget1", Cost = 12.50 }
             // using the extension method
-            .ArrangeData()
+            .Arrange()
             .And(widget =>
             {
                 var ms = new MemoryStream();
@@ -88,7 +88,7 @@ public class ArrangeActAssert
     [Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
     public async Task ExampleTest4() =>
         await new { Name = "Widget1", Cost = 12.50 }
-            .ArrangeData()
+            .Arrange()
             // supports async
             .Act(async widget =>
             {
@@ -114,7 +114,7 @@ public class ArrangeActAssert
     [Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
     public async Task ExampleTest5() =>
         await new { Name = "Widget1", Cost = 12.50 }
-            .ArrangeData()
+            .Arrange()
             .Act(SerializeAsync)
             // standard action where any assertions can be made
             .Assert(Assert.NotEmpty)
@@ -141,7 +141,7 @@ public class ArrangeActAssert
     [Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
     public async Task ExampleTest6() =>
         await new { Name = "Widget1", Cost = 12.50 }
-            .ArrangeData()
+            .Arrange()
             .Act(SerializeAsync)
             // any expression can be used to form the assertion
             .Assert(json => !string.IsNullOrWhiteSpace(json))
@@ -155,7 +155,7 @@ public class ArrangeActAssert
     [Fact(DisplayName = "Divide by 0 fails")]
     public async Task ExampleTest7() =>
         await (dividend: 3, divisor: 0)
-            .ArrangeData()
+            .Arrange()
             .Act(parts => parts.dividend / parts.divisor)
             // errors can be asserted against as well
             .Throw<DivideByZeroException>()

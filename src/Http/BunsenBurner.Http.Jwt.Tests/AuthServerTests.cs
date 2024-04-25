@@ -81,7 +81,7 @@ public sealed class AuthServerTests
                     .WithClaim(ClaimName.Issuer, Issuer)
                     .WithHeader(HeaderName.ContentType, MediaTypeNames.Application.Json)
             )
-            .ArrangeData()
+            .Arrange()
             .Act(
                 new TestServerBuilder.Options
                 {
@@ -101,7 +101,7 @@ public sealed class AuthServerTests
     public async Task Case2() =>
         await Req
             .Get.To("/api/test")
-            .ArrangeData()
+            .Arrange()
             .Act(async req =>
                 await new TestServerBuilder.Options
                 {

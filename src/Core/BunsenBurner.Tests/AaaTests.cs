@@ -127,7 +127,8 @@ public class AaaSyntaxTests
 
     [Fact(DisplayName = "Expression based assertions with data work")]
     public async Task Case13() =>
-        await Arrange(1)
+        await 1
+            .Arrange()
             .Act(x => x + 2)
             .Assert((r, x) => r == 1 && x > 0 && x < 4)
             .And((r, x) => x % r == 0);
@@ -136,8 +137,7 @@ public class AaaSyntaxTests
     public async Task Case14()
     {
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            async () =>
-                await 1.ArrangeData().Act(x => x + 2).Assert((r, x) => r == 2 && x > 4 && x < 6)
+            async () => await 1.Arrange().Act(x => x + 2).Assert((r, x) => r == 2 && x > 4 && x < 6)
         );
         Assert.Equal(
             "(r, x) => (((r == 2) AndAlso (x > 4)) AndAlso (x < 6)) is not true for the result 3 and data 1",
@@ -149,7 +149,7 @@ public class AaaSyntaxTests
     public async Task Case15() =>
         // ReSharper disable once IntDivisionByZero
         await 1
-            .ArrangeData()
+            .Arrange()
             .Act(x => x / 0)
             .Throw<DivideByZeroException>()
             .Assert(e => e.Message == "Attempted to divide by zero.");
@@ -158,7 +158,7 @@ public class AaaSyntaxTests
     public async Task Case16() =>
         // ReSharper disable once IntDivisionByZero
         await 1
-            .ArrangeData()
+            .Arrange()
             .Act(x => x / 0)
             .Throw()
             .Assert((r, e) => r == 1 && e.Message == "Attempted to divide by zero.");
@@ -167,7 +167,7 @@ public class AaaSyntaxTests
     public async Task Case17() =>
         // ReSharper disable once IntDivisionByZero
         await 1
-            .ArrangeData()
+            .Arrange()
             .Act(x => x / 0)
             .Throw<DivideByZeroException>()
             .Assert((r, e) => r == 1 && e.Message == "Attempted to divide by zero.");

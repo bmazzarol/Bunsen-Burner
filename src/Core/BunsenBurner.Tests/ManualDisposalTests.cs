@@ -20,7 +20,7 @@ public static class ManualDisposalTests
     public static async Task Case1()
     {
         var disposable = new TestDisposable();
-        await disposable.ArrangeData().Act(t => t).Assert(r => !r.IsDisposed);
+        await disposable.Arrange().Act(t => t).Assert(r => !r.IsDisposed);
         Assert.True(disposable.IsDisposed);
     }
 
@@ -30,7 +30,7 @@ public static class ManualDisposalTests
         var disposable = new TestDisposable();
         await ManualDisposal
             .New(disposable)
-            .ArrangeData()
+            .Arrange()
             .Act(d => d)
             .Assert(r => !((TestDisposable)r).IsDisposed);
         Assert.False(disposable.IsDisposed);

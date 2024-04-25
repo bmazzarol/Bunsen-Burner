@@ -8,7 +8,7 @@ public static class DummyHttpFactoryTests
     public static async Task Case1() =>
         await DummyHttpFactory
             .New()
-            .ArrangeData()
+            .Arrange()
             .And(x =>
             {
                 x.Store.Setup(
@@ -36,7 +36,7 @@ public static class DummyHttpFactoryTests
     public static async Task Case2() =>
         await DummyHttpFactory
             .New()
-            .ArrangeData()
+            .Arrange()
             .Act(x => x.CreateClient(nameof(Case1)))
             .Assert(Assert.NotNull);
 
@@ -44,7 +44,7 @@ public static class DummyHttpFactoryTests
     public static async Task Case3() =>
         await DummyHttpFactory
             .New()
-            .ArrangeData()
+            .Arrange()
             .And(x =>
                 x.Store.Setup(
                     nameof(Case1),
@@ -66,7 +66,7 @@ public static class DummyHttpFactoryTests
     public static async Task Case4() =>
         await DummyHttpFactory
             .New()
-            .ArrangeData()
+            .Arrange()
             .And(x =>
                 x.Store.Setup(
                     nameof(Case4),
@@ -90,7 +90,7 @@ public static class DummyHttpFactoryTests
     public static async Task Case5() =>
         await DummyHttpFactory
             .New()
-            .ArrangeData()
+            .Arrange()
             .And(x =>
                 x.Store.Setup(
                     nameof(Case4),

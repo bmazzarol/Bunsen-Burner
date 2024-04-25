@@ -32,17 +32,7 @@ public static partial class AaaSyntax
     /// <typeparam name="TData">data required to act on the test</typeparam>
     /// <returns>arranged test</returns>
     [Pure]
-    public static AaaBuilder.Arranged<TData> Arrange<TData>(TData data) =>
-        Shared.Arrange<TData, Syntax.Aaa>(data);
-
-    /// <summary>
-    /// Arranges the test data
-    /// </summary>
-    /// <param name="data">test data</param>
-    /// <typeparam name="TData">data required to act on the test</typeparam>
-    /// <returns>arranged test</returns>
-    [Pure]
-    public static AaaBuilder.Arranged<TData> ArrangeData<TData>(this TData data) =>
+    public static AaaBuilder.Arranged<TData> Arrange<TData>(this TData data) =>
         Shared.Arrange<TData, Syntax.Aaa>(data);
 
     /// <summary>

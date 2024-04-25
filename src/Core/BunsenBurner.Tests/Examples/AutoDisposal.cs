@@ -23,8 +23,8 @@ public class AutoDisposal
         // disposable type without a using
         var disposableType = new SomeDisposableType();
 
-        // wont be disposed within the DSL
-        await disposableType.ArrangeData().Act(data => data.IsDisposed).Assert(Assert.False);
+        // won't be disposed within the DSL
+        await disposableType.Arrange().Act(data => data.IsDisposed).Assert(Assert.False);
 
         // it will be disposed after
         Assert.True(disposableType.IsDisposed);
