@@ -1,6 +1,3 @@
-using BunsenBurner.Utility;
-using static BunsenBurner.AaaSyntax;
-
 namespace BunsenBurner.Tests.Examples;
 
 public class AutoDisposal
@@ -40,20 +37,19 @@ public class AutoDisposal
         // disposable type
         var disposableType = new SomeDisposableType();
 
-        await Arrange(
-                () =>
-                    // wrap it to disabled auto disposal
-                    ManualDisposal.New(disposableType)
-            )
+        await disposableType
+            .Arrange()
             .Act(data =>
             {
                 // can access it via `Value`
-                var result = data.Value.IsDisposed;
+                var result = data.IsDisposed;
                 // or via implicit conversion
                 SomeDisposableType resultAsWell = data;
                 return result && resultAsWell.IsDisposed;
             })
-            .Assert(Assert.False);
+            .Assert(Assert.False)
+            // disable auto-disposal
+            .NoDisposal();
 
         // it will not be disposed
         Assert.False(disposableType.IsDisposed);

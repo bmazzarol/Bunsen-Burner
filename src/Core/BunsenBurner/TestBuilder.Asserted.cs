@@ -54,6 +54,17 @@ public abstract partial record TestBuilder<TSyntax>
         public Func<TData, TResult, Task> AssertStep { get; }
 
         /// <summary>
+        /// Clears all captured disposables
+        /// </summary>
+        /// <returns>an asserted test</returns>
+        public Asserted<TData, TResult> NoDisposal() => this with { AutoDispose = false };
+
+        /// <summary>
+        /// Flag to indicate if the <see cref="TestBuilder{TSyntax}"/> should auto-dispose
+        /// </summary>
+        public bool AutoDispose { get; init; } = true;
+
+        /// <summary>
         /// Runs the <see cref="TestBuilder{TSyntax}"/> definition of a test
         /// </summary>
         /// <remarks>
@@ -70,16 +81,19 @@ public abstract partial record TestBuilder<TSyntax>
             }
             finally
             {
-                foreach (var disposable in Disposables)
+                if (AutoDispose)
                 {
-                    switch (disposable)
+                    foreach (var disposable in Disposables)
                     {
-                        case IAsyncDisposable ad:
-                            await ad.DisposeAsync();
-                            break;
-                        case IDisposable d:
-                            d.Dispose();
-                            break;
+                        switch (disposable)
+                        {
+                            case IAsyncDisposable ad:
+                                await ad.DisposeAsync();
+                                break;
+                            case IDisposable d:
+                                d.Dispose();
+                                break;
+                        }
                     }
                 }
             }

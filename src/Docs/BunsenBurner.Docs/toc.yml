@@ -14,11 +14,11 @@ items:
         href: articles/act.md
       - name: Assert
         href: articles/assert.md
+      - name: Auto Disposal
+        href: articles/auto-disposal.md
     expanded: true
   - name: Utility
     items:
-      - name: Auto Disposal
-        href: articles/auto-disposal.md
       - name: Test Logger
         href: articles/test-logger.md
       - name: TestServer Builder

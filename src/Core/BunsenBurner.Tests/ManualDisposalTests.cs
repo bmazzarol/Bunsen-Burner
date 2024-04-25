@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using BunsenBurner.Utility;
 
 namespace BunsenBurner.Tests;
 
@@ -28,11 +27,7 @@ public static class ManualDisposalTests
     public static async Task Case2()
     {
         var disposable = new TestDisposable();
-        await ManualDisposal
-            .New(disposable)
-            .Arrange()
-            .Act(d => d)
-            .Assert(r => !((TestDisposable)r).IsDisposed);
+        await disposable.Arrange().Act(d => d).Assert(r => !r.IsDisposed).NoDisposal();
         Assert.False(disposable.IsDisposed);
     }
 }

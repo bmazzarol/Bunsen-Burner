@@ -8,9 +8,7 @@ wrapping the DSL in `using` blocks.
 
 [!code-csharp[Example1](../../../Core/BunsenBurner.Tests/Examples/AutoDisposal.cs#Example1)]
 
-## Manual Disposal
-
-If you want to opt out of this behaviour you can wrap your type in a
-<xref:BunsenBurner.Utility.ManualDisposal`1> which will stop disposal.
+If you want to opt out of this behaviour call
+<xref:BunsenBurner.TestBuilder`1.Asserted`2.NoDisposal*> which will stop disposal.
 
 [!code-csharp[Example2](../../../Core/BunsenBurner.Tests/Examples/AutoDisposal.cs#Example2)]
