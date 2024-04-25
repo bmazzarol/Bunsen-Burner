@@ -1,5 +1,4 @@
 ﻿using BunsenBurner.Logging;
-using BunsenBurner.Utility;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -71,54 +70,4 @@ public class TestServerBuilderOptionsTests
         Assert.NotNull(testServer);
         Assert.NotNull(testServer2);
     }
-
-    #region Example2
-
-    // shared instance of the test server can be stored in the once type
-    private readonly Once<TestServer> _sharedTestServer = Once.New(
-        () => new TestServerBuilder.Options { Startup = typeof(Startup) }.Build()
-    );
-
-    [Fact(DisplayName = "Once can be used to create a test server once and share it")]
-    public async Task Case2()
-    {
-        // get the server, we create it only once the first time
-        TestServer server = await _sharedTestServer;
-        // second call gets the same instance
-        TestServer server2 = await _sharedTestServer;
-        Assert.Same(server, server2);
-    }
-
-    #endregion
-
-    #region Example3
-
-    // shared named instances of the test server can be stored in the cache type
-    private readonly Cache<TestServer> _sharedTestServerCache = Cache.New<TestServer>();
-
-    [Fact(DisplayName = "Cache can be used to create a named test server once and share it")]
-    public void Case3()
-    {
-        // get the server, we create it only once the first time with a given name
-        TestServer server = _sharedTestServerCache.Get(
-            nameof(server),
-            _ => new TestServerBuilder.Options { Startup = typeof(Startup) }.Build()
-        );
-        // second call gets the same instance
-        TestServer server2 = _sharedTestServerCache.Get(
-            nameof(server),
-            _ => new TestServerBuilder.Options { Startup = typeof(Startup) }.Build()
-        );
-        Assert.Same(server, server2);
-        // but another call with a new key gets a new instance
-        // second call gets the same instance
-        TestServer server3 = _sharedTestServerCache.Get(
-            nameof(server3),
-            _ => new TestServerBuilder.Options { Startup = typeof(Startup) }.Build()
-        );
-        Assert.NotSame(server, server3);
-        Assert.NotSame(server2, server3);
-    }
-
-    #endregion
 }
