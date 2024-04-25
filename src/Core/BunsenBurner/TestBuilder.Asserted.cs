@@ -54,23 +54,19 @@ public abstract partial record TestBuilder<TSyntax>
         public Func<TData, TResult, Task> AssertStep { get; }
 
         /// <summary>
-        /// Clears all captured disposables
+        /// Disables auto disposal of captured disposables
         /// </summary>
         /// <returns>an asserted test</returns>
         public Asserted<TData, TResult> NoDisposal() => this with { AutoDispose = false };
 
         /// <summary>
-        /// Flag to indicate if the <see cref="TestBuilder{TSyntax}"/> should auto-dispose
+        /// Flag to indicate if the <see cref="TestBuilder{TSyntax}"/> should auto-dispose captured disposables
         /// </summary>
         public bool AutoDispose { get; init; } = true;
 
         /// <summary>
         /// Runs the <see cref="TestBuilder{TSyntax}"/> definition of a test
         /// </summary>
-        /// <remarks>
-        /// It is easier to `await` an instance of <see cref="TestBuilder{TSyntax}"/>
-        /// than call run for most use cases
-        /// </remarks>
         public async Task Run()
         {
             try
