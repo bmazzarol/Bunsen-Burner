@@ -10,7 +10,19 @@ public class AaaSyntaxTests
     public async Task Case1() =>
         await Arrange(() => Task.FromResult(1))
             .And(x => Task.FromResult(x.ToString(InvariantCulture)))
+            .And(async x =>
+            {
+                await Task.Yield();
+                Assert.Equal("1", x);
+            })
             .Act(x => Task.FromResult(x.Length))
+            .And(
+                async (_, x) =>
+                {
+                    await Task.Yield();
+                    Assert.Equal(1, x);
+                }
+            )
             .And((_, r) => Task.FromResult(r + 1))
             .Assert(
                 (_, r) =>
@@ -24,7 +36,9 @@ public class AaaSyntaxTests
     public async Task Case2() =>
         await Arrange(() => 1)
             .And(x => x.ToString(InvariantCulture))
+            .And(x => Assert.Equal("1", x))
             .Act(x => x.Length)
+            .And((_, x) => Assert.Equal(1, x))
             .And((_, r) => r + 1)
             .Assert((_, r) => Assert.Equal(2, r));
 

@@ -15,35 +15,4 @@ internal static partial class Shared
         Func<TData, TResult> fn
     )
         where TSyntax : struct, Syntax => test.Act(x => Task.FromResult(fn(x)));
-
-    [Pure]
-    internal static TestBuilder<TSyntax>.Acted<TData, TResultNext> And<
-        TData,
-        TResult,
-        TResultNext,
-        TSyntax
-    >(
-        this TestBuilder<TSyntax>.Acted<TData, TResult> test,
-        Func<TData, TResult, Task<TResultNext>> fn
-    )
-        where TSyntax : struct, Syntax =>
-        new(
-            test.ArrangeStep,
-            async data =>
-            {
-                var result = await test.ActStep(data);
-                var nextResult = await fn(data, result);
-                return nextResult;
-            },
-            test.Disposables
-        );
-
-    [Pure]
-    internal static TestBuilder<TSyntax>.Acted<TData, TResultNext> And<
-        TData,
-        TResult,
-        TResultNext,
-        TSyntax
-    >(this TestBuilder<TSyntax>.Acted<TData, TResult> test, Func<TData, TResult, TResultNext> fn)
-        where TSyntax : struct, Syntax => test.And((d, r) => Task.FromResult(fn(d, r)));
 }

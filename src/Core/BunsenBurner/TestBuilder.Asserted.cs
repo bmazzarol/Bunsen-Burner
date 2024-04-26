@@ -1,4 +1,6 @@
-﻿namespace BunsenBurner;
+﻿using System.Linq.Expressions;
+
+namespace BunsenBurner;
 
 public abstract partial record TestBuilder<TSyntax>
 {
@@ -52,6 +54,73 @@ public abstract partial record TestBuilder<TSyntax>
         /// Assert step
         /// </summary>
         public Func<TData, TResult, Task> AssertStep { get; }
+
+        /// <summary>
+        /// Allows for additional asserting of test data
+        /// </summary>
+        /// <param name="fn">async function asserting test data</param>
+        /// <returns>asserted test</returns>
+        [Pure]
+        public Asserted<TData, TResult> And(Func<TData, TResult, Task> fn) =>
+            new(
+                ArrangeStep,
+                ActStep,
+                async (data, result) =>
+                {
+                    await AssertStep(data, result);
+                    await fn(data, result);
+                },
+                Disposables
+            );
+
+        /// <summary>
+        /// Allows for additional asserting of test data
+        /// </summary>
+        /// <param name="fn">async function asserting test data</param>
+        /// <returns>asserted test</returns>
+        [Pure]
+        public Asserted<TData, TResult> And(Func<TResult, Task> fn) => And((_, r) => fn(r));
+
+        /// <summary>
+        /// Allows for additional asserting of test data
+        /// </summary>
+        /// <param name="fn">function asserting test data</param>
+        /// <returns>asserted test</returns>
+        [Pure]
+        public Asserted<TData, TResult> And(Action<TData, TResult> fn) =>
+            And(
+                (d, r) =>
+                {
+                    fn(d, r);
+                    return Task.CompletedTask;
+                }
+            );
+
+        /// <summary>
+        /// Allows for additional asserting of test data
+        /// </summary>
+        /// <param name="fn">function asserting test data</param>
+        /// <returns>asserted test</returns>
+        [Pure]
+        public Asserted<TData, TResult> And(Action<TResult> fn) => And((_, r) => fn(r));
+
+        /// <summary>
+        /// Allows for additional asserting of test data
+        /// </summary>
+        /// <param name="expression">expression to assert against</param>
+        /// <returns>asserted test</returns>
+        [Pure]
+        public Asserted<TData, TResult> And(Expression<Func<TResult, bool>> expression) =>
+            And(r => r.RunExpressionAssertion(expression));
+
+        /// <summary>
+        /// Allows for additional asserting of test data
+        /// </summary>
+        /// <param name="expression">expression to assert against</param>
+        /// <returns>asserted test</returns>
+        [Pure]
+        public Asserted<TData, TResult> And(Expression<Func<TData, TResult, bool>> expression) =>
+            And((d, r) => d.RunExpressionAssertion(r, expression));
 
         /// <summary>
         /// Disables auto disposal of captured disposables

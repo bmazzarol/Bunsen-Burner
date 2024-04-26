@@ -5,7 +5,7 @@ least on
 [act](xref:BunsenBurner.TestBuilder`1.Acted`2) step.
 
 Both sync and async is supported as well as
-additional <xref:BunsenBurner.AaaSyntax.And*> steps.
+additional <xref:BunsenBurner.TestBuilder`1.Asserted`2.And*> steps.
 
 [!code-csharp[Example5](../../../Core/BunsenBurner.Tests/Examples/ArrangeActAssert.cs#Example5)]
 

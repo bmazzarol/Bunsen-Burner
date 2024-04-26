@@ -20,7 +20,7 @@ It does this in a few ways,
 
   [!code-csharp[Example1c](../../../Core/BunsenBurner.Tests/Examples/GettingStarted.cs#Example1c)]
 
-* Provides additional <xref:BunsenBurner.AaaSyntax.And*> stages to promote short stages, 
+* Provides additional `And` stages to promote short stages, 
   particularly helpful in the assertion stage
 
   [!code-csharp[Example1](../../../Core/BunsenBurner.Tests/Examples/ArrangeActAssert.cs#Example1)]

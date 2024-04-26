@@ -78,5 +78,66 @@ public abstract partial record TestBuilder<TSyntax>
         /// <exception cref="NoFailureException">thrown when the act step does not throw an exception</exception>
         [Pure]
         public Acted<TData, Exception> Throw() => Throw<Exception>();
+
+        /// <summary>
+        /// Allows for additional acting on the test data
+        /// </summary>
+        /// <param name="fn">async function transforming test data and last result into a new result</param>
+        /// <typeparam name="TResultNext">next result of acting</typeparam>
+        /// <returns>acted test</returns>
+        [Pure]
+        public Acted<TData, TResultNext> And<TResultNext>(
+            Func<TData, TResult, Task<TResultNext>> fn
+        ) =>
+            new(
+                ArrangeStep,
+                async data =>
+                {
+                    var lastResult = await ActStep(data);
+                    var result = await fn(data, lastResult);
+                    return result;
+                },
+                Disposables
+            );
+
+        /// <summary>
+        /// Allows for additional acting on the test data
+        /// </summary>
+        /// <param name="fn">async function transforming test data and last result into a new result</param>
+        /// <typeparam name="TResultNext">next result of acting</typeparam>
+        /// <returns>acted test</returns>
+        [Pure]
+        public Acted<TData, TResultNext> And<TResultNext>(Func<TData, TResult, TResultNext> fn) =>
+            And((data, lastResult) => Task.FromResult(fn(data, lastResult)));
+
+        /// <summary>
+        /// Allows for additional acting on the test data
+        /// </summary>
+        /// <param name="action">action to apply to the test data and last result</param>
+        /// <returns>acted test</returns>
+        [Pure]
+        public Acted<TData, TResult> And(Func<TData, TResult, Task> action) =>
+            And(
+                async (data, result) =>
+                {
+                    await action(data, result);
+                    return result;
+                }
+            );
+
+        /// <summary>
+        /// Allows for additional acting on the test data
+        /// </summary>
+        /// <param name="action">action to apply to the test data and last result</param>
+        /// <returns>acted test</returns>
+        [Pure]
+        public Acted<TData, TResult> And(Action<TData, TResult> action) =>
+            And(
+                (data, result) =>
+                {
+                    action(data, result);
+                    return result;
+                }
+            );
     }
 }

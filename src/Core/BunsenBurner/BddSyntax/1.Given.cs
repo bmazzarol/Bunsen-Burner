@@ -34,32 +34,4 @@ public static partial class BddSyntax
     [Pure]
     public static ScenarioBuilder.Arranged<TData> Given<TData>(this TData data) =>
         Shared.Arrange<TData, Syntax.Bdd>(data);
-
-    /// <summary>
-    /// Allows for additional given steps
-    /// </summary>
-    /// <param name="scenario">arranged scenario</param>
-    /// <param name="fn">async function transforming scenario data into scenario data</param>
-    /// <typeparam name="TData">initial scenario data</typeparam>
-    /// <typeparam name="TDataNext">next scenario data</typeparam>
-    /// <returns>scenario with the given data</returns>
-    [Pure]
-    public static ScenarioBuilder.Arranged<TDataNext> And<TData, TDataNext>(
-        this ScenarioBuilder.Arranged<TData> scenario,
-        Func<TData, Task<TDataNext>> fn
-    ) => Shared.And(scenario, fn);
-
-    /// <summary>
-    /// Allows for additional given steps
-    /// </summary>
-    /// <param name="scenario">arranged scenario</param>
-    /// <param name="fn">function transforming test data into test data</param>
-    /// <typeparam name="TData">initial scenario data</typeparam>
-    /// <typeparam name="TDataNext">next scenario data</typeparam>
-    /// <returns>scenario with the given data</returns>
-    [Pure]
-    public static ScenarioBuilder.Arranged<TDataNext> And<TData, TDataNext>(
-        this ScenarioBuilder.Arranged<TData> scenario,
-        Func<TData, TDataNext> fn
-    ) => Shared.And(scenario, fn);
 }

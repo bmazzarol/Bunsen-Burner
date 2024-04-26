@@ -23,5 +23,59 @@ public abstract partial record TestBuilder<TSyntax>
                 TrackPotentialDisposal(data);
                 return data;
             };
+
+        /// <summary>
+        /// Allows for additional arranging of test data
+        /// </summary>
+        /// <param name="fn">async function transforming test data into test data</param>
+        /// <typeparam name="TDataNext">next data required to act on the test</typeparam>
+        /// <returns>arranged test</returns>
+        [Pure]
+        public Arranged<TDataNext> And<TDataNext>(Func<TData, Task<TDataNext>> fn) =>
+            new(
+                async () =>
+                {
+                    var result = await ArrangeStep();
+                    var nextResult = await fn(result);
+                    return nextResult;
+                },
+                Disposables
+            );
+
+        /// <summary>
+        /// Allows for additional arranging of test data
+        /// </summary>
+        /// <param name="fn">function transforming test data into test data</param>
+        /// <typeparam name="TDataNext">next data required to act on the test</typeparam>
+        /// <returns>arranged test</returns>
+        [Pure]
+        public Arranged<TDataNext> And<TDataNext>(Func<TData, TDataNext> fn) =>
+            And(data => Task.FromResult(fn(data)));
+
+        /// <summary>
+        /// Allows for additional arranging of test data
+        /// </summary>
+        /// <param name="action">action to apply to the test data</param>
+        /// <returns>arranged test</returns>
+        [Pure]
+        public Arranged<TData> And(Func<TData, Task> action) =>
+            And(async data =>
+            {
+                await action(data);
+                return data;
+            });
+
+        /// <summary>
+        /// Allows for additional arranging of test data
+        /// </summary>
+        /// <param name="action">action to apply to the test data</param>
+        /// <returns>arranged test</returns>
+        [Pure]
+        public Arranged<TData> And(Action<TData> action) =>
+            And(data =>
+            {
+                action(data);
+                return data;
+            });
     }
 }
