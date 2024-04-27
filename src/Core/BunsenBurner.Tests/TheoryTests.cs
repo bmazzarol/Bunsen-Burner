@@ -2,8 +2,8 @@
 
 namespace BunsenBurner.Tests;
 
-using static AaaSyntax;
-using Test = TestBuilder<Syntax.Aaa>.Asserted<int, string>;
+using static ArrangeActAssert;
+using Test = TestBuilder<ArrangeActAssertSyntax>.Asserted<int, string>;
 
 public static class TheoryTests
 {

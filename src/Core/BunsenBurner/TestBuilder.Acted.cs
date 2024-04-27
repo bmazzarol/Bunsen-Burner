@@ -1,4 +1,6 @@
-﻿namespace BunsenBurner;
+﻿using BunsenBurner.Exceptions;
+
+namespace BunsenBurner;
 
 public abstract partial record TestBuilder<TSyntax>
 {
@@ -12,12 +14,7 @@ public abstract partial record TestBuilder<TSyntax>
         private readonly Func<Task<TData>> _arrangeStep;
         private readonly Func<TData, Task<TResult>> _actStep;
 
-        internal Acted(
-            Func<Task<TData>> arrangeStep,
-            Func<TData, Task<TResult>> actStep,
-            HashSet<object> disposables
-        )
-            : base(disposables)
+        internal Acted(Func<Task<TData>> arrangeStep, Func<TData, Task<TResult>> actStep)
         {
             _arrangeStep = arrangeStep;
             _actStep = actStep;
@@ -67,8 +64,7 @@ public abstract partial record TestBuilder<TSyntax>
                     {
                         return e;
                     }
-                },
-                Disposables
+                }
             );
 
         /// <summary>
@@ -96,8 +92,7 @@ public abstract partial record TestBuilder<TSyntax>
                     var lastResult = await ActStep(data);
                     var result = await fn(data, lastResult);
                     return result;
-                },
-                Disposables
+                }
             );
 
         /// <summary>

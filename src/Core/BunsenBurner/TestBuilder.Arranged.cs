@@ -10,8 +10,7 @@ public abstract partial record TestBuilder<TSyntax>
     {
         private readonly Func<Task<TData>> _arrangeStep;
 
-        internal Arranged(Func<Task<TData>> arrangeStep, HashSet<object> disposables)
-            : base(disposables) => _arrangeStep = arrangeStep;
+        internal Arranged(Func<Task<TData>> arrangeStep) => _arrangeStep = arrangeStep;
 
         /// <summary>
         /// Arrange step
@@ -32,15 +31,12 @@ public abstract partial record TestBuilder<TSyntax>
         /// <returns>arranged test</returns>
         [Pure]
         public Arranged<TDataNext> And<TDataNext>(Func<TData, Task<TDataNext>> fn) =>
-            new(
-                async () =>
-                {
-                    var result = await ArrangeStep();
-                    var nextResult = await fn(result);
-                    return nextResult;
-                },
-                Disposables
-            );
+            new(async () =>
+            {
+                var result = await ArrangeStep();
+                var nextResult = await fn(result);
+                return nextResult;
+            });
 
         /// <summary>
         /// Allows for additional arranging of test data

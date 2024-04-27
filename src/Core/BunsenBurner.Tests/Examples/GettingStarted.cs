@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json;
-using static BunsenBurner.AaaSyntax;
+using static BunsenBurner.ArrangeActAssert;
 
 namespace BunsenBurner.Tests.Examples;
 

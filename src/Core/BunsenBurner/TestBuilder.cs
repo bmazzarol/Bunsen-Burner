@@ -15,7 +15,7 @@
 /// </summary>
 /// <typeparam name="TSyntax">Supported syntax</typeparam>
 public abstract partial record TestBuilder<TSyntax>
-    where TSyntax : struct, Syntax
+    where TSyntax : struct, ISyntax<TSyntax>
 {
     /// <summary>
     /// Optional name for the test
@@ -28,20 +28,18 @@ public abstract partial record TestBuilder<TSyntax>
     /// <summary>
     /// Stores any disposables for cleanup after the <see cref="TestBuilder{TSyntax}"/> is run
     /// </summary>
-    internal HashSet<object> Disposables { get; }
+    private HashSet<object>? _disposables;
 
     private void TrackPotentialDisposal<T>(T potentialDisposable)
     {
         if (potentialDisposable is IDisposable or IAsyncDisposable)
         {
-            Disposables.Add(potentialDisposable);
+            _disposables ??= new();
+            _disposables.Add(potentialDisposable);
         }
     }
 
-    private TestBuilder(HashSet<object> disposables)
-    {
-        Disposables = disposables;
-    }
+    private TestBuilder() { }
 
     /// <summary>
     /// Builds a new <see cref="Arranged{TData}"/>
@@ -49,7 +47,7 @@ public abstract partial record TestBuilder<TSyntax>
     /// <param name="fn">arrange function</param>
     /// <typeparam name="TData">data required to act on the <see cref="TestBuilder{TSyntax}"/></typeparam>
     /// <returns>arranged test</returns>
-    public static Arranged<TData> BuildArranged<TData>(Func<Task<TData>> fn) => new(fn, new());
+    public static Arranged<TData> BuildArranged<TData>(Func<Task<TData>> fn) => new(fn);
 
     /// <summary>
     /// Builds a new <see cref="Arranged{TData}"/>
@@ -62,7 +60,7 @@ public abstract partial record TestBuilder<TSyntax>
     public static Acted<TData, TResult> BuildActed<TData, TResult>(
         Func<Task<TData>> arrangeStep,
         Func<TData, Task<TResult>> actStep
-    ) => new(arrangeStep, actStep, new());
+    ) => new(arrangeStep, actStep);
 
     /// <summary>
     /// Builds a new <see cref="Asserted{TData, TResult}"/>
@@ -77,5 +75,5 @@ public abstract partial record TestBuilder<TSyntax>
         Func<Task<TData>> arrangeStep,
         Func<TData, Task<TResult>> actStep,
         Func<TData, TResult, Task> assertStep
-    ) => new(arrangeStep, actStep, assertStep, new());
+    ) => new(arrangeStep, actStep, assertStep);
 }

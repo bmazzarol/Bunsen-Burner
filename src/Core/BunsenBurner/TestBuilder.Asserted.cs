@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using BunsenBurner.Extensions;
 
 namespace BunsenBurner;
 
@@ -18,10 +19,8 @@ public abstract partial record TestBuilder<TSyntax>
         internal Asserted(
             Func<Task<TData>> arrangeStep,
             Func<TData, Task<TResult>> actStep,
-            Func<TData, TResult, Task> assertStep,
-            HashSet<object> disposables
+            Func<TData, TResult, Task> assertStep
         )
-            : base(disposables)
         {
             _arrangeStep = arrangeStep;
             _actStep = actStep;
@@ -69,8 +68,7 @@ public abstract partial record TestBuilder<TSyntax>
                 {
                     await AssertStep(data, result);
                     await fn(data, result);
-                },
-                Disposables
+                }
             );
 
         /// <summary>
@@ -111,7 +109,7 @@ public abstract partial record TestBuilder<TSyntax>
         /// <returns>asserted test</returns>
         [Pure]
         public Asserted<TData, TResult> And(Expression<Func<TResult, bool>> expression) =>
-            And(r => r.RunExpressionAssertion(expression));
+            And(expression.RunExpressionAssertion);
 
         /// <summary>
         /// Allows for additional asserting of test data
@@ -120,7 +118,7 @@ public abstract partial record TestBuilder<TSyntax>
         /// <returns>asserted test</returns>
         [Pure]
         public Asserted<TData, TResult> And(Expression<Func<TData, TResult, bool>> expression) =>
-            And((d, r) => d.RunExpressionAssertion(r, expression));
+            And(expression.RunExpressionAssertion);
 
         /// <summary>
         /// Disables auto disposal of captured disposables
@@ -146,9 +144,9 @@ public abstract partial record TestBuilder<TSyntax>
             }
             finally
             {
-                if (AutoDispose)
+                if (AutoDispose && _disposables is not null)
                 {
-                    foreach (var disposable in Disposables)
+                    foreach (var disposable in _disposables)
                     {
                         switch (disposable)
                         {
