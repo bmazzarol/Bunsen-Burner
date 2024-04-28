@@ -10,5 +10,5 @@ jobs:
     steps:
       - uses: bmazzarol/bmazzarol/.github/actions/check-docs@main
         with:
-          docsProjectPath: src/Docs/BunsenBurner.Docs
+          docsProjectPath: BunsenBurner.Docs
           csProjFileName: BunsenBurner.Docs.csproj

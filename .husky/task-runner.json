@@ -31,7 +31,7 @@
             "command": "dotnet",
             "args": [
                 "build",
-                "src/Docs/BunsenBurner.Docs/BunsenBurner.Docs.csproj"
+                "BunsenBurner.Docs/BunsenBurner.Docs.csproj"
             ]
         }
     ]
