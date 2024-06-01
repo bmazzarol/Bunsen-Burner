@@ -12,19 +12,19 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </GlobalPackageReference>
-    <GlobalPackageReference Include="Meziantou.Analyzer" Version="2.0.122">
+    <GlobalPackageReference Include="Meziantou.Analyzer" Version="2.0.154">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </GlobalPackageReference>
-    <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.7.0">
+    <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.12.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </GlobalPackageReference>
-    <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="9.16.0.82469">
+    <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="9.26.0.92422">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </GlobalPackageReference>
-    <GlobalPackageReference Include="FluentAssertions.Analyzers" Version="0.27.0">
+    <GlobalPackageReference Include="FluentAssertions.Analyzers" Version="0.32.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </GlobalPackageReference>
@@ -32,35 +32,35 @@
   <!-- Project packages -->
   <ItemGroup>
     <PackageVersion Include="AutoFixture" Version="4.18.1" />
-    <PackageVersion Include="BenchmarkDotNet" Version="0.13.11" />
-    <PackageVersion Include="Bogus" Version="35.2.0" />
+    <PackageVersion Include="BenchmarkDotNet" Version="0.13.12" />
+    <PackageVersion Include="Bogus" Version="35.5.1" />
     <PackageVersion Include="Eon" Version="1.1.0" />
     <PackageVersion Include="Flurl" Version="4.0.0" />
     <PackageVersion Include="Hedgehog" Version="0.13.0" />
-    <PackageVersion Include="HttpBuildR.Request" Version="3.0.0" />
-    <PackageVersion Include="HttpBuildR.Response" Version="3.0.0" />
+    <PackageVersion Include="HttpBuildR.Request" Version="3.1.1" />
+    <PackageVersion Include="HttpBuildR.Response" Version="3.1.1" />
     <PackageVersion Include="JWT" Version="10.1.1" />
-    <PackageVersion Include="Meziantou.Xunit.ParallelTestFramework" Version="2.1.0" />
+    <PackageVersion Include="Meziantou.Xunit.ParallelTestFramework" Version="2.2.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageVersion Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="7.0.3" />
-    <PackageVersion Include="System.Text.Json" Version="8.0.0" />
-    <PackageVersion Include="Verify.NUnit" Version="22.11.0" />
-    <PackageVersion Include="Verify.Xunit" Version="22.11.0" />
-    <PackageVersion Include="xunit.extensibility.core" Version="2.6.4" />
+    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="7.6.0" />
+    <PackageVersion Include="System.Text.Json" Version="8.0.3" />
+    <PackageVersion Include="Verify.NUnit" Version="25.0.0" />
+    <PackageVersion Include="Verify.Xunit" Version="25.0.0" />
+    <PackageVersion Include="xunit.extensibility.core" Version="2.8.1" />
   </ItemGroup>
   <!-- target framework versions -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="6.0.25" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.25" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="6.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
     <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.0" />
@@ -69,19 +69,19 @@
   </ItemGroup>
   <!-- Test packages -->
   <ItemGroup>
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageVersion Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.2.0" />
-    <PackageVersion Include="xunit" Version="2.6.4" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.5" />
-    <PackageVersion Include="NUnit" Version="4.0.1" />
+    <PackageVersion Include="xunit" Version="2.8.1" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.1" />
+    <PackageVersion Include="NUnit" Version="4.1.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
-    <PackageVersion Include="NUnit.Analyzers" Version="3.10.0" />
+    <PackageVersion Include="NUnit.Analyzers" Version="4.2.0" />
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
-    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
-    <PackageVersion Include="WireMock.Net" Version="1.5.44" />
+    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.6.0" />
+    <PackageVersion Include="WireMock.Net" Version="1.5.55" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.25" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0" />
