@@ -22,7 +22,7 @@ public static class GivenWhenThen
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
     [Pure]
-    public static Arranged<TData> Given<TData>(Func<Task<TData>> fn) => BuildArranged(fn);
+    public static Arranged<TData> Given<TData>(Func<Task<TData>> fn) => New(fn);
 
     /// <summary>
     /// Given the scenario data
@@ -31,8 +31,7 @@ public static class GivenWhenThen
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
     [Pure]
-    public static Arranged<TData> Given<TData>(Func<TData> fn) =>
-        BuildArranged(() => Task.FromResult(fn()));
+    public static Arranged<TData> Given<TData>(Func<TData> fn) => New(() => Task.FromResult(fn()));
 
     /// <summary>
     /// Given the scenario data
@@ -55,7 +54,7 @@ public static class GivenWhenThen
     public static Acted<TData, TResult> When<TData, TResult>(
         this Arranged<TData> scenario,
         Func<TData, Task<TResult>> fn
-    ) => BuildActed(scenario.ArrangeStep, fn);
+    ) => New(scenario.ArrangeStep, fn);
 
     /// <summary>
     /// When the scenario is run
@@ -83,7 +82,7 @@ public static class GivenWhenThen
     public static Asserted<TData, TResult> Then<TData, TResult>(
         this Acted<TData, TResult> scenario,
         Func<TData, TResult, Task> fn
-    ) => BuildAsserted(scenario.ArrangeStep, scenario.ActStep, fn);
+    ) => New(scenario.ArrangeStep, scenario.ActStep, fn);
 
     /// <summary>
     /// Then verify the scenario

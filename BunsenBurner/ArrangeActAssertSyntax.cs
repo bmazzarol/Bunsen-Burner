@@ -22,7 +22,7 @@ public static class ArrangeActAssert
     /// <typeparam name="TData">data required to act on the test</typeparam>
     /// <returns>arranged test</returns>
     [Pure]
-    public static Arranged<TData> Arrange<TData>(Func<Task<TData>> fn) => BuildArranged(fn);
+    public static Arranged<TData> Arrange<TData>(Func<Task<TData>> fn) => New(fn);
 
     /// <summary>
     /// Arranges the test data
@@ -32,7 +32,7 @@ public static class ArrangeActAssert
     /// <returns>arranged test</returns>
     [Pure]
     public static Arranged<TData> Arrange<TData>(Func<TData> fn) =>
-        BuildArranged(() => Task.FromResult(fn()));
+        New(() => Task.FromResult(fn()));
 
     /// <summary>
     /// Arranges the test data
@@ -55,7 +55,7 @@ public static class ArrangeActAssert
     public static Acted<TData, TResult> Act<TData, TResult>(
         this Arranged<TData> test,
         Func<TData, Task<TResult>> fn
-    ) => BuildActed(test.ArrangeStep, fn);
+    ) => New(test.ArrangeStep, fn);
 
     /// <summary>
     /// Acts on the test data and returns a result to assert against
@@ -83,7 +83,7 @@ public static class ArrangeActAssert
     public static Asserted<TData, TResult> Assert<TData, TResult>(
         this Acted<TData, TResult> test,
         Func<TData, TResult, Task> fn
-    ) => BuildAsserted(test.ArrangeStep, test.ActStep, fn);
+    ) => New(test.ArrangeStep, test.ActStep, fn);
 
     /// <summary>
     /// Asserts on the result of acting on the test

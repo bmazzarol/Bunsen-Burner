@@ -10,7 +10,7 @@
 /// </ul>
 /// </para>
 /// <para>This construct can represent any single test, and provides the foundation for building tests as data.</para>
-/// <para>The <see cref="TestBuilder{TSyntax}"/> will also manage disposal of all `data` and `result` values
+/// <para><see cref="TestBuilder{TSyntax}"/> will also manage disposal of all `data` and `result` values
 /// that are used as long as they implement <see cref="IDisposable"/> or <see cref="IAsyncDisposable"/>.</para>
 /// </summary>
 /// <typeparam name="TSyntax">Supported syntax</typeparam>
@@ -32,11 +32,11 @@ public abstract partial record TestBuilder<TSyntax>
 
     private void TrackPotentialDisposal<T>(T potentialDisposable)
     {
-        if (potentialDisposable is IDisposable or IAsyncDisposable)
-        {
-            _disposables ??= new();
-            _disposables.Add(potentialDisposable);
-        }
+        if (potentialDisposable is not (IDisposable or IAsyncDisposable))
+            return;
+
+        _disposables ??= new();
+        _disposables.Add(potentialDisposable);
     }
 
     private TestBuilder() { }
@@ -47,7 +47,7 @@ public abstract partial record TestBuilder<TSyntax>
     /// <param name="fn">arrange function</param>
     /// <typeparam name="TData">data required to act on the <see cref="TestBuilder{TSyntax}"/></typeparam>
     /// <returns>arranged test</returns>
-    public static Arranged<TData> BuildArranged<TData>(Func<Task<TData>> fn) => new(fn);
+    public static Arranged<TData> New<TData>(Func<Task<TData>> fn) => new(fn);
 
     /// <summary>
     /// Builds a new <see cref="Arranged{TData}"/>
@@ -57,7 +57,7 @@ public abstract partial record TestBuilder<TSyntax>
     /// <typeparam name="TData">data required to act on the <see cref="TestBuilder{TSyntax}"/></typeparam>
     /// <typeparam name="TResult">result of acting</typeparam>
     /// <returns>acted test</returns>
-    public static Acted<TData, TResult> BuildActed<TData, TResult>(
+    public static Acted<TData, TResult> New<TData, TResult>(
         Func<Task<TData>> arrangeStep,
         Func<TData, Task<TResult>> actStep
     ) => new(arrangeStep, actStep);
@@ -71,7 +71,7 @@ public abstract partial record TestBuilder<TSyntax>
     /// <typeparam name="TData">data required to act on the <see cref="TestBuilder{TSyntax}"/></typeparam>
     /// <typeparam name="TResult">result of acting</typeparam>
     /// <returns>asserted test</returns>
-    public static Asserted<TData, TResult> BuildAsserted<TData, TResult>(
+    public static Asserted<TData, TResult> New<TData, TResult>(
         Func<Task<TData>> arrangeStep,
         Func<TData, Task<TResult>> actStep,
         Func<TData, TResult, Task> assertStep
