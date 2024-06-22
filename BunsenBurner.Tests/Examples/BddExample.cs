@@ -10,8 +10,8 @@ using static BunsenBurner.GivenWhenThen;
 public class BddExample
 {
     [Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
-    public async Task ExampleTestUsingBddBuilder() =>
-        await Given(
+    public Task ExampleTestUsingBddBuilder() =>
+        Given(
                 () =>
                     (
                         Widget: new { Name = "Widget1", Cost = 12.50 },

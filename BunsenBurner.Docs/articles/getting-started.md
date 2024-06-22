@@ -24,6 +24,9 @@ the [test builder (DSL)](<xref:BunsenBurner.TestBuilder`1>) like so,
 
 [!code-csharp[Example1b](../../BunsenBurner.Tests/Examples/GettingStarted.cs#Example1b)]
 
+> [!NOTE]
+> Tests must always return a `Task` to be compatible with the DSL.
+
 This formalizes the structure and then opens up refactoring possibilities
 such as pulling out a shared act method,
 

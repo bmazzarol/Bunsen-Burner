@@ -8,6 +8,16 @@ namespace BunsenBurner.Exceptions;
 [SuppressMessage("Roslynator", "RCS1194:Implement exception constructors")]
 public sealed class NoFailureException : Exception
 {
-    internal NoFailureException()
-        : base("Test was expected to fail, but completed without issue") { }
+    internal NoFailureException(string? name)
+        : base(BuildErrorMessage(name)) { }
+
+    private static string BuildErrorMessage(string? name)
+    {
+        if (name is null)
+        {
+            return "Test did not fail as expected";
+        }
+
+        return $"Test '{name}' did not fail as expected";
+    }
 }

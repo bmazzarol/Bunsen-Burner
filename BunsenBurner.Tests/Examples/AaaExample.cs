@@ -10,8 +10,8 @@ using static BunsenBurner.ArrangeActAssert;
 public class AaaExample
 {
     [Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
-    public async Task ExampleTestUsingAaaBuilder() =>
-        await Arrange(
+    public Task ExampleTestUsingAaaBuilder() =>
+        Arrange(
                 () =>
                     (
                         Widget: new { Name = "Widget1", Cost = 12.50 },

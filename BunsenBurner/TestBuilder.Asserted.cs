@@ -69,7 +69,10 @@ public abstract partial record TestBuilder<TSyntax>
                     await AssertStep(data, result);
                     await fn(data, result);
                 }
-            );
+            )
+            {
+                Name = Name
+            };
 
         /// <summary>
         /// Allows for additional asserting of test data
@@ -124,6 +127,7 @@ public abstract partial record TestBuilder<TSyntax>
         /// Disables auto disposal of captured disposables
         /// </summary>
         /// <returns>an asserted test</returns>
+        [Pure]
         public Asserted<TData, TResult> NoDisposal() => this with { AutoDispose = false };
 
         /// <summary>
@@ -167,5 +171,12 @@ public abstract partial record TestBuilder<TSyntax>
         /// </summary>
         /// <returns>awaiter</returns>
         public TaskAwaiter GetAwaiter() => Run().GetAwaiter();
+
+        /// <summary>
+        /// Implicit conversion to a task so a test can be run
+        /// </summary>
+        /// <param name="asserted">asserted test</param>
+        /// <returns>task</returns>
+        public static implicit operator Task(Asserted<TData, TResult> asserted) => asserted.Run();
     }
 }

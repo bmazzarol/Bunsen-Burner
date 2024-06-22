@@ -36,7 +36,10 @@ public abstract partial record TestBuilder<TSyntax>
                 var result = await ArrangeStep();
                 var nextResult = await fn(result);
                 return nextResult;
-            });
+            })
+            {
+                Name = Name
+            };
 
         /// <summary>
         /// Allows for additional arranging of test data

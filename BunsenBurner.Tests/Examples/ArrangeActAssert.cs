@@ -9,8 +9,8 @@ public class ArrangeActAssert
     #region Example1
 
     [Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
-    public async Task ExampleTest() =>
-        await Arrange(() =>
+    public Task ExampleTest() =>
+        Arrange(() =>
             {
                 var widget = new { Name = "Widget1", Cost = 12.50 };
                 var ms = new MemoryStream();
@@ -38,8 +38,8 @@ public class ArrangeActAssert
     }
 
     [Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
-    public async Task ExampleTest2() =>
-        await Arrange(async () =>
+    public Task ExampleTest2() =>
+        Arrange(async () =>
             {
                 // async is supported
                 var widgetNameFromDatabase = await LoadWidgetNameFromDatabase();
@@ -63,8 +63,7 @@ public class ArrangeActAssert
     #region Example3
 
     [Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
-    public async Task ExampleTest3() =>
-        await
+    public Task ExampleTest3() =>
         // existing objects can also be lifted into the DSL
         new { Name = "Widget1", Cost = 12.50 }
             // using the extension method
@@ -86,8 +85,8 @@ public class ArrangeActAssert
     #region Example4
 
     [Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
-    public async Task ExampleTest4() =>
-        await new { Name = "Widget1", Cost = 12.50 }
+    public Task ExampleTest4() =>
+        new { Name = "Widget1", Cost = 12.50 }
             .Arrange()
             // supports async
             .Act(async widget =>
@@ -112,8 +111,8 @@ public class ArrangeActAssert
     #region Example5
 
     [Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
-    public async Task ExampleTest5() =>
-        await new { Name = "Widget1", Cost = 12.50 }
+    public Task ExampleTest5() =>
+        new { Name = "Widget1", Cost = 12.50 }
             .Arrange()
             .Act(SerializeAsync)
             // standard action where any assertions can be made
@@ -139,8 +138,8 @@ public class ArrangeActAssert
     #region Example6
 
     [Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
-    public async Task ExampleTest6() =>
-        await new { Name = "Widget1", Cost = 12.50 }
+    public Task ExampleTest6() =>
+        new { Name = "Widget1", Cost = 12.50 }
             .Arrange()
             .Act(SerializeAsync)
             // any expression can be used to form the assertion
@@ -153,8 +152,8 @@ public class ArrangeActAssert
     #region Example7
 
     [Fact(DisplayName = "Divide by 0 fails")]
-    public async Task ExampleTest7() =>
-        await (dividend: 3, divisor: 0)
+    public Task ExampleTest7() =>
+        (dividend: 3, divisor: 0)
             .Arrange()
             .Act(parts => parts.dividend / parts.divisor)
             // errors can be asserted against as well

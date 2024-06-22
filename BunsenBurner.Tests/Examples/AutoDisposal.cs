@@ -39,14 +39,7 @@ public class AutoDisposal
 
         await disposableType
             .Arrange()
-            .Act(data =>
-            {
-                // can access it via `Value`
-                var result = data.IsDisposed;
-                // or via implicit conversion
-                SomeDisposableType resultAsWell = data;
-                return result && resultAsWell.IsDisposed;
-            })
+            .Act(data => data.IsDisposed)
             .Assert(Assert.False)
             // disable auto-disposal
             .NoDisposal();

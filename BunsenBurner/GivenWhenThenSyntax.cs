@@ -54,7 +54,7 @@ public static class GivenWhenThen
     public static Acted<TData, TResult> When<TData, TResult>(
         this Arranged<TData> scenario,
         Func<TData, Task<TResult>> fn
-    ) => New(scenario.ArrangeStep, fn);
+    ) => New(scenario.ArrangeStep, fn, scenario.Name);
 
     /// <summary>
     /// When the scenario is run
@@ -82,7 +82,7 @@ public static class GivenWhenThen
     public static Asserted<TData, TResult> Then<TData, TResult>(
         this Acted<TData, TResult> scenario,
         Func<TData, TResult, Task> fn
-    ) => New(scenario.ArrangeStep, scenario.ActStep, fn);
+    ) => New(scenario.ArrangeStep, scenario.ActStep, fn, scenario.Name);
 
     /// <summary>
     /// Then verify the scenario

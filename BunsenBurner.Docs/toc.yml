@@ -16,6 +16,8 @@ items:
         href: articles/assert.md
       - name: Auto Disposal
         href: articles/auto-disposal.md
+      - name: Theories
+        href: articles/theories.md
     expanded: true
   - name: .NET API Docs
     href: api/toc.yml

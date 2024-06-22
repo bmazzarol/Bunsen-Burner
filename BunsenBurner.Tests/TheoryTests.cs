@@ -1,6 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿namespace BunsenBurner.Tests;
 
-namespace BunsenBurner.Tests;
+#region TheoryExample
 
 using static ArrangeActAssert;
 using Test = TestBuilder<ArrangeActAssertSyntax>.Asserted<int, string>;
@@ -10,12 +10,9 @@ public static class TheoryTests
     public static readonly TheoryData<Test> TestCases = Enumerable
         .Range(1, 10)
         .Select(i =>
-            Arrange(() => i)
+            (i.Arrange() with { Name = $"{i} can be converted to a string" })
                 .Act(x => x.ToString(InvariantCulture))
-                .Assert(r => Assert.Equal($"{i}", r)) with
-            {
-                Name = $"{i} can be converted to a string"
-            }
+                .Assert(r => Assert.Equal($"{i}", r))
         )
         .Aggregate(
             new TheoryData<Test>(),
@@ -28,6 +25,7 @@ public static class TheoryTests
 
     [Theory(DisplayName = "Tests work well in theories")]
     [MemberData(nameof(TestCases))]
-    [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions")]
-    public static async Task Case1(Test scenario) => await scenario;
+    public static Task Case1(Test scenario) => scenario;
 }
+
+#endregion

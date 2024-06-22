@@ -45,22 +45,26 @@ public abstract partial record TestBuilder<TSyntax>
     /// Builds a new <see cref="Arranged{TData}"/>
     /// </summary>
     /// <param name="fn">arrange function</param>
+    /// <param name="name">optional name of the test</param>
     /// <typeparam name="TData">data required to act on the <see cref="TestBuilder{TSyntax}"/></typeparam>
     /// <returns>arranged test</returns>
-    public static Arranged<TData> New<TData>(Func<Task<TData>> fn) => new(fn);
+    public static Arranged<TData> New<TData>(Func<Task<TData>> fn, string? name = default) =>
+        new(fn) { Name = name };
 
     /// <summary>
     /// Builds a new <see cref="Arranged{TData}"/>
     /// </summary>
     /// <param name="arrangeStep">arrange step</param>
     /// <param name="actStep">act step</param>
+    /// <param name="name">optional name of the test</param>
     /// <typeparam name="TData">data required to act on the <see cref="TestBuilder{TSyntax}"/></typeparam>
     /// <typeparam name="TResult">result of acting</typeparam>
     /// <returns>acted test</returns>
     public static Acted<TData, TResult> New<TData, TResult>(
         Func<Task<TData>> arrangeStep,
-        Func<TData, Task<TResult>> actStep
-    ) => new(arrangeStep, actStep);
+        Func<TData, Task<TResult>> actStep,
+        string? name = default
+    ) => new(arrangeStep, actStep) { Name = name };
 
     /// <summary>
     /// Builds a new <see cref="Asserted{TData, TResult}"/>
@@ -68,12 +72,14 @@ public abstract partial record TestBuilder<TSyntax>
     /// <param name="arrangeStep">arrange step</param>
     /// <param name="actStep">act step</param>
     /// <param name="assertStep">assert step</param>
+    /// <param name="name">optional name of the test</param>
     /// <typeparam name="TData">data required to act on the <see cref="TestBuilder{TSyntax}"/></typeparam>
     /// <typeparam name="TResult">result of acting</typeparam>
     /// <returns>asserted test</returns>
     public static Asserted<TData, TResult> New<TData, TResult>(
         Func<Task<TData>> arrangeStep,
         Func<TData, Task<TResult>> actStep,
-        Func<TData, TResult, Task> assertStep
-    ) => new(arrangeStep, actStep, assertStep);
+        Func<TData, TResult, Task> assertStep,
+        string? name = default
+    ) => new(arrangeStep, actStep, assertStep) { Name = name };
 }

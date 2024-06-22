@@ -58,14 +58,17 @@ public abstract partial record TestBuilder<TSyntax>
                     try
                     {
                         await ActStep(data);
-                        throw new NoFailureException();
+                        throw new NoFailureException(Name);
                     }
                     catch (TException e) when (e is not NoFailureException)
                     {
                         return e;
                     }
                 }
-            );
+            )
+            {
+                Name = Name
+            };
 
         /// <summary>
         /// Flips the result of the act step to the error side
@@ -93,7 +96,10 @@ public abstract partial record TestBuilder<TSyntax>
                     var result = await fn(data, lastResult);
                     return result;
                 }
-            );
+            )
+            {
+                Name = Name
+            };
 
         /// <summary>
         /// Allows for additional acting on the test data

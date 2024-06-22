@@ -30,8 +30,8 @@ public class GettingStarted
     #region Example1b
 
     [Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
-    public async Task ExampleTestUsingAaaBuilder() =>
-        await Arrange(() =>
+    public Task ExampleTestUsingAaaBuilder() =>
+        Arrange(() =>
             {
                 var widget = new { Name = "Widget1", Cost = 12.50 };
                 var ms = new MemoryStream();
@@ -51,8 +51,8 @@ public class GettingStarted
     #region Example1c
 
     [Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
-    public async Task ExampleTestUsingAaaBuilder2() =>
-        await Arrange(() =>
+    public Task ExampleTestUsingAaaBuilder2() =>
+        Arrange(() =>
             {
                 var widget = new { Name = "Widget1", Cost = 12.50 };
                 var ms = new MemoryStream();
