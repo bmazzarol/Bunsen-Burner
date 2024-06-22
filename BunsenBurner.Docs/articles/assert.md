@@ -1,7 +1,7 @@
 # Assert
 
 An [assert](xref:BunsenBurner.TestBuilder`1.Asserted`2) step must follow at
-least on
+least one
 [act](xref:BunsenBurner.TestBuilder`1.Acted`2) step.
 
 Both sync and async is supported as well as
