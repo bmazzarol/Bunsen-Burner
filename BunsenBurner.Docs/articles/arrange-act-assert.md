@@ -3,7 +3,7 @@
 The [Arrange, Act and Assert Pattern](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-best-practices)
 is a way of structuring tests so that
 they are easy to read and understand. This pattern is also known as the Given,
-When, Then pattern (one of the reasons both <xref:BunsenBurner.Syntax> is
+When, Then pattern (one of the reasons both <xref:BunsenBurner.ISyntax`1> is
 supported).
 
 By breaking down your tests into these three distinct stages, you can more

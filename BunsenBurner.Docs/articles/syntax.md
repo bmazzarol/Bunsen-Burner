@@ -1,12 +1,12 @@
 # Syntax
 
-Bunsen Burner supports 2 DLS flavours via <xref:BunsenBurner.Syntax>,
+Bunsen Burner supports 2 DLS flavours via <xref:BunsenBurner.ISyntax`1>,
 
-1. <xref:BunsenBurner.Syntax.Aaa> - [Arrange Act Assert](xref:BunsenBurner.AaaSyntax)
+1. <xref:BunsenBurner.ArrangeActAssertSyntax> - [Arrange Act Assert](xref:BunsenBurner.ArrangeActAssert)
 
    [!code-csharp[Example1](../../BunsenBurner.Tests/Examples/AaaExample.cs#Example1)]
 
-2. <xref:BunsenBurner.Syntax.Bdd> - [Given When Then (BDD)](xref:BunsenBurner.BddSyntax)
+2. <xref:BunsenBurner.GivenWhenThenSyntax> - [Given When Then (BDD)](xref:BunsenBurner.GivenWhenThen)
 
    [!code-csharp[Example1](../../BunsenBurner.Tests/Examples/BddExample.cs#Example1)]
 
