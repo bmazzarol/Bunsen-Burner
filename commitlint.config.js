@@ -9,20 +9,7 @@ module.exports = {
             [
                 "deps",
                 "docs",
-                "core",
-                "auto-fixture",
-                "background",
-                "bogus",
-                "dependency-injection",
-                "function-app",
-                "hedgehog",
-                "http",
-                "logging",
-                "verify-nunit",
-                "verify-xunit",
-                "xunit",
-                "nunit",
-                "benchmarkdotnet"
+                "core"
             ]
         ]
     }

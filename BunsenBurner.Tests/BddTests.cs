@@ -1,9 +1,13 @@
 using System.Diagnostics.CodeAnalysis;
 using BunsenBurner.Exceptions;
+#region BDDUsing
+
+// for BDD style tests
+using static BunsenBurner.GivenWhenThen;
+
+#endregion
 
 namespace BunsenBurner.Tests;
-
-using static GivenWhenThen;
 
 [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions")]
 public class BddSyntaxTests

@@ -14,50 +14,53 @@
 [![CD Build](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/cd-build.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/cd-build.yml)
 [![Check Markdown](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/check-markdown.yml/badge.svg)](https://github.com/bmazzarol/Bunsen-Burner/actions/workflows/check-markdown.yml)
 
-Set :fire: to your old unit tests!
+Set :fire: to your old tests!
 A better way to write tests :test_tube: in C#.
 
 </div>
 
 ## Features
 
-* Test framework agnostic
+* Test framework-agnostic
 * Zero dependencies
-* Easy to use and extend
+* Easy to use DSL
 * More maintainable
-* Integrations to your favourite test libraries
-* Unit, Integration, Property any sort of test!
+* Easier to refactor
 
-```c#
-// Arrange act assert style
+Convert semantically equivalent tests from this,
 
-using static BunsenBurner.Aaa;
-
-namespace SomeNamespace;
-
-public static class Tests
+```csharp
+[Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
+public async Task ExampleTest()
 {
-    [Fact(DisplayName = "Example AAA test!!!")]
-    public static async Task SomeTest() =>
-        await Arrange(() => new SUT(...))
-             .Act(async sut => await sut.SomeMethod(...))
-             .Assert(result => Assert.Equal("should be this", result));
+    // Arrange
+    var widget = new { Name = "Widget1", Cost = 12.50 };
+    var ms = new MemoryStream();
+
+    // Act
+    await JsonSerializer.SerializeAsync(ms, widget);
+
+    // Assert
+    Assert.Equal(
+        expected: "{\"Name\":\"Widget1\",\"Cost\":12.5}",
+        actual: Encoding.UTF8.GetString(ms.ToArray())
+    );
 }
+```
 
-// Given when then style
+to this,
 
-using static BunsenBurner.Bdd;
-
-namespace SomeNamespace;
-
-public static class Tests
-{
-    [Fact(DisplayName = "Example BDD test!!!")]
-    public static async Task SomeTest() =>
-        await Given(() => new SUT(...))
-             .When(async sut => await sut.SomeMethod(...))
-             .Then(result => Assert.Equal("should be this", result));
-}
+```csharp
+[Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
+public Task ExampleTest() =>
+     Arrange(() => new { Name = "Widget1", Cost = 12.50 })
+    .Act(async widget =>
+    {
+        var ms = new MemoryStream();
+        await JsonSerializer.SerializeAsync(ms, widget);
+        return Encoding.UTF8.GetString(ms.ToArray());
+    })
+    .Assert(result => result == "{\"Name\":\"Widget1\",\"Cost\":12.5}");
 ```
 
 ## Getting Started
@@ -68,95 +71,45 @@ the top of each test `.cs` file
 that needs it:
 
 ```C#
-using static BunsenBurner.Aaa; // For Arrange act assert
+// for AAA style tests
+using static BunsenBurner.ArrangeActAssert;
 ```
 
 or
 
 ```C#
-using static BunsenBurner.Bdd; // For Given when then
+// for BDD style tests
+using static BunsenBurner.GivenWhenThen;
 ```
 
-Click through to the links bellow for further details.
-<!-- markdownlint-disable MD013 -->
+> [!NOTE]
+> Tests must always return a `Task` to be compatible with the DSL.
 
-| Library                                                                                     | Description                                                                                                          | Nu-Get                                                                                                                                        |
-|---------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
-| [Core](./src/Core/BunsenBurner/README.md)                                                   | Core test abstraction that makes it all possible. This is all that is required to get started!                       | [![Nuget](https://img.shields.io/nuget/v/BunsenBurner)](https://www.nuget.org/packages/BunsenBurner/)                                         |
-| [Logging](./src/Logging/BunsenBurner.Logging/README.md)                                     | Core logging abstractions. Used to assert against logged messages, useful for cases like testing background services | [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Logging)](https://www.nuget.org/packages/BunsenBurner.Logging/)                         |
-| [Xunit](./src/Xunit/BunsenBurner.Xunit/README.md)                                           | Integration with [xUnit.net](https://github.com/xunit/xunit) to easily consume Bunsen Burner                         | [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Xunit)](https://www.nuget.org/packages/BunsenBurner.Xunit/)                             |
-| [NUnit](./src/NUnit/BunsenBurner.NUnit/README.md)                                           | Integration with [NUnit](https://github.com/nunit/nunit) to easily consume Bunsen Burner                             | [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.NUnit)](https://www.nuget.org/packages/BunsenBurner.NUnit/)                             |
-| [AutoFixture](./src/AutoFixture/BunsenBurner.AutoFixture/README.md)                         | Integration with [AutoFixture](https://github.com/AutoFixture) to simplify arrange steps                             | [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.AutoFixture)](https://www.nuget.org/packages/BunsenBurner.AutoFixture/)                 |
-| [Bogus](./src/Bogus/BunsenBurner.Bogus/README.md)                                           | Integration with [Bogus](https://github.com/bchavez/Bogus) to simplify arrange steps                                 | [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Bogus)](https://www.nuget.org/packages/BunsenBurner.Bogus/)                             |
-| [DependencyInjection](./src/DependencyInjection/BunsenBurner.DependencyInjection/README.md) | Provides tests for validating Dependency Injection containers                                                        | [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.DependencyInjection)](https://www.nuget.org/packages/BunsenBurner.DependencyInjection/) |
-| [Hedgehog](./src/Hedgehog/BunsenBurner.Hedgehog/README.md)                                  | Integration with [Hedgehog](https://github.com/hedgehogqa/fsharp-hedgehog) to write property based tests             | [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Hedgehog)](https://www.nuget.org/packages/BunsenBurner.Hedgehog/)                       |
-| [BenchmarkDotNet](./src/BenchmarkDotNet/BunsenBurner.BenchmarkDotNet/README.md)             | Integration with [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet) to write performance tests             | [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.BenchmarkDotNet)](https://www.nuget.org/packages/BunsenBurner.BenchmarkDotNet/)         |
-| [Verify.Xunit](./src/Verify/BunsenBurner.Verify.Xunit/README.md)                            | Integration with [Verify.Xunit](https://github.com/VerifyTests/Verify) to simplify assert steps                      | [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Verify.Xunit)](https://www.nuget.org/packages/BunsenBurner.Verify.Xunit/)               |
-| [Verify.NUnit](./src/Verify/BunsenBurner.Verify.NUnit/README.md)                            | Integration with [Verify.NUnit](https://github.com/VerifyTests/Verify) to simplify assert steps                      | [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Verify.NUnit)](https://www.nuget.org/packages/BunsenBurner.Verify.NUnit/)               |
-| [Http](./src/Http/BunsenBurner.Http/README.md)                                              | Extension methods for testing Http servers                                                                           | [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Http)](https://www.nuget.org/packages/BunsenBurner.Http/)                               |
-| [FunctionApp](./src/FunctionApp/BunsenBurner.FunctionApp/README.md)                         | Extension methods for testing Function apps                                                                          | [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.FunctionApp)](https://www.nuget.org/packages/BunsenBurner.FunctionApp/)                 |
-| [Background](./src/Background/BunsenBurner.Background/README.md)                            | Extension methods for testing Background services                                                                    | [![Nuget](https://img.shields.io/nuget/v/BunsenBurner.Background)](https://www.nuget.org/packages/BunsenBurner.Background/)                   |
+Then use the DSL to refactor your tests.
 
-<!-- markdownlint-enable MD013 -->
+For more information, see
+the [documentation](https://bmazzarol.github.io/Bunsen-Burner).
 
 ## Why?
 
-Most tests in the C# are written in an arrange, act, assert style, like so,
-
-```c#
-using Xunit;
-
-namespace SomeNamespace;
-
-public static class Tests
-{
-    [Fact]
-    public static async Task SomeTest()
-    {
-        // Arrange
-        var sut = new SUT(...);
-        
-        // Act
-        var result = await sut.SomeMethod(...);
-        
-        // Assert
-        Assert.Equal("should be this", result);
-    }
-}
-```
+Most tests in C# are written in an arrange, act, assert style.
+This is a good pattern, but it is only a convention.
 
 This library aims to formalize this structure in the following ways,
 
 * Enforces that all tests must be arranged before acting and acted upon before
-  assertions can occur
-* Converts tests to data, which can be composed and built up then executed
-  * Works well wth theories
-* Because tests are just data, functions can be used to extend them and compose
-  them together
-  * Works will with extension methods and other test libraries, use cases
+  assertions can occur. Making it a compile
+  time error if you don't follow this pattern
+* Scaffolding tests using a fluent API making them easier to read, write and
+  refactor
+* Encourages automatic refactoring of tests sections into helper methods, which
+  is only possible if the test is structured using delegates
+* Works with the developers IDE to provide a better experience when writing
+  tests
 
-```c#
-// can use implicit usings
-using Xunit;
-using static BunsenBurner.Aaa;
-
-namespace SomeNamespace;
-
-public static class Tests
-{
-    [Fact(DisplayName = "Example AAA test!!!")]
-    public static async Task SomeTest() =>
-              // arrange starts a new test, 
-              // whatever type it returns can be used when acting 
-        await Arrange(() => new SUT(...))
-              // act on the arranged data, async is supported in all test steps
-             .Act(async sut => await sut.SomeMethod(...))
-              // assert against the result of acting
-             .Assert(result => Assert.Equal("should be this", result));
-}
-```
-
-For more details/information have a look the test projects or create an issue.
+For more information have a look the
+[documentation](https://bmazzarol.github.io/Bunsen-Burner), or check out the
+test project or create an issue.
 
 ## Attributions
 

@@ -5,15 +5,11 @@ it from [NuGet](https://www.nuget.org/packages/BunsenBurner/), and add this to
 the top of each test `.cs` file
 that needs it:
 
-```C#
-using static BunsenBurner.Aaa; // For Arrange act assert
-```
+[!code-csharp[AAAUsing](../../BunsenBurner.Tests/Examples/ArrangeActAssert.cs#ArrangeActAssertUsing)]
 
 or
 
-```C#
-using static BunsenBurner.Bdd; // For Given when then
-```
+[!code-csharp[BDDUsing](../../BunsenBurner.Tests/BddTests.cs#BDDUsing)]
 
 Take an existing test,
 

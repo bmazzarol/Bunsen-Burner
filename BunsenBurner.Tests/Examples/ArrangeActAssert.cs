@@ -1,6 +1,11 @@
 using System.Text;
 using System.Text.Json;
+#region ArrangeActAssertUsing
+
+// for AAA style tests
 using static BunsenBurner.ArrangeActAssert;
+
+#endregion
 
 namespace BunsenBurner.Tests.Examples;
 
