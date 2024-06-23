@@ -4,9 +4,9 @@
             "src": [
                 {                 
                     "files": [
-                        "Core/BunsenBurner/BunsenBurner.csproj"
+                        "BunsenBurner/BunsenBurner.csproj"
                     ],
-                    "src": "../../"
+                    "src": "../"
                 }
             ],
             "dest": "api",
