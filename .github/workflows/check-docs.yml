@@ -1,0 +1,14 @@
+﻿name: Check the Docfx site
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: bmazzarol/bmazzarol/.github/actions/check-docs@main
+        with:
+          docsProjectPath: BunsenBurner.Docs
+          csProjFileName: BunsenBurner.Docs.csproj

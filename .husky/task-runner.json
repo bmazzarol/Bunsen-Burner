@@ -25,6 +25,14 @@
             "args": [
                 "test"
             ]
+        },
+        {
+            "name": "Lint Docs",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "BunsenBurner.Docs/BunsenBurner.Docs.csproj"
+            ]
         }
     ]
 }
