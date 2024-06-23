@@ -161,6 +161,9 @@ public class AaaSyntaxTests
             async () => await Arrange(() => 1).Act(x => x + 2).Assert(x => x > 4 && x < 6)
         );
         Assert.Equal("x => ((x > 4) AndAlso (x < 6)) is not true for input '3'", exception.Message);
+        Assert.NotNull(exception.Expression);
+        Assert.NotNull(exception.Result);
+        Assert.Null(exception.TestData);
     }
 
     [Fact(DisplayName = "Expression based assertions with data work")]
