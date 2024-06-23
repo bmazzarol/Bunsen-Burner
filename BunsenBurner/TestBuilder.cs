@@ -73,6 +73,7 @@ public abstract partial record TestBuilder<TSyntax>
     /// <param name="actStep">act step</param>
     /// <param name="assertStep">assert step</param>
     /// <param name="name">optional name of the test</param>
+    /// <param name="autoDispose">optional flag to auto-dispose of `data` and `result`; default is `true`</param>
     /// <typeparam name="TData">data required to act on the <see cref="TestBuilder{TSyntax}"/></typeparam>
     /// <typeparam name="TResult">result of acting</typeparam>
     /// <returns>asserted test</returns>
@@ -80,6 +81,7 @@ public abstract partial record TestBuilder<TSyntax>
         Func<Task<TData>> arrangeStep,
         Func<TData, Task<TResult>> actStep,
         Func<TData, TResult, Task> assertStep,
-        string? name = default
-    ) => new(arrangeStep, actStep, assertStep) { Name = name };
+        string? name = default,
+        bool? autoDispose = default
+    ) => new(arrangeStep, actStep, assertStep) { Name = name, AutoDispose = autoDispose ?? true };
 }
