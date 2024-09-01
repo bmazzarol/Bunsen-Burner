@@ -38,7 +38,7 @@ public abstract partial record TestBuilder<TSyntax>
                 return nextResult;
             })
             {
-                Name = Name
+                Name = Name,
             };
 
         /// <summary>

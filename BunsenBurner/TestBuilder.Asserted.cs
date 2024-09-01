@@ -72,7 +72,7 @@ public abstract partial record TestBuilder<TSyntax>
             )
             {
                 Name = Name,
-                AutoDispose = AutoDispose
+                AutoDispose = AutoDispose,
             };
 
         /// <summary>
