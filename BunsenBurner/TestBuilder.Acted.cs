@@ -67,7 +67,7 @@ public abstract partial record TestBuilder<TSyntax>
                 }
             )
             {
-                Name = Name
+                Name = Name,
             };
 
         /// <summary>
@@ -98,7 +98,7 @@ public abstract partial record TestBuilder<TSyntax>
                 }
             )
             {
-                Name = Name
+                Name = Name,
             };
 
         /// <summary>
