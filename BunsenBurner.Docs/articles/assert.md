@@ -7,6 +7,10 @@ least one
 Both sync and async is supported as well as
 additional <xref:BunsenBurner.TestBuilder`1.Asserted`2.And*> steps.
 
+<xref:BunsenBurner.TestBuilder`1.Asserted`2.And*> steps are executed in
+parallel and will return an aggregate exception if more than one assertion
+fails.
+
 [!code-csharp[Example5](../../BunsenBurner.Tests/Examples/ArrangeActAssert.cs#Example5)]
 
 The standard [assert](xref:BunsenBurner.TestBuilder`1.Asserted`2) step is a
