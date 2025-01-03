@@ -212,4 +212,26 @@ public class AaaSyntaxTests
             .Act(x => x / 0)
             .Throw<DivideByZeroException>()
             .Assert((r, e) => r == 1 && e.Message == "Attempted to divide by zero.");
+
+    [Fact(DisplayName = "Assertions are run in parallel and return multiple failures")]
+    public async Task Case18()
+    {
+        var result = await Assert.ThrowsAsync<AggregateException>(
+            async () => await 1.Arrange().Act(x => x + 2).Assert(r => r == 0).And(r => r > 5)
+        );
+        result
+            .Message.Should()
+            .Contain("r => (r > 5) is not true for input '3'")
+            .And.Contain("r => (r == 0) is not true for input '3'");
+        result.InnerExceptions.Should().HaveCount(2);
+    }
+
+    [Fact(DisplayName = "A single failed assertion unwraps the exception")]
+    public async Task Case19()
+    {
+        var result = await Assert.ThrowsAsync<ExpressionAssertionFailureException>(
+            async () => await 1.Arrange().Act(x => x + 2).Assert(r => r == 0)
+        );
+        result.Message.Should().Be("r => (r == 0) is not true for input '3'");
+    }
 }

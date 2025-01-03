@@ -15,6 +15,7 @@ public abstract partial record TestBuilder<TSyntax>
     {
         private readonly Func<Task<TData>> _arrangeStep;
         private readonly Func<TData, Task<TResult>> _actStep;
+        private readonly List<Func<TData, TResult, Task>> _assertions;
 
         internal Asserted(
             Func<Task<TData>> arrangeStep,
@@ -24,7 +25,7 @@ public abstract partial record TestBuilder<TSyntax>
         {
             _arrangeStep = arrangeStep;
             _actStep = actStep;
-            AssertStep = assertStep;
+            _assertions = [assertStep];
         }
 
         /// <summary>
@@ -52,7 +53,26 @@ public abstract partial record TestBuilder<TSyntax>
         /// <summary>
         /// Assert step
         /// </summary>
-        public Func<TData, TResult, Task> AssertStep { get; }
+        public Func<TData, TResult, Task> AssertStep =>
+            (data, result) =>
+                Task.WhenAll(
+                        _assertions.Select(assertion => Task.Run(() => assertion(data, result)))
+                    )
+                    .ContinueWith(
+                        continuationFunction: x =>
+                            x.IsFaulted
+                            && x.Exception is { } ex
+                            && (
+                                ex.InnerExceptions.Count > 1
+                                || ex.InnerException is AggregateException
+                            )
+                                ? Task.FromException(ex.Flatten())
+                                : x,
+                        cancellationToken: CancellationToken.None,
+                        TaskContinuationOptions.ExecuteSynchronously,
+                        scheduler: TaskScheduler.Default
+                    )
+                    .Unwrap();
 
         /// <summary>
         /// Allows for additional asserting of test data
@@ -60,20 +80,11 @@ public abstract partial record TestBuilder<TSyntax>
         /// <param name="fn">async function asserting test data</param>
         /// <returns>asserted test</returns>
         [Pure]
-        public Asserted<TData, TResult> And(Func<TData, TResult, Task> fn) =>
-            new(
-                ArrangeStep,
-                ActStep,
-                async (data, result) =>
-                {
-                    await AssertStep(data, result);
-                    await fn(data, result);
-                }
-            )
-            {
-                Name = Name,
-                AutoDispose = AutoDispose,
-            };
+        public Asserted<TData, TResult> And(Func<TData, TResult, Task> fn)
+        {
+            _assertions.Add(fn);
+            return this;
+        }
 
         /// <summary>
         /// Allows for additional asserting of test data
