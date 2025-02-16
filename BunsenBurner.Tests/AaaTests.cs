@@ -219,11 +219,18 @@ public class AaaSyntaxTests
         var result = await Assert.ThrowsAsync<AggregateException>(
             async () => await 1.Arrange().Act(x => x + 2).Assert(r => r == 0).And(r => r > 5)
         );
-        result
-            .Message.Should()
-            .Contain("r => (r > 5) is not true for input '3'")
-            .And.Contain("r => (r == 0) is not true for input '3'");
-        result.InnerExceptions.Should().HaveCount(2);
+
+        Assert.Contains(
+            "r => (r == 0) is not true for input '3'",
+            result.Message,
+            StringComparison.Ordinal
+        );
+        Assert.Contains(
+            "r => (r > 5) is not true for input '3'",
+            result.Message,
+            StringComparison.Ordinal
+        );
+        Assert.Equal(2, result.InnerExceptions.Count);
     }
 
     [Fact(DisplayName = "A single failed assertion unwraps the exception")]
@@ -232,6 +239,21 @@ public class AaaSyntaxTests
         var result = await Assert.ThrowsAsync<ExpressionAssertionFailureException>(
             async () => await 1.Arrange().Act(x => x + 2).Assert(r => r == 0)
         );
-        result.Message.Should().Be("r => (r == 0) is not true for input '3'");
+
+        Assert.Contains(
+            "r => (r == 0) is not true for input '3'",
+            result.Message,
+            StringComparison.Ordinal
+        );
     }
+
+    [Fact(DisplayName = "A assertions can be run in sequence")]
+    public Task Case20() =>
+        1
+            .Arrange()
+            .Act(x => x + 2)
+            .Assert(r => r == 3)
+            .And(r => r > 0)
+            .And(r => r < 5)
+            .Sequential();
 }

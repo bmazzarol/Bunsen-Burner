@@ -1,32 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <IsPackable>false</IsPackable>
-    </PropertyGroup>
-    
-    <ItemGroup>
-        <PackageReference Include="FluentAssertions" Version="7.0.0"/>
-        <PackageReference Include="FluentAssertions.Analyzers" Version="0.34.1">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-        <PackageReference Include="xunit" Version="2.9.2" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="3.0.0">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-    </ItemGroup>
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Common.Test.props', '$(MSBuildThisFileDirectory)'))"/>
 
-    <ItemGroup>
-        <ProjectReference Include="..\BunsenBurner\BunsenBurner.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute"/>
-    </ItemGroup>
 </Project>

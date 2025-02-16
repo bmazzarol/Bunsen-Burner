@@ -29,7 +29,6 @@ public abstract partial record TestBuilder<TSyntax>
         /// <param name="fn">async function transforming test data into test data</param>
         /// <typeparam name="TDataNext">next data required to act on the test</typeparam>
         /// <returns>arranged test</returns>
-        [Pure]
         public Arranged<TDataNext> And<TDataNext>(Func<TData, Task<TDataNext>> fn) =>
             new(async () =>
             {
@@ -47,7 +46,6 @@ public abstract partial record TestBuilder<TSyntax>
         /// <param name="fn">function transforming test data into test data</param>
         /// <typeparam name="TDataNext">next data required to act on the test</typeparam>
         /// <returns>arranged test</returns>
-        [Pure]
         public Arranged<TDataNext> And<TDataNext>(Func<TData, TDataNext> fn) =>
             And(data => Task.FromResult(fn(data)));
 
@@ -56,7 +54,6 @@ public abstract partial record TestBuilder<TSyntax>
         /// </summary>
         /// <param name="action">action to apply to the test data</param>
         /// <returns>arranged test</returns>
-        [Pure]
         public Arranged<TData> And(Func<TData, Task> action) =>
             And(async data =>
             {
@@ -69,7 +66,6 @@ public abstract partial record TestBuilder<TSyntax>
         /// </summary>
         /// <param name="action">action to apply to the test data</param>
         /// <returns>arranged test</returns>
-        [Pure]
         public Arranged<TData> And(Action<TData> action) =>
             And(data =>
             {

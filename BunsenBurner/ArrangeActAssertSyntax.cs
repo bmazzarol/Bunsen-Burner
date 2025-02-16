@@ -21,7 +21,6 @@ public static class ArrangeActAssert
     /// <param name="fn">async function returning test data</param>
     /// <typeparam name="TData">data required to act on the test</typeparam>
     /// <returns>arranged test</returns>
-    [Pure]
     public static Arranged<TData> Arrange<TData>(Func<Task<TData>> fn) => New(fn);
 
     /// <summary>
@@ -30,7 +29,6 @@ public static class ArrangeActAssert
     /// <param name="fn">function returning test data</param>
     /// <typeparam name="TData">data required to act on the test</typeparam>
     /// <returns>arranged test</returns>
-    [Pure]
     public static Arranged<TData> Arrange<TData>(Func<TData> fn) =>
         New(() => Task.FromResult(fn()));
 
@@ -40,7 +38,6 @@ public static class ArrangeActAssert
     /// <param name="data">test data</param>
     /// <typeparam name="TData">data required to act on the test</typeparam>
     /// <returns>arranged test</returns>
-    [Pure]
     public static Arranged<TData> Arrange<TData>(this TData data) => Arrange(() => data);
 
     /// <summary>
@@ -51,7 +48,6 @@ public static class ArrangeActAssert
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">result of acting on the test data</typeparam>
     /// <returns>acted test</returns>
-    [Pure]
     public static Acted<TData, TResult> Act<TData, TResult>(
         this Arranged<TData> test,
         Func<TData, Task<TResult>> fn
@@ -65,7 +61,6 @@ public static class ArrangeActAssert
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">result of acting on the test data</typeparam>
     /// <returns>acted test</returns>
-    [Pure]
     public static Acted<TData, TResult> Act<TData, TResult>(
         this Arranged<TData> test,
         Func<TData, TResult> fn
@@ -79,7 +74,6 @@ public static class ArrangeActAssert
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted test</returns>
-    [Pure]
     public static Asserted<TData, TResult> Assert<TData, TResult>(
         this Acted<TData, TResult> test,
         Func<TData, TResult, Task> fn
@@ -93,7 +87,6 @@ public static class ArrangeActAssert
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted test</returns>
-    [Pure]
     public static Asserted<TData, TResult> Assert<TData, TResult>(
         this Acted<TData, TResult> test,
         Func<TResult, Task> fn
@@ -107,7 +100,6 @@ public static class ArrangeActAssert
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted test</returns>
-    [Pure]
     public static Asserted<TData, TResult> Assert<TData, TResult>(
         this Acted<TData, TResult> test,
         Action<TData, TResult> fn
@@ -128,7 +120,6 @@ public static class ArrangeActAssert
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted test</returns>
-    [Pure]
     public static Asserted<TData, TResult> Assert<TData, TResult>(
         this Acted<TData, TResult> test,
         Action<TResult> fn
@@ -149,7 +140,6 @@ public static class ArrangeActAssert
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted test</returns>
-    [Pure]
     public static Asserted<TData, TResult> Assert<TData, TResult>(
         this Acted<TData, TResult> test,
         Expression<Func<TResult, bool>> expression
@@ -163,7 +153,6 @@ public static class ArrangeActAssert
     /// <typeparam name="TData">test data</typeparam>
     /// <typeparam name="TResult">test result</typeparam>
     /// <returns>asserted test</returns>
-    [Pure]
     public static Asserted<TData, TResult> Assert<TData, TResult>(
         this Acted<TData, TResult> test,
         Expression<Func<TData, TResult, bool>> expression

@@ -21,7 +21,6 @@ public static class GivenWhenThen
     /// <param name="fn">async function returning scenario data</param>
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
-    [Pure]
     public static Arranged<TData> Given<TData>(Func<Task<TData>> fn) => New(fn);
 
     /// <summary>
@@ -30,7 +29,6 @@ public static class GivenWhenThen
     /// <param name="fn">function returning scenario data</param>
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
-    [Pure]
     public static Arranged<TData> Given<TData>(Func<TData> fn) => New(() => Task.FromResult(fn()));
 
     /// <summary>
@@ -39,7 +37,6 @@ public static class GivenWhenThen
     /// <param name="data">scenario data</param>
     /// <typeparam name="TData">data required to when the scenario is run</typeparam>
     /// <returns>scenario with the given data</returns>
-    [Pure]
     public static Arranged<TData> Given<TData>(this TData data) => Given(() => data);
 
     /// <summary>
@@ -50,7 +47,6 @@ public static class GivenWhenThen
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>scenario that is run</returns>
-    [Pure]
     public static Acted<TData, TResult> When<TData, TResult>(
         this Arranged<TData> scenario,
         Func<TData, Task<TResult>> fn
@@ -64,7 +60,6 @@ public static class GivenWhenThen
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>scenario that is run</returns>
-    [Pure]
     public static Acted<TData, TResult> When<TData, TResult>(
         this Arranged<TData> scenario,
         Func<TData, TResult> fn
@@ -78,7 +73,6 @@ public static class GivenWhenThen
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
-    [Pure]
     public static Asserted<TData, TResult> Then<TData, TResult>(
         this Acted<TData, TResult> scenario,
         Func<TData, TResult, Task> fn
@@ -92,7 +86,6 @@ public static class GivenWhenThen
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
-    [Pure]
     public static Asserted<TData, TResult> Then<TData, TResult>(
         this Acted<TData, TResult> scenario,
         Func<TResult, Task> fn
@@ -106,7 +99,6 @@ public static class GivenWhenThen
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
-    [Pure]
     public static Asserted<TData, TResult> Then<TData, TResult>(
         this Acted<TData, TResult> scenario,
         Action<TData, TResult> fn
@@ -127,7 +119,6 @@ public static class GivenWhenThen
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
-    [Pure]
     public static Asserted<TData, TResult> Then<TData, TResult>(
         this Acted<TData, TResult> scenario,
         Action<TResult> fn
@@ -141,7 +132,6 @@ public static class GivenWhenThen
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
-    [Pure]
     public static Asserted<TData, TResult> Then<TData, TResult>(
         this Acted<TData, TResult> scenario,
         Expression<Func<TResult, bool>> expression
@@ -155,7 +145,6 @@ public static class GivenWhenThen
     /// <typeparam name="TData">scenario data</typeparam>
     /// <typeparam name="TResult">result of running the scenario</typeparam>
     /// <returns>completed scenario</returns>
-    [Pure]
     public static Asserted<TData, TResult> Then<TData, TResult>(
         this Acted<TData, TResult> scenario,
         Expression<Func<TData, TResult, bool>> expression

@@ -1,9 +1,22 @@
 ﻿is_global = true
 
 dotnet_diagnostic.MA0048.severity = none
+
+# Type name should not match containing namespace
+dotnet_diagnostic.MA0049.severity = warning
+
+# Use Task.ConfigureAwait(false) if the current SynchronizationContext is not needed
 dotnet_diagnostic.MA0004.severity = none
+
+# Fix TODO comment
+dotnet_diagnostic.MA0026.severity = suggestion
+
+# Remove the unused internal class
+dotnet_diagnostic.S1144.severity = suggestion
+
+# Track uses of "TODO" tags
+dotnet_diagnostic.S1135.severity = suggestion
+
 # logging performance
 dotnet_diagnostic.CA1848.severity = none
 
-# Add comma after the last value
-dotnet_diagnostic.MA0007.severity = none

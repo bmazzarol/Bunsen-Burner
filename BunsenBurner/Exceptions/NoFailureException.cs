@@ -6,7 +6,7 @@ namespace BunsenBurner.Exceptions;
 /// Thrown when an <see cref="TestBuilder{TSyntax}"/> is expected to fail and it succeeds
 /// </summary>
 [SuppressMessage("Roslynator", "RCS1194:Implement exception constructors")]
-public sealed class NoFailureException : Exception
+public sealed class NoFailureException : Exception, IAssertionException
 {
     internal NoFailureException(string? name)
         : base(BuildErrorMessage(name)) { }

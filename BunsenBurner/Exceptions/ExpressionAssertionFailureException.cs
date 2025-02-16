@@ -7,7 +7,7 @@ namespace BunsenBurner.Exceptions;
 /// Thrown when an expression assertion fails
 /// </summary>
 [SuppressMessage("Roslynator", "RCS1194:Implement exception constructors")]
-public sealed class ExpressionAssertionFailureException : Exception
+public sealed class ExpressionAssertionFailureException : Exception, IAssertionException
 {
     /// <summary>
     /// Predicate expression that failed

@@ -54,32 +54,43 @@ public abstract partial record TestBuilder<TSyntax>
         /// Assert step
         /// </summary>
         public Func<TData, TResult, Task> AssertStep =>
-            (data, result) =>
-                Task.WhenAll(
-                        _assertions.Select(assertion => Task.Run(() => assertion(data, result)))
-                    )
-                    .ContinueWith(
-                        continuationFunction: x =>
-                            x.IsFaulted
-                            && x.Exception is { } ex
-                            && (
-                                ex.InnerExceptions.Count > 1
-                                || ex.InnerException is AggregateException
-                            )
-                                ? Task.FromException(ex.Flatten())
-                                : x,
-                        cancellationToken: CancellationToken.None,
-                        TaskContinuationOptions.ExecuteSynchronously,
-                        scheduler: TaskScheduler.Default
-                    )
-                    .Unwrap();
+            async (data, result) =>
+            {
+                if (AssertSequentially)
+                {
+                    foreach (var assertion in _assertions)
+                    {
+                        await assertion(data, result);
+                    }
+                }
+                else
+                {
+                    await Task.WhenAll(
+                            _assertions.Select(assertion => Task.Run(() => assertion(data, result)))
+                        )
+                        .ContinueWith(
+                            continuationFunction: x =>
+                                x.IsFaulted
+                                && x.Exception is { } ex
+                                && (
+                                    ex.InnerExceptions.Count > 1
+                                    || ex.InnerException is AggregateException
+                                )
+                                    ? Task.FromException(ex.Flatten())
+                                    : x,
+                            cancellationToken: CancellationToken.None,
+                            TaskContinuationOptions.ExecuteSynchronously,
+                            scheduler: TaskScheduler.Default
+                        )
+                        .Unwrap();
+                }
+            };
 
         /// <summary>
         /// Allows for additional asserting of test data
         /// </summary>
         /// <param name="fn">async function asserting test data</param>
         /// <returns>asserted test</returns>
-        [Pure]
         public Asserted<TData, TResult> And(Func<TData, TResult, Task> fn)
         {
             _assertions.Add(fn);
@@ -91,7 +102,6 @@ public abstract partial record TestBuilder<TSyntax>
         /// </summary>
         /// <param name="fn">async function asserting test data</param>
         /// <returns>asserted test</returns>
-        [Pure]
         public Asserted<TData, TResult> And(Func<TResult, Task> fn) => And((_, r) => fn(r));
 
         /// <summary>
@@ -99,7 +109,6 @@ public abstract partial record TestBuilder<TSyntax>
         /// </summary>
         /// <param name="fn">function asserting test data</param>
         /// <returns>asserted test</returns>
-        [Pure]
         public Asserted<TData, TResult> And(Action<TData, TResult> fn) =>
             And(
                 (d, r) =>
@@ -114,7 +123,6 @@ public abstract partial record TestBuilder<TSyntax>
         /// </summary>
         /// <param name="fn">function asserting test data</param>
         /// <returns>asserted test</returns>
-        [Pure]
         public Asserted<TData, TResult> And(Action<TResult> fn) => And((_, r) => fn(r));
 
         /// <summary>
@@ -122,7 +130,6 @@ public abstract partial record TestBuilder<TSyntax>
         /// </summary>
         /// <param name="expression">expression to assert against</param>
         /// <returns>asserted test</returns>
-        [Pure]
         public Asserted<TData, TResult> And(Expression<Func<TResult, bool>> expression) =>
             And(expression.RunExpressionAssertion);
 
@@ -131,7 +138,6 @@ public abstract partial record TestBuilder<TSyntax>
         /// </summary>
         /// <param name="expression">expression to assert against</param>
         /// <returns>asserted test</returns>
-        [Pure]
         public Asserted<TData, TResult> And(Expression<Func<TData, TResult, bool>> expression) =>
             And(expression.RunExpressionAssertion);
 
@@ -139,13 +145,23 @@ public abstract partial record TestBuilder<TSyntax>
         /// Disables auto disposal of captured disposables
         /// </summary>
         /// <returns>an asserted test</returns>
-        [Pure]
         public Asserted<TData, TResult> NoDisposal() => this with { AutoDispose = false };
 
         /// <summary>
         /// Flag to indicate if the <see cref="TestBuilder{TSyntax}"/> should auto-dispose captured disposables
         /// </summary>
         public bool AutoDispose { get; init; } = true;
+
+        /// <summary>
+        /// Ensures that the assertions are run sequentially, by default they are run in parallel
+        /// </summary>
+        /// <returns>an asserted test</returns>
+        public Asserted<TData, TResult> Sequential() => this with { AssertSequentially = true };
+
+        /// <summary>
+        /// Ensures that the assertions are run sequentially
+        /// </summary>
+        public bool AssertSequentially { get; init; }
 
         /// <summary>
         /// Runs the <see cref="TestBuilder{TSyntax}"/> definition of a test
