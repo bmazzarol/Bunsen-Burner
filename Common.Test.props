@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <!--
-        This file contains all the shared properties and targets for
+        This file contains all the shared properties for
         the test projects that are in this solution
      -->
 
