@@ -23,7 +23,11 @@ public class ArrangeActAssert
             })
             .Act(async data =>
             {
-                await JsonSerializer.SerializeAsync(data.ms, data.widget);
+                await JsonSerializer.SerializeAsync(
+                    data.ms,
+                    data.widget,
+                    cancellationToken: TestContext.Current.CancellationToken
+                );
                 return Encoding.UTF8.GetString(data.ms.ToArray());
             })
             // split assertions into parts
@@ -58,7 +62,11 @@ public class ArrangeActAssert
             })
             .Act(async data =>
             {
-                await JsonSerializer.SerializeAsync(data.ms, data.widget);
+                await JsonSerializer.SerializeAsync(
+                    data.ms,
+                    data.widget,
+                    cancellationToken: TestContext.Current.CancellationToken
+                );
                 return Encoding.UTF8.GetString(data.ms.ToArray());
             })
             .Assert(result => !string.IsNullOrWhiteSpace(result));
@@ -80,7 +88,11 @@ public class ArrangeActAssert
             })
             .Act(async data =>
             {
-                await JsonSerializer.SerializeAsync(data.ms, data.widget);
+                await JsonSerializer.SerializeAsync(
+                    data.ms,
+                    data.widget,
+                    cancellationToken: TestContext.Current.CancellationToken
+                );
                 return Encoding.UTF8.GetString(data.ms.ToArray());
             })
             .Assert(result => !string.IsNullOrWhiteSpace(result));
@@ -97,7 +109,11 @@ public class ArrangeActAssert
             .Act(async widget =>
             {
                 var ms = new MemoryStream();
-                await JsonSerializer.SerializeAsync(ms, widget);
+                await JsonSerializer.SerializeAsync(
+                    ms,
+                    widget,
+                    cancellationToken: TestContext.Current.CancellationToken
+                );
                 return ms;
             })
             // and sync with additional act steps
@@ -109,7 +125,11 @@ public class ArrangeActAssert
     private static async Task<string> SerializeAsync<T>(T widget)
     {
         var ms = new MemoryStream();
-        await JsonSerializer.SerializeAsync(ms, widget);
+        await JsonSerializer.SerializeAsync(
+            ms,
+            widget,
+            cancellationToken: TestContext.Current.CancellationToken
+        );
         return Encoding.UTF8.GetString(ms.ToArray());
     }
 

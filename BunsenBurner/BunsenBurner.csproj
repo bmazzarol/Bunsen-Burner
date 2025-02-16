@@ -1,68 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    
-    <PropertyGroup>
-        <Authors>Ben Mazzarol</Authors>
-    </PropertyGroup>
 
-    <PropertyGroup>
-        <Title>Bunsen Burner Core</Title>
-        <Description>This provides the core dependency free test abstraction that Bunsen Burner is built on</Description>
-        <PackageTags>C#, Functional, Test, Property Tests, Unit Tests, Automation Tests</PackageTags>
-        <PackageProjectUrl>https://bmazzarol.github.io/Bunsen-Burner</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/bmazzarol/Bunsen-Burner</RepositoryUrl>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Copyright>Copyright (c) Ben Mazzarol. All rights reserved.</Copyright>
-        <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <EmbedUntrackedSources>true</EmbedUntrackedSources>
-        <IsPackable>True</IsPackable>
-        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageIcon>fire-icon.png</PackageIcon>
-    </PropertyGroup>
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Common.Release.props', '$(MSBuildThisFileDirectory)'))"/>
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <AnalysisMode>Recommended</AnalysisMode>
-        <OutputType>library</OutputType>
-        <LangVersion>latest</LangVersion>
+        <Title>Bunsen Burner</Title>
+        <Description>This provides the core dependency free test abstraction that Bunsen Burner is built on</Description>
+        <PackageTags>C#, Integration Tests, Functional Tests, Property Tests, Unit Tests, Automation Tests, AAA, BDD</PackageTags>
+        <PackageProjectUrl>https://bmazzarol.github.io/Bunsen-Burner</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/bmazzarol/Bunsen-Burner</RepositoryUrl>
+        <PackageIcon>fire-icon.png</PackageIcon>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\" />
         <None Include="..\fire-icon.png" Pack="true" PackagePath="\" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
     </ItemGroup>
     
     <ItemGroup>
-        <PackageReference Include="Polyfill" Version="7.9.1">
+        <PackageReference Include="Polyfill">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="AsyncFixer" Version="1.6.0">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Meziantou.Analyzer" Version="2.0.184">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Roslynator.Analyzers" Version="4.12.10">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="SonarAnalyzer.CSharp" Version="10.4.0.108396">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-        </PackageReference>
+        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
     </ItemGroup>
 
 </Project>

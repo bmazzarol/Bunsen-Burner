@@ -48,7 +48,6 @@ public abstract partial record TestBuilder<TSyntax>
         /// <typeparam name="TException">exception type to expect</typeparam>
         /// <returns>an acted test</returns>
         /// <exception cref="NoFailureException">thrown when the act step does not throw an exception</exception>
-        [Pure]
         public Acted<TData, TException> Throw<TException>()
             where TException : Exception =>
             new(
@@ -75,7 +74,6 @@ public abstract partial record TestBuilder<TSyntax>
         /// </summary>
         /// <returns>an acted test</returns>
         /// <exception cref="NoFailureException">thrown when the act step does not throw an exception</exception>
-        [Pure]
         public Acted<TData, Exception> Throw() => Throw<Exception>();
 
         /// <summary>
@@ -84,7 +82,6 @@ public abstract partial record TestBuilder<TSyntax>
         /// <param name="fn">async function transforming test data and last result into a new result</param>
         /// <typeparam name="TResultNext">next result of acting</typeparam>
         /// <returns>acted test</returns>
-        [Pure]
         public Acted<TData, TResultNext> And<TResultNext>(
             Func<TData, TResult, Task<TResultNext>> fn
         ) =>
@@ -107,7 +104,6 @@ public abstract partial record TestBuilder<TSyntax>
         /// <param name="fn">async function transforming test data and last result into a new result</param>
         /// <typeparam name="TResultNext">next result of acting</typeparam>
         /// <returns>acted test</returns>
-        [Pure]
         public Acted<TData, TResultNext> And<TResultNext>(Func<TData, TResult, TResultNext> fn) =>
             And((data, lastResult) => Task.FromResult(fn(data, lastResult)));
 
@@ -116,7 +112,6 @@ public abstract partial record TestBuilder<TSyntax>
         /// </summary>
         /// <param name="action">action to apply to the test data and last result</param>
         /// <returns>acted test</returns>
-        [Pure]
         public Acted<TData, TResult> And(Func<TData, TResult, Task> action) =>
             And(
                 async (data, result) =>
@@ -131,7 +126,6 @@ public abstract partial record TestBuilder<TSyntax>
         /// </summary>
         /// <param name="action">action to apply to the test data and last result</param>
         /// <returns>acted test</returns>
-        [Pure]
         public Acted<TData, TResult> And(Action<TData, TResult> action) =>
             And(
                 (data, result) =>

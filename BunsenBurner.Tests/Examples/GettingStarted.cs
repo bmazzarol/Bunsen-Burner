@@ -16,7 +16,11 @@ public class GettingStarted
         var ms = new MemoryStream();
 
         // Act
-        await JsonSerializer.SerializeAsync(ms, widget);
+        await JsonSerializer.SerializeAsync(
+            ms,
+            widget,
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
         // Assert
         Assert.Equal(
