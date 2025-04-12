@@ -9,6 +9,8 @@
         <SonarQubeExclude>true</SonarQubeExclude>
         <ProjectName>$(AssemblyName.Replace('.Tests', ''))</ProjectName>
         <OutputType>Exe</OutputType>
+        <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+        <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
     </PropertyGroup>
 
     <Import Project="$(MSBuildProjectDirectory)\..\$(ProjectName)\build\$(ProjectName).props"
@@ -16,6 +18,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage"/>
         <PackageReference Include="xunit.v3"/>
         <PackageReference Include="xunit.runner.visualstudio">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
