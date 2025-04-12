@@ -7,7 +7,7 @@ on:
         description: Release Version
         required: true
   release:
-    types: [ published ]
+    types: [published]
 
 env:
   PACKAGE_VERSION: ${{ github.event.inputs.version || github.event.release.tag_name }}

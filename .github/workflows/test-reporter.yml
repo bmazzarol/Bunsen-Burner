@@ -2,8 +2,8 @@
 
 on:
   workflow_run:
-    workflows: [ CI Build ]
-    types: [ completed ]
+    workflows: [CI Build]
+    types: [completed]
 
 jobs:
   report:
