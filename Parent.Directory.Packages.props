@@ -25,7 +25,7 @@
         <PackageVersion Include="ValueTaskSupplement" Version="1.1.0" />
         <PackageVersion Include="Docfx.Common" Version="2.78.3" />
         <PackageVersion Include="Docfx.Plugins" Version="2.78.3" />
-        <PackageVersion Include="System.Composition" Version="9.0.3" />
+        <PackageVersion Include="System.Composition" Version="8.0.0" />
     </ItemGroup>
     <!-- Test packages -->
     <ItemGroup>
