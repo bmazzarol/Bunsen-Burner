@@ -105,8 +105,8 @@ public class BddSyntaxTests
     [Fact(DisplayName = "Expression based assertions that are wrong fail")]
     public async Task Case12()
     {
-        var exception = await Assert.ThrowsAsync<ExpressionAssertionFailureException>(
-            () => Given(() => 1).When(x => x + 2).Then(x => x < 4).And(x => x % 1 != 0)
+        var exception = await Assert.ThrowsAsync<ExpressionAssertionFailureException>(() =>
+            Given(() => 1).When(x => x + 2).Then(x => x < 4).And(x => x % 1 != 0)
         );
         Assert.Equal("x => ((x % 1) != 0) is not true for input '3'", exception.Message);
     }
@@ -122,8 +122,8 @@ public class BddSyntaxTests
     [Fact(DisplayName = "Expression based assertions with data that are wrong fail")]
     public async Task Case14()
     {
-        var exception = await Assert.ThrowsAsync<ExpressionAssertionFailureException>(
-            () => 1.Given().When(x => x + 2).Then((r, x) => r == 2 && x > 4 && x < 6)
+        var exception = await Assert.ThrowsAsync<ExpressionAssertionFailureException>(() =>
+            1.Given().When(x => x + 2).Then((r, x) => r == 2 && x > 4 && x < 6)
         );
         Assert.Equal(
             "(r, x) => (((r == 2) AndAlso (x > 4)) AndAlso (x < 6)) is not true for inputs '1' and '3'",

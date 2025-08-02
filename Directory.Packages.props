@@ -2,6 +2,9 @@
   <PropertyGroup>
     <ParentDirectoryPackageProps>$([MSBuild]::GetPathOfFileAbove('Directory.Packages.props', '$(MSBuildThisFileDirectory)/../'))</ParentDirectoryPackageProps>
   </PropertyGroup>
-  <Import Project="$(ParentDirectoryPackageProps)" Condition="Exists('$(ParentDirectoryPackageProps)')" />
+  <Import
+    Project="$(ParentDirectoryPackageProps)"
+    Condition="Exists('$(ParentDirectoryPackageProps)')"
+  />
   <Import Project="Parent.Directory.Packages.props" Condition="$(BuiltInMonoRepo) != 'true'" />
 </Project>

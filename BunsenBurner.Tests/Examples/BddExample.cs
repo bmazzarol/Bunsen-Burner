@@ -11,12 +11,8 @@ public class BddExample
 {
     [Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
     public Task ExampleTestUsingBddBuilder() =>
-        Given(
-                () =>
-                    (
-                        Widget: new { Name = "Widget1", Cost = 12.50 },
-                        MemoryStream: new MemoryStream()
-                    )
+        Given(() =>
+                (Widget: new { Name = "Widget1", Cost = 12.50 }, MemoryStream: new MemoryStream())
             )
             .When(async data =>
             {

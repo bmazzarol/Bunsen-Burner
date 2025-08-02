@@ -11,12 +11,8 @@ public class AaaExample
 {
     [Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
     public Task ExampleTestUsingAaaBuilder() =>
-        Arrange(
-                () =>
-                    (
-                        Widget: new { Name = "Widget1", Cost = 12.50 },
-                        MemoryStream: new MemoryStream()
-                    )
+        Arrange(() =>
+                (Widget: new { Name = "Widget1", Cost = 12.50 }, MemoryStream: new MemoryStream())
             )
             .Act(async data =>
             {

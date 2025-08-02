@@ -1,51 +1,49 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <!--
+  <!--
         This file contains all the shared properties for
         the docs projects that are in this solution
      -->
-
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+  <Target Name="BuildDocs" AfterTargets="AfterBuild" BeforeTargets="PostBuildEvent">
+    <!-- Prevent parallel execution -->
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+      <BuildDocInParallel>false</BuildDocInParallel>
     </PropertyGroup>
-
-    <Target Name="BuildDocs" AfterTargets="AfterBuild" BeforeTargets="PostBuildEvent">
-        <!-- Prevent parallel execution -->
-        <PropertyGroup>
-            <BuildDocInParallel>false</BuildDocInParallel>
-        </PropertyGroup>
-
-        <!-- Check if docfx.json exists -->
-        <PropertyGroup>
-            <DocFxConfigExists Condition="Exists('docfx.json')">true</DocFxConfigExists>
-        </PropertyGroup>
-
-        <!-- Only proceed if docfx.json exists -->
-        <Message Text="docfx.json not found. Skipping documentation generation."
-                 Condition="'$(DocFxConfigExists)' != 'true'"/>
-
-        <CallTarget Targets="ExecuteBuildDocs"
-                    Condition="'$(DocFxConfigExists)' == 'true'"/>
-    </Target>
-
-    <Target Name="ExecuteBuildDocs">
-        <!-- Restore tools with error handling -->
-        <Exec Command="dotnet tool restore"
-              ContinueOnError="false"
-              StandardOutputImportance="low"
-              StandardErrorImportance="high"/>
-
-        <!-- Clean output directories -->
-        <RemoveDir Directories="_site;api"/>
-
-        <!-- Generate and build documentation -->
-        <Exec Command="dotnet docfx metadata docfx.json"
-              ContinueOnError="false"
-              StandardOutputImportance="normal"
-              StandardErrorImportance="high"/>
-
-        <Exec Command="dotnet docfx build docfx.json --warningsAsErrors"
-              ContinueOnError="false"
-              StandardOutputImportance="normal"
-              StandardErrorImportance="high"/>
-    </Target>
+    <!-- Check if docfx.json exists -->
+    <PropertyGroup>
+      <DocFxConfigExists Condition="Exists('docfx.json')">true</DocFxConfigExists>
+    </PropertyGroup>
+    <!-- Only proceed if docfx.json exists -->
+    <Message
+      Text="docfx.json not found. Skipping documentation generation."
+      Condition="'$(DocFxConfigExists)' != 'true'"
+    />
+    <CallTarget Targets="ExecuteBuildDocs" Condition="'$(DocFxConfigExists)' == 'true'" />
+  </Target>
+  <Target Name="ExecuteBuildDocs">
+    <!-- Restore tools with error handling -->
+    <Exec
+      Command="dotnet tool restore"
+      ContinueOnError="false"
+      StandardOutputImportance="low"
+      StandardErrorImportance="high"
+    />
+    <!-- Clean output directories -->
+    <RemoveDir Directories="_site;api" />
+    <!-- Generate and build documentation -->
+    <Exec
+      Command="dotnet docfx metadata docfx.json"
+      ContinueOnError="false"
+      StandardOutputImportance="normal"
+      StandardErrorImportance="high"
+    />
+    <Exec
+      Command="dotnet docfx build docfx.json --warningsAsErrors"
+      ContinueOnError="false"
+      StandardOutputImportance="normal"
+      StandardErrorImportance="high"
+    />
+  </Target>
 </Project>

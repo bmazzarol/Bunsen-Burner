@@ -5,6 +5,7 @@
             "command": "dotnet",
             "args": [
                 "csharpier",
+                "format",
                 "."
             ]
         },

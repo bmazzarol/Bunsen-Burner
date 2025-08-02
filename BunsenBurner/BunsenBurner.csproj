@@ -1,27 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-    <Import Project="$([MSBuild]::GetPathOfFileAbove('Common.Release.props', '$(MSBuildThisFileDirectory)'))"/>
-
-    <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
-        <Title>Bunsen Burner</Title>
-        <Description>This provides the core dependency free test abstraction that Bunsen Burner is built on</Description>
-        <PackageTags>C#, Integration Tests, Functional Tests, Property Tests, Unit Tests, Automation Tests, AAA, BDD</PackageTags>
-        <PackageProjectUrl>https://bmazzarol.github.io/Bunsen-Burner</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/bmazzarol/Bunsen-Burner</RepositoryUrl>
-        <PackageIcon>fire-icon.png</PackageIcon>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <None Include="..\fire-icon.png" Pack="true" PackagePath="\" />
-    </ItemGroup>
-    
-    <ItemGroup>
-        <PackageReference Include="Polyfill">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
-    </ItemGroup>
-
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Common.Release.props', '$(MSBuildThisFileDirectory)'))" />
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Title>Bunsen Burner</Title>
+    <Description>This provides the core dependency free test abstraction that Bunsen Burner is built on</Description>
+    <PackageTags>C#, Integration Tests, Functional Tests, Property Tests, Unit Tests, Automation Tests, AAA, BDD</PackageTags>
+    <PackageProjectUrl>https://bmazzarol.github.io/Bunsen-Burner</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/bmazzarol/Bunsen-Burner</RepositoryUrl>
+    <PackageIcon>fire-icon.png</PackageIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\fire-icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Polyfill">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
+  </ItemGroup>
 </Project>

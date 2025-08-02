@@ -87,20 +87,19 @@ public class AaaSyntaxTests
     [Fact(DisplayName = "Failure assertions throw on successful async functions")]
     public async Task Case8()
     {
-        var exception = await Assert.ThrowsAsync<NoFailureException>(
-            () =>
-                Arrange(() => 1)
-                    .Act(Task.FromResult)
-                    .Throw()
-                    .Assert(
-                        [ExcludeFromCodeCoverage]
-                        (data, e) =>
-                        {
-                            Assert.Equal(1, data);
-                            Assert.Equal("Some failure", e.Message);
-                            return Task.CompletedTask;
-                        }
-                    )
+        var exception = await Assert.ThrowsAsync<NoFailureException>(() =>
+            Arrange(() => 1)
+                .Act(Task.FromResult)
+                .Throw()
+                .Assert(
+                    [ExcludeFromCodeCoverage]
+                    (data, e) =>
+                    {
+                        Assert.Equal(1, data);
+                        Assert.Equal("Some failure", e.Message);
+                        return Task.CompletedTask;
+                    }
+                )
         );
 
         Assert.Equal("Test did not fail as expected", exception.Message);
@@ -109,20 +108,19 @@ public class AaaSyntaxTests
     [Fact(DisplayName = "Failure assertions throw on successful async functions with named tests")]
     public async Task Case8b()
     {
-        var exception = await Assert.ThrowsAsync<NoFailureException>(
-            () =>
-                (1.Arrange() with { Name = "Some custom name" })
-                    .Act(Task.FromResult)
-                    .Throw()
-                    .Assert(
-                        [ExcludeFromCodeCoverage]
-                        (data, e) =>
-                        {
-                            Assert.Equal(1, data);
-                            Assert.Equal("Some failure", e.Message);
-                            return Task.CompletedTask;
-                        }
-                    )
+        var exception = await Assert.ThrowsAsync<NoFailureException>(() =>
+            (1.Arrange() with { Name = "Some custom name" })
+                .Act(Task.FromResult)
+                .Throw()
+                .Assert(
+                    [ExcludeFromCodeCoverage]
+                    (data, e) =>
+                    {
+                        Assert.Equal(1, data);
+                        Assert.Equal("Some failure", e.Message);
+                        return Task.CompletedTask;
+                    }
+                )
         );
 
         Assert.Equal("Test 'Some custom name' did not fail as expected", exception.Message);
@@ -157,8 +155,8 @@ public class AaaSyntaxTests
     [Fact(DisplayName = "Expression based assertions that are wrong fail")]
     public async Task Case12()
     {
-        var exception = await Assert.ThrowsAsync<ExpressionAssertionFailureException>(
-            async () => await Arrange(() => 1).Act(x => x + 2).Assert(x => x > 4 && x < 6)
+        var exception = await Assert.ThrowsAsync<ExpressionAssertionFailureException>(async () =>
+            await Arrange(() => 1).Act(x => x + 2).Assert(x => x > 4 && x < 6)
         );
         Assert.Equal("x => ((x > 4) AndAlso (x < 6)) is not true for input '3'", exception.Message);
         Assert.NotNull(exception.Expression);
@@ -177,8 +175,8 @@ public class AaaSyntaxTests
     [Fact(DisplayName = "Expression based assertions with data that are wrong fail")]
     public async Task Case14()
     {
-        var exception = await Assert.ThrowsAsync<ExpressionAssertionFailureException>(
-            () => 1.Arrange().Act(x => x + 2).Assert((r, x) => r == 2 && x > 4 && x < 6)
+        var exception = await Assert.ThrowsAsync<ExpressionAssertionFailureException>(() =>
+            1.Arrange().Act(x => x + 2).Assert((r, x) => r == 2 && x > 4 && x < 6)
         );
         Assert.Equal(
             "(r, x) => (((r == 2) AndAlso (x > 4)) AndAlso (x < 6)) is not true for inputs '1' and '3'",
@@ -216,8 +214,8 @@ public class AaaSyntaxTests
     [Fact(DisplayName = "Assertions are run in parallel and return multiple failures")]
     public async Task Case18()
     {
-        var result = await Assert.ThrowsAsync<AggregateException>(
-            async () => await 1.Arrange().Act(x => x + 2).Assert(r => r == 0).And(r => r > 5)
+        var result = await Assert.ThrowsAsync<AggregateException>(async () =>
+            await 1.Arrange().Act(x => x + 2).Assert(r => r == 0).And(r => r > 5)
         );
 
         Assert.Contains(
@@ -236,8 +234,8 @@ public class AaaSyntaxTests
     [Fact(DisplayName = "A single failed assertion unwraps the exception")]
     public async Task Case19()
     {
-        var result = await Assert.ThrowsAsync<ExpressionAssertionFailureException>(
-            async () => await 1.Arrange().Act(x => x + 2).Assert(r => r == 0)
+        var result = await Assert.ThrowsAsync<ExpressionAssertionFailureException>(async () =>
+            await 1.Arrange().Act(x => x + 2).Assert(r => r == 0)
         );
 
         Assert.Contains(

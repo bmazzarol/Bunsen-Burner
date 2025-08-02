@@ -20,3 +20,5 @@ dotnet_diagnostic.S1135.severity = suggestion
 # logging performance
 dotnet_diagnostic.CA1848.severity = none
 
+# Add at least one assertion to this test case.
+dotnet_diagnostic.S2699.severity = suggestion

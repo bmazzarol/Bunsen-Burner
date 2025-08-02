@@ -1,28 +1,24 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <!--
+  <!--
         This file contains all the shared properties for
         the benchmark projects that are in this solution
      -->
-
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <SonarQubeExclude>true</SonarQubeExclude>
-        <ProjectName>$(AssemblyName.Replace('.Benchmarks', ''))</ProjectName>
-        <OutputType>Exe</OutputType>
-        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="BenchmarkDotNet"/>
-        <PackageReference Include="BenchmarkDotNet.Diagnostics.dotTrace"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="$(MSBuildProjectDirectory)\..\$(ProjectName)\$(ProjectName).csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute"/>
-    </ItemGroup>
-
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <SonarQubeExclude>true</SonarQubeExclude>
+    <ProjectName>$(AssemblyName.Replace('.Benchmarks', ''))</ProjectName>
+    <OutputType>Exe</OutputType>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" />
+    <PackageReference Include="BenchmarkDotNet.Diagnostics.dotTrace" />
+    <PackageReference Include=" Microsoft.CodeAnalysis.CSharp" VersionOverride="4.14.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(MSBuildProjectDirectory)\..\$(ProjectName)\$(ProjectName).csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
+  </ItemGroup>
 </Project>
