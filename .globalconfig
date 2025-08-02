@@ -11,6 +11,9 @@ dotnet_diagnostic.MA0004.severity = none
 # Fix TODO comment
 dotnet_diagnostic.MA0026.severity = suggestion
 
+# Method is too long
+dotnet_diagnostic.MA0051.severity = suggestion
+
 # Remove the unused internal class
 dotnet_diagnostic.S1144.severity = suggestion
 
