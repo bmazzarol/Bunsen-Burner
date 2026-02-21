@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="BunsenBurner.Docs/BunsenBurner.Docs.csproj" />
+  <Project Path="BunsenBurner.Tests/BunsenBurner.Tests.csproj" />
+  <Project Path="BunsenBurner/BunsenBurner.csproj" />
+</Solution>
