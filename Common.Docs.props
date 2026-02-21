@@ -4,7 +4,7 @@
         the docs projects that are in this solution
      -->
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
   <Target Name="BuildDocs" AfterTargets="AfterBuild" BeforeTargets="PostBuildEvent">
     <!-- Prevent parallel execution -->

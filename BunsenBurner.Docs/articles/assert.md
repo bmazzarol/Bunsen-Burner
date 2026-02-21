@@ -25,8 +25,8 @@ Another style of assertion is using expressions.
 
 ## Asserting against exceptions
 
-On the unhappy path [throw](xref:BunsenBurner.TestBuilder`1.Acted`2.Throw*) can be
-used to assert against exceptions,
+On the unhappy path [throw](xref:BunsenBurner.TestBuilder`1.Acted`2.Throw*) can
+be used to assert against exceptions,
 
 [!code-csharp[Example7](../../BunsenBurner.Tests/Examples/ArrangeActAssert.cs#Example7)]
 
