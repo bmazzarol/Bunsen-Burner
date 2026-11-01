@@ -167,14 +167,18 @@ kbd {
 
 pre {
   background: var(--bm-surface);
-  border: 1px solid var(--bm-rule);
-  border-radius: var(--bm-radius);
+  border: 0;
+  border-top: 1px solid var(--bm-rule);
+  border-bottom: 1px solid var(--bm-rule);
   padding: 0.7rem 0.9rem;
   line-height: 1.5;
   overflow-x: auto;
 }
 
-pre code {
+/* docfx's highlighter paints its own box inside ours - one box is enough */
+pre code,
+pre code.hljs,
+[data-bs-theme="dark"] pre code.hljs {
   background: none;
   padding: 0;
 }
@@ -235,11 +239,18 @@ footer {
   font-size: 0.85rem;
 }
 
-/* the project logo sits on the line directly under the page title */
+/* -------------------------------------------------------------- masthead logo */
+
+/* the logo floats beside the intro copy instead of stranded on its own line */
+article > p:first-of-type {
+  margin: 0;
+}
 
 article > p:first-of-type img {
-  width: 48px;
-  height: 48px;
+  float: left;
+  width: 44px;
+  height: 44px;
+  margin: 0 1rem 0.75rem 0;
 }
 
 /* ------------------------------------------------- project list (profile site) */
