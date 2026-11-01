@@ -9,5 +9,14 @@
   "config": {
     "MD013": false,
     "MD041": false
-  }
+  },
+  "globs": [
+    "**/*.md",
+    "!**/node_modules/**",
+    "!LICENSE.md",
+    "!**/__examples__/**",
+    "!**/_site/**",
+    "!.github/**",
+    "!**/*.verified.md"
+  ]
 }
