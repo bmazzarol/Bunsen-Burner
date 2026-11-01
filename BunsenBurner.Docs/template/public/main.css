@@ -72,6 +72,33 @@ a {
   background: var(--bm-accent-soft);
 }
 
+/* the search results pagination is bootstrap's own, and .page-link sets its
+   colour on a class, so the accent has to be stated explicitly */
+.pagination {
+  --bs-pagination-color: var(--bm-accent);
+  --bs-pagination-hover-color: var(--bm-accent);
+  --bs-pagination-focus-color: var(--bm-accent);
+  --bs-pagination-active-bg: var(--bm-accent);
+  --bs-pagination-active-color: var(--bs-body-bg);
+  --bs-pagination-border-color: var(--bm-rule);
+}
+
+.page-link {
+  color: var(--bm-accent);
+}
+
+.page-link:hover {
+  color: var(--bm-accent);
+  background: var(--bm-accent-soft);
+}
+
+.page-link.active,
+.active > .page-link {
+  background: var(--bm-accent);
+  color: var(--bs-body-bg);
+  border-color: color-mix(in srgb, var(--bm-accent) 60%, transparent);
+}
+
 /* --------------------------------------------------------------------- base */
 
 body {
