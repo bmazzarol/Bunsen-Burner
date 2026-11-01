@@ -17,4 +17,4 @@ jobs:
     steps:
       - uses: bmazzarol/bmazzarol/.github/actions/check-markdown@main
         with:
-          targetMdFiles: ${{ vars.MARKDOWN_GLOBS }}
+          targetMdFiles: ${{ vars.MARKDOWN_GLOBS || '"**/*.md" "!node_modules/**" "!LICENSE.md"' }}
