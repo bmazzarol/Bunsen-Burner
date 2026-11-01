@@ -1,13 +1,14 @@
 # Getting Started
 
-To use this library, simply include `BunsenBurner.dll` in your project or grab
-it from [NuGet](https://www.nuget.org/packages/BunsenBurner/), and add this to
-the top of each test `.cs` file
-that needs it:
+Add the package, then use `BunsenBurner` in each test file that needs it,
+
+```shell
+dotnet add package BunsenBurner
+```
 
 [!code-csharp[AAAUsing](../../BunsenBurner.Tests/Examples/ArrangeActAssert.cs#ArrangeActAssertUsing)]
 
-or
+or the Given/When/Then spelling,
 
 [!code-csharp[BDDUsing](../../BunsenBurner.Tests/BddTests.cs#BDDUsing)]
 
@@ -28,5 +29,5 @@ such as pulling out a shared act method,
 
 [!code-csharp[Example1c](../../BunsenBurner.Tests/Examples/GettingStarted.cs#Example1c)]
 
-The principle is simple, refine the test structure using a DSL
-then use the new structure to identify common code and DRY that code up.
+The idea is to use the DSL to make the shape of the test explicit, then use
+that shape to find code that can be shared.
