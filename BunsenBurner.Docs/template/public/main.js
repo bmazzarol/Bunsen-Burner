@@ -1,10 +1,9 @@
 /*
   Shared navigation icons and accent colour for every bmazzarol docfx site.
 
-  docfx does not emit an edit link for these sites, so the repository link is
-  derived from the page itself: the "improve this doc" link when docfx does
-  provide one, otherwise the first path segment of the GitHub Pages URL, which
-  is the repository name.
+  The repository link for the nav icons is taken from docfx's own "Edit this
+  page" link when it is present, otherwise from the first path segment of the
+  GitHub Pages URL, which is the repository name.
 
   The accent colour is sampled from the project's own icon, so each site's
   links, focus rings and text selection carry its logo.

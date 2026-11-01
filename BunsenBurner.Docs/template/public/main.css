@@ -351,6 +351,24 @@ th {
   text-decoration: underline;
 }
 
+/* docfx puts an "Edit this page" link under the article. It is useful - it
+   points at the markdown a reader should fix - so it stays, but it reads as
+   quietly as the footer */
+.contribution {
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--bm-muted);
+}
+
+.contribution a {
+  color: var(--bm-accent);
+  text-decoration: none;
+}
+
+.contribution a:hover {
+  text-decoration: underline;
+}
+
 footer {
   background: var(--bm-surface);
   border-top: 1px solid var(--bm-rule);
