@@ -2,9 +2,9 @@
 
 ![Bunsen Burner](images/fire-icon.png)
 
-**Turn the heat up on your old tests.**
+**Arrange, act and assert, enforced by the compiler.**
 
-A test framework for C# that turns arrange-act-assert into a composable pipeline, and disposes everything the arrange step created for you.
+A test DSL for C# that turns arrange-act-assert into a composable pipeline, and disposes everything the arrange and act stages create.
 
 ```shell
 dotnet add package BunsenBurner
