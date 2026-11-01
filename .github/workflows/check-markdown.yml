@@ -1,4 +1,4 @@
-﻿name: Check Markdown
+name: Check Markdown
 
 on:
   push:
@@ -17,5 +17,4 @@ jobs:
     steps:
       - uses: bmazzarol/bmazzarol/.github/actions/check-markdown@main
         with:
-          targetMdFiles: |
-            "BunsenBurner*/**/*.md" "BunsenBurner.Docs/**/*.md" "*.md" "!LICENSE.md"
+          targetMdFiles: ${{ vars.MARKDOWN_GLOBS }}

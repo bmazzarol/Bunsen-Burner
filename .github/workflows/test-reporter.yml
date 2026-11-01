@@ -1,4 +1,4 @@
-﻿name: Test Reporter
+name: Test Reporter
 
 on:
   workflow_run:

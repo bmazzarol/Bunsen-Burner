@@ -1,12 +1,11 @@
-﻿name: Check C# Formatting
+name: Check C# Formatting
 
 on:
   pull_request:
     branches: [main]
 
 jobs:
-  check_formatting:
+  format:
     runs-on: ubuntu-latest
-    name: Check C# Formatting
     steps:
       - uses: bmazzarol/bmazzarol/.github/actions/check-code-format@main

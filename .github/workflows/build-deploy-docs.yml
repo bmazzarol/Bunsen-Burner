@@ -1,4 +1,4 @@
-﻿name: Build and Deploy Docs
+name: Build and Deploy Docs
 
 on:
   push:
@@ -13,5 +13,5 @@ jobs:
     steps:
       - uses: bmazzarol/bmazzarol/.github/actions/build-deploy-docs@main
         with:
-          docsProjectPath: BunsenBurner.Docs
-          csProjFileName: BunsenBurner.Docs.csproj
+          docsProjectPath: ${{ vars.DOCS_PROJECT_PATH }}
+          csProjFileName: ${{ vars.CS_PROJ_FILE_NAME }}

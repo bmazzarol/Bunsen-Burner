@@ -1,4 +1,4 @@
-﻿name: Check the Docfx site
+name: Check the Docfx site
 
 on:
   pull_request:
@@ -10,5 +10,5 @@ jobs:
     steps:
       - uses: bmazzarol/bmazzarol/.github/actions/check-docs@main
         with:
-          docsProjectPath: BunsenBurner.Docs
-          csProjFileName: BunsenBurner.Docs.csproj
+          docsProjectPath: ${{ vars.DOCS_PROJECT_PATH }}
+          csProjFileName: ${{ vars.CS_PROJ_FILE_NAME }}
