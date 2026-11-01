@@ -92,12 +92,13 @@ form.search {
   margin-bottom: 0.35rem;
 }
 
-.toc .lvl1 > a {
+/* docfx renders the toc as nested ul.nav.levelN; the top level carries the
+   weight, everything below it is quieter */
+.toc > ul > li > a {
   font-weight: 600;
 }
 
-.toc .lvl2 > a,
-.toc .lvl3 > a {
+.toc ul ul a {
   color: var(--bm-muted);
 }
 
@@ -249,12 +250,19 @@ th {
   margin-bottom: 0.75rem;
 }
 
-.affix {
+#affix {
   font-size: 0.8rem;
   color: var(--bm-muted);
 }
 
-.affix a {
+#affix h5 {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--bm-muted);
+}
+
+#affix a {
   text-decoration: none;
 }
 
