@@ -2,7 +2,7 @@
     "metadata": [
         {
             "src": [
-                {                 
+                {
                     "files": [
                         "BunsenBurner/BunsenBurner.csproj"
                     ],
@@ -58,7 +58,10 @@
             "_appName": "Bunsen Burner",
             "_appLogoPath": "images/fire-icon.png",
             "_appFaviconPath": "images/favicon.ico",
-            "_appFooter": "Created By <a href='https://github.com/bmazzarol' target='blank'>Ben Mazzarol</a>"
+            "_appFooter": "Part of <a href='https://github.com/bmazzarol'>bmazzarol</a> - built with <a href='https://dotnet.github.io/docfx'>docfx</a>",
+            "_disableBreadcrumb": true,
+            "_disableTocFilter": true,
+            "_appLogoUrl": "https://bmazzarol.github.io/bmazzarol/"
         }
     }
 }

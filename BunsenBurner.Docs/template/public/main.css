@@ -1,18 +1,268 @@
-﻿#logo {
-    margin-right: 1em;
-    height: 2.5em;
+/*
+  bmazzarol docs theme
+  ====================
+  Minimal, content-first styling on top of docfx's "modern" template.
+
+  Design rules
+  ------------
+  1. The article is the product. Everything else is chrome and should be quiet.
+  2. One column of prose at a comfortable measure (~70ch).
+  3. Hierarchy comes from type and whitespace, not borders and colour.
+  4. Dark/light follows the OS by default (docfx already does this).
+  5. Never add decoration that does not help the reader decide or find.
+*/
+
+/*
+  Self-hosted fonts (OFL licensed, see docs/theme/README.md):
+    Inter            400-700 variable, latin subset, 37 KB
+    JetBrains Mono   400-600 variable, latin subset, 30 KB
+  Paths are relative to public/main.css, which is where docfx puts this file.
+*/
+@font-face {
+  font-family: "Inter";
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("fonts/inter-latin.var.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+  src: url("fonts/jetbrains-mono-latin.var.woff2") format("woff2");
+}
+
+:root {
+  --bm-measure: 70ch;
+  --bm-radius: 8px;
+  --bm-muted: var(--bs-secondary-color);
+  --bm-rule: var(--bs-border-color);
+  --bm-surface: var(--bs-tertiary-bg);
+}
+
+/* --------------------------------------------------------------------- base */
+
+body {
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.65;
+}
+
+main.container-xxl {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 3rem;
+}
+
+/* ------------------------------------------------------------- top navigation */
+
+header.bg-body {
+  border-bottom: 1px solid var(--bm-rule);
 }
 
 .navbar {
-    background-color: var(--bs-border-color);
+  padding: 0.5rem 1rem;
 }
 
-body > footer {
-    background-color: var(--bs-tertiary-bg);
-    height: auto;
-    padding: 0.5em;
+.navbar-brand {
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
-body > footer.border-top {
-    border-top-color: var(--bs-tertiary-bg);
+#logo {
+  height: 1.75rem;
+  margin-right: 0.6rem;
+}
+
+form.search {
+  max-width: 20rem;
+}
+
+/* --------------------------------------------------------- left side nav (toc) */
+
+.toc {
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.toc .lvl1 > a {
+  font-weight: 600;
+}
+
+.toc .lvl2 > a,
+.toc .lvl3 > a {
+  color: var(--bm-muted);
+}
+
+/* ------------------------------------------------------------------- article */
+
+.content {
+  max-width: var(--bm-measure);
+}
+
+article h1 {
+  font-size: 1.75rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  margin: 0.25rem 0 0.75rem;
+}
+
+article h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 1.75rem 0 0.5rem;
+}
+
+article h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.4rem;
+}
+
+article h4,
+article h5 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 1rem 0 0.35rem;
+}
+
+article p,
+article li {
+  margin-bottom: 0.6rem;
+}
+
+article a {
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--bs-link-color) 40%, transparent);
+}
+
+article a:hover {
+  border-bottom-color: var(--bs-link-color);
+}
+
+article img {
+  max-width: 100%;
+}
+
+/* prose that carries weight but never shouts */
+article blockquote {
+  border-left: 3px solid var(--bm-rule);
+  padding: 0.5rem 0.9rem;
+  margin: 0.75rem 0;
+  color: var(--bm-muted);
+}
+
+/* -------------------------------------------------------------- code and tables */
+
+pre,
+code,
+kbd {
+  font-family: "JetBrains Mono", ui-monospace, "Cascadia Mono", SFMono-Regular,
+    Consolas, monospace;
+  font-size: 0.875rem;
+}
+
+pre {
+  background: var(--bm-surface);
+  border: 1px solid var(--bm-rule);
+  border-radius: var(--bm-radius);
+  padding: 0.7rem 0.9rem;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+code {
+  background: var(--bm-surface);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.75rem 0;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--bm-rule);
+  padding: 0.45rem 0.6rem;
+  text-align: left;
+}
+
+th {
+  font-weight: 600;
+  color: var(--bm-muted);
+  font-size: 0.85rem;
+}
+
+/* ------------------------------------------------------------ secondary chrome */
+
+/* breadcrumbs are turned off by the shared docfx metadata */
+
+.actionbar {
+  margin-bottom: 0.75rem;
+}
+
+.affix {
+  font-size: 0.8rem;
+  color: var(--bm-muted);
+}
+
+.affix a {
+  text-decoration: none;
+}
+
+.contribution,
+.next-article {
+  font-size: 0.85rem;
+  color: var(--bm-muted);
+  margin-top: 1.5rem;
+}
+
+footer {
+  background: var(--bm-surface);
+  border-top: 1px solid var(--bm-rule);
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+}
+
+/* the project logo sits on the line directly under the page title */
+
+article > p:first-of-type img {
+  width: 48px;
+  height: 48px;
+}
+
+/* ------------------------------------------------- project list (profile site) */
+
+article li img {
+  width: 28px;
+  height: 28px;
+  vertical-align: middle;
+}
+
+article li > strong,
+article li > b {
+  font-size: 0.95rem;
+}
+
+/* ------------------------------------------------------------ small screens */
+
+@media (max-width: 768px) {
+  main.container-xxl {
+    padding: 1rem 0.75rem 2rem;
+  }
+
+  .content {
+    max-width: none;
+  }
 }
