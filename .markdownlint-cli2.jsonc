@@ -4,7 +4,10 @@
   //
   // MD013 (line length) is disabled: docfx articles, tables and code samples
   // legitimately run longer than 80 characters.
+  // MD041 (first line must be a heading) is disabled: every landing page hero
+  // opens with the project logo and puts the title on the next line.
   "config": {
-    "MD013": false
+    "MD013": false,
+    "MD041": false
   }
 }
