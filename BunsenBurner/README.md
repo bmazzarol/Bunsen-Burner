@@ -1,35 +1,39 @@
-﻿<!-- markdownlint-disable MD013 -->
+![Bunsen Burner](https://raw.githubusercontent.com/bmazzarol/Bunsen-Burner/main/fire-icon-small.png)
 
-# ![Bunsen Burner](https://raw.githubusercontent.com/bmazzarol/Bunsen-Burner/main/fire-icon-small.png) Bunsen Burner
+# Bunsen Burner
 
-<!-- markdownlint-enable MD013 -->
+**Arrange, act and assert, enforced by the compiler.**
+
+A test DSL for C# that turns arrange-act-assert into a composable pipeline, and disposes everything the arrange and act stages create.
 
 [![Nuget](https://img.shields.io/nuget/v/BunsenBurner)](https://www.nuget.org/packages/BunsenBurner/)
 
-A test DSL with no dependencies and no runner of its own. Arrange, act and
-assert become types, and the disposables a test creates are disposed by the
-test.
+```shell
+dotnet add package BunsenBurner
+```
 
-## Getting Started
+[Getting started](https://bmazzarol.github.io/Bunsen-Burner/articles/getting-started.html) - [Full documentation](https://bmazzarol.github.io/Bunsen-Burner/)
 
-Add the package, then import it in each test file that needs it:
+## Getting started
 
-```C#
+Add the package, then import the DSL in each test file that needs it:
+
+```csharp
 // for AAA style tests
 using static BunsenBurner.ArrangeActAssert;
 ```
 
 or
 
-```C#
+```csharp
 // for BDD style tests
 using static BunsenBurner.GivenWhenThen;
 ```
 
 > [!NOTE]
-> Tests must always return a `Task` to be compatible with the DSL.
+> Tests must return a `Task` to be compatible with the DSL.
 
-Take an existing test,
+Take a test you already have,
 
 ```csharp
 [Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
@@ -50,42 +54,38 @@ public async Task ExampleTest()
 }
 ```
 
-and convert it to this,
+and write it as a pipeline,
 
 ```csharp
 [Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
 public Task ExampleTest() =>
-     Arrange(() => new { Name = "Widget1", Cost = 12.50 })
-    .Act(async widget =>
-    {
-        var ms = new MemoryStream();
-        await JsonSerializer.SerializeAsync(ms, widget);
-        return Encoding.UTF8.GetString(ms.ToArray());
-    })
-    .Assert(result => result == "{\"Name\":\"Widget1\",\"Cost\":12.5}");
-```
-
-This formalizes the structure and then opens up refactoring possibilities
-such as pulling out a shared act method,
-
-```csharp
-[Fact(DisplayName = "SerializeAsync can work with anonymous objects")]
-public Task ExampleTestUsingAaaBuilder2() =>
     Arrange(() =>
     {
         var widget = new { Name = "Widget1", Cost = 12.50 };
         var ms = new MemoryStream();
         return (widget, ms);
     })
-    // pull out the shared test code
-    .Act(CallSerializeAsync)
+    .Act(async data =>
+    {
+        await JsonSerializer.SerializeAsync(data.ms, data.widget);
+        return Encoding.UTF8.GetString(data.ms.ToArray());
+    })
     .Assert(result =>
-        Assert.Equal(
-            expected: "{\"Name\":\"Widget1\",\"Cost\":12.5}", 
-            actual: result)
+        Assert.Equal(expected: "{\"Name\":\"Widget1\",\"Cost\":12.5}", actual: result)
     );
+```
 
-// this is now a shared stage and can be used in many tests
+The `MemoryStream` is disposed by the test, whether the assertion passes or not.
+
+Because each stage is a delegate, shared code lifts out of the test into a
+reusable helper:
+
+```csharp
+public Task ExampleTest() =>
+    Arrange(() => new { Name = "Widget1", Cost = 12.50 })
+        .Act(CallSerializeAsync)     // a shared stage, used by many tests
+        .Assert(result => result == "{\"Name\":\"Widget1\",\"Cost\":12.5}");
+
 private static async Task<string> CallSerializeAsync<T>((T, MemoryStream) data)
 {
     var (widget, ms) = data;
@@ -94,8 +94,20 @@ private static async Task<string> CallSerializeAsync<T>((T, MemoryStream) data)
 }
 ```
 
-The principle: put the test into the DSL, then the shared code across
-similar tests becomes visible and can be pulled out.
+Arranging, acting and asserting in the wrong order does not compile. That is the
+point of the DSL.
 
-For more information,
-see [Bunsen Burner](https://bmazzarol.github.io/Bunsen-Burner).
+## What it does not do
+
+- It is not a test runner. Tests are still `xUnit` `Fact`s, so the runner,
+  reporting and CI stay the same
+- It does not execute anything. Each stage is a delegate the test itself calls
+- Tests that do not return a `Task` are not compatible with the DSL
+- It does not keep disposables alive. Anything disposable created in the arrange
+  or act stage is disposed, unless a stage calls `NoDisposal`
+
+## See also
+
+- [Getting started](https://bmazzarol.github.io/Bunsen-Burner/articles/getting-started.html)
+- [Arrange act assert](https://bmazzarol.github.io/Bunsen-Burner/articles/arrange-act-assert.html)
+- [Auto disposal](https://bmazzarol.github.io/Bunsen-Burner/articles/auto-disposal.html)
