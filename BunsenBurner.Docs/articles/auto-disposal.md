@@ -3,8 +3,7 @@
 Any type that implements <xref:System.IDisposable> or <xref:System.IAsyncDisposable>
 are auto disposed by the [DSL](xref:BunsenBurner.TestBuilder`1).
 
-This means that you can just return whatever type without needing to worry about
-wrapping the DSL in `using` blocks.
+Return the type directly; no `using` block is needed around the DSL.
 
 [!code-csharp[Example1](../../BunsenBurner.Tests/Examples/AutoDisposal.cs#Example1)]
 

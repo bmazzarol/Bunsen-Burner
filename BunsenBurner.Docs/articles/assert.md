@@ -4,7 +4,7 @@ An [assert](xref:BunsenBurner.TestBuilder`1.Asserted`2) step must follow at
 least one
 [act](xref:BunsenBurner.TestBuilder`1.Acted`2) step.
 
-Both sync and async is supported as well as
+Both sync and async asserts are supported, as are
 additional <xref:BunsenBurner.TestBuilder`1.Asserted`2.And*> steps.
 
 <xref:BunsenBurner.TestBuilder`1.Asserted`2.And*> steps are executed in
@@ -13,9 +13,8 @@ fails.
 
 [!code-csharp[Example5](../../BunsenBurner.Tests/Examples/ArrangeActAssert.cs#Example5)]
 
-The standard [assert](xref:BunsenBurner.TestBuilder`1.Asserted`2) step is a
-simple Action and
-succeeds as long as nothing throws.
+The standard [assert](xref:BunsenBurner.TestBuilder`1.Asserted`2) step is an
+`Action` and succeeds as long as nothing throws.
 
 ## Expression Based Asserts
 

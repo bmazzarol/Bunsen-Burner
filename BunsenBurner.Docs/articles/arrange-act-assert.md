@@ -1,18 +1,15 @@
 # Arrange Act Assert Pattern
 
 The [Arrange, Act and Assert Pattern](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-best-practices)
-is a way of structuring tests so that
-they are easy to read and understand. This pattern is also known as the Given,
-When, Then pattern (one of the reasons both <xref:BunsenBurner.ISyntax`1> is
-supported).
+structures a test so that it reads in one direction. It is also known as
+Given, When, Then, which is why both <xref:BunsenBurner.ISyntax`1> spellings are
+supported.
 
-By breaking down your tests into these three distinct stages, you can more
-easily identify what needs to be tested and ensure that your tests are
-comprehensive.
+Splitting a test into these three stages makes it obvious what is being tested
+and where the setup can be shared.
 
-Bunsen Burner aims to empower this by co-opting the compilers help.
-
-It does this in a few ways,
+Bunsen Burner enforces the pattern with the compiler. It does that in a few
+ways,
 
 * The [DSL](xref:BunsenBurner.TestBuilder`1) enforces the correct flow, you need
   to arrange, act and assert in the correct order, otherwise it will not compile
