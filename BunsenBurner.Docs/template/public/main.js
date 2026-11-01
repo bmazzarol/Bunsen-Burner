@@ -5,7 +5,7 @@
   emits, so one file works for every project without hard-coding a repo name.
 */
 
-const home = 'https://bmazzarol.github.io/'
+const home = 'https://bmazzarol.github.io/bmazzarol/'
 
 function repoUrl () {
   const url =
