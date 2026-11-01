@@ -1,0 +1,10 @@
+{
+  // Shared markdownlint settings for every repo in the monorepo.
+  // Synced by scripts/ci-sync.sh (workflows apply) into each repo root.
+  //
+  // MD013 (line length) is disabled: docfx articles, tables and code samples
+  // legitimately run longer than 80 characters.
+  "config": {
+    "MD013": false
+  }
+}
