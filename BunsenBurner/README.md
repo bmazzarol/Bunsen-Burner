@@ -6,16 +6,13 @@
 
 [![Nuget](https://img.shields.io/nuget/v/BunsenBurner)](https://www.nuget.org/packages/BunsenBurner/)
 
-Test framework-agnostic, zero dependencies, easy to use DSL, more maintainable,
-easier to refactor. Set :fire: to your old tests! A better way to write tests
-:test_tube: in C#.
+A test DSL with no dependencies and no runner of its own. Arrange, act and
+assert become types, and the disposables a test creates are disposed by the
+test.
 
 ## Getting Started
 
-To use this library, simply include `BunsenBurner.dll` in your project or grab
-it from [NuGet](https://www.nuget.org/packages/BunsenBurner/), and add this to
-the top of each test `.cs` file
-that needs it:
+Add the package, then import it in each test file that needs it:
 
 ```C#
 // for AAA style tests
@@ -97,8 +94,8 @@ private static async Task<string> CallSerializeAsync<T>((T, MemoryStream) data)
 }
 ```
 
-The principle is simple, refine the test structure using a DSL
-then use the new structure to identify common code and DRY that code up.
+The principle: put the test into the DSL, then the shared code across
+similar tests becomes visible and can be pulled out.
 
 For more information,
 see [Bunsen Burner](https://bmazzarol.github.io/Bunsen-Burner).

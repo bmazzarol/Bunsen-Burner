@@ -14,9 +14,9 @@ A test framework for C# that turns arrange-act-assert into a composable pipeline
 
 * Test framework-agnostic
 * Zero dependencies
-* Easy to use DSL
-* More maintainable
-* Easier to refactor
+* A DSL that makes the stage order part of the types
+* Stages are delegates, so shared code lifts out into helpers
+* Disposables created in the test are disposed for you
 
 Convert semantically equivalent tests from this,
 
@@ -56,10 +56,7 @@ public Task ExampleTest() =>
 
 ## Getting Started
 
-To use this library, simply include `BunsenBurner.dll` in your project or grab
-it from [NuGet](https://www.nuget.org/packages/BunsenBurner/), and add this to
-the top of each test `.cs` file
-that needs it:
+Add the package, then import it in each test file that needs it:
 
 ```C#
 // for AAA style tests
