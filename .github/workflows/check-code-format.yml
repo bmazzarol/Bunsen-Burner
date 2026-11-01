@@ -12,14 +12,3 @@ jobs:
       - uses: bmazzarol/bmazzarol/.github/actions/check-code-format@main
         with:
           dotnetVersion: ${{ vars.DOTNET_VERSION }}
-
-  pull_request:
-    branches: [main]
-
-jobs:
-  format:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: bmazzarol/bmazzarol/.github/actions/check-code-format@main
-        with:
-          dotnetVersion: ${{ vars.DOTNET_VERSION }}

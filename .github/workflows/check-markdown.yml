@@ -19,21 +19,3 @@ jobs:
       - uses: bmazzarol/bmazzarol/.github/actions/check-markdown@main
         with:
           targetMdFiles: ${{ vars.MARKDOWN_GLOBS || '"**/*.md" "!node_modules/**" "!LICENSE.md"' }}
-
-  push:
-    branches: [main]
-    paths:
-      - "**/*.md"
-      - .github/workflows/check-markdown.yml
-  pull_request:
-    branches: [main]
-
-jobs:
-  lint:
-    runs-on: ubuntu-latest
-    permissions:
-      statuses: write
-    steps:
-      - uses: bmazzarol/bmazzarol/.github/actions/check-markdown@main
-        with:
-          targetMdFiles: ${{ vars.MARKDOWN_GLOBS || '"**/*.md" "!node_modules/**" "!LICENSE.md"' }}

@@ -17,19 +17,3 @@ jobs:
           docsProjectPath: ${{ vars.DOCS_PROJECT_PATH }}
           csProjFileName: ${{ vars.CS_PROJ_FILE_NAME }}
           dotnetVersion: ${{ vars.DOTNET_VERSION }}
-
-  push:
-    branches: [main]
-
-jobs:
-  build-and-deploy-docs:
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    steps:
-      - uses: bmazzarol/bmazzarol/.github/actions/build-deploy-docs@main
-        with:
-          docsProjectPath: ${{ vars.DOCS_PROJECT_PATH }}
-          csProjFileName: ${{ vars.CS_PROJ_FILE_NAME }}
-          dotnetVersion: ${{ vars.DOTNET_VERSION }}

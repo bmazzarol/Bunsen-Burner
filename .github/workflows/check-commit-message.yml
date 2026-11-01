@@ -11,13 +11,3 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: bmazzarol/bmazzarol/.github/actions/check-commit-message@main
-
-  pull_request:
-    branches: [main]
-
-jobs:
-  commitlint:
-    if: ${{ github.actor != 'dependabot[bot]' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: bmazzarol/bmazzarol/.github/actions/check-commit-message@main

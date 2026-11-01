@@ -14,16 +14,3 @@ jobs:
           docsProjectPath: ${{ vars.DOCS_PROJECT_PATH }}
           csProjFileName: ${{ vars.CS_PROJ_FILE_NAME }}
           dotnetVersion: ${{ vars.DOTNET_VERSION }}
-
-  pull_request:
-    branches: [main]
-
-jobs:
-  check-docs:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: bmazzarol/bmazzarol/.github/actions/check-docs@main
-        with:
-          docsProjectPath: ${{ vars.DOCS_PROJECT_PATH }}
-          csProjFileName: ${{ vars.CS_PROJ_FILE_NAME }}
-          dotnetVersion: ${{ vars.DOTNET_VERSION }}
