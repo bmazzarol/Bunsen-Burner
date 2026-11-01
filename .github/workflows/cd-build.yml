@@ -21,3 +21,4 @@ jobs:
         with:
           version: ${{ env.PACKAGE_VERSION }}
           nugetKey: ${{ secrets.NUGET_API_KEY }}
+          dotnetVersion: ${{ vars.DOTNET_VERSION }}

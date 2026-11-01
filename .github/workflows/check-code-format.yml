@@ -9,3 +9,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: bmazzarol/bmazzarol/.github/actions/check-code-format@main
+        with:
+          dotnetVersion: ${{ vars.DOTNET_VERSION }}

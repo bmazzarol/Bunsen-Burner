@@ -20,3 +20,4 @@ jobs:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           sonarToken: ${{ secrets.SONAR_TOKEN }}
           sonarProjectKey: ${{ vars.SONAR_PROJECT_KEY }}
+          dotnetVersion: ${{ vars.DOTNET_VERSION }}

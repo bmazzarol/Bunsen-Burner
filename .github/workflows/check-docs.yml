@@ -12,3 +12,4 @@ jobs:
         with:
           docsProjectPath: ${{ vars.DOCS_PROJECT_PATH }}
           csProjFileName: ${{ vars.CS_PROJ_FILE_NAME }}
+          dotnetVersion: ${{ vars.DOTNET_VERSION }}
