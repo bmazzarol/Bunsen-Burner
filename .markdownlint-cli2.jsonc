@@ -16,7 +16,7 @@
     "!LICENSE.md",
     "!**/__examples__/**",
     "!**/_site/**",
-    "!.github/**",
+    "!**/.github/**",
     "!**/*.verified.md"
   ]
 }
