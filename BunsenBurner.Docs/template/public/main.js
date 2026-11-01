@@ -1,11 +1,14 @@
 /*
   Shared navigation icons for every bmazzarol docfx site.
 
-  The repository link is derived from the "improve this doc" link docfx already
-  emits, so one file works for every project without hard-coding a repo name.
+  docfx does not emit an edit link for these sites, so the repository link is
+  derived from the page itself: the "improve this doc" link when docfx does
+  provide one, otherwise the first path segment of the GitHub Pages URL, which
+  is the repository name.
 */
 
-const home = 'https://bmazzarol.github.io/bmazzarol/'
+const org = 'bmazzarol'
+const home = `https://${org}.github.io/bmazzarol/`
 
 function repoUrl () {
   const url =
@@ -13,14 +16,17 @@ function repoUrl () {
     document.querySelector('meta[name="docfx:docurl"]')?.content ||
     ''
   const match = url.match(/github\.com\/[^/]+\/[^/]+/)
-  return match ? 'https://' + match[0] : null
+  if (match) return 'https://' + match[0]
+
+  const repo = location.pathname.split('/').filter(Boolean)[0] || 'bmazzarol'
+  return `https://github.com/${org}/${repo}`
 }
 
 export default {
   iconLinks: [
     {
       icon: 'github',
-      href: repoUrl() || 'https://github.com/bmazzarol',
+      href: repoUrl(),
       title: 'Repository',
     },
     {
