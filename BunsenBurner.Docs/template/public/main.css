@@ -45,8 +45,9 @@
   --bm-code-rule: color-mix(in srgb, var(--bs-border-color) 55%, transparent);
   /* main.js samples the project icon and writes the site accent here; docfx's
      own blue is the fallback for a logo that cannot be sampled */
-  --bm-accent: var(--bs-link-color);
+  --bm-accent-light: var(--bs-link-color);
   --bm-accent-dark: var(--bs-link-color);
+  --bm-accent: var(--bm-accent-light);
   --bm-accent-soft: color-mix(in srgb, var(--bm-accent) 28%, transparent);
 }
 

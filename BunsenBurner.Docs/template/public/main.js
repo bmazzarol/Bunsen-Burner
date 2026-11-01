@@ -145,10 +145,14 @@ function applyAccent (image) {
   const light = readableAccent(colour.hue, colour.saturation, lightBackground, true)
   const dark = readableAccent(colour.hue, colour.saturation, darkBackground, false)
   const root = document.documentElement
-  root.style.setProperty('--bm-accent', `hsl(${colour.hue} ${colour.saturation}% ${light * 100}%)`)
+  const saturation = Math.round(colour.saturation * 100)
+  root.style.setProperty(
+    '--bm-accent-light',
+    `hsl(${colour.hue} ${saturation}% ${Math.round(light * 100)}%`
+  )
   root.style.setProperty(
     '--bm-accent-dark',
-    `hsl(${colour.hue} ${colour.saturation}% ${dark * 100}%)`
+    `hsl(${colour.hue} ${saturation}% ${Math.round(dark * 100)}%`
   )
 }
 
