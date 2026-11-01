@@ -36,7 +36,6 @@
 
 :root {
   --bm-measure: 70ch;
-  --bm-radius: 8px;
   --bm-muted: var(--bs-secondary-color);
   --bm-rule: var(--bs-border-color);
   --bm-surface: var(--bs-tertiary-bg);
@@ -266,11 +265,21 @@ th {
   text-decoration: none;
 }
 
-.contribution,
-.next-article {
+#nextArticle {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
   font-size: 0.85rem;
   color: var(--bm-muted);
-  margin-top: 1.5rem;
+}
+
+#nextArticle a {
+  color: var(--bs-link-color);
+  text-decoration: none;
+}
+
+#nextArticle a:hover {
+  text-decoration: underline;
 }
 
 footer {
