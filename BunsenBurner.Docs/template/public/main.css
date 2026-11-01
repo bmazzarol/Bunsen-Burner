@@ -41,6 +41,8 @@
   --bm-surface: var(--bs-tertiary-bg);
   /* half way to the tertiary background: code sits barely above the page */
   --bm-code-bg: color-mix(in srgb, var(--bs-tertiary-bg) 50%, var(--bs-body-bg));
+  /* a hairline that is softer than the surrounding rules */
+  --bm-code-rule: color-mix(in srgb, var(--bs-border-color) 55%, transparent);
 }
 
 /* --------------------------------------------------------------------- base */
@@ -192,8 +194,8 @@ article blockquote {
 /* -------------------------------------------------------------- code and tables */
 
 /* code is the most common element on a page, so it is deliberately quiet: a
-   tint half way to the tertiary background, ends faded out so nothing looks
-   boxed in, and generous space above and below */
+   tint half way to the tertiary background, a soft rule top and bottom only,
+   the sides faded out, and generous space above and below */
 
 pre,
 code,
@@ -212,6 +214,8 @@ pre {
     transparent 100%
   );
   border: 0;
+  border-top: 1px solid var(--bm-code-rule);
+  border-bottom: 1px solid var(--bm-code-rule);
   margin: 1.5rem 0 1.75rem;
   padding: 0.9rem 1.1rem;
   line-height: 1.6;
